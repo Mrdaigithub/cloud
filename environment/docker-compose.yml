@@ -1,0 +1,25 @@
+version: '3'
+services:
+  ngnix:
+    image: "nginx:stable-alpine"
+    ports:
+      - "80:80"
+    volumes:
+      - "C:/Users/Administrator/Desktop/cloud/environment/nginx/www:/usr/share/nginx/html:ro"
+      - "C:/Users/Administrator/Desktop/cloud/environment/nginx/logs:/var/log/nginx"
+      - "C:/Users/Administrator/Desktop/cloud/environment/nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
+      - "C:/Users/Administrator/Desktop/cloud/environment/nginx/conf/vhost:/etc/nginx/conf.d"
+    restart: always
+  db:
+    image: "postgres:10.0-alpine"
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+  adminer:
+          image: adminer
+          restart: always
+          ports:
+              - 8081:8080
