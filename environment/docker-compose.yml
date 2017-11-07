@@ -17,8 +17,23 @@ services:
     build:
       php
     volumes:
-      - "./nginx/html/default:/home/mrdai/html/default"
+      - "./nginx/html:/home/mrdai/html/"
+    working_dir: /home/mrdai/html/cloud/public
+    command: php-fpm
+    links:
+      - db
     restart: always
+    environment:
+        APP_ENV: local
+        APP_DEBUG: 'true'
+        APP_KEY: cloud
+        APP_LOCALE: en
+        APP_FALLBACK_LOCALE: en
+        DB_CONNECTION: pgsql
+        DB_HOST: db
+        DB_DATABASE: cloud
+        DB_USERNAME: root
+        DB_PASSWORD: root
   db:
     image: "postgres:10.0-alpine"
     ports:
