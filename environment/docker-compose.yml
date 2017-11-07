@@ -1,29 +1,30 @@
 version: '3'
 services:
-  ngnix:
+  web:
     build:
       nginx
     ports:
       - "80:80"
     volumes:
-      - "./nginx/html:/home/mrdai/html:ro"
+      - "./nginx/html:/home/mrdai/html"
       - "./nginx/logs:/home/mrdai/logs"
       - "./nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/conf/vhost:/etc/nginx/conf.d"
+    links:
+      - php
     restart: always
-  php-apache:
+  php:
     build:
-      php-apache
-    ports:
-      - "9090:80"
+      php
     volumes:
-      - "./php-apache/html:/var/www/html"
+      - "./nginx/html/default:/home/mrdai/html/default"
     restart: always
-#  db:
-#    image: "postgres:10.0-alpine"
-#    ports:
-#      - "5432:5432"
-#    restart: always
-#    environment:
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: root
+  db:
+    image: "postgres:10.0-alpine"
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: cloud
