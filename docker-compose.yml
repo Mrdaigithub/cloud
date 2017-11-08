@@ -6,8 +6,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - "./nginx/html:/home/mrdai/html"
-      - "./nginx/logs:/home/mrdai/logs"
+      - "./nginx/html:/html"
+      - "./nginx/logs:/logs"
       - "./nginx/conf/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/conf/vhost:/etc/nginx/conf.d"
     links:
@@ -17,23 +17,12 @@ services:
     build:
       php
     volumes:
-      - "./nginx/html:/home/mrdai/html/"
-    working_dir: /home/mrdai/html/cloud/public
+      - "./nginx/html:/html"
+    working_dir: /html/cloud/public
     command: php-fpm
     links:
       - db
     restart: always
-    environment:
-        APP_ENV: local
-        APP_DEBUG: 'true'
-        APP_KEY: cloud
-        APP_LOCALE: en
-        APP_FALLBACK_LOCALE: en
-        DB_CONNECTION: pgsql
-        DB_HOST: db
-        DB_DATABASE: cloud
-        DB_USERNAME: root
-        DB_PASSWORD: root
   db:
     image: "postgres:10.0-alpine"
     ports:
@@ -43,3 +32,10 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: cloud
+  adminer:
+    image: adminer
+    restart: always
+    links:
+      - db
+    ports:
+      - 8090:8080
