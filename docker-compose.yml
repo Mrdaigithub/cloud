@@ -4,7 +4,8 @@ services:
     build:
       nginx
     ports:
-      - "80:80"
+      - "8000:8000"
+      - "8001:8001"
     volumes:
       - "./nginx/html:/html"
       - "./nginx/logs:/logs"
@@ -18,7 +19,7 @@ services:
       php
     volumes:
       - "./nginx/html:/html"
-    working_dir: /html/cloud/public
+    working_dir: /html/api.cloud/public
     command: php-fpm
     links:
       - db
@@ -31,7 +32,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: cloud
+      POSTGRES_DB: api.cloud
   adminer:
     image: adminer
     restart: always
