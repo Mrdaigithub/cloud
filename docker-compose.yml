@@ -19,7 +19,7 @@ services:
       php
     volumes:
       - "./nginx/html:/html"
-    working_dir: /html/api.cloud/public
+    working_dir: /html/api/public
     command: php-fpm
     links:
       - db
@@ -32,7 +32,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: api.cloud
+      POSTGRES_DB: cloud
   adminer:
     image: adminer
     restart: always
