@@ -11,11 +11,13 @@
 
 ## Contents
 <!-- * [Installation](#installation) -->
-<!-- * [Usage](#usage) -->
+* [Usage](#usage)
 * [Features](#features)
 * [Todo](#todo)
 * [License](./LICENSE)
 
+### Usage
+    *  docker-compose up -d
 
 ### features
 
