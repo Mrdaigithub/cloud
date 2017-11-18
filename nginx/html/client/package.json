@@ -6,10 +6,12 @@
     "jss": "^8.1.0",
     "jss-preset-default": "^3.0.0",
     "material-ui": "next",
+    "material-ui-icons": "^1.0.0-beta.17",
     "prop-types": "latest",
     "react": "latest",
     "react-dom": "latest",
     "react-jss": "latest",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "latest",
     "recompose": "latest"
   },

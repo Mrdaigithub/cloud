@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import withRoot from '../components/withRoot';
 import Login from './login/Login'
+import Routes from '../routes'
+
 
 const styles = {
     root: {
@@ -15,26 +17,11 @@ const styles = {
 };
 
 class Index extends Component {
-    state = {
-        open: false,
-    };
-
-    handleRequestClose = () => {
-        this.setState({
-            open: false,
-        });
-    };
-
-    handleClick = () => {
-        this.setState({
-            open: true,
-        });
-    };
-
     render() {
         return (
             <div className={this.props.classes.root}>
-                <Login/>
+                <Routes/>
+                {/*<Login/>*/}
             </div>
         );
     }
