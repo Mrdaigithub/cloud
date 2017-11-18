@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import withRoot from '../components/withRoot';
-import Login from './login/Login'
 import Routes from '../routes'
 
 
@@ -21,7 +20,6 @@ class Index extends Component {
         return (
             <div className={this.props.classes.root}>
                 <Routes/>
-                {/*<Login/>*/}
             </div>
         );
     }
