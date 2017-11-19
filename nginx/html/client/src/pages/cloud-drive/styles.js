@@ -19,6 +19,10 @@ const styles = theme => ({
         fontSize: '20px',
         margin: '10px 0 0 0'
     },
+    'sidebar-link': {
+        display: 'inherit',
+        textDecoration: 'none'
+    },
     'img-responsive': {
         width: '100%'
     },
