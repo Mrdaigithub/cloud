@@ -9,7 +9,6 @@ import Routes from '../routes'
 
 const styles = {
     root: {
-        textAlign: 'center',
         height: '100vh',
         overflow: 'hidden'
     },
