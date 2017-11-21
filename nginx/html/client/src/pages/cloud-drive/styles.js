@@ -26,9 +26,22 @@ const styles = theme => ({
     'img-responsive': {
         width: '100%'
     },
-    "topbar-btn": {
+    'topbar-btn': {
         color: '#fff'
     },
+    'bottom-bar': {
+        backgroundColor: 'rgba(0,0,0,.9)',
+        width: '100%',
+        position: 'fixed',
+        bottom: 0,
+        left: 0
+    },
+    'bottom-bar-btn': {
+        textAlign: 'center'
+    },
+    'bottom-bar-btn-icon': {
+        color: '#fff'
+    }
 });
 
 export default styles

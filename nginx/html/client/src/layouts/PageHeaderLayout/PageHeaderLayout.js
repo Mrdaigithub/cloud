@@ -13,6 +13,7 @@ import Divider from 'material-ui/Divider';
 import List, {ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Storage from 'material-ui-icons/Storage';
 import Delete from 'material-ui-icons/Delete';
+import FileUpload from 'material-ui-icons/FileUpload';
 import SupervisorAccount from 'material-ui-icons/SupervisorAccount';
 import Avatar from 'material-ui/Avatar';
 import GithubIcon from '../../components/GithubIcon'
@@ -65,6 +66,12 @@ class CloudDrive extends Component {
                                     </ListItemIcon>
                                     <ListItemText primary="My cloud"/>
                                 </Link>
+                            </ListItem>
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <FileUpload/>
+                                </ListItemIcon>
+                                <ListItemText primary="upload"/>
                             </ListItem>
                             <ListItem button>
                                 <Link to="/trash" className={classes['sidebar-link']}>
