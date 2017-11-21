@@ -43,7 +43,7 @@ class CloudDrive extends Component {
                          onClick={this.toggleDrawer(false)}
                          onKeyDown={this.toggleDrawer(false)}>
                         <List className={classes['avatar-container']}>
-                            <Link to="/users/oneself" className={classes['sidebar-link']}>
+                            <Link to="/personnel/oneself" className={classes['sidebar-link']}>
                                 <ListItem button>
                                     <Grid container direction={'row'} spacing={0}>
                                         <Grid item xs={12}>
@@ -85,11 +85,11 @@ class CloudDrive extends Component {
                         <Divider/>
                         <List>
                             <ListItem button>
-                                <Link to="/users" className={classes['sidebar-link']}>
+                                <Link to="/personnel/groups" className={classes['sidebar-link']}>
                                     <ListItemIcon>
                                         <SupervisorAccount/>
                                     </ListItemIcon>
-                                    <ListItemText primary="Users"/>
+                                    <ListItemText primary="personnel"/>
                                 </Link>
                             </ListItem>
                         </List>

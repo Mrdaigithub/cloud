@@ -13,6 +13,7 @@
     "react-jss": "latest",
     "react-router-dom": "^4.2.2",
     "react-scripts": "latest",
+    "react-swipeable-views": "^0.12.10",
     "recompose": "latest"
   },
   "scripts": {

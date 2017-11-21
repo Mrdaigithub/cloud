@@ -30,7 +30,7 @@ const styles = theme => ({
         color: '#fff'
     },
     'content':{
-        padding:'50px 0'
+        padding:'65px 0'
     }
 });
 

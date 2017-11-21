@@ -16,7 +16,6 @@ class Oneself extends Component {
         const {classes} = this.props;
         return (
             <Grid container
-                  column
                   direction={'row'}
                   justify={'center'}
                   alignItems={'flex-start'}

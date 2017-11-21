@@ -2,6 +2,7 @@ FROM php:7.0.25-fpm
 RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libpq-dev \
+        php \
     && docker-php-ext-install mcrypt mbstring tokenizer pdo pdo_pgsql
 RUN apt-get autoclean \
     && apt-get autoremove \
