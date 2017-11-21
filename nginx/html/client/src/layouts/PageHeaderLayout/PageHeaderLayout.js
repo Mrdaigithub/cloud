@@ -94,7 +94,7 @@ class CloudDrive extends Component {
                         </List>
                     </div>
                 </Drawer>
-                <AppBar position='static'>
+                <AppBar position='fixed'>
                     <Toolbar>
                         <Grid container direction={'row'}
                               justify={'space-between'}
@@ -149,7 +149,7 @@ class CloudDrive extends Component {
                         </Grid>
                     </Toolbar>
                 </AppBar>
-                <div id={'content'}>
+                <div className={classes['content']}>
                     {children}
                 </div>
             </div>

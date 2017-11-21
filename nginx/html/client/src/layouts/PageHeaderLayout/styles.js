@@ -29,6 +29,9 @@ const styles = theme => ({
     "topbar-btn": {
         color: '#fff'
     },
+    'content':{
+        paddingTop:'50px'
+    }
 });
 
 export default styles
