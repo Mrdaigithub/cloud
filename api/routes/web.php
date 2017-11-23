@@ -11,10 +11,8 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
 
-$router->get('/login', function () use ($router) {
-    return 'login';
+$router->group(['namespace' => 'Api\V1'], function () use ($router) {
+    $router->post('login', 'TokenController@login');
+    $router->get('logout', 'TokenController@logout');
 });
