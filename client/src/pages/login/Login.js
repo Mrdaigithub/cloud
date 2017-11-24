@@ -8,6 +8,21 @@ import Button from 'material-ui/Button'
 import logo from './../../static/logo.svg'
 
 class Login extends Component {
+    state = {
+        username: '',
+        password: ''
+    };
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
+
+    login(){
+        console.log('login')
+    }
+
     render() {
         const {classes} = this.props;
         return (
@@ -18,9 +33,22 @@ class Login extends Component {
                         <Grid item xs={5} className={classes.logoTitle}>Cloud</Grid>
                         <Grid item xs={12} className={classes.logoText}>A simple cloud project</Grid>
                     </Grid>
-                    <TextField className={classes.loginInput} id="Username" label="username" fullWidth/>
-                    <TextField className={classes.loginInput} id="Password" label="password" fullWidth/>
-                    <Button raised color="accent" className={classes.loginButton}>login</Button>
+                    <TextField className={classes.loginInput}
+                               id="username"
+                               label="username"
+                               value={this.state.username}
+                               onChange={this.handleChange('username')}
+                               fullWidth/>
+                    <TextField className={classes.loginInput}
+                               id="password"
+                               label="password"
+                               value={this.state.password}
+                               onChange={this.handleChange('password')}
+                               fullWidth/>
+                    <Button raised
+                            color="accent"
+                            className={classes.loginButton}
+                            onClick={this.login}>login</Button>
                 </Grid>
             </Grid>
         )
