@@ -3,12 +3,10 @@
  * Created by PhpStorm.
  * User: dai
  * Date: 2017/11/25
- * Time: 15:52
+ * Time: 15:46
  */
 
-use App\Http\Controllers\Api\V1;
-
-class Login
+class ApiSerializer
 {
 
 }
