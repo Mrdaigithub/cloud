@@ -6,9 +6,15 @@
  * Time: 15:52
  */
 
-use App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers\Api\V1;
 
-class Login
+use App\Http\Controllers\Api\ApiController;
+use App\Models\User;
+
+class TokenController extends ApiController
 {
-
+    public function login()
+    {
+        return $this->message('success');
+    }
 }

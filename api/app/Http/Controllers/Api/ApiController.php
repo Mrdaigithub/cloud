@@ -6,7 +6,12 @@
  * Time: 15:50
  */
 
+namespace App\Http\Controllers\Api;
+
+use App\Api\Helpers\Api\ApiResponse;
+use App\Http\Controllers\Controller;
+
 class ApiController
 {
-
+    use ApiResponse;
 }
