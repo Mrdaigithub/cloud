@@ -5,12 +5,16 @@ import styles from './styles'
 import Grid from 'material-ui/Grid'
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
+import IconButton from 'material-ui/IconButton';
 import logo from './../../static/logo.svg'
+import GithubIcon from "../../components/GithubIcon";
+import axios from '../../configs/axios'
+import qs from 'qs'
 
 class Login extends Component {
     state = {
-        username: '',
-        password: ''
+        username: 'root',
+        password: 'root'
     };
 
     handleChange = name => event => {
@@ -19,8 +23,15 @@ class Login extends Component {
         });
     };
 
-    login(){
-        console.log('login')
+    login() {
+        let that = this;
+        !(async function () {
+            let res = await axios.post('/login/password', qs.stringify({
+                username: that.state.username,
+                password: that.state.password
+            }));
+            console.log(res)
+        })()
     }
 
     render() {
@@ -36,19 +47,30 @@ class Login extends Component {
                     <TextField className={classes.loginInput}
                                id="username"
                                label="username"
+                               required
                                value={this.state.username}
                                onChange={this.handleChange('username')}
                                fullWidth/>
                     <TextField className={classes.loginInput}
                                id="password"
                                label="password"
+                               required
                                value={this.state.password}
                                onChange={this.handleChange('password')}
                                fullWidth/>
                     <Button raised
                             color="accent"
                             className={classes.loginButton}
-                            onClick={this.login}>login</Button>
+                            onClick={this.login.bind(this)}>login</Button>
+                    <Grid container alignItems={'center'} justify={'flex-start'}>
+                        <Grid item xs={4}>其他登录方式</Grid>
+                        <Grid item xs={4}>
+                            <IconButton
+                                href={`https://github.com/login/oauth/authorize?client_id=${'fbc7ce7b78d475a3a327'}`}>
+                                <GithubIcon/>
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         )

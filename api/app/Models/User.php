@@ -11,14 +11,9 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'username', 'password'
+        'username', 'email'
     ];
     protected $hidden = [
         'password'
     ];
-
-    public static function findFOrPassport($email)
-    {
-        return self::where('email', $email)->first();
-    }
 }

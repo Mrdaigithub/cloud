@@ -20,7 +20,11 @@ const styles = theme => ({
     },
     'loginButton': {
         width: '100%',
-        marginTop: '3vh'
+        margin: '3vh 0 1vh 0'
+    },
+    'otherLoginWayImg': {
+        backgroundColor: '#dfdfdf',
+        borderRadius:'50%'
     }
 });
 
