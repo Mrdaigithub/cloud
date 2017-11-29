@@ -63,8 +63,7 @@ class Login extends Component {
                             className={classes.loginButton}
                             onClick={this.login.bind(this)}>login</Button>
                     <Grid container alignItems={'center'} justify={'flex-start'}>
-                        <Grid item xs={4}>其他登录方式</Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={2}>
                             <IconButton
                                 href={`https://github.com/login/oauth/authorize?client_id=${'fbc7ce7b78d475a3a327'}`}>
                                 <GithubIcon/>
