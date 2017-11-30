@@ -15,9 +15,6 @@ const styles = theme => ({
     'loginForm': {
         height: '100vh'
     },
-    'loginInput': {
-        margin: '5px 0'
-    },
     'loginButton': {
         width: '100%',
         margin: '3vh 0 1vh 0'

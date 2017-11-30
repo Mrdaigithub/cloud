@@ -10,14 +10,16 @@
     "material-ui-icons": "^1.0.0-beta.17",
     "prop-types": "latest",
     "qs": "^6.5.1",
-    "rc-form": "^2.1.3",
     "react": "latest",
     "react-dom": "latest",
     "react-jss": "latest",
+    "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "latest",
     "react-swipeable-views": "^0.12.10",
-    "recompose": "latest"
+    "recompose": "latest",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
