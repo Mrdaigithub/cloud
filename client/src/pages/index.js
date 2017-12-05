@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import {Route, Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import teal from 'material-ui/colors/teal';
 import indigo from 'material-ui/colors/indigo';
 import {MuiThemeProvider, createMuiTheme} from 'material-ui/styles';
 import {withStyles} from 'material-ui/styles';
 import withRoot from '../components/withRoot';
-import Home from './home'
-import About from './about'
-import Welcome from './welcome'
+import Routes from '../routes'
 
 const styles = {
     root: {
@@ -35,8 +32,7 @@ class App extends Component {
                 <main>
                     <MuiThemeProvider theme={theme}>
                         <div className={this.props.classes.root}>
-                            <Route exact path="/" component={Home}/>
-                            <Route exact path="/about-us" component={About}/>
+                            <Routes/>
                         </div>
                     </MuiThemeProvider>
                 </main>
