@@ -1,17 +1,18 @@
-import React from 'react'
-import {render} from 'react-dom'
-import {Provider} from 'react-redux'
-import {ConnectedRouter} from 'react-router-redux'
-import store, {history} from './store/index'
-import App from './pages/index'
+import dva from 'dva';
+import './index.css';
 
-const target = document.querySelector('#root');
+// 1. Initialize
+const app = dva();
 
-render(
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App/>
-        </ConnectedRouter>
-    </Provider>,
-    target
-)
+// 2. Plugins
+// app.use({});
+
+// 3. Model
+// app.model(require('./models/example'));
+
+
+// 4. Router
+app.router(require('./router'));
+
+// 5. Start
+app.start('#root');

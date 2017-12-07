@@ -1,0 +1,34 @@
+
+.normal {
+  height: 100vh;
+}
+
+.logo-img {
+  width: 100%;
+}
+
+.logo-title {
+  font-size: 38px;
+  color: rgba(0, 0, 0, 0.85)
+}
+
+.logo-text {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 20px
+}
+
+.login-form {
+  height: 100vh;
+}
+
+.login-button {
+  width: 100%;
+  margin: 3vh 0 1vh 0
+}
+
+.other-login-way-img {
+  background-color: #dfdfdf;
+  border-radius: 50%
+}
