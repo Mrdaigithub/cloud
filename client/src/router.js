@@ -4,9 +4,9 @@ import dynamic from 'dva/dynamic';
 import IndexPage from './routes/IndexPage';
 
 function RouterConfig({ history, app }) {
-  const Welcome = dynamic({
+  const Welcomes = dynamic({
     app,
-    component: () => import('./routes/WelcomePage'),
+    component: () => import('./routes/Welcome/Welcome'),
   });
 
   const Login = dynamic({
@@ -14,15 +14,23 @@ function RouterConfig({ history, app }) {
     models: () => [
       import('./models/oneself'),
     ],
-    component: () => import('./routes/LoginPage'),
+    component: () => import('./routes/Login/Login'),
+  });
+  const CloudDrive = dynamic({
+    app,
+    models: () => [
+      import('./models/oneself'),
+    ],
+    component: () => import('./routes/CloudDrive/CloudDrive'),
   });
 
   return (
     <Router history={history}>
       <Switch>
         <Route path="/" exact component={IndexPage}/>
-        <Route path="/Welcome" component={Welcome}/>
+        <Route path="/Welcome" component={Welcomes}/>
         <Route path="/login" component={Login}/>
+        <Route path="/cloud-drive" component={CloudDrive}/>
       </Switch>
     </Router>
   );

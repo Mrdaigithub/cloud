@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import Grid from 'material-ui/Grid';
 import { LinearProgress } from 'material-ui/Progress';
-
 import styles from './Welcome.css';
 import logo from '../../assets/logo.svg';
 
@@ -50,4 +50,4 @@ class Welcome extends Component {
   }
 }
 
-export default Welcome;
+export default connect()(Welcome);

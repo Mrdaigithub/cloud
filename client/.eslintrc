@@ -24,6 +24,8 @@
     "react/prop-types": [0],
     "require-yield": [1],
     "react/jsx-space-before-closing" : [ "error", "never" ],
+    "react/jsx-indent-props": [2, 2],
+    "react/jsx-closing-bracket-location": [1, "after-props"],
     "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}]
   },
   "parserOptions": {
