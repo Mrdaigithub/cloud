@@ -155,37 +155,33 @@ class CloudDrive extends Component {
           </ListItem>
         </List>
         <div className={styles['bottom-bar']}>
-          <Grid container
-                direction={'row'}
-                justify={'space-around'}
-                alignItems={'center'}>
+          <Grid
+            container
+            direction={'row'}
+            justify={'space-around'}
+            alignItems={'center'}>
             <Grid item xs={2} className={styles['bottom-bar-btn']}>
-              <IconButton className={styles['bottom-bar-btn-icon']}
-                          aria-label="Delete">
+              <IconButton className={styles['bottom-bar-btn-icon']} aria-label="Delete">
                 <DeleteIcon/>
               </IconButton>
             </Grid>
             <Grid item xs={2} className={styles['bottom-bar-btn']}>
-              <IconButton className={styles['bottom-bar-btn-icon']}
-                          aria-label="Delete">
+              <IconButton className={styles['bottom-bar-btn-icon']} aria-label="Delete">
                 <DeleteIcon/>
               </IconButton>
             </Grid>
             <Grid item xs={2} className={styles['bottom-bar-btn']}>
-              <IconButton className={styles['bottom-bar-btn-icon']}
-                          aria-label="Delete">
+              <IconButton className={styles['bottom-bar-btn-icon']} aria-label="Delete">
                 <DeleteIcon/>
               </IconButton>
             </Grid>
             <Grid item xs={2} className={styles['bottom-bar-btn']}>
-              <IconButton className={styles['bottom-bar-btn-icon']}
-                          aria-label="Delete">
+              <IconButton className={styles['bottom-bar-btn-icon']} aria-label="Delete">
                 <DeleteIcon/>
               </IconButton>
             </Grid>
             <Grid item xs={2} className={styles['bottom-bar-btn']}>
-              <IconButton className={styles['bottom-bar-btn-icon']}
-                          aria-label="Delete">
+              <IconButton className={styles['bottom-bar-btn-icon']} aria-label="Delete">
                 <DeleteIcon/>
               </IconButton>
             </Grid>

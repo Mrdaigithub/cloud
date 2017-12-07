@@ -46,8 +46,8 @@ class Login extends Component {
 
   login() {
     // let that = this;
-    let ustate = this.handleValidation('username')();
-    let pstate = this.handleValidation('password')();
+    const ustate = this.handleValidation('username')();
+    const pstate = this.handleValidation('password')();
     if (!ustate || !pstate) {
       return false;
     }
