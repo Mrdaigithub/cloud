@@ -23,10 +23,16 @@
     "react/prefer-stateless-function": [0],
     "react/prop-types": [0],
     "require-yield": [1],
+    "indent": [0, 4],
     "react/jsx-space-before-closing" : [ "error", "never" ],
-    "react/jsx-indent-props": [2, 2],
+    "react/jsx-indent": ["error", 4],
+    "react/jsx-indent-props": [2, 4],
     "react/jsx-closing-bracket-location": [1, "after-props"],
-    "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}]
+    "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
+    "no-undef":[1],
+    "no-unused-vars":[1],
+    "max-len":[2, 2000],
+    "quote-props":[0]
   },
   "parserOptions": {
     "ecmaFeatures": {
