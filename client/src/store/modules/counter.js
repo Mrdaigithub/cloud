@@ -7,7 +7,6 @@ const initialState = {
     count: 0,
     isIncrementing: false,
     isDecrementing: false,
-    token: '',
 };
 
 export default (state = initialState, action) => {

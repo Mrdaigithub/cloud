@@ -1,22 +1,12 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import teal from 'material-ui/colors/teal';
 import indigo from 'material-ui/colors/indigo';
+import Snackbar from 'material-ui/Snackbar';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import withRoot from '../components/withRoot';
-import About from './About';
-import Welcome from './Welcome';
-import Login from './Login';
-import CloudDrive from './CloudDrive';
-
-const styles = {
-    root: {
-        position: 'relative',
-        height: '100vh',
-        overflowX: 'hidden',
-    },
-};
+import Routes from '../routes';
 
 const theme = createMuiTheme({
     palette: {
@@ -28,17 +18,47 @@ const theme = createMuiTheme({
     },
 });
 
+const styles = theme => ({
+    root: {
+        position: 'relative',
+        height: '100vh',
+        overflowX: 'hidden',
+    },
+    snackbar: {
+        margin: theme.spacing.unit,
+    },
+});
+
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            msgShow: false,
+            msgText: '',
+        };
+    }
+
+    componentDidMount() {
+        const { store } = this.props;
+        store.subscribe(() => {
+                this.setState({ msgShow: store.getState().assist.msgShow });
+                this.setState({ msgText: store.getState().assist.msgText });
+            },
+        );
+    }
+
     render() {
+        const { classes } = this.props;
         return (
             <main>
                 <MuiThemeProvider theme={theme}>
-                    <div className={this.props.classes.root}>
-                        <Route exact path="/" component={Welcome}/>
-                        <Route exact path="/welcome" component={Welcome}/>
-                        <Route exact path="/about-us" component={About}/>
-                        <Route exact path="/login" component={Login}/>
-                        <Route exact path="/cloud-drive" component={CloudDrive}/>
+                    <div className={classes.root}>
+                        <Snackbar
+                            className={classes.secondary}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                            open={this.state.msgShow}
+                            message={this.state.msgText}/>
+                        <Routes/>
                     </div>
                 </MuiThemeProvider>
             </main>
@@ -50,4 +70,14 @@ App.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withRoot(withStyles(styles)(App));
+const mapStateToProps = state => ({
+    msgShow: state.user.msgShow,
+    msgText: state.user.msgText,
+});
+
+export default connect(
+    mapStateToProps,
+    undefined,
+    undefined,
+    { pure: false },
+)(withRoot(withStyles(styles)(App)));

@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
+import { login } from '../../store/modules/user';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import GithubIcon from '../../components/GithubIcon';
@@ -54,13 +55,7 @@ class Login extends Component {
         if (!ustate || !pstate) {
             return false;
         }
-        this.props.dispatch({
-            type: 'oneself/Login',
-            payload: {
-                username: this.state.username,
-                password: this.state.password,
-            },
-        });
+        this.props.login(this.state.username, this.state.password);
     }
 
     render() {
@@ -114,9 +109,12 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    token: state.user.token,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+    login,
     changePage: url => push(url),
 }, dispatch);
 

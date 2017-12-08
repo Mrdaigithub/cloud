@@ -51,7 +51,7 @@ class Welcome extends Component {
     }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),
