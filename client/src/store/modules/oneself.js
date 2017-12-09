@@ -1,7 +1,8 @@
 import qs from 'qs';
 import request from '../../utils/requester';
 
-export const SAVE_TOKEN = 'user/SAVE_TOKEN';
+export const SAVE_TOKEN = 'oneself/SAVE_TOKEN';
+export const CLEAR_TOKEN = 'oneself/CLEAR_TOKEN';
 
 const initialState = {
     accessToken: null,
@@ -15,6 +16,12 @@ export default (state = initialState, action) => {
                 ...state,
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
+            };
+        case CLEAR_TOKEN:
+            return {
+                ...state,
+                accessToken: null,
+                refreshToken: null,
             };
 
         default:
@@ -37,6 +44,15 @@ export const login = (username, password, cb) => {
             },
         });
 
+        return cb();
+    };
+};
+
+export const logout = (cb) => {
+    return (dispatch) => {
+        dispatch({
+            type: CLEAR_TOKEN,
+        });
         return cb();
     };
 };

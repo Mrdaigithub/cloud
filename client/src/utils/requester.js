@@ -36,8 +36,8 @@ requester.interceptors.request.use(
     (config) => {
         const configs = config;
         toggleLoading()(store.dispatch);
-        if (store.getState().user.accessToken) {
-            const { accessToken } = store.getState().user.accessToken;
+        if (store.getState().oneself.accessToken) {
+            const { accessToken } = store.getState().personnel.accessToken;
             configs.headers.common.Authorization = `Bearer ${accessToken}`;
         }
         return configs;

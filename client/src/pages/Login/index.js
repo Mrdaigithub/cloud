@@ -8,7 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
-import { login } from '../../store/modules/user';
+import { login } from '../../store/modules/oneself';
 import { alert } from '../../store/modules/assist';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
@@ -116,7 +116,6 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.user.token,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

@@ -77,8 +77,8 @@ App.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    msgShow: state.user.msgShow,
-    msgText: state.user.msgText,
+    msgShow: state.oneself.msgShow,
+    msgText: state.oneself.msgText,
 });
 
 export default connect(
