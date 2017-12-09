@@ -32,7 +32,8 @@
     "no-undef":[1],
     "no-unused-vars":[1],
     "max-len":[2, 2000],
-    "quote-props":[0]
+    "quote-props":[0],
+    "linebreak-style": [0]
   },
   "parserOptions": {
     "ecmaFeatures": {

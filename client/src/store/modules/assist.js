@@ -62,6 +62,5 @@ export const alert = (msgText = '', time = 3000) => {
                 },
             });
         }, time);
-
     };
 };

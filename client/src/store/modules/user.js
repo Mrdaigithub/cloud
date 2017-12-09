@@ -22,21 +22,21 @@ export default (state = initialState, action) => {
     }
 };
 
-export const login = (username, password) => {
+export const login = (username, password, cb) => {
     return async (dispatch) => {
         const { access_token, refresh_token } = await request.post('/login/password', qs.stringify({
             username,
             password,
         }));
 
-        return setTimeout(() => {
-            dispatch({
-                type: SAVE_TOKEN,
-                payload: {
-                    accessToken: access_token,
-                    refreshToken: refresh_token,
-                },
-            });
-        }, 3000);
+        dispatch({
+            type: SAVE_TOKEN,
+            payload: {
+                accessToken: access_token,
+                refreshToken: refresh_token,
+            },
+        });
+
+        return cb();
     };
 };

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
 import { LinearProgress } from 'material-ui/Progress';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import styles from './styles';
 import logo from '../../static/logo.svg';
@@ -30,7 +30,7 @@ class Welcome extends Component {
         if (completed <= 100) {
             this.setState({ completed: completed + (100 / (time / 0.5)) });
         } else {
-            this.props.changePage('/Login');
+            this.props.changePage('/login');
         }
     };
 
@@ -54,7 +54,7 @@ class Welcome extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => push(url),
+    changePage: url => replace(url),
 }, dispatch);
 
 export default connect(

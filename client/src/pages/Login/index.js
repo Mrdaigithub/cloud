@@ -6,9 +6,10 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import { login } from '../../store/modules/user';
+import { alert } from '../../store/modules/assist';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import GithubIcon from '../../components/GithubIcon';
@@ -55,7 +56,12 @@ class Login extends Component {
         if (!ustate || !pstate) {
             return false;
         }
-        this.props.login(this.state.username, this.state.password);
+        this.props.login(this.state.username, this.state.password, () => {
+            this.props.alert('login success', 1000);
+            setTimeout(() => {
+                this.props.changePage('/cloud-drive');
+            }, 1300);
+        });
     }
 
     render() {
@@ -115,7 +121,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     login,
-    changePage: url => push(url),
+    alert,
+    changePage: url => replace(url),
 }, dispatch);
 
 export default connect(

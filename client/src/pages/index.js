@@ -7,6 +7,7 @@ import Snackbar from 'material-ui/Snackbar';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import withRoot from '../components/withRoot';
 import Routes from '../routes';
+import CircularLoading from '../components/CircularLoading';
 
 const theme = createMuiTheme({
     palette: {
@@ -33,6 +34,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false,
             msgShow: false,
             msgText: '',
         };
@@ -41,8 +43,11 @@ class App extends Component {
     componentDidMount() {
         const { store } = this.props;
         store.subscribe(() => {
-                this.setState({ msgShow: store.getState().assist.msgShow });
-                this.setState({ msgText: store.getState().assist.msgText });
+                this.setState({
+                    loading: store.getState().assist.loading,
+                    msgShow: store.getState().assist.msgShow,
+                    msgText: store.getState().assist.msgText,
+                });
             },
         );
     }
@@ -58,6 +63,7 @@ class App extends Component {
                             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                             open={this.state.msgShow}
                             message={this.state.msgText}/>
+                        <CircularLoading show={this.state.loading}/>
                         <Routes/>
                     </div>
                 </MuiThemeProvider>
