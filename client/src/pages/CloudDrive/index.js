@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
+import qs from 'qs';
 import Grid from 'material-ui/Grid';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
@@ -18,6 +19,7 @@ import SpeedDial from '../../components/SpeedDial';
 import SpeedDialItem from '../../components/SpeedDial/SpeedDialItem';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './styles';
+import request from '../../utils/requester';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -25,11 +27,16 @@ class CloudDrive extends Component {
         this.handleUpload = this.handleUpload.bind(this);
     }
 
-    handleUpload() {
+    async handleUpload() {
         const formData = new FormData();
-        const fileData = document.querySelector('#icon-button-file').files[0];
-        formData.append('img', fileData);
-        console.log(formData);
+        const files = document.querySelector('#icon-button-file').files;
+        formData.append('_method', 'put');
+        for (const file of files) {
+            formData.append(file.name, file);
+        }
+        await request.post('/file/upload', qs.stringify({
+            files: formData,
+        }));
     }
 
     render() {
@@ -189,39 +196,6 @@ class CloudDrive extends Component {
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                 </List>
-                <div className={classes.bottomBar}>
-                    <Grid
-                        container
-                        direction={'row'}
-                        justify={'space-around'}
-                        alignItems={'center'}>
-                        <Grid item xs={2} className={classes.bottomBarBtn}>
-                            <IconButton className={classes.bottomBarBtnIcon} aria-label="Delete">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={2} className={classes.bottomBarBtn}>
-                            <IconButton className={classes.bottomBarBtnIcon} aria-label="Delete">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={2} className={classes.bottomBarBtn}>
-                            <IconButton className={classes.bottomBarBtnIcon} aria-label="Delete">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={2} className={classes.bottomBarBtn}>
-                            <IconButton className={classes.bottomBarBtnIcon} aria-label="Delete">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Grid>
-                        <Grid item xs={2} className={classes.bottomBarBtn}>
-                            <IconButton className={classes.bottomBarBtnIcon} aria-label="Delete">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                </div>
             </PageHeaderLayout>
         );
     }

@@ -57,7 +57,7 @@ class Login extends Component {
             return false;
         }
         this.props.login(this.state.username, this.state.password, () => {
-            this.props.alert('login success', 1000);
+            this.props.alert('登录成功', 1000);
             setTimeout(() => {
                 this.props.changePage('/cloud-drive');
             }, 1300);
@@ -76,7 +76,7 @@ class Login extends Component {
                             <Grid item xs={12} className={classes.logoText}>A simple cloud project</Grid>
                         </Grid>
                         <FormControl fullWidth required>
-                            <InputLabel>Username</InputLabel>
+                            <InputLabel>用户名</InputLabel>
                             <Input
                                 error={this.state.usernameErr} required value={this.state.username}
                                 onChange={this.handleChange('username').bind(this)}
@@ -86,7 +86,7 @@ class Login extends Component {
                             </FormHelperText>
                         </FormControl>
                         <FormControl fullWidth required>
-                            <InputLabel>Password</InputLabel>
+                            <InputLabel>密码</InputLabel>
                             <Input
                                 error={this.state.passwordErr}
                                 value={this.state.password}
@@ -99,7 +99,7 @@ class Login extends Component {
                         <Button
                             raised color="primary"
                             className={classes.loginButton}
-                            onClick={this.login.bind(this)}>login</Button>
+                            onClick={this.login.bind(this)}>登录</Button>
                         <Grid container alignItems={'center'} justify={'flex-start'}>
                             <Grid item xs={2}>
                                 <IconButton

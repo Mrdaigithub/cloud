@@ -1,7 +1,7 @@
 const styles = theme => ({
     'cover': {
         position: 'fixed',
-        bottom: '60px',
+        bottom: '40px',
         right: '20px',
         zIndex: 999,
         opacity: 1,

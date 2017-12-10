@@ -12,7 +12,6 @@ import Divider from 'material-ui/Divider';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Storage from 'material-ui-icons/Storage';
 import Delete from 'material-ui-icons/Delete';
-import FileUpload from 'material-ui-icons/FileUpload';
 import SupervisorAccount from 'material-ui-icons/SupervisorAccount';
 import Avatar from 'material-ui/Avatar';
 import GithubIcon from '../../components/GithubIcon/index';
@@ -65,21 +64,15 @@ class PageHeaderLayout extends Component {
                                     <ListItemIcon>
                                         <Storage/>
                                     </ListItemIcon>
-                                    <ListItemText primary="My cloud"/>
+                                    <ListItemText primary="我的云端硬盘"/>
                                 </Link>
-                            </ListItem>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <FileUpload/>
-                                </ListItemIcon>
-                                <ListItemText primary="upload"/>
                             </ListItem>
                             <ListItem button>
                                 <Link to="/trash" className={classes.sidebarLink}>
                                     <ListItemIcon>
                                         <Delete/>
                                     </ListItemIcon>
-                                    <ListItemText primary="Trash"/>
+                                    <ListItemText primary="回收站"/>
                                 </Link>
                             </ListItem>
                         </List>
@@ -90,7 +83,7 @@ class PageHeaderLayout extends Component {
                                     <ListItemIcon>
                                         <SupervisorAccount/>
                                     </ListItemIcon>
-                                    <ListItemText primary="personnel"/>
+                                    <ListItemText primary="人员管理"/>
                                 </Link>
                             </ListItem>
                         </List>

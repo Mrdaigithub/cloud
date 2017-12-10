@@ -31,19 +31,6 @@ const styles = theme => ({
     'topbarBtn': {
         color: '#fff',
     },
-
-    'bottomBar': {
-        backgroundColor: 'rgba(0, 0, 0, .9)',
-        width: '100%',
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-    },
-
-    'bottomBarBtn': {
-        textAlign: 'center',
-    },
-
     'bottomBarBtnIcon': {
         color: '#fff',
     },
