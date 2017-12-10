@@ -47,6 +47,12 @@ const styles = theme => ({
     'bottomBarBtnIcon': {
         color: '#fff',
     },
+    'SpeedDialItemInput': {
+        display: 'none',
+    },
+    'SpeedDialItemButton': {
+        display: 'inline',
+    },
 
 });
 
