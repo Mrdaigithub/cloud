@@ -30,13 +30,14 @@ class CloudDrive extends Component {
     async handleUpload() {
         const formData = new FormData();
         const files = document.querySelector('#icon-button-file').files;
-        formData.append('_method', 'put');
         for (const file of files) {
-            formData.append(file.name, file);
+            formData.append('files', file);
         }
-        await request.post('/file/upload', qs.stringify({
-            files: formData,
-        }));
+        await request.post(
+            '/file/upload',
+            formData,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+        );
     }
 
     render() {
@@ -48,8 +49,8 @@ class CloudDrive extends Component {
                         <input
                             accept="*"
                             className={classes.SpeedDialItemInput}
-                            multiple="multiple"
                             id="icon-button-file"
+                            name="icon-button-file"
                             onChange={this.handleUpload}
                             type="file"/>
                         <label htmlFor="icon-button-file">
@@ -57,6 +58,9 @@ class CloudDrive extends Component {
                                 <FileUpload/>
                             </IconButton>
                         </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <DeleteIcon/>
                     </SpeedDialItem>
                 </SpeedDial>
                 <List>
