@@ -22,4 +22,5 @@ Route::namespace('Api\V1')
     ->prefix('v1')
     ->group(function () {
         Route::post('/login/password', 'AuthController@passwordLogin');
+        Route::post('/file/upload', 'FileController@upload');
     });

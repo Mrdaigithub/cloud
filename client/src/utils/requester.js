@@ -44,7 +44,7 @@ requester.interceptors.request.use(
     },
     (err) => {
         toggleLoading()(store.dispatch);
-        alert('Request error', 1500)(store.dispatch);
+        alert('本地请求失败', 1500)(store.dispatch);
         return Promise.reject(err);
     });
 
@@ -60,7 +60,7 @@ requester.interceptors.response.use(
             const errorCode = data.message;
             alert(errors[errorCode], 1500)(store.dispatch);
         } else {
-            alert('Server timeout', 1500)(store.dispatch);
+            alert('远端服务器超时', 1500)(store.dispatch);
         }
         return Promise.reject(data);
     });
