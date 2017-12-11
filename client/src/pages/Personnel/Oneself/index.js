@@ -47,7 +47,7 @@ class Oneself extends Component {
                                     <img className={classes['logo-img']} src={logo} alt="logo"/>
                                 </Link>
                             </Grid>
-                            <Grid item xs={12} className={classes.title}>choose your account</Grid>
+                            <Grid item xs={12} className={classes.title}>选择账户</Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={11} sm={8} md={5}>
@@ -108,7 +108,7 @@ class Oneself extends Component {
                                                 raised
                                                 color="primary"
                                                 onClick={this.handleLogout.bind(this)}>
-                                                Toggle avatar
+                                                切换账户
                                             </Button>
                                         </Grid>
                                     </Grid>
