@@ -30,9 +30,7 @@ class CloudDrive extends Component {
     async handleUpload() {
         const formData = new FormData();
         const files = document.querySelector('#icon-button-file').files;
-        for (const file of files) {
-            formData.append('files', file);
-        }
+        formData.append('files', files[0]);
         await request.post(
             '/file/upload',
             formData,

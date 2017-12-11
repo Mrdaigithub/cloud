@@ -14,17 +14,11 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'username' => 'root',
             'email' => 'root@gmail.com',
-            'password' => bcrypt('root')
-        ]);
-        DB::table('users')->insert([
-            'username' => 'user1',
-            'email' => 'user1@gmail.com',
-            'password' => bcrypt('user1')
-        ]);
-        DB::table('users')->insert([
-            'username' => 'user2',
-            'email' => 'user2@gmail.com',
-            'password' => bcrypt('user2')
+            'password' => bcrypt('root'),
+            'is_admin' => true,
+            'capacity' => 102400000000000000,
+            'used' => 25600,
+            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
     }
 }

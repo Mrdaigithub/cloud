@@ -28,7 +28,7 @@ const errors = {
 
 const requester = axios.create({
     baseURL: '//api.mrdaisite.com/api/v1/',
-    timeout: 3000,
+    // timeout: 3000,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 });
 
