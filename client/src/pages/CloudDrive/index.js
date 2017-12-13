@@ -31,43 +31,50 @@ class CloudDrive extends Component {
     /**
      * chunk file
      * @param file
-     * @param chunkSize
+     * @param tmpSize
      * @returns {Array}
      * @private
      */
-    _chunkFile(file, chunkSize = 5242880) {
-        const chunkNum = Math.ceil(file.size / chunkSize);
-        const fileChunk = [];
+    _splitFile(file, tmpSize = 5242880) {
+        const chunkNum = Math.ceil(file.size / tmpSize);
+        const tmpList = [];
         for (let i = 0; i < chunkNum; i += 1) {
-            fileChunk.push(file.slice(i * chunkSize, (i + 1) * chunkSize));
+            tmpList.push(file.slice(i * tmpSize, (i + 1) * tmpSize));
         }
-        return fileChunk;
+        return tmpList;
     }
 
     handleUpload() {
-        const chunkFileList = this._chunkFile(document.querySelector('#icon-button-file').files[0], 512000);
+        const file = document.querySelector('#icon-button-file').files[0];
         const fileReader = new FileReader();
-        const loadNext = fileChunk => fileReader.readAsBinaryString(fileChunk);
         const spark = new SparkMD5();
-        let fileChunk = chunkFileList.shift();
+        const tmpList = this._splitFile(file, 512000);
+        const loadNextTmp = tmp => fileReader.readAsBinaryString(tmp);
+        const tmpName = file.name;
+        const tmpNum = tmpList.length;
+        let tmpIndex = 0;
+        let tmp = tmpList.shift();
         fileReader.onload = async (e) => {
             const formData = new FormData();
             spark.appendBinary(e.target.result);
-            const fileChunkMD5 = spark.end();
-            console.log(e);
-            formData.append('files', fileChunk);
-            formData.append('md5', fileChunkMD5);
+            const tmpHash = spark.end();
+            formData.append('files', tmp);
+            formData.append('name', tmpName);
+            formData.append('hash', tmpHash);
+            formData.append('index', tmpIndex);
+            formData.append('num', tmpNum);
             await request.post(
                 '/file/upload',
                 formData,
                 { headers: { 'Content-Type': 'multipart/form-data' } },
             );
-            if (chunkFileList.length) {
-                fileChunk = chunkFileList.shift();
-                loadNext(fileChunk);
+            if (tmpList.length) {
+                tmp = tmpList.shift();
+                tmpIndex += 1;
+                loadNextTmp(tmp);
             }
         };
-        loadNext(fileChunk);
+        loadNextTmp(tmp);
     }
 
     render() {
