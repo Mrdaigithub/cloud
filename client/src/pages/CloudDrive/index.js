@@ -10,6 +10,7 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
+import SparkMD5 from 'spark-md5';
 import FileIcon from '../../components/file-type-icon/FileIcon';
 import FolderIcon from '../../components/file-type-icon/FolderIcon';
 import TextIcon from '../../components/file-type-icon/TextIcon';
@@ -27,15 +28,46 @@ class CloudDrive extends Component {
         this.handleUpload = this.handleUpload.bind(this);
     }
 
-    async handleUpload() {
-        const formData = new FormData();
-        const files = document.querySelector('#icon-button-file').files;
-        formData.append('files', files[0]);
-        await request.post(
-            '/file/upload',
-            formData,
-            { headers: { 'Content-Type': 'multipart/form-data' } },
-        );
+    /**
+     * chunk file
+     * @param file
+     * @param chunkSize
+     * @returns {Array}
+     * @private
+     */
+    _chunkFile(file, chunkSize = 5242880) {
+        const chunkNum = Math.ceil(file.size / chunkSize);
+        const fileChunk = [];
+        for (let i = 0; i < chunkNum; i += 1) {
+            fileChunk.push(file.slice(i * chunkSize, (i + 1) * chunkSize));
+        }
+        return fileChunk;
+    }
+
+    handleUpload() {
+        const chunkFileList = this._chunkFile(document.querySelector('#icon-button-file').files[0], 512000);
+        const fileReader = new FileReader();
+        const loadNext = fileChunk => fileReader.readAsBinaryString(fileChunk);
+        const spark = new SparkMD5();
+        let fileChunk = chunkFileList.shift();
+        fileReader.onload = async (e) => {
+            const formData = new FormData();
+            spark.appendBinary(e.target.result);
+            const fileChunkMD5 = spark.end();
+            console.log(e);
+            formData.append('files', fileChunk);
+            formData.append('md5', fileChunkMD5);
+            await request.post(
+                '/file/upload',
+                formData,
+                { headers: { 'Content-Type': 'multipart/form-data' } },
+            );
+            if (chunkFileList.length) {
+                fileChunk = chunkFileList.shift();
+                loadNext(fileChunk);
+            }
+        };
+        loadNext(fileChunk);
     }
 
     render() {
