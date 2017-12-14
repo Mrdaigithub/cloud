@@ -48,33 +48,39 @@ class CloudDrive extends Component {
         const file = document.querySelector('#icon-button-file').files[0];
         const fileReader = new FileReader();
         const spark = new SparkMD5();
-        const tmpList = this._splitFile(file, 512000);
+        const tmpList = this._splitFile(file, 1024000);
         const loadNextTmp = tmp => fileReader.readAsBinaryString(tmp);
-        const tmpName = file.name;
+        const fileName = file.name;
         const tmpNum = tmpList.length;
+        let fileHash = null;
         let tmpIndex = 0;
-        let tmp = tmpList.shift();
+        let tmp = null;
         fileReader.onload = async (e) => {
             const formData = new FormData();
             spark.appendBinary(e.target.result);
-            const tmpHash = spark.end();
-            formData.append('files', tmp);
-            formData.append('name', tmpName);
-            formData.append('hash', tmpHash);
-            formData.append('index', tmpIndex);
-            formData.append('num', tmpNum);
-            await request.post(
-                '/file/upload',
-                formData,
-                { headers: { 'Content-Type': 'multipart/form-data' } },
-            );
+            const hash = spark.end();
+            if (!fileHash) {
+                fileHash = hash;
+            } else {
+                formData.append('files', tmp);
+                formData.append('name', fileName);
+                formData.append('fileHash', fileHash);
+                formData.append('hash', hash);
+                formData.append('index', tmpIndex);
+                formData.append('num', tmpNum);
+                await request.post(
+                    '/file/upload',
+                    formData,
+                    { headers: { 'Content-Type': 'multipart/form-data' } },
+                );
+            }
             if (tmpList.length) {
                 tmp = tmpList.shift();
                 tmpIndex += 1;
                 loadNextTmp(tmp);
             }
         };
-        loadNextTmp(tmp);
+        loadNextTmp(file);
     }
 
     render() {

@@ -10,6 +10,30 @@ use App\Models\User;
 
 class AuthController extends ApiController
 {
+    /**
+     * 从指定url获取access token
+     *
+     * @param $url
+     * @param $post_data
+     * @return mixed
+     */
+    private function fetch_access_token($url, $post_data)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }
+
+    /**
+     * 使用密码方式登陆
+     *
+     * @param Request $request
+     * @return mixed
+     */
     function passwordLogin(Request $request)
     {
         $req = $request->all();
@@ -32,16 +56,5 @@ class AuthController extends ApiController
     function codeLogin(Request $request)
     {
 
-    }
-
-    private function fetch_access_token($url, $post_data)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
     }
 }

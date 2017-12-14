@@ -26,12 +26,13 @@ class FileController extends Controller
      * @param $index
      * @return Tmp
      */
-    private function save_tmp($file, $name, $hash, $num, $index)
+    private function save_tmp($file, $name, $file_hash, $hash, $num, $index)
     {
-        $full_filename = $this->base_path . $file->storeAs('tmps', $hash);
+        $this->base_path . $file->storeAs('tmps', $hash);
         $tmp = new Tmp();
         $tmp->tmp_name_hash = $hash;
         $tmp->real_file = $name;
+        $tmp->real_file_hash = $file_hash;
         $tmp->all_tmp_num = $num;
         $tmp->tmp_index = $index;
         $tmp->save();
@@ -55,16 +56,33 @@ class FileController extends Controller
      * @param $real_file
      * @return string
      */
-    private function merge_tmp($real_file)
+    private function merge_tmp($real_file, $file_hash)
     {
-        $tmpList = Tmp::where('real_file', $real_file)->orderBy('tmp_index')->get();
-        $new_file_fp = fopen($this->base_path . 'public/files/' . $real_file, 'wb+');
-        fwrite($new_file_fp, '');
+        $tmpList = Tmp::where('real_file_hash', $file_hash)->orderBy('tmp_index')->get();
+        $extension = array_key_exists('extension', pathinfo($real_file)) ? '.' . pathinfo($real_file)['extension'] : null;
+        $new_file_fp = fopen($this->base_path . 'public/files/' . $file_hash . $extension, 'wb+');
         foreach ($tmpList as $tmp) {
             $tmp_content = file_get_contents($this->base_path . 'tmps/' . $tmp['tmp_name_hash']);
             fwrite($new_file_fp, $tmp_content);
         }
-        return $this->base_path . 'public/files/' . $real_file;
+        return $this->base_path . 'public/files/' . $file_hash . $extension;
+    }
+
+    /**
+     * @param $full_filename
+     * @param $file_hash
+     * @return File
+     */
+    private function save_real_file($full_filename, $file_hash)
+    {
+        $file = new File();
+        $file->full_filename = $full_filename;
+        $file->file_hash = $file_hash;
+        $file->file_hash = $file_hash;
+        $file->file_size = filesize($full_filename);
+        $file->file_type = pathinfo($full_filename)['extension'];
+        $file->save();
+        return $file;
     }
 
     function upload(Request $request)
@@ -73,13 +91,16 @@ class FileController extends Controller
         $this->save_tmp(
             $request->file('files'),
             $req['name'],
+            $req['fileHash'],
             $req['hash'],
             $req['num'],
             $req['index']
         );
-        if ($this->receive_all_tmp($req['name'])){
-            return $this->merge_tmp($req['name']);
+        if ($this->receive_all_tmp($req['name'])) {
+            $full_filename = $this->merge_tmp($req['name'], $req['fileHash']);
+            return $this->save_real_file($full_filename, $req['fileHash']);
         }
+        return json_encode(false);
     }
 
     function get_file(Request $request)
