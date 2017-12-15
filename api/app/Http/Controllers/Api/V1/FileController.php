@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
 use Carbon\Carbon;
+use Validator;
 use App\Models\File;
 use App\Models\Tmp;
 
 
-class FileController extends Controller
+class FileController extends ApiController
 {
     function __construct()
     {
@@ -88,17 +89,19 @@ class FileController extends Controller
     function upload(Request $request)
     {
         $req = $request->all();
+        if (Validator::make($req, ['real_file' => 'required', 'real_file_hash' => 'required', 'tmp_name_hash' => 'required', 'all_tmp_num' => 'required', 'tmp_index' => 'required'])->fails()) return $this->failed(400000);
+        if (Validator::make($req, ['real_file_hash' => 'unique:files,file_hash'])->fails()) return $this->failed(409000, 409);
         $this->save_tmp(
             $request->file('files'),
-            $req['name'],
-            $req['fileHash'],
-            $req['hash'],
-            $req['num'],
-            $req['index']
+            $req['real_file'],
+            $req['real_file_hash'],
+            $req['tmp_name_hash'],
+            $req['all_tmp_num'],
+            $req['tmp_index']
         );
-        if ($this->receive_all_tmp($req['name'])) {
-            $full_filename = $this->merge_tmp($req['name'], $req['fileHash']);
-            return $this->save_real_file($full_filename, $req['fileHash']);
+        if ($this->receive_all_tmp($req['real_file'])) {
+            $full_filename = $this->merge_tmp($req['real_file'], $req['real_file_hash']);
+            return $this->save_real_file($full_filename, $req['real_file_hash']);
         }
         return json_encode(false);
     }

@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 Route::namespace('Api\V1')
     ->prefix('v1')
     ->group(function () {
         Route::post('/login/password', 'AuthController@passwordLogin');
-        Route::post('/file/upload', 'FileController@upload');
+        Route::middleware(['api.auth'])->group(function () {
+            Route::post('/file/upload', 'FileController@upload');
+        });
     });

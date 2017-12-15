@@ -35,7 +35,8 @@ export const login = (username, password, cb) => {
             username,
             password,
         }));
-
+        sessionStorage.accessToken = access_token;
+        sessionStorage.refreshToken = refresh_token;
         dispatch({
             type: SAVE_TOKEN,
             payload: {
@@ -43,7 +44,6 @@ export const login = (username, password, cb) => {
                 refreshToken: refresh_token,
             },
         });
-
         return cb();
     };
 };

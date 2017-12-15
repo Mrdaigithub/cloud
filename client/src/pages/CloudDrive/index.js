@@ -63,11 +63,11 @@ class CloudDrive extends Component {
                 fileHash = hash;
             } else {
                 formData.append('files', tmp);
-                formData.append('name', fileName);
-                formData.append('fileHash', fileHash);
-                formData.append('hash', hash);
-                formData.append('index', tmpIndex);
-                formData.append('num', tmpNum);
+                formData.append('real_file', fileName);
+                formData.append('real_file_hash', fileHash);
+                formData.append('tmp_name_hash', hash);
+                formData.append('all_tmp_num', tmpNum);
+                formData.append('tmp_index', tmpIndex);
                 await request.post(
                     '/file/upload',
                     formData,
