@@ -13,7 +13,7 @@ import { withStyles } from 'material-ui/styles';
 import { logout } from '../../../store/modules/oneself';
 import { alert } from '../../../store/modules/assist';
 import styles from './styles';
-import BasicLayout from '../../../layouts/BasicLayout';
+import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import logo from '../../../static/logo.svg';
 import defaultAvatar from '../../../static/defaultAvatar.svg';
 
@@ -28,7 +28,7 @@ class Oneself extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <BasicLayout>
+            <PageHeaderLayout>
                 <Grid
                     container
                     direction={'row'}
@@ -117,7 +117,7 @@ class Oneself extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
-            </BasicLayout>
+            </PageHeaderLayout>
         );
     }
 }

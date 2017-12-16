@@ -29,7 +29,6 @@ class CreateUsersTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('file_id')->unsigned();
             $table->string('filename');
-            $table->boolean('is_file');
             $table->timestamps();
         });
     }

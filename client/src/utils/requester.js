@@ -9,7 +9,7 @@ const errors = {
     400003: '用户不存在',
     400004: '用户已存在',
     401000: '密码错误',
-    401001: '用户有效期限已过',
+    401001: '用户未携带有效的access token',
     401002: '未授权',
     403000: '权限不足',
     409000: '上传的文件已存在于服务器',
@@ -26,15 +26,10 @@ const requester = axios.create({
 requester.interceptors.request.use(
     (config) => {
         const configs = config;
-        let accessToken = null;
         toggleLoading()(store.dispatch);
-        if (store.getState().oneself.accessToken) {
-            accessToken = store.getState().oneself.accessToken;
-        }
         if (sessionStorage.accessToken) {
-            accessToken = sessionStorage.accessToken;
+            configs.headers.common.Authorization = `Bearer ${sessionStorage.accessToken}`;
         }
-        configs.headers.common.Authorization = `Bearer ${accessToken}`;
         return configs;
     },
     (err) => {

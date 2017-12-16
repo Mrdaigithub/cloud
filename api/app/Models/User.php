@@ -16,4 +16,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password'
     ];
+
+    public function file()
+    {
+        return $this->belongsToMany('App\Models\File', 'user_file', 'user_id', 'file_id')
+            ->withPivot('filename')
+            ->withTimestamps();
+    }
 }
