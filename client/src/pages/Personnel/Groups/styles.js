@@ -1,33 +1,32 @@
 const styles = theme => ({
-    'normal': {
-        'marginTop': '10vh',
+    root: {
+        paddingRight: 2,
+        marginTop: theme.spacing.unit * 3,
     },
-    'logo-img': {
-        width: '100%',
+    table: {
+        minWidth: 800,
     },
-    'title': {
-        textAlign: 'center',
-        fontSize: '22px',
-        color: '#555',
-        fontWeight: 100,
+    tableWrapper: {
+        overflowX: 'auto',
     },
-    'list-avatar': {
-        borderRadius: '50%',
-        backgroundColor: '#7d7d7d',
-        padding: '6px',
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.secondary.A700,
+                backgroundColor: theme.palette.secondary.A100,
+            }
+            : {
+                color: theme.palette.secondary.A100,
+                backgroundColor: theme.palette.secondary.A700,
+            },
+    spacer: {
+        flex: '1 1 100%',
     },
-    'list-username': {
-        marginLeft: '10px',
-        fontSize: '20px',
-        color: '#555',
-        fontWeight: 100,
+    actions: {
+        color: theme.palette.text.secondary,
     },
-    'list-logout': {
-        fontSize: '22px',
-        lineHeight: '45px',
-        color: '#555',
-        fontWeight: 500,
-        textAlign: 'center',
+    title: {
+        flex: '0 0 auto',
     },
 });
 

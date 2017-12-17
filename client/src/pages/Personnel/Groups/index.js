@@ -10,10 +10,8 @@ import Table, {
     TableBody,
     TableCell,
     TableFooter,
-    TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel,
 } from 'material-ui/Table';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -25,158 +23,21 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
-import { logout } from '../../../store/modules/oneself';
 import { alert } from '../../../store/modules/assist';
-// import styles from './styles';
+import styles from './styles';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
+import EnhancedTableHead from '../../../components/EnhancedTableHead';
+import requester from '../../../utils/requester';
 
-
-let counter = 0;
-
-function createData(name, calories, fat, carbs, protein) {
-    counter += 1;
-    return { id: counter, name, calories, fat, carbs, protein };
-}
 
 const columnData = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-    { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-    { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-    { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+    { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
+    { id: 'username', numeric: false, disablePadding: false, label: '用户名' },
+    { id: 'email', numeric: false, disablePadding: false, label: '邮箱号码' },
+    { id: 'capacity', numeric: false, disablePadding: false, label: '容量' },
+    { id: 'created_at', numeric: false, disablePadding: false, label: '创建时间' },
 ];
 
-class EnhancedTableHead extends React.Component {
-    static propTypes = {
-        numSelected: PropTypes.number.isRequired,
-        onRequestSort: PropTypes.func.isRequired,
-        onSelectAllClick: PropTypes.func.isRequired,
-        order: PropTypes.string.isRequired,
-        orderBy: PropTypes.string.isRequired,
-        rowCount: PropTypes.number.isRequired,
-    };
-
-    createSortHandler = property => (event) => {
-        this.props.onRequestSort(event, property);
-    };
-
-    render() {
-        const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
-
-        return (
-            <TableHead>
-                <TableRow>
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={numSelected === rowCount}
-                            onChange={onSelectAllClick}/>
-                    </TableCell>
-                    {columnData.map(column => {
-                        return (
-                            <TableCell
-                                key={column.id}
-                                numeric={column.numeric}
-                                padding={column.disablePadding ? 'none' : 'default'}>
-                                <Tooltip
-                                    title="Sort"
-                                    placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                                    enterDelay={300}>
-                                    <TableSortLabel
-                                        active={orderBy === column.id}
-                                        direction={order}
-                                        onClick={this.createSortHandler(column.id)}>
-                                        {column.label}
-                                    </TableSortLabel>
-                                </Tooltip>
-                            </TableCell>
-                        );
-                    }, this)}
-                </TableRow>
-            </TableHead>
-        );
-    }
-}
-
-const toolbarStyles = theme => ({
-    root: {
-        paddingRight: 2,
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                color: theme.palette.secondary.A700,
-                backgroundColor: theme.palette.secondary.A100,
-            }
-            : {
-                color: theme.palette.secondary.A100,
-                backgroundColor: theme.palette.secondary.A700,
-            },
-    spacer: {
-        flex: '1 1 100%',
-    },
-    actions: {
-        color: theme.palette.text.secondary,
-    },
-    title: {
-        flex: '0 0 auto',
-    },
-});
-
-let EnhancedTableToolbar = (props) => {
-    const { numSelected, classes } = props;
-
-    return (
-        <Toolbar
-            className={classNames(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}>
-            <div className={classes.title}>
-                {numSelected > 0 ? (
-                    <Typography type="subheading">{numSelected} selected</Typography>
-                ) : (
-                    <Typography type="title">Nutrition</Typography>
-                )}
-            </div>
-            <div className={classes.spacer}/>
-            <div className={classes.actions}>
-                {numSelected > 0 ? (
-                    <Tooltip title="Delete">
-                        <IconButton aria-label="Delete">
-                            <DeleteIcon/>
-                        </IconButton>
-                    </Tooltip>
-                ) : (
-                    <Tooltip title="Filter list">
-                        <IconButton aria-label="Filter list">
-                            <FilterListIcon/>
-                        </IconButton>
-                    </Tooltip>
-                )}
-            </div>
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
-};
-
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
-
-const styles = theme => ({
-    root: {
-        width: '100%',
-        marginTop: theme.spacing.unit * 3,
-    },
-    table: {
-        minWidth: 800,
-    },
-    tableWrapper: {
-        overflowX: 'auto',
-    },
-});
 
 class Oneself extends React.Component {
     constructor(props, context) {
@@ -186,24 +47,16 @@ class Oneself extends React.Component {
             order: 'asc',
             orderBy: 'calories',
             selected: [],
-            data: [
-                createData('Cupcake', 305, 3.7, 67, 4.3),
-                createData('Donut', 452, 25.0, 51, 4.9),
-                createData('Eclair', 262, 16.0, 24, 6.0),
-                createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-                createData('Gingerbread', 356, 16.0, 49, 3.9),
-                createData('Honeycomb', 408, 3.2, 87, 6.5),
-                createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-                createData('Jelly Bean', 375, 0.0, 94, 0.0),
-                createData('KitKat', 518, 26.0, 65, 7.0),
-                createData('Lollipop', 392, 0.2, 98, 0.0),
-                createData('Marshmallow', 318, 0, 81, 2.0),
-                createData('Nougat', 360, 19.0, 9, 37.0),
-                createData('Oreo', 437, 18.0, 63, 4.0),
-            ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+            data: [],
             page: 0,
-            rowsPerPage: 5,
+            rowsPerPage: 10,
         };
+    }
+
+    async componentWillMount() {
+        this.setState({
+            data: await requester.get('/users'),
+        });
     }
 
     handleRequestSort = (event, property) => {
@@ -261,16 +114,22 @@ class Oneself extends React.Component {
         this.setState({ page });
     };
 
-    handleChangeRowsPerPage = event => {
+    handleChangeRowsPerPage = (event) => {
         this.setState({ rowsPerPage: event.target.value });
     };
+
+    async handleDeleteUser() {
+        const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
+        const res = await Promise.all(deleteList);
+        console.log(res);
+    }
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - (page * rowsPerPage));
 
         return (
             <PageHeaderLayout>
@@ -282,10 +141,38 @@ class Oneself extends React.Component {
                     spacing={8}>
                     <Grid item xs={11} className={classes.normal}>
                         <Paper className={classes.root}>
-                            <EnhancedTableToolbar numSelected={selected.length}/>
+                            <Toolbar
+                                className={classNames(classes.root, {
+                                    [classes.highlight]: selected.length > 0,
+                                })}>
+                                <div className={classes.title}>
+                                    {selected.length > 0 ? (
+                                        <Typography type="subheading">{selected.length} selected</Typography>
+                                    ) : (
+                                        <Typography type="title">人员管理</Typography>
+                                    )}
+                                </div>
+                                <div className={classes.spacer}/>
+                                <div className={classes.actions}>
+                                    {selected.length > 0 ? (
+                                        <Tooltip title="删除">
+                                            <IconButton aria-label="Delete" onClick={this.handleDeleteUser.bind(this)}>
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    ) : (
+                                        <Tooltip title="Filter list">
+                                            <IconButton aria-label="Filter list">
+                                                <FilterListIcon/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                </div>
+                            </Toolbar>
                             <div className={classes.tableWrapper}>
                                 <Table className={classes.table}>
                                     <EnhancedTableHead
+                                        columnData={columnData}
                                         numSelected={selected.length}
                                         order={order}
                                         orderBy={orderBy}
@@ -293,7 +180,7 @@ class Oneself extends React.Component {
                                         onRequestSort={this.handleRequestSort}
                                         rowCount={data.length}/>
                                     <TableBody>
-                                        {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
+                                        {data.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).map((n) => {
                                             const isSelected = this.isSelected(n.id);
                                             return (
                                                 <TableRow
@@ -308,11 +195,11 @@ class Oneself extends React.Component {
                                                     <TableCell padding="checkbox">
                                                         <Checkbox checked={isSelected}/>
                                                     </TableCell>
-                                                    <TableCell padding="none">{n.name}</TableCell>
-                                                    <TableCell numeric>{n.calories}</TableCell>
-                                                    <TableCell numeric>{n.fat}</TableCell>
-                                                    <TableCell numeric>{n.carbs}</TableCell>
-                                                    <TableCell numeric>{n.protein}</TableCell>
+                                                    <TableCell>{n.id}</TableCell>
+                                                    <TableCell>{n.username}</TableCell>
+                                                    <TableCell>{n.email}</TableCell>
+                                                    <TableCell>{n.capacity}</TableCell>
+                                                    <TableCell>{n.created_at}</TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -350,7 +237,6 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     alert,
-    logout,
     changePage: url => replace(url),
 }, dispatch);
 
