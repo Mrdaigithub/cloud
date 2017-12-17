@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
-import Avatar from 'material-ui/Avatar';
 import keycode from 'keycode';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -118,13 +117,21 @@ class Oneself extends React.Component {
         this.setState({ rowsPerPage: event.target.value });
     };
 
+    isSelected = id => this.state.selected.indexOf(id) !== -1;
+
     async handleDeleteUser() {
         const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
-        const res = await Promise.all(deleteList);
-        console.log(res);
+        await Promise.all(deleteList);
+        this.setState(() => {
+            return {
+                data: this.state.data.filter(({ id }, index) => {
+                    console.log(this.isSelected(id));
+                    return this.isSelected(id) ? false : this.state.data[index];
+                }),
+                selected: [],
+            };
+        });
     }
-
-    isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
         const { classes } = this.props;
