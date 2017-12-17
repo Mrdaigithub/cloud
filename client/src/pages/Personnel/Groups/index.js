@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Grid from 'material-ui/Grid';
-import keycode from 'keycode';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
+import Button from 'material-ui/Button';
+import Slide from 'material-ui/transitions/Slide';
 import Table, {
     TableBody,
     TableCell,
@@ -12,18 +13,31 @@ import Table, {
     TablePagination,
     TableRow,
 } from 'material-ui/Table';
+import TextField from 'material-ui/TextField';
+import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+} from 'material-ui/Dialog';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Checkbox from 'material-ui/Checkbox';
 import Tooltip from 'material-ui/Tooltip';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
+import PersonAdd from 'material-ui-icons/PersonAdd';
 import FilterListIcon from 'material-ui-icons/FilterList';
+import Visibility from 'material-ui-icons/Visibility';
+import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import { alert } from '../../../store/modules/assist';
 import styles from './styles';
+import SpeedDial from '../../../components/SpeedDial';
+import SpeedDialItem from '../../../components/SpeedDial/SpeedDialItem';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
 import requester from '../../../utils/requester';
@@ -37,8 +51,12 @@ const columnData = [
     { id: 'created_at', numeric: false, disablePadding: false, label: '创建时间' },
 ];
 
+function Transition(props) {
+    return <Slide direction="up" {...props}/>;
+}
 
-class Oneself extends React.Component {
+
+class Oneself extends Component {
     constructor(props, context) {
         super(props, context);
 
@@ -49,6 +67,13 @@ class Oneself extends React.Component {
             data: [],
             page: 0,
             rowsPerPage: 10,
+            DialogOpen: false,
+            showPassword: false,
+            username: '',
+            password: '',
+            confirm: '',
+            email: '',
+            size: 0,
         };
     }
 
@@ -82,12 +107,6 @@ class Oneself extends React.Component {
         this.setState({ selected: [] });
     };
 
-    handleKeyDown = (event, id) => {
-        if (keycode(event) === 'space') {
-            this.handleClick(event, id);
-        }
-    };
-
     handleClick = (event, id) => {
         const { selected } = this.state;
         const selectedIndex = selected.indexOf(id);
@@ -119,17 +138,34 @@ class Oneself extends React.Component {
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
+    handleCloseDialog() {
+        this.setState({
+            DialogOpen: false,
+        });
+    }
+
+    handleChangePasswordVisibility() {
+        this.setState({
+            showPassword: !this.state.showPassword,
+        });
+    }
+
     async handleDeleteUser() {
         const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
         await Promise.all(deleteList);
         this.setState(() => {
             return {
                 data: this.state.data.filter(({ id }, index) => {
-                    console.log(this.isSelected(id));
                     return this.isSelected(id) ? false : this.state.data[index];
                 }),
                 selected: [],
             };
+        });
+    }
+
+    async handleAddUser() {
+        this.setState({
+            DialogOpen: true,
         });
     }
 
@@ -193,7 +229,6 @@ class Oneself extends React.Component {
                                                 <TableRow
                                                     hover
                                                     onClick={event => this.handleClick(event, n.id)}
-                                                    onKeyDown={event => this.handleKeyDown(event, n.id)}
                                                     role="checkbox"
                                                     aria-checked={isSelected}
                                                     tabIndex={-1}
@@ -231,6 +266,84 @@ class Oneself extends React.Component {
                         </Paper>
                     </Grid>
                 </Grid>
+                <SpeedDial>
+                    <SpeedDialItem>
+                        <label htmlFor="icon-button-file">
+                            <IconButton
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span"
+                                onClick={this.handleAddUser.bind(this)}>
+                                <PersonAdd/>
+                            </IconButton>
+                        </label>
+                    </SpeedDialItem>
+                </SpeedDial>
+                <Dialog
+                    open={this.state.DialogOpen}
+                    onClose={this.handleClose}
+                    transition={Transition}
+                    aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title">创建用户</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="username"
+                            label="用户名"
+                            type="text"
+                            fullWidth/>
+                        <FormControl className={classes.formControl} fullWidth>
+                            <InputLabel htmlFor="password">密码</InputLabel>
+                            <Input
+                                id="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                value={this.state.password}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={this.handleChangePasswordVisibility.bind(this)}>
+                                            {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }/>
+                        </FormControl>
+                        <FormControl className={classes.formControl} fullWidth>
+                            <InputLabel htmlFor="confirmPassword">确认密码</InputLabel>
+                            <Input
+                                id="confirmPassword"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                value={this.state.password}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={this.handleChangePasswordVisibility.bind(this)}>
+                                            {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }/>
+                        </FormControl>
+                        <TextField
+                            margin="dense"
+                            id="email"
+                            label="邮箱"
+                            type="text"
+                            fullWidth/>
+                        <FormControl
+                            fullWidth>
+                            <InputLabel htmlFor="size">容量</InputLabel>
+                            <Input
+                                id="size"
+                                type="number"
+                                value=""
+                                endAdornment={<InputAdornment position="end">bit</InputAdornment>}/>
+                        </FormControl>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseDialog.bind(this)} color="primary">关闭</Button>
+                        <Button onClick={this.handleCloseDialog.bind(this)} color="primary">提交</Button>
+                    </DialogActions>
+                </Dialog>
             </PageHeaderLayout>
         );
     }
