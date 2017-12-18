@@ -1,12 +1,12 @@
 const styles = theme => ({
-    'global-footer': {
+    globalFooter: {
         width: '100%',
         textAlign: 'center',
         position: 'absolute',
         bottom: 0,
         left: 0,
     },
-    'links': {
+    links: {
         display: 'inline-block',
         marginRight: '10px',
         fontSize: '14px',
@@ -14,7 +14,7 @@ const styles = theme => ({
         fontWeight: 100,
         textDecoration: 'none',
     },
-    'copyright': {
+    copyright: {
         fontSize: '14px',
         color: '#555',
         fontWeight: 100,

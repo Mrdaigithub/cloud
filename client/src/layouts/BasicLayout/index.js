@@ -8,7 +8,7 @@ class BasicLayout extends Component {
         return (
             <div>
                 {children}
-                <footer className={classes['global-footer']}>
+                <footer className={classes.globalFooter}>
                     <div>
                         <a className={classes.links} href="https://github.com/Mrdaigithub/cloud">
                             Github

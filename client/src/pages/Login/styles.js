@@ -1,33 +1,33 @@
 const styles = theme => ({
-    'normal': {
+    normal: {
         height: '100vh',
     },
-    'logoImg': {
+    logoImg: {
         width: '100%',
     },
 
-    'logoTitle': {
+    logoTitle: {
         fontSize: '38px',
         color: 'rgba(0, 0, 0, 0.85)',
     },
 
-    'logoText': {
+    logoText: {
         textAlign: 'center',
         fontSize: '14px',
         color: 'rgba(0, 0, 0, 0.45)',
         marginBottom: '20px',
     },
 
-    'loginForm': {
+    loginForm: {
         height: '100vh',
     },
 
-    'loginButton': {
+    loginButton: {
         width: '100%',
         margin: '3vh 0 1vh 0',
     },
 
-    'otherLoginWayImg': {
+    otherLoginWayImg: {
         backgroundColor: '#dfdfdf',
         borderRadius: '50%',
     },

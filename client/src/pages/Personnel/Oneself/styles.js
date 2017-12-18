@@ -1,28 +1,28 @@
 const styles = theme => ({
-    'normal': {
+    normal: {
         'marginTop': '10vh',
     },
-    'logo-img': {
+    logoImg: {
         width: '100%',
     },
-    'title': {
+    title: {
         textAlign: 'center',
         fontSize: '22px',
         color: '#555',
         fontWeight: 100,
     },
-    'list-avatar': {
+    listAvatar: {
         borderRadius: '50%',
         backgroundColor: '#7d7d7d',
         padding: '6px',
     },
-    'list-username': {
+    listUsername: {
         marginLeft: '10px',
         fontSize: '20px',
         color: '#555',
         fontWeight: 100,
     },
-    'list-logout': {
+    listLogout: {
         fontSize: '22px',
         lineHeight: '45px',
         color: '#555',

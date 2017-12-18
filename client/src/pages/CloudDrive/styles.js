@@ -1,43 +1,43 @@
 import avatarBg from '../../static/avatar-bg.png';
 
 const styles = theme => ({
-    'drawer': {
+    drawer: {
         width: '250px',
     },
 
-    'avatarContainer': {
+    avatarContainer: {
         background: `url(${avatarBg}) center`,
         backgroundSize: 'cover',
     },
-    'avatarImg': {
+    avatarImg: {
         padding: '5px',
         backgroundColor: '#7d7d7d',
         borderRadius: '50%',
         overflow: 'hidden',
     },
 
-    'avatarUsername': {
+    avatarUsername: {
         color: '#000',
         fontSize: '20px',
         margin: '10px 0 0 0',
     },
-    'sidebarLink': {
+    sidebarLink: {
         display: 'inherit',
         textDecoration: 'none',
     },
-    'imgResponsive': {
+    imgResponsive: {
         width: '100%',
     },
-    'topbarBtn': {
+    topbarBtn: {
         color: '#fff',
     },
-    'bottomBarBtnIcon': {
+    bottomBarBtnIcon: {
         color: '#fff',
     },
-    'SpeedDialItemInput': {
+    SpeedDialItemInput: {
         display: 'none',
     },
-    'SpeedDialItemButton': {
+    SpeedDialItemButton: {
         display: 'inline',
     },
 

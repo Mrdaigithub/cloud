@@ -37,7 +37,33 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $req = $request->all();
+        if (Validator::make($req,
+            [
+                'username' => 'required',
+                'password' => 'required',
+                'email' => 'required',
+                'size' => 'required'
+            ])->fails()) return $this->failed(400000);
+        if (Validator::make($req,
+            [
+                'username' => 'string',
+                'password' => 'string',
+                'size' => 'numeric'
+            ])->fails()) return $this->failed(400001);
+        if (Validator::make($req,
+            [
+                'email' => 'email',
+                'size' => 'between:0,1099511627776'
+            ])->fails()) return $this->failed(400002);
+
+        $user = new User();
+        $user->username = $req['username'];
+        $user->password = $req['password'];
+        $user->email = $req['email'];
+        $user->size = $req['size'];
+        if (!$user->save()) return $this->failed(500001);
+        return $user;
     }
 
     /**

@@ -1,5 +1,5 @@
 const styles = theme => ({
-    'normal': {
+    normal: {
         height: '100vh',
         position: 'fixed',
         top: 0,

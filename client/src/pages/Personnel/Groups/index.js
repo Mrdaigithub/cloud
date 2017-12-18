@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import createClass from 'create-react-class';
 import Grid from 'material-ui/Grid';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -13,9 +14,10 @@ import Table, {
     TablePagination,
     TableRow,
 } from 'material-ui/Table';
+import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle, FormsyAutoComplete } from 'formsy-material-ui/lib';
 import TextField from 'material-ui/TextField';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import { FormControl } from 'material-ui/Form';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -28,12 +30,14 @@ import Tooltip from 'material-ui/Tooltip';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 import PersonAdd from 'material-ui-icons/PersonAdd';
+import Edit from 'material-ui-icons/Edit';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import Visibility from 'material-ui-icons/Visibility';
 import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
+import qs from 'qs';
 import { alert } from '../../../store/modules/assist';
 import styles from './styles';
 import SpeedDial from '../../../components/SpeedDial';
@@ -71,7 +75,7 @@ class Oneself extends Component {
             showPassword: false,
             username: '',
             password: '',
-            confirm: '',
+            confirmPassword: '',
             email: '',
             size: 0,
         };
@@ -150,6 +154,12 @@ class Oneself extends Component {
         });
     }
 
+    handleChangeInput = name => (event) => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
+
     async handleDeleteUser() {
         const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
         await Promise.all(deleteList);
@@ -164,9 +174,15 @@ class Oneself extends Component {
     }
 
     async handleAddUser() {
-        this.setState({
-            DialogOpen: true,
-        });
+        const { username, password, confirmPassword, email, size } = this.state;
+        requester.post('/users', qs.stringify({
+            username,
+            password,
+            confirmPassword,
+            email,
+            size,
+        }));
+        this.handleCloseDialog();
     }
 
     render() {
@@ -273,8 +289,18 @@ class Oneself extends Component {
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span"
-                                onClick={this.handleAddUser.bind(this)}>
+                                onClick={() => this.setState({ DialogOpen: true })}>
                                 <PersonAdd/>
+                            </IconButton>
+                        </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <label htmlFor="icon-button-file">
+                            <IconButton
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
+                                <Edit/>
                             </IconButton>
                         </label>
                     </SpeedDialItem>
@@ -290,6 +316,8 @@ class Oneself extends Component {
                             autoFocus
                             margin="dense"
                             id="username"
+                            value={this.state.username}
+                            onChange={this.handleChangeInput('username')}
                             label="用户名"
                             type="text"
                             fullWidth/>
@@ -299,6 +327,7 @@ class Oneself extends Component {
                                 id="password"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 value={this.state.password}
+                                onChange={this.handleChangeInput('password')}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -308,12 +337,20 @@ class Oneself extends Component {
                                     </InputAdornment>
                                 }/>
                         </FormControl>
+                        {/*<FormsyText*/}
+                        {/*name="name"*/}
+                        {/*validations="isWords"*/}
+                        {/*validationError={'error'}*/}
+                        {/*required*/}
+                        {/*hintText="What is your name?"*/}
+                        {/*floatingLabelText="Name"/>*/}
                         <FormControl className={classes.formControl} fullWidth>
                             <InputLabel htmlFor="confirmPassword">确认密码</InputLabel>
                             <Input
                                 id="confirmPassword"
                                 type={this.state.showPassword ? 'text' : 'password'}
-                                value={this.state.password}
+                                value={this.state.confirmPassword}
+                                onChange={this.handleChangeInput('confirmPassword')}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -328,6 +365,8 @@ class Oneself extends Component {
                             id="email"
                             label="邮箱"
                             type="text"
+                            value={this.state.email}
+                            onChange={this.handleChangeInput('email')}
                             fullWidth/>
                         <FormControl
                             fullWidth>
@@ -335,13 +374,14 @@ class Oneself extends Component {
                             <Input
                                 id="size"
                                 type="number"
-                                value=""
+                                value={this.state.size}
+                                onChange={this.handleChangeInput('size')}
                                 endAdornment={<InputAdornment position="end">bit</InputAdornment>}/>
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleCloseDialog.bind(this)} color="primary">关闭</Button>
-                        <Button onClick={this.handleCloseDialog.bind(this)} color="primary">提交</Button>
+                        <Button onClick={this.handleAddUser.bind(this)} color="primary">提交</Button>
                     </DialogActions>
                 </Dialog>
             </PageHeaderLayout>
@@ -363,4 +403,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(withStyles(styles)(Oneself));
+)(createClass(withStyles(styles)(Oneself)));

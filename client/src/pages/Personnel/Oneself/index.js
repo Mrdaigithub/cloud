@@ -44,7 +44,7 @@ class Oneself extends Component {
                             spacing={8}>
                             <Grid item xs={3} sm={2} md={1}>
                                 <Link to="/cloud-drive">
-                                    <img className={classes['logo-img']} src={logo} alt="logo"/>
+                                    <img className={classes.logoImg} src={logo} alt="logo"/>
                                 </Link>
                             </Grid>
                             <Grid item xs={12} className={classes.title}>选择账户</Grid>
@@ -62,13 +62,13 @@ class Oneself extends Component {
                                         spacing={0}>
                                         <Grid item xs={2}>
                                             <Avatar
-                                                className={classes['list-avatar']}
+                                                className={classes.listAvatar}
                                                 alt={'defaultAvatar'}
                                                 src={defaultAvatar}/>
                                         </Grid>
                                         <Grid item xs={9} sm={8} md={5}>
                                             <ListItemText
-                                                className={classes['list-username']}
+                                                className={classes.listUsername}
                                                 primary={`defaultAvatar`}/>
                                         </Grid>
                                     </Grid>
@@ -83,13 +83,13 @@ class Oneself extends Component {
                                         spacing={0}>
                                         <Grid item xs={2}>
                                             <Avatar
-                                                className={classes['list-avatar']}
+                                                className={classes.listAvatar}
                                                 alt={'defaultAvatar'}
                                                 src={defaultAvatar}/>
                                         </Grid>
                                         <Grid item xs={9} sm={8} md={5}>
                                             <ListItemText
-                                                className={classes['list-username']}
+                                                className={classes.listUsername}
                                                 primary={`defaultAvatar`}/>
                                         </Grid>
                                     </Grid>
@@ -103,7 +103,7 @@ class Oneself extends Component {
                                         justify={'center'}
                                         alignItems={'center'}
                                         spacing={40}>
-                                        <Grid item className={classes['list-logout']}>
+                                        <Grid item className={classes.listLogout}>
                                             <Button
                                                 raised
                                                 color="primary"

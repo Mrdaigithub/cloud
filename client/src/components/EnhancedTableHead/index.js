@@ -11,7 +11,7 @@ import Checkbox from 'material-ui/Checkbox';
 import Tooltip from 'material-ui/Tooltip';
 
 
-class EnhancedTableHead extends React.Component {
+class EnhancedTableHead extends Component {
     static propTypes = {
         numSelected: PropTypes.number.isRequired,
         onRequestSort: PropTypes.func.isRequired,

@@ -1,5 +1,5 @@
 const styles = theme => ({
-    'cover': {
+    cover: {
         position: 'fixed',
         bottom: '40px',
         right: '20px',
@@ -9,12 +9,12 @@ const styles = theme => ({
         width: '56px',
         textAlign: 'center',
     },
-    'floatButton': {
+    floatButton: {
         '& svg': {
             transition: 'transform 0.2s ease-in-out',
         },
     },
-    'action': {
+    action: {
         position: 'relative',
         marginBottom: '12px',
         transition: '0.2s ease-in-out',
@@ -27,7 +27,7 @@ const styles = theme => ({
             },
         },
     },
-    'opened': {
+    opened: {
         '& $floatButton svg': {
             transform: 'rotate(135deg)',
         },
@@ -36,7 +36,7 @@ const styles = theme => ({
             opacity: 1,
         },
     },
-    'closed': {
+    closed: {
         '& $floatButton svg': {
             transform: 'rotate(0)',
         },

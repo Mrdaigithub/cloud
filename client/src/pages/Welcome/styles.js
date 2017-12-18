@@ -1,8 +1,8 @@
 const styles = theme => ({
-    'normal': {
+    normal: {
         textAlign: 'center',
-        height: '100vh'
-    }
+        height: '100vh',
+    },
 });
 
 export default styles

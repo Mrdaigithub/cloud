@@ -28,6 +28,9 @@ const styles = theme => ({
     title: {
         flex: '0 0 auto',
     },
+    SpeedDialItemButton: {
+        display: 'inline',
+    },
 });
 
 export default styles;
