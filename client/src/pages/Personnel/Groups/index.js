@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import createClass from 'create-react-class';
+import Formsy from 'formsy-react';
 import Grid from 'material-ui/Grid';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -14,7 +14,6 @@ import Table, {
     TablePagination,
     TableRow,
 } from 'material-ui/Table';
-import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle, FormsyAutoComplete } from 'formsy-material-ui/lib';
 import TextField from 'material-ui/TextField';
 import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
@@ -44,6 +43,7 @@ import SpeedDial from '../../../components/SpeedDial';
 import SpeedDialItem from '../../../components/SpeedDial/SpeedDialItem';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
+import FormsyText from '../../../components/FormsyMaterialUi/FormsyText';
 import requester from '../../../utils/requester';
 
 
@@ -78,6 +78,7 @@ class Oneself extends Component {
             confirmPassword: '',
             email: '',
             size: 0,
+            canSubmit: false,
         };
     }
 
@@ -183,6 +184,18 @@ class Oneself extends Component {
             size,
         }));
         this.handleCloseDialog();
+    }
+
+    disableButton() {
+        this.setState({ canSubmit: false });
+    }
+
+    enableButton() {
+        this.setState({ canSubmit: true });
+    }
+
+    submit(model) {
+        console.log(model);
     }
 
     render() {
@@ -337,13 +350,6 @@ class Oneself extends Component {
                                     </InputAdornment>
                                 }/>
                         </FormControl>
-                        {/*<FormsyText*/}
-                        {/*name="name"*/}
-                        {/*validations="isWords"*/}
-                        {/*validationError={'error'}*/}
-                        {/*required*/}
-                        {/*hintText="What is your name?"*/}
-                        {/*floatingLabelText="Name"/>*/}
                         <FormControl className={classes.formControl} fullWidth>
                             <InputLabel htmlFor="confirmPassword">确认密码</InputLabel>
                             <Input
@@ -384,6 +390,14 @@ class Oneself extends Component {
                         <Button onClick={this.handleAddUser.bind(this)} color="primary">提交</Button>
                     </DialogActions>
                 </Dialog>
+                <Formsy onValidSubmit={this.submit.bind(this)} onValid={this.enableButton.bind(this)} onInvalid={this.disableButton.bind(this)}>
+                    <FormsyText
+                        name="email"
+                        validations="isEmail"
+                        validationError="This is not a valid email"
+                        required/>
+                    <button type="submit" disabled={!this.state.canSubmit}>Submit</button>
+                </Formsy>
             </PageHeaderLayout>
         );
     }
@@ -403,4 +417,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(createClass(withStyles(styles)(Oneself)));
+)(withStyles(styles)(Oneself));
