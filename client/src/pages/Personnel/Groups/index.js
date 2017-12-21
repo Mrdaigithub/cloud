@@ -14,14 +14,14 @@ import Table, {
     TablePagination,
     TableRow,
 } from 'material-ui/Table';
-import TextField from 'material-ui/TextField';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import { FormControl } from 'material-ui/Form';
+import { InputAdornment } from 'material-ui/Input';
 import Dialog, {
     DialogActions,
     DialogContent,
     DialogTitle,
 } from 'material-ui/Dialog';
+import Visibility from 'material-ui-icons/Visibility';
+import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Checkbox from 'material-ui/Checkbox';
@@ -31,8 +31,6 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import PersonAdd from 'material-ui-icons/PersonAdd';
 import Edit from 'material-ui-icons/Edit';
 import FilterListIcon from 'material-ui-icons/FilterList';
-import Visibility from 'material-ui-icons/Visibility';
-import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
@@ -43,9 +41,8 @@ import SpeedDial from '../../../components/SpeedDial';
 import SpeedDialItem from '../../../components/SpeedDial/SpeedDialItem';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
-import FormsyText from '../../../components/FormsyMaterialUi/FormsyText';
+import { FormsyText } from '../../../components/FormsyMaterialUi';
 import requester from '../../../utils/requester';
-
 
 const columnData = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
@@ -73,12 +70,6 @@ class Oneself extends Component {
             rowsPerPage: 10,
             DialogOpen: false,
             showPassword: false,
-            username: '',
-            password: '',
-            confirmPassword: '',
-            email: '',
-            size: 0,
-            canSubmit: false,
         };
     }
 
@@ -149,17 +140,9 @@ class Oneself extends Component {
         });
     }
 
-    handleChangePasswordVisibility() {
-        this.setState({
-            showPassword: !this.state.showPassword,
-        });
+    handleClickShowPasssword() {
+        this.setState({ showPassword: !this.state.showPassword });
     }
-
-    handleChangeInput = name => (event) => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
 
     async handleDeleteUser() {
         const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
@@ -174,28 +157,15 @@ class Oneself extends Component {
         });
     }
 
-    async handleAddUser() {
-        const { username, password, confirmPassword, email, size } = this.state;
+    async handleAddUser(model) {
+        const { username, password, email, capacity } = model;
         requester.post('/users', qs.stringify({
             username,
             password,
-            confirmPassword,
             email,
-            size,
+            capacity,
         }));
         this.handleCloseDialog();
-    }
-
-    disableButton() {
-        this.setState({ canSubmit: false });
-    }
-
-    enableButton() {
-        this.setState({ canSubmit: true });
-    }
-
-    submit(model) {
-        console.log(model);
     }
 
     render() {
@@ -323,81 +293,61 @@ class Oneself extends Component {
                     onClose={this.handleClose}
                     transition={Transition}
                     aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">创建用户</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="username"
-                            value={this.state.username}
-                            onChange={this.handleChangeInput('username')}
-                            label="用户名"
-                            type="text"
-                            fullWidth/>
-                        <FormControl className={classes.formControl} fullWidth>
-                            <InputLabel htmlFor="password">密码</InputLabel>
-                            <Input
-                                id="password"
+                    <Formsy onValidSubmit={this.handleAddUser.bind(this)}>
+                        <DialogTitle id="form-dialog-title">创建用户</DialogTitle>
+                        <DialogContent>
+                            <FormsyText
+                                title="用户名"
+                                name="username"
+                                validations={{ matchRegexp: /(\w|\d){4,}/ }}
+                                validationError="用户名不合法"
+                                required
+                                fullWidth
+                                autoFocus/>
+                            <FormsyText
+                                title="密码"
+                                name="password"
                                 type={this.state.showPassword ? 'text' : 'password'}
-                                value={this.state.password}
-                                onChange={this.handleChangeInput('password')}
+                                required
+                                fullWidth
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <IconButton
-                                            onClick={this.handleChangePasswordVisibility.bind(this)}>
+                                        <IconButton onClick={this.handleClickShowPasssword.bind(this)}>
                                             {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
                                         </IconButton>
                                     </InputAdornment>
                                 }/>
-                        </FormControl>
-                        <FormControl className={classes.formControl} fullWidth>
-                            <InputLabel htmlFor="confirmPassword">确认密码</InputLabel>
-                            <Input
-                                id="confirmPassword"
+                            <FormsyText
+                                title="确认密码"
+                                name="repeatedPassword"
                                 type={this.state.showPassword ? 'text' : 'password'}
-                                value={this.state.confirmPassword}
-                                onChange={this.handleChangeInput('confirmPassword')}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            onClick={this.handleChangePasswordVisibility.bind(this)}>
-                                            {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }/>
-                        </FormControl>
-                        <TextField
-                            margin="dense"
-                            id="email"
-                            label="邮箱"
-                            type="text"
-                            value={this.state.email}
-                            onChange={this.handleChangeInput('email')}
-                            fullWidth/>
-                        <FormControl
-                            fullWidth>
-                            <InputLabel htmlFor="size">容量</InputLabel>
-                            <Input
-                                id="size"
+                                validations="equalsField:password"
+                                validationError="两次输入不相同"
+                                required
+                                fullWidth/>
+                            <FormsyText
+                                title="邮箱"
+                                name="email"
+                                validations="isEmail"
+                                validationError="邮箱格式不正确"
+                                required
+                                fullWidth/>
+                            <FormsyText
+                                title="容量"
+                                name="capacity"
                                 type="number"
-                                value={this.state.size}
-                                onChange={this.handleChangeInput('size')}
-                                endAdornment={<InputAdornment position="end">bit</InputAdornment>}/>
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleCloseDialog.bind(this)} color="primary">关闭</Button>
-                        <Button onClick={this.handleAddUser.bind(this)} color="primary">提交</Button>
-                    </DialogActions>
+                                validations="isInt"
+                                validationError="容量只能为正整数"
+                                required
+                                fullWidth
+                                endAdornment={<InputAdornment position="end">MB</InputAdornment>}/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleCloseDialog.bind(this)} color="primary">关闭</Button>
+                            <Button type="submit" color="primary">提交</Button>
+                        </DialogActions>
+                    </Formsy>
                 </Dialog>
-                <Formsy onValidSubmit={this.submit.bind(this)} onValid={this.enableButton.bind(this)} onInvalid={this.disableButton.bind(this)}>
-                    <FormsyText
-                        name="email"
-                        validations="isEmail"
-                        validationError="This is not a valid email"
-                        required/>
-                    <button type="submit" disabled={!this.state.canSubmit}>Submit</button>
-                </Formsy>
             </PageHeaderLayout>
         );
     }

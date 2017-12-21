@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Formsy from 'formsy-react';
 import Grid from 'material-ui/Grid';
-import Input, { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
 import Button from 'material-ui/Button';
+import { InputAdornment } from 'material-ui/Input';
 import IconButton from 'material-ui/IconButton';
+import Visibility from 'material-ui-icons/Visibility';
+import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import { login } from '../../store/modules/oneself';
 import { alert } from '../../store/modules/assist';
+import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import GithubIcon from '../../components/GithubIcon';
@@ -20,43 +23,17 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: 'root',
-            password: 'root',
+            showPassword: false,
         };
     }
 
-    handleChange = name => (event) => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
+    handleClickShowPasssword() {
+        this.setState({ showPassword: !this.state.showPassword });
+    }
 
-    handleValidation = name => () => {
-        let state = true;
-        if (name === 'username' && this.state.username === '') {
-            this.setState({ usernameErr: true });
-            state = false;
-        }
-        if (name === 'username' && this.state.username !== '') {
-            this.setState({ usernameErr: false });
-        }
-        if (name === 'password' && this.state.password === '') {
-            this.setState({ passwordErr: true });
-            state = false;
-        }
-        if (name === 'password' && this.state.password !== '') {
-            this.setState({ passwordErr: false });
-        }
-        return state;
-    };
-
-    login() {
-        const ustate = this.handleValidation('username')();
-        const pstate = this.handleValidation('password')();
-        if (!ustate || !pstate) {
-            return false;
-        }
-        this.props.login(this.state.username, this.state.password, () => {
+    login(model) {
+        const { username, password } = model;
+        this.props.login(username, password, () => {
             this.props.alert('登录成功', 1000);
             setTimeout(() => {
                 this.props.changePage('/cloud-drive');
@@ -75,31 +52,33 @@ class Login extends Component {
                             <Grid item xs={5} className={classes.logoTitle}>Cloud</Grid>
                             <Grid item xs={12} className={classes.logoText}>A simple cloud project</Grid>
                         </Grid>
-                        <FormControl fullWidth required>
-                            <InputLabel>用户名</InputLabel>
-                            <Input
-                                error={this.state.usernameErr} required value={this.state.username}
-                                onChange={this.handleChange('username').bind(this)}
-                                onBlur={this.handleValidation('username').bind(this)}/>
-                            <FormHelperText error={this.state.usernameErr}>
-                                {this.state.usernameErr ? 'username is require' : ''}
-                            </FormHelperText>
-                        </FormControl>
-                        <FormControl fullWidth required>
-                            <InputLabel>密码</InputLabel>
-                            <Input
-                                error={this.state.passwordErr}
-                                value={this.state.password}
-                                onChange={this.handleChange('password').bind(this)}
-                                onBlur={this.handleValidation('password').bind(this)}/>
-                            <FormHelperText error={this.state.passwordErr}>
-                                {this.state.passwordErr ? 'password is require' : ''}
-                            </FormHelperText>
-                        </FormControl>
-                        <Button
-                            raised color="primary"
-                            className={classes.loginButton}
-                            onClick={this.login.bind(this)}>登录</Button>
+                        <Formsy onValidSubmit={this.login.bind(this)}>
+                            <FormsyText
+                                title="用户名"
+                                name="username"
+                                validations={{ matchRegexp: /(\w|\d){4,}/ }}
+                                validationError="用户名不合法"
+                                required
+                                fullWidth
+                                autoFocus/>
+                            <FormsyText
+                                title="密码"
+                                name="password"
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                required
+                                fullWidth
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={this.handleClickShowPasssword.bind(this)}>
+                                            {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }/>
+                            <Button
+                                type="submit"
+                                raised color="primary"
+                                className={classes.loginButton}>登录</Button>
+                        </Formsy>
                         <Grid container alignItems={'center'} justify={'flex-start'}>
                             <Grid item xs={2}>
                                 <IconButton
@@ -115,8 +94,7 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     login,

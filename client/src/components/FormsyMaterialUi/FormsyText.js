@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { propTypes, withFormsy } from 'formsy-react';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 
 
 class FormsyText extends Component {
@@ -13,18 +15,30 @@ class FormsyText extends Component {
     }
 
     render() {
-        const className = `form-group ${this.props.className} ${this.props.showRequired() ? 'required' : ''} ${this.props.showError() ? 'error' : ''}`;
-        const errorMessage = this.props.getErrorMessage();
+        const {
+            getErrorMessage,
+            autoFocus,
+            fullWidth,
+            title,
+            type,
+            getValue,
+            endAdornment,
+            startAdornment,
+        } = this.props;
+        const errorMessage = getErrorMessage();
         return (
-            <div className={className}>
-                <label htmlFor={this.props.name}>{this.props.title}</label>
-                <input
-                    onChange={this.changeValue}
-                    name={this.props.name}
-                    type={this.props.type || 'text'}
-                    value={this.props.getValue() || ''}/>
-                <span className="validation-error">{errorMessage}</span>
-            </div>
+            <FormControl error={!!errorMessage} fullWidth={fullWidth}>
+                <InputLabel>{title}</InputLabel>
+                <Input
+                    autoFocus={autoFocus}
+                    id={title}
+                    type={type || 'text'}
+                    value={getValue() || ''}
+                    endAdornment={endAdornment}
+                    startAdornment={startAdornment}
+                    onChange={this.changeValue}/>
+                <FormHelperText>{errorMessage}</FormHelperText>
+            </FormControl>
         );
     }
 }

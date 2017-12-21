@@ -1,2 +1,1 @@
-export FormsyText1 from './FormsyText1';
-export FormsyText from './FormsyText';
+export { default as FormsyText } from './FormsyText';
