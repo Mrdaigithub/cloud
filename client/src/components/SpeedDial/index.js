@@ -44,3 +44,4 @@ class SpeedDial extends Component {
 
 
 export default withStyles(styles)(SpeedDial);
+export { default as SpeedDialItem } from './SpeedDialItem';

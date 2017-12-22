@@ -9,13 +9,8 @@ import IconButton from 'material-ui/IconButton';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
-import FileIcon from '../../components/file-type-icon/FileIcon';
-import FolderIcon from '../../components/file-type-icon/FolderIcon';
-import TextIcon from '../../components/file-type-icon/TextIcon';
-import PdfIcon from '../../components/file-type-icon/PdfIcon';
-import RarIcon from '../../components/file-type-icon/ZipIcon';
-import SpeedDial from '../../components/SpeedDial';
-import SpeedDialItem from '../../components/SpeedDial/SpeedDialItem';
+import { FileIcon, FolderIcon, TextIcon, PdfIcon, ZipIcon } from '../../components/file-type-icon';
+import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './styles';
 import request from '../../utils/requester';
@@ -126,117 +121,117 @@ class CloudDrive extends Component {
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
-                        <ListItemIcon><RarIcon/></ListItemIcon>
+                        <ListItemIcon><ZipIcon/></ListItemIcon>
                         <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
