@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_admin')->default(false);
             $table->unsignedBigInteger('capacity')->default(1048576)->comment('kb');
             $table->unsignedBigInteger('used')->default(0)->comment('kb');
-            $table->jsonb('path_structure');
+            $table->jsonb('path_structure')->default('[]');
             $table->timestamps();
         });
 
