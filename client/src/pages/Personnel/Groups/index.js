@@ -69,7 +69,18 @@ class Oneself extends Component {
             rowsPerPage: 10,
             DialogOpen: false,
             showPassword: false,
+            createMode: true,
+            editUser: {
+                id: '',
+                username: '',
+                email: '',
+                capacity: '',
+            },
         };
+        this.handleClickShowPasssword = this.handleClickShowPasssword.bind(this);
+        this.handleDeleteUser = this.handleDeleteUser.bind(this);
+        this.handleAddUser = this.handleAddUser.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 
     async componentWillMount() {
@@ -133,6 +144,26 @@ class Oneself extends Component {
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
+    handleOpenDialog(createMode = true) {
+        if (createMode) {
+            this.setState({
+                createMode: true,
+                DialogOpen: true,
+            });
+        } else {
+            if (!this.state.selected.length || this.state.selected.length > 1) return false;
+            const editUser = this.state.data.filter((user) => {
+                return user.id === this.state.selected[0] ? user : false;
+            })[0];
+            const { id, username, email, capacity } = editUser;
+            this.setState(() => ({
+                createMode: false,
+                DialogOpen: true,
+                editUser: { id, username, email, capacity },
+            }));
+        }
+    }
+
     handleCloseDialog() {
         this.setState({
             DialogOpen: false,
@@ -158,12 +189,32 @@ class Oneself extends Component {
 
     async handleAddUser(model) {
         const { username, password, email, capacity } = model;
-        requester.post('/users', qs.stringify({
-            username,
-            password,
-            email,
-            capacity,
-        }));
+        if (this.state.createMode) {
+            const newUser = await requester.post('/users', qs.stringify({
+                username,
+                password,
+                email,
+                capacity,
+            }));
+            this.setState((prevState) => {
+                const userList = prevState.data;
+                userList.push(newUser);
+                return { data: userList };
+            });
+        } else {
+            const editedUser = await requester.put(`/users/${this.state.editUser.id}`, qs.stringify({
+                username,
+                password,
+                email,
+                capacity,
+            }));
+            this.setState({
+                data: this.state.data.map((user) => {
+                    if (user.id === editedUser.id) return editedUser;
+                    return user;
+                }),
+            });
+        }
         this.handleCloseDialog();
     }
 
@@ -197,7 +248,7 @@ class Oneself extends Component {
                                 <div className={classes.actions}>
                                     {selected.length > 0 ? (
                                         <Tooltip title="删除">
-                                            <IconButton aria-label="Delete" onClick={this.handleDeleteUser.bind(this)}>
+                                            <IconButton aria-label="Delete" onClick={this.handleDeleteUser}>
                                                 <DeleteIcon/>
                                             </IconButton>
                                         </Tooltip>
@@ -271,7 +322,7 @@ class Oneself extends Component {
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span"
-                                onClick={() => this.setState({ DialogOpen: true })}>
+                                onClick={this.handleOpenDialog.bind(this)}>
                                 <PersonAdd/>
                             </IconButton>
                         </label>
@@ -281,7 +332,8 @@ class Oneself extends Component {
                             <IconButton
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
-                                component="span">
+                                component="span"
+                                onClick={this.handleOpenDialog.bind(this, false)}>
                                 <Edit/>
                             </IconButton>
                         </label>
@@ -289,11 +341,11 @@ class Oneself extends Component {
                 </SpeedDial>
                 <Dialog
                     open={this.state.DialogOpen}
-                    onClose={this.handleClose}
                     transition={Transition}
                     aria-labelledby="form-dialog-title">
-                    <Formsy onValidSubmit={this.handleAddUser.bind(this)}>
-                        <DialogTitle id="form-dialog-title">创建用户</DialogTitle>
+                    <Formsy onValidSubmit={this.handleAddUser}>
+                        <DialogTitle
+                            id="form-dialog-title">{this.state.createMode ? '创建用户' : `编辑用户 --- ${this.state.editUser.username}`}</DialogTitle>
                         <DialogContent>
                             <FormsyText
                                 title="用户名"
@@ -301,17 +353,18 @@ class Oneself extends Component {
                                 validations={{ matchRegexp: /(\w|\d){4,}/ }}
                                 validationError="用户名不合法"
                                 required
+                                value={this.state.createMode ? '' : this.state.editUser.username}
                                 fullWidth
                                 autoFocus/>
                             <FormsyText
                                 title="密码"
                                 name="password"
                                 type={this.state.showPassword ? 'text' : 'password'}
-                                required
+                                required={this.state.createMode}
                                 fullWidth
                                 endAdornment={
                                     <InputAdornment position="end">
-                                        <IconButton onClick={this.handleClickShowPasssword.bind(this)}>
+                                        <IconButton onClick={this.handleClickShowPasssword}>
                                             {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
                                         </IconButton>
                                     </InputAdornment>
@@ -322,11 +375,12 @@ class Oneself extends Component {
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 validations="equalsField:password"
                                 validationError="两次输入不相同"
-                                required
+                                required={this.state.createMode}
                                 fullWidth/>
                             <FormsyText
                                 title="邮箱"
                                 name="email"
+                                value={this.state.createMode ? '' : this.state.editUser.email}
                                 validations="isEmail"
                                 validationError="邮箱格式不正确"
                                 required
@@ -335,6 +389,7 @@ class Oneself extends Component {
                                 title="容量"
                                 name="capacity"
                                 type="number"
+                                value={this.state.createMode ? '' : this.state.editUser.capacity}
                                 validations="isInt"
                                 validationError="容量只能为正整数"
                                 required
@@ -342,7 +397,7 @@ class Oneself extends Component {
                                 endAdornment={<InputAdornment position="end">MB</InputAdornment>}/>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.handleCloseDialog.bind(this)} color="primary">关闭</Button>
+                            <Button onClick={this.handleCloseDialog} color="primary">关闭</Button>
                             <Button type="submit" color="primary">提交</Button>
                         </DialogActions>
                     </Formsy>

@@ -87,7 +87,24 @@ class UserController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        $req = $request->all();
+        if (Validator::make($req,
+            [
+                'username' => 'string',
+                'capacity' => 'numeric'
+            ])->fails()) return $this->failed(400001);
+        if (Validator::make($req,
+            [
+                'email' => 'email',
+                'capacity' => 'between:0,1099511627776'
+            ])->fails()) return $this->failed(400002);
+        $user = User::find($id);
+        $user->username = $req['username'];
+        if (key_exists('password', $req) && $req['password']) $user->password = bcrypt($req['password']);
+        $user->email = $req['email'];
+        $user->capacity = $req['capacity'];
+        if (!$user->save()) return $this->failed(500001);
+        return $user;
     }
 
     /**
