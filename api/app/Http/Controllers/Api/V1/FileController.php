@@ -15,14 +15,15 @@ class FileController extends ApiController
 {
     function __construct()
     {
-        return;
-        $this->base_path = dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/storage/app/';
+        $this->base_path = (string)dirname(dirname(dirname(dirname(dirname(dirname(__FILE__)))))) . '/storage/app/';
     }
 
     /**
      * 保存临时文件至tmps数据库和tmps文件夹下
      *
+     * @param $file
      * @param $name
+     * @param $file_hash
      * @param $hash
      * @param $num
      * @param $index
@@ -56,6 +57,7 @@ class FileController extends ApiController
      * 合并临时文件
      *
      * @param $real_file
+     * @param $file_hash
      * @return string
      */
     private function merge_tmp($real_file, $file_hash)
@@ -89,10 +91,17 @@ class FileController extends ApiController
 
     function upload(Request $request)
     {
-        return json_encode($request->user());
         $req = $request->all();
-        if (Validator::make($req, ['real_file' => 'required', 'real_file_hash' => 'required', 'tmp_name_hash' => 'required', 'all_tmp_num' => 'required', 'tmp_index' => 'required'])->fails()) return $this->failed(400000);
-        if (Validator::make($req, ['real_file_hash' => 'unique:files,file_hash'])->fails()) return $this->failed(409000, 409);
+        if (Validator::make($req, [
+            'real_file' => 'required',
+            'real_file_hash' => 'required',
+            'tmp_name_hash' => 'required',
+            'all_tmp_num' => 'required',
+            'tmp_index' => 'required'
+        ])->fails()) return $this->failed(400000);
+        if (Validator::make($req, [
+            'real_file_hash' => 'unique:files,file_hash'
+        ])->fails()) return $this->failed(409000, 409);
         $this->save_tmp(
             $request->file('files'),
             $req['real_file'],
