@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import { LinearProgress } from 'material-ui/Progress';
 import Grid from 'material-ui/Grid';
-import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import Dialog, { DialogContent } from 'material-ui/Dialog';
 import { FileIcon } from '../../components/file-type-icon';
 import styles from './styles';
 
@@ -26,7 +26,7 @@ class FileUploader extends Component {
                             </div>
                         </Grid>
                         <Grid item xs={12}>
-                            <LinearProgress mode="determinate" value={0}/>
+                            <LinearProgress mode="buffer" value={20}/>
                         </Grid>
                         <Grid item xs={12}>
                             上传过程中请不要关闭程序

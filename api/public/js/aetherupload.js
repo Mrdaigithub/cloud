@@ -364,7 +364,14 @@ function aetherupload(file, group) {
 
     newInstance.wrapperDom = $(file).parents("#aetherupload-wrapper");
 
-    newInstance.group = group || 'file';
+    newInstance.group = group;
 
     return newInstance;
 }
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import qs from 'qs';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
@@ -14,15 +15,76 @@ import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import { FileUploader } from '../../components/FileUploader';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './styles';
-import request from '../../utils/requester';
+import requester from '../../utils/requester';
 
 class CloudDrive extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            filename: '',
+            fileSize: 0,
+            fileHash: '',
+        };
         this.handleUpload = this.handleUpload.bind(this);
     }
 
     handleUpload() {
+        const file = document.querySelector('#icon-button-file').files[0];
+        if (!file) return false;
+        this.setState({
+            filename: file.name,
+            fileSize: file.size,
+        });
+        this.calculateHash(file);
+    }
+
+    calculateHash(file) {
+        const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+        const chunkSize = 2097152;
+        const chunks = Math.ceil(file.size / chunkSize);
+        const spark = new SparkMD5.ArrayBuffer();
+        const fileReader = new FileReader();
+        let currentChunk = 0;
+
+        fileReader.onload = (e) => {
+            spark.append(e.target.result);
+            currentChunk += 1;
+            if (currentChunk < chunks) {
+                loadNext();
+            } else {
+                this.setState({
+                    fileHash: spark.end(),
+                });
+                this.preprocess();
+            }
+        };
+
+        fileReader.onerror = () => {
+            console.error('文件Ｈash计算失败');
+            return false;
+        };
+
+        const loadNext = () => {
+            const start = currentChunk * chunkSize;
+            const end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+        };
+
+        loadNext();
+    }
+
+    async preprocess() {
+        const { filename, fileSize, fileHash } = this.state;
+        const res = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
+            file_name: filename,
+            file_size: fileSize,
+            file_hash: fileHash,
+        }));
+        if (res.error) {
+            console.error('error');
+            return false;
+        }
+        console.log(res);
     }
 
     render() {
@@ -185,7 +247,7 @@ class CloudDrive extends Component {
                         <DeleteIcon/>
                     </SpeedDialItem>
                 </SpeedDial>
-                <FileUploader uploadState/>
+                <FileUploader uploadState={false}/>
             </PageHeaderLayout>
         );
     }

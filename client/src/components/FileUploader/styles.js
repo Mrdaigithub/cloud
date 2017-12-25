@@ -16,7 +16,7 @@ const styles = theme => ({
             '& i': {
                 display: 'block',
                 fontStyle: 'normal',
-                width: '90%',
+                width: '85%',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
