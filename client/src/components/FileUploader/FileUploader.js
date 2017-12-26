@@ -12,6 +12,7 @@ class FileUploader extends Component {
         const {
             classes,
             uploadState,
+            uploadValue,
         } = this.props;
         return (
             <Dialog
@@ -26,7 +27,7 @@ class FileUploader extends Component {
                             </div>
                         </Grid>
                         <Grid item xs={12}>
-                            <LinearProgress mode="buffer" value={20}/>
+                            <LinearProgress mode="buffer" value={uploadValue ? uploadValue : 0}/>
                         </Grid>
                         <Grid item xs={12}>
                             上传过程中请不要关闭程序

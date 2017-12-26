@@ -37,7 +37,8 @@
     "class-methods-use-this": [0],
     "no-console": [0],
     "no-underscore-dangle": [0],
-    "camelcase": [1]
+    "camelcase": [1],
+    "no-unneeded-ternary":[2, { "defaultAssignment": true }]
   },
   "parserOptions": {
     "ecmaFeatures": {

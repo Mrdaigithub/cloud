@@ -21,8 +21,10 @@ class CloudDrive extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filename: '',
-            fileSize: 0,
+            uploadState: false,
+            uploadValue: 0,
+            chunkSize: 2097152,
+            file: null,
             fileHash: '',
         };
         this.handleUpload = this.handleUpload.bind(this);
@@ -31,16 +33,13 @@ class CloudDrive extends Component {
     handleUpload() {
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
-        this.setState({
-            filename: file.name,
-            fileSize: file.size,
-        });
+        this.setState({ file });
         this.calculateHash(file);
     }
 
     calculateHash(file) {
         const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
-        const chunkSize = 2097152;
+        const { chunkSize } = this.state;
         const chunks = Math.ceil(file.size / chunkSize);
         const spark = new SparkMD5.ArrayBuffer();
         const fileReader = new FileReader();
@@ -60,7 +59,7 @@ class CloudDrive extends Component {
         };
 
         fileReader.onerror = () => {
-            console.error('文件Ｈash计算失败');
+            console.error('文件Hash计算失败');
             return false;
         };
 
@@ -74,17 +73,55 @@ class CloudDrive extends Component {
     }
 
     async preprocess() {
-        const { filename, fileSize, fileHash } = this.state;
-        const res = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
-            file_name: filename,
-            file_size: fileSize,
+        const { fileHash } = this.state;
+        const { name, size } = this.state.file;
+        const {
+            error,
+            chunkSize,
+            savedPath,
+            subDir,
+            uploadBaseName,
+            uploadExt,
+        } = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
+            file_name: name,
+            file_size: size,
             file_hash: fileHash,
         }));
-        if (res.error) {
+        if (error) {
             console.error('error');
             return false;
         }
-        console.log(res);
+        const chunkCount = Math.ceil(size / chunkSize);
+        if (savedPath.length === 0) {
+            this.setState({ uploadValue: 0 });
+            this.uploadChunk([...Array(chunkCount)
+                .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
+        } else {
+            this.setState({ uploadValue: 100 });
+            setTimeout(() => {
+                this.setState({
+
+                });
+            }, 1000);
+        }
+    }
+
+    async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
+        const file = this.state.file;
+        const { size } = file;
+        for (const i of chunkCountArr) {
+            const form = new FormData();
+            const start = i * chunkSize;
+            const end = Math.min(size, start + chunkSize);
+            form.append('file', file.slice(start, end));
+            form.append('upload_ext', uploadExt);
+            form.append('chunk_total', chunkCount);
+            form.append('chunk_index', i + 1);
+            form.append('upload_basename', uploadBaseName);
+            form.append('sub_dir', subDir);
+            const res = await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
+            console.log(res);
+        }
     }
 
     render() {
@@ -247,7 +284,7 @@ class CloudDrive extends Component {
                         <DeleteIcon/>
                     </SpeedDialItem>
                 </SpeedDial>
-                <FileUploader uploadState={false}/>
+                <FileUploader uploadState={this.state.uploadState} uploadValue={this.state.uploadValue}/>
             </PageHeaderLayout>
         );
     }

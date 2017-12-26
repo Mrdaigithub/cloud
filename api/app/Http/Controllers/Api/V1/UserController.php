@@ -17,8 +17,6 @@ class UserController extends ApiController
      */
     public function index()
     {
-        $files = Redis::get('aetherupload_file_hashes');
-        return $files;
         return User::orderBy('id')->get();
     }
 
