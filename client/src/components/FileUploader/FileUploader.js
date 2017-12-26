@@ -30,7 +30,7 @@ class FileUploader extends Component {
                             <LinearProgress mode="buffer" value={uploadValue ? uploadValue : 0}/>
                         </Grid>
                         <Grid item xs={12}>
-                            上传过程中请不要关闭程序
+                            {uploadValue === 100 ? '文件上传成功' : '上传过程中请不要关闭程序'}
                         </Grid>
                     </Grid>
                 </DialogContent>

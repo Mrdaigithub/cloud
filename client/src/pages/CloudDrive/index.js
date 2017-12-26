@@ -33,7 +33,10 @@ class CloudDrive extends Component {
     handleUpload() {
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
-        this.setState({ file });
+        this.setState({
+            file,
+            uploadState: true,
+        });
         this.calculateHash(file);
     }
 
@@ -51,14 +54,13 @@ class CloudDrive extends Component {
             if (currentChunk < chunks) {
                 loadNext();
             } else {
-                this.setState({
-                    fileHash: spark.end(),
-                });
+                this.setState({ fileHash: spark.end() });
                 this.preprocess();
             }
         };
 
         fileReader.onerror = () => {
+            this.resetUploadProcess();
             console.error('文件Hash计算失败');
             return false;
         };
@@ -88,6 +90,7 @@ class CloudDrive extends Component {
             file_hash: fileHash,
         }));
         if (error) {
+            this.resetUploadProcess();
             console.error('error');
             return false;
         }
@@ -98,11 +101,10 @@ class CloudDrive extends Component {
                 .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
         } else {
             this.setState({ uploadValue: 100 });
+            console.log('秒传');
             setTimeout(() => {
-                this.setState({
-
-                });
-            }, 1000);
+                this.resetUploadProcess();
+            }, 1500);
         }
     }
 
@@ -121,7 +123,18 @@ class CloudDrive extends Component {
             form.append('sub_dir', subDir);
             const res = await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             console.log(res);
+            this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
+        this.resetUploadProcess();
+    }
+
+    resetUploadProcess() {
+        this.setState({
+            uploadState: false,
+        });
+        setTimeout(() => {
+            this.setState({ uploadValue: 0 });
+        }, 300);
     }
 
     render() {
