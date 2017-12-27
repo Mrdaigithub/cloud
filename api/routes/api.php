@@ -19,7 +19,8 @@ Route::namespace('Api\V1')
     ->group(function () {
         Route::post('/login/password', 'AuthController@passwordLogin');
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
-            Route::post('/file/upload', 'FileController@upload');
             Route::resource('users', 'UserController');
+            Route::post('/file/upload/preprocess', 'FileController@preprocess');
+            Route::post('/file/upload/uploading', 'FileController@uploading');
         });
     });

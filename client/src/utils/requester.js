@@ -19,7 +19,7 @@ const errors = {
 
 const requester = axios.create({
     baseURL: '//api.mrdaisite.com/api/v1/',
-    timeout: 10000,
+    timeout: 60000,
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 });
 
@@ -34,7 +34,7 @@ requester.interceptors.request.use(
     },
     (err) => {
         toggleLoading()(store.dispatch);
-        alert('本地请求失败', 1500)(store.dispatch);
+        alert('本地请求超时', 1500)(store.dispatch);
         return Promise.reject(err);
     });
 
@@ -47,7 +47,7 @@ requester.interceptors.response.use(
         toggleLoading()(store.dispatch);
         if (!error.response) {
             toggleLoading()(store.dispatch);
-            alert('本地请求失败', 1500)(store.dispatch);
+            alert('本地请求超时', 1500)(store.dispatch);
             return Promise.reject(error);
         }
         const data = error.response.data;

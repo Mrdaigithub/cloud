@@ -23,9 +23,12 @@ class CloudDrive extends Component {
         this.state = {
             uploadState: false,
             uploadValue: 0,
+            uploadDone: false,
             chunkSize: 2097152,
             file: null,
             fileHash: '',
+            group: 'file',
+            locale: 'zh',
         };
         this.handleUpload = this.handleUpload.bind(this);
     }
@@ -36,6 +39,7 @@ class CloudDrive extends Component {
         this.setState({
             file,
             uploadState: true,
+            uploadDone: false,
         });
         this.calculateHash(file);
     }
@@ -75,37 +79,37 @@ class CloudDrive extends Component {
     }
 
     async preprocess() {
-        const { fileHash } = this.state;
+        const { fileHash, locale, group } = this.state;
         const { name, size } = this.state.file;
-        const {
-            error,
-            chunkSize,
-            savedPath,
-            subDir,
-            uploadBaseName,
-            uploadExt,
-        } = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
-            file_name: name,
+        const { exists } = await requester.post('file/upload/preprocess', qs.stringify({
+            filename: name,
             file_size: size,
             file_hash: fileHash,
         }));
-        if (error) {
-            this.resetUploadProcess();
-            console.error('error');
-            return false;
-        }
-        const chunkCount = Math.ceil(size / chunkSize);
-        if (savedPath.length === 0) {
-            this.setState({ uploadValue: 0 });
-            this.uploadChunk([...Array(chunkCount)
-                .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
-        } else {
-            this.setState({ uploadValue: 100 });
-            console.log('秒传');
-            setTimeout(() => {
-                this.resetUploadProcess();
-            }, 1500);
-        }
+        return false;
+        // if (error) {
+        //     this.resetUploadProcess();
+        //     console.error('error');
+        //     return false;
+        // }
+        // const chunkCount = Math.ceil(size / chunkSize);
+        // if (savedPath.length === 0) {
+        //     this.setState({
+        //         uploadValue: 0,
+        //         uploadDone: false,
+        //     });
+        //     this.uploadChunk([...Array(chunkCount)
+        //         .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
+        // } else {
+        //     this.setState({
+        //         uploadValue: 100,
+        //         uploadDone: true,
+        //     });
+        //     console.log('秒传');
+        //     setTimeout(() => {
+        //         this.resetUploadProcess();
+        //     }, 2000);
+        // }
     }
 
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
@@ -121,24 +125,32 @@ class CloudDrive extends Component {
             form.append('chunk_index', i + 1);
             form.append('upload_basename', uploadBaseName);
             form.append('sub_dir', subDir);
+            form.append('group', this.state.group);
+            form.append('locale', this.state.locale);
             const res = await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
-            console.log(res);
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
-        this.resetUploadProcess();
+        this.setState({
+            uploadDone: true,
+        });
+        setTimeout(() => {
+            this.resetUploadProcess();
+        }, 2000);
     }
 
     resetUploadProcess() {
-        this.setState({
-            uploadState: false,
-        });
+        this.setState({ uploadState: false });
         setTimeout(() => {
-            this.setState({ uploadValue: 0 });
+            this.setState({
+                uploadValue: 0,
+                uploadDone: false,
+            });
         }, 300);
     }
 
     render() {
         const { classes } = this.props;
+        const { uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
                 <List>
@@ -297,7 +309,11 @@ class CloudDrive extends Component {
                         <DeleteIcon/>
                     </SpeedDialItem>
                 </SpeedDial>
-                <FileUploader uploadState={this.state.uploadState} uploadValue={this.state.uploadValue}/>
+                <FileUploader
+                    uploadState={uploadState}
+                    uploadValue={uploadValue}
+                    uploadFilename={file ? file.name : ''}
+                    done={uploadDone}/>
             </PageHeaderLayout>
         );
     }
