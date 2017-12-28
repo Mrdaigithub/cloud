@@ -26,6 +26,8 @@ class CloudDrive extends Component {
             chunkSize: 2097152,
             file: null,
             fileHash: '',
+            group: 'file',
+            locale: 'zh',
         };
         this.handleUpload = this.handleUpload.bind(this);
     }
@@ -75,8 +77,8 @@ class CloudDrive extends Component {
     }
 
     async preprocess() {
-        const { fileHash } = this.state;
-        const { name, size } = this.state.file;
+        const { file, fileHash, group, locale } = this.state;
+        const { name, size } = file;
         const {
             error,
             chunkSize,
@@ -88,6 +90,8 @@ class CloudDrive extends Component {
             file_name: name,
             file_size: size,
             file_hash: fileHash,
+            locale,
+            group,
         }));
         if (error) {
             this.resetUploadProcess();
@@ -110,17 +114,20 @@ class CloudDrive extends Component {
 
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
-        const { size } = file;
+        const { name, size } = file;
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
             const end = Math.min(size, start + chunkSize);
             form.append('file', file.slice(start, end));
+            form.append('filename', name);
             form.append('upload_ext', uploadExt);
             form.append('chunk_total', chunkCount);
             form.append('chunk_index', i + 1);
             form.append('upload_basename', uploadBaseName);
             form.append('sub_dir', subDir);
+            form.append('group', this.state.group);
+            form.append('locale', this.state.locale);
             const res = await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             console.log(res);
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });

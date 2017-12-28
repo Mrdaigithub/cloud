@@ -15,7 +15,7 @@ class UserController extends ApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         return User::orderBy('id')->get();
     }

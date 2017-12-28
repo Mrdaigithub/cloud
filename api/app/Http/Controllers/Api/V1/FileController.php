@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\ApiController;
 use Carbon\Carbon;
 use Validator;
-use App\Models\File;
+use App\Models\Storage;
 use App\Models\Tmp;
 
 
@@ -75,11 +75,11 @@ class FileController extends ApiController
     /**
      * @param $full_filename
      * @param $file_hash
-     * @return File
+     * @return Storage
      */
     private function save_real_file($full_filename, $file_hash)
     {
-        $file = new File();
+        $file = new Storage();
         $file->full_filename = $full_filename;
         $file->file_hash = $file_hash;
         $file->file_hash = $file_hash;

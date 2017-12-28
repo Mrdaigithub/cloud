@@ -24,13 +24,6 @@ class CreateUsersTable extends Migration
             $table->jsonb('path_structure')->default('[]');
             $table->timestamps();
         });
-
-        Schema::create('user_file', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
-            $table->integer('file_id')->unsigned();
-            $table->string('filename');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -41,6 +34,5 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('user_file');
     }
 }
