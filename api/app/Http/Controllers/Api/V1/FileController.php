@@ -7,9 +7,13 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\ApiController;
 use Carbon\Carbon;
 use Validator;
+<<<<<<< HEAD
 use App\Models\Storage;
 use App\Models\Tmp;
 
+=======
+use App\Models\File;
+>>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
 
 class FileController extends ApiController
 {
@@ -115,6 +119,24 @@ class FileController extends ApiController
             return $this->save_real_file($full_filename, $req['real_file_hash']);
         }
         return json_encode(false);
+    }
+
+    function preprocess(Request $request)
+    {
+        $req = $request->all();
+        if (Validator::make($req, [
+            'filename' => 'required',
+            'file_size' => 'required',
+            'file_hash' => 'required',
+        ])->fails()) return $this->failed(400000);
+        if (Validator::make($req, [
+            'file_hash' => 'unique:files,file_hash'
+        ])->fails()) return response()->json(['exists' => true]);
+//        return response()->json([
+//            'exists' => true,
+//            'chunk_size' => getenv('chunk_size'),
+//        ]);
+        return json_encode(Storage::makeDirectory('public/files'));
     }
 
     function get_file(Request $request)

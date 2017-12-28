@@ -13,6 +13,8 @@ class FileUploader extends Component {
             classes,
             uploadState,
             uploadValue,
+            uploadFilename,
+            done,
         } = this.props;
         return (
             <Dialog
@@ -23,14 +25,14 @@ class FileUploader extends Component {
                         <Grid item xs={12}>
                             <div className={classes.media}>
                                 <FileIcon/>
-                                <span><i>CentOS-7-x86_64-Everything-1708.iso</i></span>
+                                <span><i>{uploadFilename}</i></span>
                             </div>
                         </Grid>
                         <Grid item xs={12}>
-                            <LinearProgress mode="buffer" value={uploadValue ? uploadValue : 0}/>
+                            <LinearProgress mode="determinate" value={uploadValue ? uploadValue : 0}/>
                         </Grid>
                         <Grid item xs={12}>
-                            {uploadValue === 100 ? '文件上传成功' : '上传过程中请不要关闭程序'}
+                            {done ? '文件上传成功' : '上传过程中请不要关闭程序'}
                         </Grid>
                     </Grid>
                 </DialogContent>

@@ -16,7 +16,11 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+<<<<<<< HEAD
         'App\Events\UploadEvent' => [
+=======
+        'App\Events\Upload' => [
+>>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
             'App\Listeners\UploadListener',
         ],
     ];
