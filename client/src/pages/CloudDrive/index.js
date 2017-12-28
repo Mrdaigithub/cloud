@@ -79,7 +79,6 @@ class CloudDrive extends Component {
     }
 
     async preprocess() {
-<<<<<<< HEAD
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
         const {
@@ -91,41 +90,34 @@ class CloudDrive extends Component {
             uploadExt,
         } = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
             file_name: name,
-=======
-        const { fileHash, locale, group } = this.state;
-        const { name, size } = this.state.file;
-        const { exists } = await requester.post('file/upload/preprocess', qs.stringify({
-            filename: name,
->>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
             file_size: size,
             file_hash: fileHash,
             locale,
             group,
         }));
-        return false;
-        // if (error) {
-        //     this.resetUploadProcess();
-        //     console.error('error');
-        //     return false;
-        // }
-        // const chunkCount = Math.ceil(size / chunkSize);
-        // if (savedPath.length === 0) {
-        //     this.setState({
-        //         uploadValue: 0,
-        //         uploadDone: false,
-        //     });
-        //     this.uploadChunk([...Array(chunkCount)
-        //         .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
-        // } else {
-        //     this.setState({
-        //         uploadValue: 100,
-        //         uploadDone: true,
-        //     });
-        //     console.log('秒传');
-        //     setTimeout(() => {
-        //         this.resetUploadProcess();
-        //     }, 2000);
-        // }
+        if (error) {
+            this.resetUploadProcess();
+            console.error('error');
+            return false;
+        }
+        const chunkCount = Math.ceil(size / chunkSize);
+        if (savedPath.length === 0) {
+            this.setState({
+                uploadValue: 0,
+                uploadDone: false,
+            });
+            this.uploadChunk([...Array(chunkCount)
+                .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
+        } else {
+            this.setState({
+                uploadValue: 100,
+                uploadDone: true,
+            });
+            console.log('秒传');
+            setTimeout(() => {
+                this.resetUploadProcess();
+            }, 1500);
+        }
     }
 
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {

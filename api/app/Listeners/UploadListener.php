@@ -2,20 +2,12 @@
 
 namespace App\Listeners;
 
-<<<<<<< HEAD
 use App\Events\UploadEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
 use Predis\Connection\ConnectionException;
 use App\Models\Storage;
-=======
-use App\Events\Upload;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Http\Request;
-use AetherUpload\Receiver;
->>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
 
 class UploadListener
 {
@@ -32,7 +24,6 @@ class UploadListener
     /**
      * Handle the event.
      *
-<<<<<<< HEAD
      * @param UploadEvent $event
      * @return \App\Models\Storage
      */
@@ -46,14 +37,5 @@ class UploadListener
         $storage->file = true;
         $storage->save();
         return $storage;
-=======
-     * @param  Upload $event
-     * @return void
-     */
-    public function handle(Upload $event)
-    {
-        $request = new Request();
-        print_r($request->file('file'));
->>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
     }
 }

@@ -17,11 +17,7 @@ return [
             "MIDDLEWARE_DISPLAY"           => ['api.auth', 'auth:api'], # 文件展示时的路由中间件
             "MIDDLEWARE_DOWNLOAD"          => ['api.auth', 'auth:api'], # 文件下载时的路由中间件
             "EVENT_BEFORE_UPLOAD_COMPLETE" => '', # 上传完成前触发的事件（临时文件），Receiver的实例被注入
-<<<<<<< HEAD
             "EVENT_UPLOAD_COMPLETE"        => 'App\Events\UploadEvent', # 上传完成后触发的事件（已存文件），Receiver的实例被注入
-=======
-            "EVENT_UPLOAD_COMPLETE"        => 'App\Events\Upload', # 上传完成后触发的事件（已存文件），Receiver的实例被注入
->>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
         ],
 
     ],

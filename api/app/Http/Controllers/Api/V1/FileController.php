@@ -7,13 +7,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\ApiController;
 use Carbon\Carbon;
 use Validator;
-<<<<<<< HEAD
-use App\Models\Storage;
-use App\Models\Tmp;
-
-=======
-use App\Models\File;
->>>>>>> 8a12f18c35fe3a28eeebf60b157f8c8f938a59cc
 
 class FileController extends ApiController
 {
