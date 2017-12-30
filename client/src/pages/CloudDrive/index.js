@@ -4,9 +4,14 @@ import qs from 'qs';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
+import Formsy from 'formsy-react';
+import { FormsyText } from '../../components/FormsyMaterialUi';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Checkbox from 'material-ui/Checkbox';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
+import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
@@ -21,6 +26,8 @@ class CloudDrive extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            createDirDiglogState: false,
+            newDirName: '',
             uploadState: false,
             uploadValue: 0,
             uploadDone: false,
@@ -31,6 +38,31 @@ class CloudDrive extends Component {
             locale: 'zh',
         };
         this.handleUpload = this.handleUpload.bind(this);
+        this.handleCreateDir = this.handleCreateDir.bind(this);
+        this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
+        this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
+        this.handleChangeNewDirName = this.handleChangeNewDirName.bind(this);
+    }
+
+    handleOpencreateDirDiglog() {
+        this.setState({ createDirDiglogState: true });
+    }
+
+    handleClosecreateDirDiglog() {
+        this.setState({ createDirDiglogState: false });
+    }
+
+    handleChangeNewDirName(event) {
+        this.setState({ newDirName: event.target.value });
+    }
+
+    handleCreateDir(val) {
+        console.log(val);
+        const { newDirName } = this.state;
+        if (newDirName.trim() === '') return;
+        // await requester.post('storage/dir', qs.stringify({
+        //     current_dir: this.props.currentDir,
+        // }));
     }
 
     handleUpload() {
@@ -44,6 +76,10 @@ class CloudDrive extends Component {
         this.calculateHash(file);
     }
 
+    /**
+     * 预先计算上传文件的Hash值
+     * @param file
+     */
     calculateHash(file) {
         const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
         const { chunkSize } = this.state;
@@ -78,6 +114,10 @@ class CloudDrive extends Component {
         loadNext();
     }
 
+    /**
+     * 预处理上传文件 (判断秒传)
+     * @returns {Promise.<boolean>}
+     */
     async preprocess() {
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
@@ -120,6 +160,16 @@ class CloudDrive extends Component {
         }
     }
 
+    /**
+     * 上传文件分块
+     * @param chunkCountArr
+     * @param chunkSize
+     * @param chunkCount
+     * @param uploadExt
+     * @param uploadBaseName
+     * @param subDir
+     * @returns {Promise.<void>}
+     */
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
         const { name, size } = file;
@@ -136,7 +186,7 @@ class CloudDrive extends Component {
             form.append('sub_dir', subDir);
             form.append('group', this.state.group);
             form.append('locale', this.state.locale);
-            const res = await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
+            await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
         this.setState({
@@ -147,6 +197,9 @@ class CloudDrive extends Component {
         }, 2000);
     }
 
+    /**
+     * 重置文件进度条
+     */
     resetUploadProcess() {
         this.setState({ uploadState: false });
         setTimeout(() => {
@@ -309,10 +362,22 @@ class CloudDrive extends Component {
                             onChange={this.handleUpload}
                             type="file"/>
                         <label htmlFor="icon-button-file">
-                            <IconButton color="primary" className={classes.SpeedDialItemButton} component="span">
+                            <IconButton
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
                                 <FileUpload/>
                             </IconButton>
                         </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <IconButton
+                            color="primary"
+                            className={classes.SpeedDialItemButton}
+                            component="span"
+                            onClick={this.handleOpencreateDirDiglog}>
+                            <CreateNewFolder/>
+                        </IconButton>
                     </SpeedDialItem>
                     <SpeedDialItem>
                         <DeleteIcon/>
@@ -323,12 +388,33 @@ class CloudDrive extends Component {
                     uploadValue={uploadValue}
                     uploadFilename={file ? file.name : ''}
                     done={uploadDone}/>
+                <Dialog open={this.state.createDirDiglogState}>
+                    <Formsy onValidSubmit={this.handleCreateDir}>
+                        <DialogContent>
+                            <FormsyText
+                                title="文件夹名称"
+                                name="dirName"
+                                validations={{ matchRegexp: /(\w|\d)*/ }}
+                                validationError="不能含非法字符"
+                                required
+                                value={this.state.newDirName}
+                                fullWidth
+                                autoFocus/>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button color="primary" onClick={this.handleClosecreateDirDiglog}>关闭</Button>
+                            <Button onClick={this.handleCreateDir} color="primary">创建</Button>
+                        </DialogActions>
+                    </Formsy>
+                </Dialog>
             </PageHeaderLayout>
         );
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    currentDir: state.storage.currentDir,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),

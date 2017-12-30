@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -31,7 +34,7 @@ class PageHeaderLayout extends Component {
     };
 
     render() {
-        const { children, classes } = this.props;
+        const { children, classes, currentDir } = this.props;
         return (
             <div>
                 <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
@@ -111,7 +114,7 @@ class PageHeaderLayout extends Component {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">Title</Typography>
+                                        <Typography type="title" color="inherit">{currentDir}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -153,4 +156,15 @@ class PageHeaderLayout extends Component {
     }
 }
 
-export default withStyles(styles)(PageHeaderLayout);
+const mapStateToProps = state => ({
+    currentDir: state.storage.currentDir,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    changePage: url => push(url),
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(withStyles(styles)(PageHeaderLayout));
