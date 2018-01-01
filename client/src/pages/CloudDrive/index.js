@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import Formsy from 'formsy-react';
-import { FormsyText } from '../../components/FormsyMaterialUi';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Checkbox from 'material-ui/Checkbox';
@@ -15,6 +14,7 @@ import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
+import { FormsyText } from '../../components/FormsyMaterialUi';
 import { FileIcon, FolderIcon, TextIcon, PdfIcon, ZipIcon } from '../../components/file-type-icon';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import { FileUploader } from '../../components/FileUploader';
@@ -42,6 +42,18 @@ class CloudDrive extends Component {
         this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
     }
 
+    componentWillMount() {
+        this.getResourceList();
+    }
+
+    /**  获取当前路径的资源列表 **/
+
+    async getResourceList() {
+        await requester.get(`resources?path=${this.array2path(this.props.currentPath)}`);
+    }
+
+    /**  创建文件夹 **/
+
     handleOpencreateDirDiglog() {
         this.setState({ createDirDiglogState: true });
     }
@@ -50,15 +62,26 @@ class CloudDrive extends Component {
         this.setState({ createDirDiglogState: false });
     }
 
+    /**
+     * 将路径数组转化成上传的路径字符串['x', 'y', 'z'] => 'x.y.z'
+     * @param arr
+     * @returns {string}
+     */
+    array2path(arr) {
+        const array = arr.filter(item => !!item);
+        return array.length === 0 ? '' : array.reduce((accumulator, currentValue) => `${accumulator}.${currentValue}`);
+    }
+
     async handleCreateDir(model) {
-        const currentPath = this.props.currentPath
-            .filter(item => !!item)
-            .reduce((accumulator, currentValue) => `${accumulator}.${currentValue}`);
-        await requester.post('storage/dir', qs.stringify({
+        const currentPath = this.array2path(this.props.currentPath);
+        await requester.post('resources', qs.stringify({
             new_dir: model.newDir,
             current_path: currentPath,
         }));
     }
+
+
+    /**  上传文件 **/
 
     handleUpload() {
         const file = document.querySelector('#icon-button-file').files[0];

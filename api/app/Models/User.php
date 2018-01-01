@@ -20,10 +20,10 @@ class User extends Authenticatable
     public function storage()
     {
         return $this->belongsToMany(
-            'App\Models\Storage',
-            'user_storage',
+            'App\Models\Resource',
+            'user_resource',
             'user_id',
-            'storage_id'
+            'resource_id'
         );
     }
 }

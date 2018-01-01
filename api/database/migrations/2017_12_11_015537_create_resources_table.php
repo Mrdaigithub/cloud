@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateStoragesTable extends Migration
+class CreateResourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,15 @@ class CreateStoragesTable extends Migration
      */
     public function up()
     {
-        Schema::create('storages', function (Blueprint $table) {
+        Schema::create('resources', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('storage_name');
-            $table->string('file_hash')->nullable();
+            $table->string('resource_name');
+            $table->string('hash')->nullable();
             $table->boolean('file')->default(true);
             $table->timestamps();
         });
-        DB::statement("ALTER TABLE storages ADD path ltree NOT NULL");
-        DB::statement("CREATE INDEX path_gist_idx ON storages USING gist(path)");
+        DB::statement("ALTER TABLE resources ADD path ltree NOT NULL");
+        DB::statement("CREATE INDEX path_gist_idx ON resources USING gist(path)");
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateStoragesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('storages');
+        Schema::dropIfExists('resources');
     }
 }

@@ -20,6 +20,6 @@ Route::namespace('Api\V1')
         Route::post('/login/password', 'AuthController@passwordLogin');
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
             Route::resource('users', 'UserController');
-            Route::post('/storage/dir', 'StorageController@create_dir');
+            Route::resource('resources', 'ResourceController');
         });
     });

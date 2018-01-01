@@ -1,7 +1,7 @@
 export const CHANGE_FOLDER = 'oneself/CHANGE_FOLDER';
 
 const initialState = {
-    currentPath: ['', '123', '213', '1'],
+    currentPath: ['1', '2'],
 };
 
 export default (state = initialState, action) => {

@@ -24,8 +24,8 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('user_storage', function (Blueprint $table) {
-            $table->increments('storage_id')->unsigned();
+        Schema::create('user_resource', function (Blueprint $table) {
+            $table->increments('resource_id')->unsigned();
             $table->integer('user_id');
         });
     }
@@ -38,6 +38,6 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('user_storage');
+        Schema::dropIfExists('user_resource');
     }
 }

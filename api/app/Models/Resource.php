@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Storage extends Model
+class Resource extends Model
 {
     public function user()
     {

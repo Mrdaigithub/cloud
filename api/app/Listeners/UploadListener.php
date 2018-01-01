@@ -7,7 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
 use Predis\Connection\ConnectionException;
-use App\Models\Storage;
+use App\Models\Resource;
 
 class UploadListener
 {
@@ -25,12 +25,12 @@ class UploadListener
      * Handle the event.
      *
      * @param UploadEvent $event
-     * @return \App\Models\Storage
+     * @return \App\Models\Resource
      */
     public function handle(UploadEvent $event)
     {
         $saved_path = $event->receiver->savedPath;
-        $storage = new Storage();
+        $storage = new Resource();
         $storage->storage_name = $event->filename['filename'];
         $storage->file_hash = pathinfo($saved_path)['filename'];
         $storage->user_id = $event->oneself->id;
