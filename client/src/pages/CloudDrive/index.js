@@ -27,7 +27,6 @@ class CloudDrive extends Component {
         super(props);
         this.state = {
             createDirDiglogState: false,
-            newDirName: '',
             uploadState: false,
             uploadValue: 0,
             uploadDone: false,
@@ -41,7 +40,6 @@ class CloudDrive extends Component {
         this.handleCreateDir = this.handleCreateDir.bind(this);
         this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
         this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
-        this.handleChangeNewDirName = this.handleChangeNewDirName.bind(this);
     }
 
     handleOpencreateDirDiglog() {
@@ -52,17 +50,14 @@ class CloudDrive extends Component {
         this.setState({ createDirDiglogState: false });
     }
 
-    handleChangeNewDirName(event) {
-        this.setState({ newDirName: event.target.value });
-    }
-
-    handleCreateDir(val) {
-        console.log(val);
-        const { newDirName } = this.state;
-        if (newDirName.trim() === '') return;
-        // await requester.post('storage/dir', qs.stringify({
-        //     current_dir: this.props.currentDir,
-        // }));
+    async handleCreateDir(model) {
+        const currentPath = this.props.currentPath
+            .filter(item => !!item)
+            .reduce((accumulator, currentValue) => `${accumulator}.${currentValue}`);
+        await requester.post('storage/dir', qs.stringify({
+            new_dir: model.newDir,
+            current_path: currentPath,
+        }));
     }
 
     handleUpload() {
@@ -393,17 +388,16 @@ class CloudDrive extends Component {
                         <DialogContent>
                             <FormsyText
                                 title="文件夹名称"
-                                name="dirName"
+                                name="newDir"
                                 validations={{ matchRegexp: /(\w|\d)*/ }}
                                 validationError="不能含非法字符"
                                 required
-                                value={this.state.newDirName}
                                 fullWidth
                                 autoFocus/>
                         </DialogContent>
                         <DialogActions>
                             <Button color="primary" onClick={this.handleClosecreateDirDiglog}>关闭</Button>
-                            <Button onClick={this.handleCreateDir} color="primary">创建</Button>
+                            <Button type="submit" color="primary">创建</Button>
                         </DialogActions>
                     </Formsy>
                 </Dialog>
@@ -413,7 +407,7 @@ class CloudDrive extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentDir: state.storage.currentDir,
+    currentPath: state.storage.currentPath,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

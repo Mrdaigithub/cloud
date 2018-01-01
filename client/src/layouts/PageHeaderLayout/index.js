@@ -34,7 +34,7 @@ class PageHeaderLayout extends Component {
     };
 
     render() {
-        const { children, classes, currentDir } = this.props;
+        const { children, classes, currentPath } = this.props;
         return (
             <div>
                 <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
@@ -114,7 +114,7 @@ class PageHeaderLayout extends Component {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">{currentDir}</Typography>
+                                        <Typography type="title" color="inherit">{currentPath.map(e => `${e}/`)}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -157,7 +157,7 @@ class PageHeaderLayout extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentDir: state.storage.currentDir,
+    currentPath: state.storage.currentPath,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

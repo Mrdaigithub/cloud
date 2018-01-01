@@ -18,7 +18,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => true,
             'capacity' => 102400000000000000,
             'used' => 25600,
-            'path_structure' => '[]'
         ]);
         DB::table('users')->insert([
             'username' => 'user1',
@@ -27,7 +26,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user2',
@@ -36,7 +34,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user3',
@@ -45,7 +42,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user4',
@@ -54,7 +50,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user5',
@@ -63,7 +58,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user6',
@@ -72,7 +66,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user7',
@@ -81,7 +74,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user8',
@@ -90,7 +82,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user9',
@@ -99,7 +90,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user10',
@@ -108,7 +98,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user11',
@@ -117,7 +106,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user12',
@@ -126,7 +114,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user13',
@@ -135,7 +122,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user14',
@@ -144,7 +130,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user15',
@@ -153,7 +138,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user16',
@@ -162,7 +146,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user17',
@@ -171,7 +154,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '["1", "2", "3", {"4": ["5", "6", {"7": ["8", "9", {"10": [11, 12]}]}]}]'
         ]);
         DB::table('users')->insert([
             'username' => 'user18',
@@ -188,7 +170,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '[]'
         ]);
         DB::table('users')->insert([
             'username' => 'user20',
@@ -197,7 +178,6 @@ class UsersTableSeeder extends Seeder
             'is_admin' => false,
             'capacity' => 10240000,
             'used' => 256,
-            'path_structure' => '[]'
         ]);
     }
 }

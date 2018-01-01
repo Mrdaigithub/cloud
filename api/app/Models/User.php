@@ -16,4 +16,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password'
     ];
+
+    public function storage()
+    {
+        return $this->belongsToMany(
+            'App\Models\Storage',
+            'user_storage',
+            'user_id',
+            'storage_id'
+        );
+    }
 }

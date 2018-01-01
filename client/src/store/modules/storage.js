@@ -1,7 +1,7 @@
 export const CHANGE_FOLDER = 'oneself/CHANGE_FOLDER';
 
 const initialState = {
-    currentDir: '/',
+    currentPath: ['', '123', '213', '1'],
 };
 
 export default (state = initialState, action) => {
@@ -9,7 +9,7 @@ export default (state = initialState, action) => {
         case CHANGE_FOLDER:
             return {
                 ...state,
-                currentDir: action.payload.currentDir,
+                currentPath: action.payload.currentPath,
             };
 
         default:

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateStoragesTable extends Migration
 {
@@ -17,10 +18,11 @@ class CreateStoragesTable extends Migration
             $table->increments('id')->unsigned();
             $table->string('storage_name');
             $table->string('file_hash')->nullable();
-            $table->unsignedInteger('user_id');
             $table->boolean('file')->default(true);
             $table->timestamps();
         });
+        DB::statement("ALTER TABLE storages ADD path ltree NOT NULL");
+        DB::statement("CREATE INDEX path_gist_idx ON storages USING gist(path)");
     }
 
     /**

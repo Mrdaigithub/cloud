@@ -34,6 +34,7 @@ class FormsyText extends Component {
                     id={title}
                     type={type || 'text'}
                     value={getValue() || ''}
+                    autoComplete="off"
                     endAdornment={endAdornment}
                     startAdornment={startAdornment}
                     onChange={this.changeValue}/>
