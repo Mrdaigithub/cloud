@@ -45,6 +45,7 @@ class CloudDrive extends Component {
     }
 
     componentWillMount() {
+        console.log(this.props.location);
         this.getResourceList();
     }
 

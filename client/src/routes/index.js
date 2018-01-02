@@ -1,27 +1,23 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Welcome from '../pages/Welcome';
 import Login from '../pages/Login';
 import CloudDrive from '../pages/CloudDrive';
 import Oneself from '../pages/Personnel/Oneself';
 import Groups from '../pages/Personnel/Groups';
+import NotFound from '../pages/NotFound';
 
 const Routes = props => (
-    <div>
+    <Switch>
         <Route exact path="/" component={Welcome}/>
         <Route exact path="/welcome" component={Welcome}/>
         <Route exact path="/login" component={Login}/>
-        <Route exact path="/cloud-drive" component={CloudDrive}/>
+        <Route path="/cloud-drive/0" component={CloudDrive}/>
+        <Redirect exact from="/cloud-drive" to="/cloud-drive/0"/>
         <Route exact path="/personnel/oneself" component={Oneself}/>
         <Route exact path="/personnel/groups" component={Groups}/>
-        <Route component={NoMatch}/>
-    </div>
-);
-
-const NoMatch = ({ location }) => (
-    <div>
-        <h3>No match for <code>{location.pathname}</code></h3>
-    </div>
+        <Route component={NotFound}/>
+    </Switch>
 );
 
 export default Routes;
