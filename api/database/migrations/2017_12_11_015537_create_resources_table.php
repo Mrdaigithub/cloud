@@ -21,7 +21,7 @@ class CreateResourcesTable extends Migration
             $table->boolean('file')->default(true);
             $table->timestamps();
         });
-        DB::statement("ALTER TABLE resources ADD path ltree NOT NULL");
+        DB::statement("ALTER TABLE resources ADD path ltree NOT NULL DEFAULT 'root'");
         DB::statement("CREATE INDEX path_gist_idx ON resources USING gist(path)");
     }
 

@@ -14,6 +14,7 @@ import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
+import { goPath } from '../../store/modules/resource';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import { FileIcon, FolderIcon, TextIcon, PdfIcon, ZipIcon } from '../../components/file-type-icon';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
@@ -26,6 +27,7 @@ class CloudDrive extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentResourceList: [],
             createDirDiglogState: false,
             uploadState: false,
             uploadValue: 0,
@@ -48,8 +50,10 @@ class CloudDrive extends Component {
 
     /**  获取当前路径的资源列表 **/
 
-    async getResourceList() {
-        await requester.get(`resources?path=${this.array2path(this.props.currentPath)}`);
+    async getResourceList(resourceName) {
+        if (resourceName) this.props.goPath(resourceName);
+        const currentResourceList = await requester.get(`resources?path=${this.array2path(this.props.currentPath)}`);
+        this.setState({ currentResourceList });
     }
 
     /**  创建文件夹 **/
@@ -230,15 +234,19 @@ class CloudDrive extends Component {
 
     render() {
         const { classes } = this.props;
-        const { uploadState, uploadValue, file, uploadDone } = this.state;
+        const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
                 <List>
-                    <ListItem button>
-                        <ListItemIcon><FolderIcon/></ListItemIcon>
-                        <ListItemText primary={`folder`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
+                    {currentResourceList.map((resource) => {
+                        return (
+                            <ListItem button key={resource.id} onClick={this.getResourceList.bind(this, resource.resource_name)}>
+                                <ListItemIcon>{resource.file ? <FileIcon/> : <FolderIcon/>}</ListItemIcon>
+                                <ListItemText primary={resource.resource_name}/>
+                                <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
+                            </ListItem>
+                        );
+                    })}
                     <ListItem button>
                         <ListItemIcon><FileIcon/></ListItemIcon>
                         <ListItemText primary={`file`}/>
@@ -252,116 +260,6 @@ class CloudDrive extends Component {
                     <ListItem button>
                         <ListItemIcon><PdfIcon/></ListItemIcon>
                         <ListItemText primary={`pdf`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
                         <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                     </ListItem>
                     <ListItem button>
@@ -430,11 +328,12 @@ class CloudDrive extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentPath: state.storage.currentPath,
+    currentPath: state.resource.currentPath,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),
+    goPath,
 }, dispatch);
 
 export default connect(

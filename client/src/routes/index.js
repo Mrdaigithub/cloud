@@ -14,6 +14,13 @@ const Routes = props => (
         <Route exact path="/cloud-drive" component={CloudDrive}/>
         <Route exact path="/personnel/oneself" component={Oneself}/>
         <Route exact path="/personnel/groups" component={Groups}/>
+        <Route component={NoMatch}/>
+    </div>
+);
+
+const NoMatch = ({ location }) => (
+    <div>
+        <h3>No match for <code>{location.pathname}</code></h3>
     </div>
 );
 

@@ -12,14 +12,38 @@ use App\Models\User;
 class ResourceController extends ApiController
 {
     /**
+     * 处理path格式 =>（root.xxx.yyy.zzz）
+     *
+     * @param $path
+     * @return string
+     */
+    private function deal_path($path)
+    {
+        $path = array_filter(
+            array_map(function ($item) {
+                return trim("$item.");
+            }, explode(".", trim($path, 'root.'))),
+            function ($item) {
+                return !!$item;
+            });
+        return trim('root.' . implode('', $path), '.');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $path = $request->only('path')['path'];
-        return $path;
+        $path = $this->deal_path($request->only('path')['path']);
+        $uid = $request->user()->id;
+        $resources = DB::select(
+            "SELECT id, resource_name, file, created_at, updated_at, path
+              FROM resources
+              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              WHERE user_id=? AND path ~ ?;", [$uid, $path]);
+        return $resources;
     }
 
     /**
@@ -53,7 +77,7 @@ class ResourceController extends ApiController
         $storage = new Resource();
         $storage->resource_name = $req['new_dir'];
         $storage->file = false;
-        $storage->path = $req['current_path'] ? $req['current_path'] : '';
+        if ($req['current_path']) $storage->path = 'root.' . $req['current_path'];
         if (!$storage->save()) return $this->failed(500001);
         $request->user()->storage()->attach($storage->id);
         return response()->json($storage);

@@ -157,7 +157,7 @@ class PageHeaderLayout extends Component {
 }
 
 const mapStateToProps = state => ({
-    currentPath: state.storage.currentPath,
+    currentPath: state.resource.currentPath,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
