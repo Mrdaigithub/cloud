@@ -17,7 +17,7 @@ class User extends Authenticatable
         'password'
     ];
 
-    public function storage()
+    public function resource()
     {
         return $this->belongsToMany(
             'App\Models\Resource',

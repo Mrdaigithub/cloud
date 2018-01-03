@@ -74,13 +74,13 @@ class ResourceController extends ApiController
                 'new_dir' => 'string',
             ])->fails()) return $this->failed(400001);
 
-        $storage = new Resource();
-        $storage->resource_name = $req['new_dir'];
-        $storage->file = false;
-        if ($req['current_path']) $storage->path = '0.' . $req['current_path'];
-        if (!$storage->save()) return $this->failed(500001);
-        $request->user()->storage()->attach($storage->id);
-        return response()->json($storage);
+        $resource = new Resource();
+        $resource->resource_name = $req['new_dir'];
+        $resource->file = false;
+        if ($req['current_path']) $resource->path = $req['current_path'];
+        if (!$resource->save()) return $this->failed(500001);
+        $request->user()->resource()->attach($resource->id);
+        return response()->json($resource);
     }
 
     /**

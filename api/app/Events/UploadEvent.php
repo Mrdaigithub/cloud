@@ -16,21 +16,18 @@ class UploadEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $receiver;
-    public $oneself;
-    public $filename;
+    public $request;
 
     /**
      * UploadEvent constructor.
      *
      * @param $receiver
-     * @param $oneself
-     * @param $filename
+     * @param $request
      */
-    public function __construct($receiver, $oneself, $filename)
+    public function __construct($receiver, $request)
     {
         $this->receiver = $receiver;
-        $this->oneself = $oneself;
-        $this->filename = $filename;
+        $this->request = $request;
     }
 
     /**

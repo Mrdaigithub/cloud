@@ -29,13 +29,15 @@ class UploadListener
      */
     public function handle(UploadEvent $event)
     {
+        $req = $event->request;
         $saved_path = $event->receiver->savedPath;
-        $storage = new Resource();
-        $storage->storage_name = $event->filename['filename'];
-        $storage->file_hash = pathinfo($saved_path)['filename'];
-        $storage->user_id = $event->oneself->id;
-        $storage->file = true;
-        $storage->save();
-        return $storage;
+        $resource = new Resource();
+        $resource->resource_name = $req->only('filename');
+        $resource->hash = pathinfo($saved_path)['filename'];
+        $resource->mime = $req->file->getMimeType();
+        $resource->file = true;
+        $resource->save();
+        $event->oneself->resource()->attach($resource->id);
+        return $resource;
     }
 }

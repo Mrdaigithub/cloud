@@ -88,11 +88,13 @@ class CloudDrive extends Component {
     }
 
     async handleCreateDir(model) {
-        const currentPath = this.url2path();
+        const currentPath = this.url2path(this.props.routing.location.pathname);
         await requester.post('resources', qs.stringify({
             new_dir: model.newDir,
             current_path: currentPath,
         }));
+        this.handleClosecreateDirDiglog();
+        this.getResourceList(this.url2path(this.props.routing.location.pathname));
     }
 
 
@@ -261,26 +263,26 @@ class CloudDrive extends Component {
                             </ListItem>
                         );
                     })}
-                    <ListItem button>
-                        <ListItemIcon><FileIcon/></ListItemIcon>
-                        <ListItemText primary={`file`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><TextIcon/></ListItemIcon>
-                        <ListItemText primary={`text`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><PdfIcon/></ListItemIcon>
-                        <ListItemText primary={`pdf`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon><ZipIcon/></ListItemIcon>
-                        <ListItemText primary={`zip`}/>
-                        <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
-                    </ListItem>
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon><FileIcon/></ListItemIcon>*/}
+                        {/*<ListItemText primary={`file`}/>*/}
+                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
+                    {/*</ListItem>*/}
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon><TextIcon/></ListItemIcon>*/}
+                        {/*<ListItemText primary={`text`}/>*/}
+                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
+                    {/*</ListItem>*/}
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon><PdfIcon/></ListItemIcon>*/}
+                        {/*<ListItemText primary={`pdf`}/>*/}
+                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
+                    {/*</ListItem>*/}
+                    {/*<ListItem button>*/}
+                        {/*<ListItemIcon><ZipIcon/></ListItemIcon>*/}
+                        {/*<ListItemText primary={`zip`}/>*/}
+                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
+                    {/*</ListItem>*/}
                 </List>
                 <SpeedDial>
                     <SpeedDialItem>

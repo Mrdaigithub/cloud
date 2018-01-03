@@ -18,6 +18,7 @@ class CreateResourcesTable extends Migration
             $table->increments('id')->unsigned();
             $table->string('resource_name');
             $table->string('hash')->nullable();
+            $table->string('mime')->nullable();
             $table->boolean('file')->default(true);
             $table->timestamps();
         });
