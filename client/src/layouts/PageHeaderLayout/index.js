@@ -24,17 +24,19 @@ import defaultAvatar from '../../static/defaultAvatar.svg';
 import styles from './styles';
 
 class PageHeaderLayout extends Component {
-    state = {
-        open: false,
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+        };
+    }
+
     toggleDrawer = open => () => {
-        this.setState({
-            open,
-        });
+        this.setState({ open });
     };
 
     render() {
-        const { children, classes, currentPath } = this.props;
+        const { children, classes } = this.props;
         return (
             <div>
                 <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
@@ -63,7 +65,7 @@ class PageHeaderLayout extends Component {
                         <Divider/>
                         <List>
                             <ListItem button>
-                                <Link to="/cloud-drive" className={classes.sidebarLink}>
+                                <Link to="/cloud-drive/0" className={classes.sidebarLink}>
                                     <ListItemIcon>
                                         <Storage/>
                                     </ListItemIcon>
@@ -114,7 +116,7 @@ class PageHeaderLayout extends Component {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">{currentPath.map(e => `${e}/`)}</Typography>
+                                        {/*<Typography type="title" color="inherit">{currentPath.map(e => `${e}/`)}</Typography>*/}
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -156,8 +158,7 @@ class PageHeaderLayout extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    currentPath: state.resource.currentPath,
+const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

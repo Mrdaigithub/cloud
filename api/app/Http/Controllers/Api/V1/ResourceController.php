@@ -22,11 +22,11 @@ class ResourceController extends ApiController
         $path = array_filter(
             array_map(function ($item) {
                 return trim("$item.");
-            }, explode(".", trim($path, 'root.'))),
+            }, explode(".", trim($path, '0.'))),
             function ($item) {
                 return !!$item;
             });
-        return trim('root.' . implode('', $path), '.');
+        return trim('0.' . implode('', $path), '.');
     }
 
     /**
@@ -77,7 +77,7 @@ class ResourceController extends ApiController
         $storage = new Resource();
         $storage->resource_name = $req['new_dir'];
         $storage->file = false;
-        if ($req['current_path']) $storage->path = 'root.' . $req['current_path'];
+        if ($req['current_path']) $storage->path = '0.' . $req['current_path'];
         if (!$storage->save()) return $this->failed(500001);
         $request->user()->storage()->attach($storage->id);
         return response()->json($storage);

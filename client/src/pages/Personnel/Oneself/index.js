@@ -43,7 +43,7 @@ class Oneself extends Component {
                             alignItems={'center'}
                             spacing={8}>
                             <Grid item xs={3} sm={2} md={1}>
-                                <Link to="/cloud-drive">
+                                <Link to="/cloud-drive/0">
                                     <img className={classes.logoImg} src={logo} alt="logo"/>
                                 </Link>
                             </Grid>

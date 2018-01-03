@@ -14,7 +14,7 @@ import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
-import { goPath } from '../../store/modules/resource';
+import { history } from '../../store';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import { FileIcon, FolderIcon, TextIcon, PdfIcon, ZipIcon } from '../../components/file-type-icon';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
@@ -38,6 +38,7 @@ class CloudDrive extends Component {
             group: 'file',
             locale: 'zh',
         };
+        this.unlisten = null;
         this.handleUpload = this.handleUpload.bind(this);
         this.handleCreateDir = this.handleCreateDir.bind(this);
         this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
@@ -45,17 +46,22 @@ class CloudDrive extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.location);
-        this.getResourceList();
+        this.unlisten = history.listen((location) => {
+            this.getResourceList(this.url2path(location.pathname));
+        });
+        if (!this.state.currentResourceList.length) this.getResourceList(this.url2path(this.props.location.pathname));
+    }
+
+    componentWillUnmount() {
+        this.unlisten();
     }
 
     /**  获取当前路径的资源列表 **/
-
-    async getResourceList(resourceName) {
-        if (resourceName) this.props.goPath(resourceName);
-        const currentResourceList = await requester.get(`resources?path=${this.array2path(this.props.currentPath)}`);
+    async getResourceList(pathnameStr = '0') {
+        const currentResourceList = await requester.get(`resources?path=${pathnameStr}`);
         this.setState({ currentResourceList });
     }
+
 
     /**  创建文件夹 **/
 
@@ -68,17 +74,21 @@ class CloudDrive extends Component {
     }
 
     /**
-     * 将路径数组转化成上传的路径字符串['x', 'y', 'z'] => 'x.y.z'
-     * @param arr
+     * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
+     *
+     * @param url
      * @returns {string}
      */
-    array2path(arr) {
-        const array = arr.filter(item => !!item);
-        return array.length === 0 ? '' : array.reduce((accumulator, currentValue) => `${accumulator}.${currentValue}`);
+    url2path(url) {
+        return url.split('/')
+            .filter(item => !!item && item !== 'cloud-drive')
+            .map(item => item.trim()
+                .replace(/(^\.+|\.+$)/, ''))
+            .join('.');
     }
 
     async handleCreateDir(model) {
-        const currentPath = this.array2path(this.props.currentPath);
+        const currentPath = this.url2path();
         await requester.post('resources', qs.stringify({
             new_dir: model.newDir,
             current_path: currentPath,
@@ -234,14 +244,17 @@ class CloudDrive extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, changePage, routing } = this.props;
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
                 <List>
                     {currentResourceList.map((resource) => {
                         return (
-                            <ListItem button key={resource.id} onClick={this.getResourceList.bind(this, resource.resource_name)}>
+                            <ListItem
+                                button
+                                key={resource.id}
+                                onClick={changePage.bind(this, `${routing.location.pathname}/${resource.id}`)}>
                                 <ListItemIcon>{resource.file ? <FileIcon/> : <FolderIcon/>}</ListItemIcon>
                                 <ListItemText primary={resource.resource_name}/>
                                 <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
@@ -328,13 +341,12 @@ class CloudDrive extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    currentPath: state.resource.currentPath,
+const mapStateToProps = (state, routing) => ({
+    routing,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),
-    goPath,
 }, dispatch);
 
 export default connect(

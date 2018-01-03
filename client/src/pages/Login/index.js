@@ -36,7 +36,7 @@ class Login extends Component {
         this.props.login(username, password, () => {
             this.props.alert('登录成功', 1000);
             setTimeout(() => {
-                this.props.changePage('/cloud-drive');
+                this.props.changePage('/cloud-drive/0');
             }, 1300);
         });
     }
