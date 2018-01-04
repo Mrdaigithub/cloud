@@ -38,7 +38,7 @@ class PageHeaderLayout extends Component {
     render() {
         const { children, classes } = this.props;
         return (
-            <div>
+            <div className={classes.normal}>
                 <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
                     <div
                         className={classes.drawer}
@@ -158,8 +158,7 @@ class PageHeaderLayout extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),

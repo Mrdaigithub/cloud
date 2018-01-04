@@ -11,7 +11,6 @@ const PrivateRoute = () => (
             (sessionStorage.accessToken && sessionStorage.refreshToken) ?
                 (<Switch>
                     <Route path="/cloud-drive/0" component={CloudDrive}/>
-                    <Redirect form="/cloud-drive" to="/cloud-drive/0"/>
                     <Route exact path="/personnel/oneself" component={Oneself}/>
                     <Route exact path="/personnel/groups" component={Groups}/>
                     <Route component={NotFound}/>

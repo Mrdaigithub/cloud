@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import Welcome from '../pages/Welcome';
 import Login from '../pages/Login';
-import NotFound from '../pages/NotFound';
 
 const Routes = props => (
     <Switch>

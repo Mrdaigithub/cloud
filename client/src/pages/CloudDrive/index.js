@@ -275,7 +275,7 @@ class CloudDrive extends Component {
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
-                <List>
+                <List className={classes.resourceList}>
                     {currentResourceList.map((resource) => {
                         return (
                             <ListItem

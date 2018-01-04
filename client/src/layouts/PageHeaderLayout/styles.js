@@ -2,6 +2,9 @@ import avatarBg from '../../static/avatar-bg.png';
 
 
 const styles = theme => ({
+    normal: {
+        height: '100vh',
+    },
     drawer: {
         width: '250px',
     },
@@ -38,7 +41,9 @@ const styles = theme => ({
     },
 
     content: {
-        padding: '50px 0 5px 0',
+        height: '100vh',
+        boxSizing: 'border-box',
+        padding: '60px 0 5px 0',
     },
 });
 
