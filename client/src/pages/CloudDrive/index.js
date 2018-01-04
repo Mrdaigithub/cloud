@@ -314,16 +314,25 @@ class CloudDrive extends Component {
                         </label>
                     </SpeedDialItem>
                     <SpeedDialItem>
-                        <IconButton
-                            color="primary"
-                            className={classes.SpeedDialItemButton}
-                            component="span"
-                            onClick={this.handleOpencreateDirDiglog}>
-                            <CreateNewFolder/>
-                        </IconButton>
+                        <label htmlFor="icon-button-create">
+                            <IconButton
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span"
+                                onClick={this.handleOpencreateDirDiglog}>
+                                <CreateNewFolder/>
+                            </IconButton>
+                        </label>
                     </SpeedDialItem>
                     <SpeedDialItem>
-                        <DeleteIcon/>
+                        <label htmlFor="icon-button-remove">
+                            <IconButton
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
+                                <DeleteIcon/>
+                            </IconButton>
+                        </label>
                     </SpeedDialItem>
                 </SpeedDial>
                 <FileUploader
