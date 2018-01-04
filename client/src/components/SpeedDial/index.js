@@ -25,9 +25,9 @@ class SpeedDial extends Component {
             <div
                 className={classes.cover}>
                 <div className={this.state.open ? classes.opened : classes.closed}>
-                    <div className={classes.action}>
+                    <ul className={classes.action}>
                         {this.props.children}
-                    </div>
+                    </ul>
                     <Button
                         fab
                         color="primary"

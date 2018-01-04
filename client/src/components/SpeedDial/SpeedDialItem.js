@@ -5,9 +5,11 @@ import styles from './styles';
 
 
 const SpeedDialItem = props => (
-    <Button fab mini>
-        {props.children}
-    </Button>
+    <li>
+        <Button fab mini>
+            {props.children}
+        </Button>
+    </li>
 );
 
 

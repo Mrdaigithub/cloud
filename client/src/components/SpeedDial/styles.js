@@ -15,10 +15,14 @@ const styles = theme => ({
         },
     },
     action: {
-        marginBottom: '12px',
+        margin: 0,
         transition: '0.2s ease-in-out',
+        padding: 0,
+        '& li': {
+            listStyle: 'none',
+            transition: '0.2s ease-in-out',
+        },
         '& button': {
-            margin: '8px 0',
             backgroundColor: '#fff',
             '& a': {
                 display: 'inline-flex',
@@ -31,8 +35,13 @@ const styles = theme => ({
             transform: 'rotate(135deg)',
         },
         '& $action': {
-            transform: 'translate(0,-50px)',
+            marginBottom: '25px',
+            visibility: 'visible',
             opacity: 1,
+            '& li': {
+                height: '40px',
+                marginBottom: '15px',
+            },
         },
     },
     closed: {
@@ -40,8 +49,13 @@ const styles = theme => ({
             transform: 'rotate(0)',
         },
         '& $action': {
-            transform: 'translate(0,0)',
+            marginBottom: 0,
+            visibility: 'hidden',
             opacity: 0,
+            '& li': {
+                height: 0,
+                marginBottom: '0',
+            },
         },
     },
 });
