@@ -16,7 +16,8 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
 import { history } from '../../store';
 import { FormsyText } from '../../components/FormsyMaterialUi';
-import { FileIcon, FolderIcon, TextIcon, PdfIcon, ZipIcon } from '../../components/file-type-icon';
+import { FolderIcon } from '../../components/file-type-icon';
+import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import { FileUploader } from '../../components/FileUploader';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -56,21 +57,32 @@ class CloudDrive extends Component {
         this.unlisten();
     }
 
-    /**  获取当前路径的资源列表 **/
+
+    /**
+     * 获取当前路径的资源列表
+     *
+     * @param pathnameStr
+     * @returns {Promise<void>}
+     */
     async getResourceList(pathnameStr = '0') {
         const currentResourceList = await requester.get(`resources?path=${pathnameStr}`);
         this.setState({ currentResourceList });
     }
 
-
-    /**  创建文件夹 **/
-
-    handleOpencreateDirDiglog() {
-        this.setState({ createDirDiglogState: true });
+    /**
+     * 获取文件后缀
+     *
+     * @param resourceName
+     * @returns {string}
+     */
+    getResourceExt(resourceName) {
+        const index = resourceName.lastIndexOf('.');
+        return resourceName.substr(index + 1);
     }
 
-    handleClosecreateDirDiglog() {
-        this.setState({ createDirDiglogState: false });
+    handleClickDir(resourceID, file) {
+        const { changePage, routing } = this.props;
+        return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
     }
 
     /**
@@ -85,6 +97,17 @@ class CloudDrive extends Component {
             .map(item => item.trim()
                 .replace(/(^\.+|\.+$)/, ''))
             .join('.');
+    }
+
+
+    /**  创建文件夹 **/
+
+    handleOpencreateDirDiglog() {
+        this.setState({ createDirDiglogState: true });
+    }
+
+    handleClosecreateDirDiglog() {
+        this.setState({ createDirDiglogState: false });
     }
 
     async handleCreateDir(model) {
@@ -169,6 +192,7 @@ class CloudDrive extends Component {
             file_hash: fileHash,
             locale,
             group,
+            path: this.url2path(this.props.routing.location.pathname),
         }));
         if (error) {
             this.resetUploadProcess();
@@ -221,6 +245,7 @@ class CloudDrive extends Component {
             form.append('sub_dir', subDir);
             form.append('group', this.state.group);
             form.append('locale', this.state.locale);
+            form.append('path', this.url2path(this.props.routing.location.pathname));
             await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
@@ -246,7 +271,7 @@ class CloudDrive extends Component {
     }
 
     render() {
-        const { classes, changePage, routing } = this.props;
+        const { classes } = this.props;
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
@@ -256,33 +281,19 @@ class CloudDrive extends Component {
                             <ListItem
                                 button
                                 key={resource.id}
-                                onClick={changePage.bind(this, `${routing.location.pathname}/${resource.id}`)}>
-                                <ListItemIcon>{resource.file ? <FileIcon/> : <FolderIcon/>}</ListItemIcon>
+                                onClick={this.handleClickDir.bind(this, resource.id, resource.file)}>
+                                <ListItemIcon>
+                                    {
+                                        resource.file ?
+                                            <ResourceTypeIcon ext={this.getResourceExt(resource.resource_name)}/> :
+                                            <FolderIcon/>
+                                    }
+                                </ListItemIcon>
                                 <ListItemText primary={resource.resource_name}/>
                                 <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
                             </ListItem>
                         );
                     })}
-                    {/*<ListItem button>*/}
-                        {/*<ListItemIcon><FileIcon/></ListItemIcon>*/}
-                        {/*<ListItemText primary={`file`}/>*/}
-                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
-                    {/*</ListItem>*/}
-                    {/*<ListItem button>*/}
-                        {/*<ListItemIcon><TextIcon/></ListItemIcon>*/}
-                        {/*<ListItemText primary={`text`}/>*/}
-                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
-                    {/*</ListItem>*/}
-                    {/*<ListItem button>*/}
-                        {/*<ListItemIcon><PdfIcon/></ListItemIcon>*/}
-                        {/*<ListItemText primary={`pdf`}/>*/}
-                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
-                    {/*</ListItem>*/}
-                    {/*<ListItem button>*/}
-                        {/*<ListItemIcon><ZipIcon/></ListItemIcon>*/}
-                        {/*<ListItemText primary={`zip`}/>*/}
-                        {/*<ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>*/}
-                    {/*</ListItem>*/}
                 </List>
                 <SpeedDial>
                     <SpeedDialItem>
@@ -348,7 +359,7 @@ const mapStateToProps = (state, routing) => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => push(url),
+    changePage: url => (push(url)),
 }, dispatch);
 
 export default connect(
