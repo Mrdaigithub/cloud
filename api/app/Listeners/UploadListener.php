@@ -32,12 +32,12 @@ class UploadListener
         $req = $event->request;
         $saved_path = $event->receiver->savedPath;
         $resource = new Resource();
-        $resource->resource_name = $req->only('filename');
+        $resource->resource_name = $req->only('filename')['filename'];
         $resource->hash = pathinfo($saved_path)['filename'];
-        $resource->mime = $req->file->getMimeType();
         $resource->file = true;
+        $resource->path = $req->only('path')['path'];
         $resource->save();
-        $event->oneself->resource()->attach($resource->id);
+        $req->user()->resource()->attach($resource->id);
         return $resource;
     }
 }

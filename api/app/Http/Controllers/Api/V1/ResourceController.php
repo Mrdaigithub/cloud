@@ -42,7 +42,8 @@ class ResourceController extends ApiController
             "SELECT id, resource_name, file, created_at, updated_at, path
               FROM resources
               LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-              WHERE user_id=? AND path ~ ?;", [$uid, $path]);
+              WHERE user_id=? AND path ~ ?
+              ORDER BY file ,created_at ASC;", [$uid, $path]);
         return $resources;
     }
 
