@@ -15,7 +15,6 @@ const styles = theme => ({
         },
     },
     action: {
-        position: 'relative',
         marginBottom: '12px',
         transition: '0.2s ease-in-out',
         '& button': {
@@ -32,7 +31,7 @@ const styles = theme => ({
             transform: 'rotate(135deg)',
         },
         '& $action': {
-            top: '-5px',
+            transform: 'translate(0,-50px)',
             opacity: 1,
         },
     },
@@ -41,7 +40,7 @@ const styles = theme => ({
             transform: 'rotate(0)',
         },
         '& $action': {
-            top: '0',
+            transform: 'translate(0,0)',
             opacity: 0,
         },
     },
