@@ -16,18 +16,22 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Storage from 'material-ui-icons/Storage';
 import Delete from 'material-ui-icons/Delete';
 import SupervisorAccount from 'material-ui-icons/SupervisorAccount';
+import Settings from 'material-ui-icons/Settings';
 import Avatar from 'material-ui/Avatar';
 import GithubIcon from '../../components/GithubIcon/index';
 import LightIcon from '../../components/LightIcon/index';
 import SearchIcon from '../../components/SearchIcon/index';
+import Setting from '../../pages/Setting';
 import styles from './styles';
 import { getInfo } from '../../store/modules/oneself';
+
 
 class PageHeaderLayout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
+            drawerOpen: false,
+            settingOpen: true,
         };
     }
 
@@ -35,8 +39,12 @@ class PageHeaderLayout extends Component {
         this.props.getInfo();
     }
 
-    toggleDrawer = open => () => {
-        this.setState({ open });
+    handleToggleDrawer = drawerOpen => () => {
+        this.setState({ drawerOpen });
+    };
+
+    handleToggleSetting = () => {
+        this.setState({ settingOpen: !this.state.settingOpen });
     };
 
     render() {
@@ -50,12 +58,12 @@ class PageHeaderLayout extends Component {
         } = this.props;
         return (
             <div className={classes.normal}>
-                <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
+                <Drawer open={this.state.drawerOpen} onRequestClose={this.handleToggleDrawer(false)}>
                     <div
                         className={classes.drawer}
-                        onTouchStart={this.toggleDrawer(true)}
-                        onClick={this.toggleDrawer(false)}
-                        onKeyDown={this.toggleDrawer(false)}>
+                        onTouchStart={this.handleToggleDrawer(true)}
+                        onClick={this.handleToggleDrawer(false)}
+                        onKeyDown={this.handleToggleDrawer(false)}>
                         <List className={classes.avatarContainer}>
                             <ListItem>
                                 <Grid container direction={'row'} spacing={0}>
@@ -100,6 +108,12 @@ class PageHeaderLayout extends Component {
                                     <ListItemText primary="人员管理"/>
                                 </Link>
                             </ListItem>
+                            <ListItem button onClick={this.handleToggleSetting}>
+                                <ListItemIcon>
+                                    <Settings/>
+                                </ListItemIcon>
+                                <ListItemText primary="设置"/>
+                            </ListItem>
                         </List>
                         <Divider/>
                         <List>
@@ -117,7 +131,7 @@ class PageHeaderLayout extends Component {
                                     <Grid item xs={5} sm={3} md={2}>
                                         <Typography type="title" color="inherit">
                                             <IconButton
-                                                onClick={this.toggleDrawer(true)}
+                                                onClick={this.handleToggleDrawer(true)}
                                                 color="contrast"
                                                 aria-label="Menu">
                                                 <MenuIcon/>
@@ -162,6 +176,7 @@ class PageHeaderLayout extends Component {
                 <div className={classes.content}>
                     {children}
                 </div>
+                <Setting open={this.state.settingOpen} onClose={this.handleToggleSetting}/>
             </div>
         );
     }
