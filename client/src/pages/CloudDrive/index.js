@@ -350,8 +350,11 @@ class CloudDrive extends Component {
                             <FormsyText
                                 title="文件夹名称"
                                 name="newDir"
-                                validations={{ matchRegexp: /(\w|\d)*/ }}
-                                validationError="不能含非法字符"
+                                validations={{ isAlphanumeric: true, equals: 1 }}
+                                validationErrors={{
+                                    isAlphanumeric: 'You have to type valid email',
+                                    equals: 'exists',
+                                }}
                                 required
                                 fullWidth
                                 autoFocus/>
