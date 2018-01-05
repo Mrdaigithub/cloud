@@ -194,7 +194,7 @@ class Oneself extends Component {
                 username,
                 password,
                 email,
-                capacity,
+                capacity: (capacity * 1024 * 1024 * 1024 * 1024).toFixed(0),
             }));
             this.setState((prevState) => {
                 const userList = prevState.data;
@@ -206,7 +206,7 @@ class Oneself extends Component {
                 username,
                 password,
                 email,
-                capacity,
+                capacity: (capacity * 1024 * 1024 * 1024 * 1024).toFixed(0),
             }));
             this.setState({
                 data: this.state.data.map((user) => {
@@ -272,28 +272,29 @@ class Oneself extends Component {
                                         onRequestSort={this.handleRequestSort}
                                         rowCount={data.length}/>
                                     <TableBody>
-                                        {data.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).map((n) => {
-                                            const isSelected = this.isSelected(n.id);
-                                            return (
-                                                <TableRow
-                                                    hover
-                                                    onClick={event => this.handleClick(event, n.id)}
-                                                    role="checkbox"
-                                                    aria-checked={isSelected}
-                                                    tabIndex={-1}
-                                                    key={n.id}
-                                                    selected={isSelected}>
-                                                    <TableCell padding="checkbox">
-                                                        <Checkbox checked={isSelected}/>
-                                                    </TableCell>
-                                                    <TableCell>{n.id}</TableCell>
-                                                    <TableCell>{n.username}</TableCell>
-                                                    <TableCell>{n.email}</TableCell>
-                                                    <TableCell>{n.capacity}</TableCell>
-                                                    <TableCell>{n.created_at}</TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
+                                        {data.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                                            .map((n) => {
+                                                const isSelected = this.isSelected(n.id);
+                                                return (
+                                                    <TableRow
+                                                        hover
+                                                        onClick={event => this.handleClick(event, n.id)}
+                                                        role="checkbox"
+                                                        aria-checked={isSelected}
+                                                        tabIndex={-1}
+                                                        key={n.id}
+                                                        selected={isSelected}>
+                                                        <TableCell padding="checkbox">
+                                                            <Checkbox checked={isSelected}/>
+                                                        </TableCell>
+                                                        <TableCell>{n.id}</TableCell>
+                                                        <TableCell>{n.username}</TableCell>
+                                                        <TableCell>{n.email}</TableCell>
+                                                        <TableCell>{n.capacity ? `${(n.capacity / 1024 / 1024 / 1024 / 1024).toFixed(0)}GB` : '无限制'}</TableCell>
+                                                        <TableCell>{n.created_at}</TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
                                         {emptyRows > 0 && (
                                             <TableRow style={{ height: 49 * emptyRows }}>
                                                 <TableCell colSpan={6}/>
@@ -394,7 +395,7 @@ class Oneself extends Component {
                                 validationError="容量只能为正整数"
                                 required
                                 fullWidth
-                                endAdornment={<InputAdornment position="end">MB</InputAdornment>}/>
+                                endAdornment={<InputAdornment position="end">GB</InputAdornment>}/>
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={this.handleCloseDialog} color="primary">关闭</Button>

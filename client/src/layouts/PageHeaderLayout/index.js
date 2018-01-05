@@ -117,8 +117,11 @@ class PageHeaderLayout extends Component {
                         </List>
                         <Divider/>
                         <List>
-                            <ListItem button>
-                                <p>已用{(used / 1024 / 1024).toFixed(3)}MB，共{(capacity / 1024 / 1024 / 1024).toFixed(0)}GB</p>
+                            <ListItem>
+                                <p>
+                                    已用{(used / 1024 / 1024).toFixed(3)}MB，
+                                    {capacity ? `共${(capacity / 1024 / 1024 / 1024).toFixed(0)}GB` : '无限制'}
+                                </p>
                             </ListItem>
                         </List>
                     </div>

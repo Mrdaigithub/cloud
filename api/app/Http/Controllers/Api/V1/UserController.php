@@ -65,7 +65,7 @@ class UserController extends ApiController
      */
     public function show(Request $request, $id)
     {
-        return $id;
+        if ($id == 0) return $request->user();
     }
 
     /**
