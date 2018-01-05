@@ -1,13 +1,10 @@
 import qs from 'qs';
 import request from '../../utils/requester';
 
-export const SAVE_TOKEN = 'oneself/SAVE_TOKEN';
-export const CLEAR_TOKEN = 'oneself/CLEAR_TOKEN';
 export const FETCH_ONESELF = 'oneself/FETCH_ONESELF';
+export const CLEAR_ONESELF = 'oneself/CLEAR_ONESELF';
 
 const initialState = {
-    accessToken: null,
-    refreshToken: null,
     id: null,
     username: '',
     email: '',
@@ -18,18 +15,6 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case SAVE_TOKEN:
-            return {
-                ...state,
-                accessToken: action.payload.accessToken,
-                refreshToken: action.payload.refreshToken,
-            };
-        case CLEAR_TOKEN:
-            return {
-                ...state,
-                accessToken: null,
-                refreshToken: null,
-            };
         case FETCH_ONESELF:
             return {
                 ...state,
@@ -40,6 +25,16 @@ export default (state = initialState, action) => {
                 capacity: action.payload.capacity,
                 used: action.payload.used,
             };
+        case CLEAR_ONESELF:
+            return {
+                ...state,
+                id: null,
+                username: '',
+                email: '',
+                isAdmin: false,
+                capacity: 0,
+                used: 0,
+            };
 
         default:
             return state;
@@ -47,30 +42,22 @@ export default (state = initialState, action) => {
 };
 
 export const login = (username, password, cb) => {
-    return async (dispatch) => {
+    return async () => {
         const { access_token, refresh_token } = await request.post('/login/password', qs.stringify({
             username,
             password,
         }));
         sessionStorage.accessToken = access_token;
         sessionStorage.refreshToken = refresh_token;
-        dispatch({
-            type: SAVE_TOKEN,
-            payload: {
-                accessToken: access_token,
-                refreshToken: refresh_token,
-            },
-        });
         return cb();
     };
 };
 
-export const logout = (cb) => {
+export const logout = () => {
     return (dispatch) => {
         dispatch({
-            type: CLEAR_TOKEN,
+            type: CLEAR_ONESELF,
         });
-        return cb();
     };
 };
 
@@ -88,5 +75,12 @@ export const getInfo = () => {
                 used,
             },
         });
+    };
+};
+
+export const clearToken = () => {
+    return () => {
+        delete sessionStorage.accessToken;
+        delete sessionStorage.refreshToken;
     };
 };

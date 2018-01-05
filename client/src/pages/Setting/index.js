@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
-import { Link } from 'react-router-dom';
 import { replace } from 'react-router-redux';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -12,8 +11,9 @@ import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import Divider from 'material-ui/Divider';
 import ListSubheader from 'material-ui/List/ListSubheader';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 import Slide from 'material-ui/transitions/Slide';
+import { logout } from '../../store/modules/oneself';
 import styles from './styles';
 
 
@@ -22,8 +22,14 @@ function Transition(props) {
 }
 
 class Setting extends Component {
+    logout() {
+        const { changePage, clearOneself } = this.props;
+        changePage('/login');
+        clearOneself();
+    }
+
     render() {
-        const { open, onClose, classes, changePage } = this.props;
+        const { open, onClose, classes } = this.props;
         return (
             <Dialog
                 fullScreen
@@ -43,7 +49,7 @@ class Setting extends Component {
                         <ListItem button disabled>
                             <ListItemText primary={<div className={classes.listItemTextChild}><h4>邮箱地址</h4><p>asdasd</p></div>}/>
                         </ListItem>
-                        <ListItem button onClick={changePage.bind(this, '/login')}>
+                        <ListItem button onClick={this.logout.bind(this)}>
                             <ListItemText primary="登出"/>
                         </ListItem>
                         <Divider/>
@@ -55,7 +61,7 @@ class Setting extends Component {
                             <ListItemText
                                 primary={
                                     <div className={classes.listItemTextChild}>
-                                        <Link to="https://github.com/Mrdaigithub/cloud/issues/new">发现bug</Link>
+                                        <a href="https://github.com/Mrdaigithub/cloud/issues/new">发现bug</a>
                                     </div>
                                 }/>
                         </ListItem>
@@ -70,6 +76,7 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (replace(url)),
+    clearOneself: () => (logout()),
 }, dispatch);
 
 export default connect(

@@ -10,7 +10,7 @@ import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
-import { login } from '../../store/modules/oneself';
+import { login, clearToken } from '../../store/modules/oneself';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
@@ -25,6 +25,10 @@ class Login extends Component {
         this.state = {
             showPassword: false,
         };
+    }
+
+    componentWillMount() {
+        this.props.clearToken();
     }
 
     handleClickShowPasssword() {
@@ -98,6 +102,7 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     login,
+    clearToken,
     alert,
     changePage: url => replace(url),
 }, dispatch);

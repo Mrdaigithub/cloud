@@ -48,9 +48,13 @@ class CloudDrive extends Component {
 
     async componentWillMount() {
         this.unlisten = history.listen((location) => {
-            this.getResourceList(this.url2path(location.pathname));
+            if (/cloud-drive\/\d+/.test('/cloud-drive/0'.trim())) {
+                this.getResourceList(this.url2path(location.pathname));
+            }
         });
-        if (!this.state.currentResourceList.length) this.getResourceList(this.url2path(this.props.location.pathname));
+        if (!this.state.currentResourceList.length) {
+            this.getResourceList(this.url2path(this.props.location.pathname));
+        }
     }
 
     componentWillUnmount() {

@@ -31,7 +31,7 @@ class PageHeaderLayout extends Component {
         super(props);
         this.state = {
             drawerOpen: false,
-            settingOpen: true,
+            settingOpen: false,
         };
     }
 
