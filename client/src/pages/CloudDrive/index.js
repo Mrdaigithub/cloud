@@ -46,7 +46,7 @@ class CloudDrive extends Component {
         this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         this.unlisten = history.listen((location) => {
             this.getResourceList(this.url2path(location.pathname));
         });

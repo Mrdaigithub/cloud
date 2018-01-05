@@ -20,8 +20,8 @@ import Avatar from 'material-ui/Avatar';
 import GithubIcon from '../../components/GithubIcon/index';
 import LightIcon from '../../components/LightIcon/index';
 import SearchIcon from '../../components/SearchIcon/index';
-import defaultAvatar from '../../static/defaultAvatar.svg';
 import styles from './styles';
+import { getInfo } from '../../store/modules/oneself';
 
 class PageHeaderLayout extends Component {
     constructor(props) {
@@ -31,12 +31,23 @@ class PageHeaderLayout extends Component {
         };
     }
 
+    componentWillMount() {
+        this.props.getInfo();
+    }
+
     toggleDrawer = open => () => {
         this.setState({ open });
     };
 
     render() {
-        const { children, classes } = this.props;
+        const {
+            children,
+            classes,
+            username,
+            email,
+            capacity,
+            used,
+        } = this.props;
         return (
             <div className={classes.normal}>
                 <Drawer open={this.state.open} onRequestClose={this.toggleDrawer(false)}>
@@ -46,21 +57,19 @@ class PageHeaderLayout extends Component {
                         onClick={this.toggleDrawer(false)}
                         onKeyDown={this.toggleDrawer(false)}>
                         <List className={classes.avatarContainer}>
-                            <Link to="/personnel/oneself" className={classes.sidebarLink}>
-                                <ListItem button>
-                                    <Grid container direction={'row'} spacing={0}>
-                                        <Grid item xs={12}>
-                                            <Avatar
-                                                className={classes.avatarImg}
-                                                alt="defaultAvatar"
-                                                src={defaultAvatar}/>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <p className={classes.avatarUsername}>username</p>
-                                        </Grid>
+                            <ListItem>
+                                <Grid container direction={'row'} spacing={0}>
+                                    <Grid item xs={12}>
+                                        <Avatar className={classes.avatarImg}>{username ? username[0].toUpperCase() : 'U'}</Avatar>
                                     </Grid>
-                                </ListItem>
-                            </Link>
+                                    <Grid item xs={12}>
+                                        <p className={classes.avatarUsername}>{username}</p>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <p className={classes.avatarEmail}>{email}</p>
+                                    </Grid>
+                                </Grid>
+                            </ListItem>
                         </List>
                         <Divider/>
                         <List>
@@ -95,7 +104,7 @@ class PageHeaderLayout extends Component {
                         <Divider/>
                         <List>
                             <ListItem button>
-                                <p>已用28%，共15 GB</p>
+                                <p>已用{(used / 1024 / 1024).toFixed(3)}MB，共{(capacity / 1024 / 1024 / 1024).toFixed(0)}GB</p>
                             </ListItem>
                         </List>
                     </div>
@@ -158,10 +167,16 @@ class PageHeaderLayout extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    username: state.oneself.username,
+    email: state.oneself.email,
+    capacity: state.oneself.capacity,
+    used: state.oneself.used,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),
+    getInfo,
 }, dispatch);
 
 export default connect(

@@ -1,6 +1,3 @@
-import avatarBg from '../../static/avatar-bg.png';
-
-
 const styles = theme => ({
     normal: {
         height: '100vh',
@@ -10,21 +7,21 @@ const styles = theme => ({
     },
 
     avatarContainer: {
-        background: `url(${avatarBg}) center`,
-        backgroundSize: 'cover',
+        backgroundColor: '#1ca7b5',
+        color: '#fff',
     },
-
     avatarImg: {
-        padding: '5px',
-        backgroundColor: '#7d7d7d',
-        borderRadius: '50%',
-        overflow: 'hidden',
+        backgroundColor: '#fff',
+        color: '#1ca7b5',
     },
-
-    avatarUsername: {
-        color: '#000',
-        fontSize: '20px',
-        margin: '10px 0 0 0',
+    'avatarUsername': {
+        fontSize: '16px',
+        margin: '15px 0 0 0',
+    },
+    'avatarEmail': {
+        fontSize: '16px',
+        margin: '0',
+        color: 'rgba(255,255,255,.8)',
     },
 
     sidebarLink: {
