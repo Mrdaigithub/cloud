@@ -34,6 +34,7 @@ class UploadListener
         $resource = new Resource();
         $resource->resource_name = $req->only('filename')['filename'];
         $resource->hash = pathinfo($saved_path)['filename'];
+        $resource->size = $req->only('file_size')['file_size'];
         $resource->file = true;
         $resource->path = $req->only('path')['path'];
         $resource->save();

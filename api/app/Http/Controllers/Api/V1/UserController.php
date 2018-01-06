@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
 use Validator;
 use App\Models\User;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
+
 
 class UserController extends ApiController
 {
@@ -17,7 +19,7 @@ class UserController extends ApiController
      */
     public function index(Request $request)
     {
-        return User::orderBy('id')->get();
+        return new UserCollection(User::orderBy('id')->get());
     }
 
     /**
@@ -65,7 +67,9 @@ class UserController extends ApiController
      */
     public function show(Request $request, $id)
     {
-        if ($id == 0) return $request->user();
+        if ($id == 0) {
+            return new UserResource($request->user());
+        }
     }
 
     /**

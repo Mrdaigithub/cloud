@@ -246,6 +246,7 @@ class CloudDrive extends Component {
             const end = Math.min(size, start + chunkSize);
             form.append('file', file.slice(start, end));
             form.append('filename', name);
+            form.append('file_size', file.size);
             form.append('upload_ext', uploadExt);
             form.append('chunk_total', chunkCount);
             form.append('chunk_index', i + 1);

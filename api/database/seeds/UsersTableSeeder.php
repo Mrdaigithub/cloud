@@ -17,21 +17,18 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('root'),
             'is_admin' => true,
             'capacity' => null,
-            'used' => 0,
         ]);
         DB::table('users')->insert([
             'username' => 'user1',
             'email' => 'user1@gmail.com',
             'password' => bcrypt('user1'),
             'is_admin' => false,
-            'used' => 0,
         ]);
         DB::table('users')->insert([
             'username' => 'user2',
             'email' => 'user2@gmail.com',
             'password' => bcrypt('user2'),
             'is_admin' => false,
-            'used' => 0,
         ]);
         DB::table('users')->insert([
             'username' => 'user3',
@@ -39,14 +36,12 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('user3'),
             'is_admin' => false,
 
-            'used' => 0,
         ]);
         DB::table('users')->insert([
             'username' => 'user4',
             'email' => 'user4@gmail.com',
             'password' => bcrypt('user4'),
             'is_admin' => false,
-            'used' => 0,
         ]);
     }
 }

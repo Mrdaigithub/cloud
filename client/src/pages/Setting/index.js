@@ -29,7 +29,7 @@ class Setting extends Component {
     }
 
     render() {
-        const { open, onClose, classes } = this.props;
+        const { open, onClose, classes, email } = this.props;
         return (
             <Dialog
                 fullScreen
@@ -47,7 +47,7 @@ class Setting extends Component {
                     <div className={classes.listSection}>
                         <ListSubheader>账户信息</ListSubheader>
                         <ListItem button disabled>
-                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>邮箱地址</h4><p>asdasd</p></div>}/>
+                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>邮箱地址</h4><p>{email}</p></div>}/>
                         </ListItem>
                         <ListItem button onClick={this.logout.bind(this)}>
                             <ListItemText primary="登出"/>
@@ -72,7 +72,9 @@ class Setting extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    email: state.oneself.email,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (replace(url)),
