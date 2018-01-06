@@ -15,6 +15,7 @@ import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
 import { history } from '../../store';
+import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
@@ -114,13 +115,14 @@ class CloudDrive extends Component {
     }
 
     async handleCreateDir(model) {
-        const currentPath = this.url2path(this.props.routing.location.pathname);
+        const { routing } = this.props;
+        const currentPath = this.url2path(routing.location.pathname);
         await requester.post('resources', qs.stringify({
             new_dir: model.newDir,
             current_path: currentPath,
         }));
         this.handleClosecreateDirDiglog();
-        this.getResourceList(this.url2path(this.props.routing.location.pathname));
+        this.getResourceList(this.url2path(routing.location.pathname));
     }
 
 
@@ -182,6 +184,7 @@ class CloudDrive extends Component {
     async preprocess() {
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
+        const { routing, alert } = this.props;
         const {
             error,
             chunkSize,
@@ -199,7 +202,7 @@ class CloudDrive extends Component {
         }));
         if (error) {
             this.resetUploadProcess();
-            console.error('error');
+            alert('文件上传失败, 暂不支持无后缀名与空文件');
             return false;
         }
         const chunkCount = Math.ceil(size / chunkSize);
@@ -208,16 +211,15 @@ class CloudDrive extends Component {
                 uploadValue: 0,
                 uploadDone: false,
             });
-            this.uploadChunk([...Array(chunkCount)
-                .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
+            this.uploadChunk([...Array(chunkCount).keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
         } else {
             this.setState({
                 uploadValue: 100,
                 uploadDone: true,
             });
-            console.log('秒传');
             setTimeout(() => {
                 this.resetUploadProcess();
+                this.getResourceList(this.url2path(routing.location.pathname));
             }, 1500);
         }
     }
@@ -235,6 +237,7 @@ class CloudDrive extends Component {
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
         const { name, size } = file;
+        const { routing } = this.props;
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
@@ -257,6 +260,7 @@ class CloudDrive extends Component {
         });
         setTimeout(() => {
             this.resetUploadProcess();
+            this.getResourceList(this.url2path(routing.location.pathname));
         }, 2000);
     }
 
@@ -382,6 +386,7 @@ const mapStateToProps = (state, routing) => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (push(url)),
+    alert,
 }, dispatch);
 
 export default connect(
