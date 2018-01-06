@@ -66,16 +66,21 @@ class ResourceController extends ApiController
     public function store(Request $request)
     {
         $req = $request->all();
-        if (Validator::make($req,
-            [
-                'new_dir' => 'required',
-            ])->fails()) return $this->failed(400000);
-        if (Validator::make($req,
-            [
-                'new_dir' => 'string',
-            ])->fails()) return $this->failed(400001);
-
         $resource = new Resource();
+        if (Validator::make($req, ['new_dir' => 'required',])->fails()) {
+            return $this->failed(400000);
+        }
+        if (Validator::make($req, ['new_dir' => 'string',])->fails()) {
+            return $this->failed(400001);
+        }
+        if (DB::select(
+            "SELECT count(id)
+              FROM resources
+              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              WHERE user_id=? AND path ~ ? AND resource_name=?",
+            [$request->user()->id, $req['current_path'], $req['new_dir']])[0]->count != 0) {
+            return $this->failed(409000);
+        }
         $resource->resource_name = $req['new_dir'];
         $resource->file = false;
         if ($req['current_path']) $resource->path = $req['current_path'];

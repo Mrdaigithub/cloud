@@ -61,7 +61,6 @@ class CloudDrive extends Component {
         this.unlisten();
     }
 
-
     /**
      * 获取当前路径的资源列表
      *
@@ -286,7 +285,7 @@ class CloudDrive extends Component {
                                 button
                                 key={resource.id}
                                 onClick={this.handleClickDir.bind(this, resource.id, resource.file)}>
-                                <ListItemIcon>
+                                <ListItemIcon className={classes.resourceIcon}>
                                     {
                                         resource.file ?
                                             <ResourceTypeIcon ext={this.getResourceExt(resource.resource_name)}/> :
@@ -350,10 +349,17 @@ class CloudDrive extends Component {
                             <FormsyText
                                 title="文件夹名称"
                                 name="newDir"
-                                validations={{ isAlphanumeric: true, equals: 1 }}
+                                validations={{
+                                    isAlphanumeric: true,
+                                    dirExists: (values, value) => {
+                                        return !this.state.currentResourceList
+                                            .filter(item => !item.file && item.resource_name === value)
+                                            .length;
+                                    },
+                                }}
                                 validationErrors={{
-                                    isAlphanumeric: 'You have to type valid email',
-                                    equals: 'exists',
+                                    isAlphanumeric: '存在非法字符',
+                                    dirExists: '文件夹已存在',
                                 }}
                                 required
                                 fullWidth

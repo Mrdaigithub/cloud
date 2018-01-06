@@ -11,7 +11,9 @@ const styles = theme => ({
     SpeedDialItemButton: {
         display: 'inline',
     },
-
+    resourceIcon: {
+        marginRight: 0,
+    },
 });
 
 export default styles;
