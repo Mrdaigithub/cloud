@@ -116,10 +116,10 @@ class CloudDrive extends Component {
 
     async handleCreateDir(model) {
         const { routing } = this.props;
-        const currentPath = this.url2path(routing.location.pathname);
+        const path = this.url2path(routing.location.pathname);
         await requester.post('resources', qs.stringify({
-            new_dir: model.newDir,
-            current_path: currentPath,
+            resource_name: model.newDir,
+            path,
         }));
         this.handleClosecreateDirDiglog();
         this.getResourceList(this.url2path(routing.location.pathname));
@@ -131,6 +131,9 @@ class CloudDrive extends Component {
     handleUpload() {
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
+        if (this.state.currentResourceList.filter(item => item.file && item.resource_name === file.name).length) {
+            return this.props.alert('在当前目录下已有同名文件');
+        }
         this.setState({
             file,
             uploadState: true,
@@ -202,8 +205,7 @@ class CloudDrive extends Component {
         }));
         if (error) {
             this.resetUploadProcess();
-            alert('文件上传失败, 暂不支持无后缀名与空文件');
-            return false;
+            return alert('文件上传失败, 暂不支持无后缀名与空文件');
         }
         const chunkCount = Math.ceil(size / chunkSize);
         if (savedPath.length === 0) {

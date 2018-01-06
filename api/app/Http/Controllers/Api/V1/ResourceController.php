@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Resource;
-use App\Models\User;
+
 
 class ResourceController extends ApiController
 {
@@ -67,25 +67,28 @@ class ResourceController extends ApiController
     {
         $req = $request->all();
         $resource = new Resource();
-        if (Validator::make($req, ['new_dir' => 'required',])->fails()) {
+        $user = $request->user();
+        $path = $this->deal_path($request->only('path')['path']);
+        $resource_name = $request->only('resource_name')['resource_name'];
+
+        if (Validator::make($req, ['resource_name' => 'required',])->fails()) {
             return $this->failed(400000);
         }
         if (Validator::make($req, ['new_dir' => 'string',])->fails()) {
             return $this->failed(400001);
         }
-        if (DB::select(
-            "SELECT count(id)
+        if (DB::select("SELECT count(id)
               FROM resources
               LEFT JOIN user_resource ON resources.id = user_resource.resource_id
               WHERE user_id=? AND path ~ ? AND resource_name=?",
-            [$request->user()->id, $req['current_path'], $req['new_dir']])[0]->count != 0) {
+                [$user->id, $path, $resource_name])[0]->count != 0) {
             return $this->failed(409000);
         }
-        $resource->resource_name = $req['new_dir'];
+        $resource->resource_name = $resource_name;
         $resource->file = false;
-        if ($req['current_path']) $resource->path = $req['current_path'];
+        if ($req['path']) $resource->path = $path;
         if (!$resource->save()) return $this->failed(500001);
-        $request->user()->resource()->attach($resource->id);
+        $user->resource()->attach($resource->id);
         return response()->json($resource);
     }
 

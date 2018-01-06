@@ -2,7 +2,7 @@
 
 return [
 
-    "ENABLE_EXAMPLE_PAGE" => true, # 启用示例页面，访问域名/aetherupload，生产环境下请将该选项设置为false
+    "ENABLE_EXAMPLE_PAGE" => false, # 启用示例页面，访问域名/aetherupload，生产环境下请将该选项设置为false
     "CHUNK_SIZE"          => 1 * 1000 * 1000, # 上传时的分块大小（B），默认为1M，越大传输越快，需要小于web服务器和php.ini中设置的上传限值
     "UPLOAD_PATH"         => storage_path() . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . "aetherupload", # 上传目录的本地物理路径
     "HEAD_DIR"            => "_head", # 指针头文件目录的名称，建议保持默认
@@ -12,7 +12,7 @@ return [
         "file" => [ # 新增分组请尽量使用video、audio等有意义的分组名
             "FILE_MAXSIZE"                 => 0, # 被允许的资源文件大小（MB），0为不限制
             "FILE_EXTENSIONS"              => "", # 被允许的资源文件扩展名，空为不限制，多个值以逗号分隔
-            "MIDDLEWARE_PREPROCESS"        => ['api.auth', 'auth:api'], # 上传预处理时的路由中间件
+            "MIDDLEWARE_PREPROCESS"        => ['api.auth', 'auth:api', 'resource.exists'], # 上传预处理时的路由中间件
             "MIDDLEWARE_SAVE_CHUNK"        => ['api.auth', 'auth:api'], # 上传文件分块时的路由中间件
             "MIDDLEWARE_DISPLAY"           => ['api.auth', 'auth:api'], # 文件展示时的路由中间件
             "MIDDLEWARE_DOWNLOAD"          => ['api.auth', 'auth:api'], # 文件下载时的路由中间件
