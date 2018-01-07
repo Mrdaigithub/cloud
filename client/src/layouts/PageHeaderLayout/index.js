@@ -23,7 +23,7 @@ import LightIcon from '../../components/LightIcon/index';
 import SearchIcon from '../../components/SearchIcon/index';
 import Setting from '../../pages/Setting';
 import styles from './styles';
-import { getInfo } from '../../store/modules/oneself';
+import { fetchOneself } from '../../store/modules/oneself';
 
 
 class PageHeaderLayout extends Component {
@@ -36,7 +36,7 @@ class PageHeaderLayout extends Component {
     }
 
     componentWillMount() {
-        this.props.getInfo();
+        this.props.fetchOneself();
     }
 
     handleToggleDrawer = drawerOpen => () => {
@@ -119,8 +119,8 @@ class PageHeaderLayout extends Component {
                         <List>
                             <ListItem>
                                 <p>
-                                    已用{(used / 1024 / 1024).toFixed(3)}MB，
-                                    {capacity ? `共${(capacity / (1024 ** 4)).toFixed(0)}GB` : '无限制'}
+                                    已用{(used / (1024 ** 3)).toFixed(3)}GB，
+                                    {capacity ? `共${(capacity / (1024 ** 3)).toFixed(3)}GB` : '无限制'}
                                 </p>
                             </ListItem>
                         </List>
@@ -194,7 +194,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => push(url),
-    getInfo,
+    fetchOneself,
 }, dispatch);
 
 export default connect(

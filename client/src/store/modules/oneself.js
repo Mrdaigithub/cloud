@@ -61,7 +61,7 @@ export const logout = () => {
     };
 };
 
-export const getInfo = () => {
+export const fetchOneself = () => {
     return async (dispatch) => {
         const { id, username, email, is_admin, capacity, used } = await request.get('/users/0');
         return dispatch({

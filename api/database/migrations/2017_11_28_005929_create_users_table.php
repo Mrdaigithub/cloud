@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
-            $table->unsignedBigInteger('capacity')->default(5497558138880)->nullable()->comment('byte');
+            $table->unsignedBigInteger('capacity')->default(5368709120)->nullable()->comment('byte');
             $table->timestamps();
         });
 

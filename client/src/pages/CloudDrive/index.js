@@ -24,6 +24,7 @@ import { FileUploader } from '../../components/FileUploader';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './styles';
 import requester from '../../utils/requester';
+import { fetchOneself } from '../../store/modules/oneself';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -129,10 +130,14 @@ class CloudDrive extends Component {
     /**  上传文件 **/
 
     handleUpload() {
+        const { capacity, used, alert } = this.props;
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
         if (this.state.currentResourceList.filter(item => item.file && item.resource_name === file.name).length) {
-            return this.props.alert('在当前目录下已有同名文件');
+            return alert('在当前目录下已有同名文件');
+        }
+        if (!!capacity && file.size + parseInt(used, 10) > capacity) {
+            return alert('存储容量不足');
         }
         this.setState({
             file,
@@ -187,7 +192,7 @@ class CloudDrive extends Component {
     async preprocess() {
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
-        const { routing, alert } = this.props;
+        const { routing, alert, fetchOneself } = this.props;
         const {
             error,
             chunkSize,
@@ -222,6 +227,7 @@ class CloudDrive extends Component {
             setTimeout(() => {
                 this.resetUploadProcess();
                 this.getResourceList(this.url2path(routing.location.pathname));
+                fetchOneself();
             }, 1500);
         }
     }
@@ -239,7 +245,7 @@ class CloudDrive extends Component {
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
         const { name, size } = file;
-        const { routing } = this.props;
+        const { routing, fetchOneself } = this.props;
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
@@ -264,6 +270,7 @@ class CloudDrive extends Component {
         setTimeout(() => {
             this.resetUploadProcess();
             this.getResourceList(this.url2path(routing.location.pathname));
+            fetchOneself();
         }, 2000);
     }
 
@@ -385,11 +392,14 @@ class CloudDrive extends Component {
 
 const mapStateToProps = (state, routing) => ({
     routing,
+    capacity: state.oneself.capacity,
+    used: state.oneself.used,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (push(url)),
     alert,
+    fetchOneself,
 }, dispatch);
 
 export default connect(
