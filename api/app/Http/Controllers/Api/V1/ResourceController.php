@@ -22,11 +22,11 @@ class ResourceController extends ApiController
         $path = array_filter(
             array_map(function ($item) {
                 return trim("$item.");
-            }, explode(".", trim($path, '0.'))),
+            }, explode(".", trim($path))),
             function ($item) {
                 return !!$item;
             });
-        return trim('0.' . implode('', $path), '.');
+        return trim(implode('', $path), '.');
     }
 
     /**
@@ -42,7 +42,7 @@ class ResourceController extends ApiController
             "SELECT id, resource_name, file, created_at, updated_at, path
               FROM resources
               LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-              WHERE user_id=? AND path ~ ?
+              WHERE user_id=? AND path = ?
               ORDER BY file ,created_at ASC;", [$uid, $path]);
         return $resources;
     }
@@ -80,7 +80,7 @@ class ResourceController extends ApiController
         if (DB::select("SELECT count(id)
               FROM resources
               LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-              WHERE user_id=? AND path ~ ? AND resource_name=?",
+              WHERE user_id=? AND path = ? AND resource_name=?",
                 [$user->id, $path, $resource_name])[0]->count != 0) {
             return $this->failed(409000);
         }
@@ -129,11 +129,25 @@ class ResourceController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $user = $request->user();
+        $path = $this->deal_path(Resource::find($id)->path) . '.' . $id;
+        $remove_id_list = DB::select("SELECT id FROM resources
+                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          WHERE user_id=? AND path >= ?
+                          ORDER BY file ,created_at ASC;",
+            [$user->id, $path]);
+        $request->user()->resource()->detach($id);
+        Resource::destroy($id);
+        if (count($remove_id_list)) {
+            foreach ($remove_id_list as $remove_id) {
+                $request->user()->resource()->detach($remove_id->id);
+                Resource::destroy($remove_id->id);
+            }
+        }
     }
 }

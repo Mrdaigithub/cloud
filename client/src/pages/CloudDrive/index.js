@@ -32,6 +32,7 @@ class CloudDrive extends Component {
         this.state = {
             currentResourceList: [],
             createDirDiglogState: false,
+            selected: [],
             uploadState: false,
             uploadValue: 0,
             uploadDone: false,
@@ -46,6 +47,7 @@ class CloudDrive extends Component {
         this.handleCreateDir = this.handleCreateDir.bind(this);
         this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
         this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
+        this.handleRemoveResource = this.handleRemoveResource.bind(this);
     }
 
     async componentWillMount() {
@@ -90,6 +92,21 @@ class CloudDrive extends Component {
         return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
     }
 
+    handleToggleResource = resourceID => () => {
+        const { selected } = this.state;
+        const currentIndex = selected.indexOf(resourceID);
+        const newChecked = [...selected];
+
+        if (currentIndex === -1) {
+            newChecked.push(resourceID);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+        this.setState({
+            selected: newChecked,
+        });
+    };
+
     /**
      * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
      *
@@ -118,6 +135,7 @@ class CloudDrive extends Component {
     async handleCreateDir(model) {
         const { routing } = this.props;
         const path = this.url2path(routing.location.pathname);
+        console.log(path);
         await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
             path,
@@ -287,6 +305,25 @@ class CloudDrive extends Component {
         }, 300);
     }
 
+
+    /**  删除资源 **/
+
+    async handleRemoveResource() {
+        const { selected, currentResourceList } = this.state;
+        if (selected.length) {
+            const deleteList = selected.map(id => requester.delete(`resources/${id}`));
+            await Promise.all(deleteList);
+            this.setState(() => {
+                return {
+                    currentResourceList: currentResourceList.filter(({ id }, index) => {
+                        return selected.indexOf(id) === -1 ? currentResourceList[index] : false;
+                    }),
+                    selected: [],
+                };
+            });
+        }
+    }
+
     render() {
         const { classes } = this.props;
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
@@ -307,7 +344,11 @@ class CloudDrive extends Component {
                                     }
                                 </ListItemIcon>
                                 <ListItemText primary={resource.resource_name}/>
-                                <ListItemSecondaryAction><Checkbox/></ListItemSecondaryAction>
+                                <ListItemSecondaryAction>
+                                    <Checkbox
+                                        onChange={this.handleToggleResource(resource.id)}
+                                        checked={this.state.selected.indexOf(resource.id) !== -1}/>
+                                </ListItemSecondaryAction>
                             </ListItem>
                         );
                     })}
@@ -344,6 +385,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-remove">
                             <IconButton
+                                onClick={this.handleRemoveResource}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span">
