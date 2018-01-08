@@ -1,6 +1,8 @@
 const styles = theme => ({
         resourceList: {
-            paddingTop: 0,
+            height: '100vh',
+            padding: '60px 0 5px 0',
+            boxSizing: 'border-box',
         },
         bottomBarBtnIcon: {
             color: '#fff',
@@ -19,11 +21,6 @@ const styles = theme => ({
         },
         moveDirTopBarTitle: {
             flex: 1,
-        },
-        moveDirDiglogContent: {
-            height: '100vh',
-            padding: '60px 0 5px 0',
-            boxSizing: 'border-box',
         },
     })
 ;

@@ -7,9 +7,7 @@ import { withStyles } from 'material-ui/styles';
 import Formsy from 'formsy-react';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
-import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import Slide from 'material-ui/transitions/Slide';
@@ -23,11 +21,10 @@ import SparkMD5 from 'spark-md5';
 import { history } from '../../store';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
-import { FolderIcon } from '../../components/file-type-icon';
-import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import { FileUploader } from '../../components/FileUploader';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import ResourceList from '../../components/ResourceList';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
@@ -103,10 +100,10 @@ class CloudDrive extends Component {
         return resourceName.substr(index + 1);
     }
 
-    handleClickDir(resourceID, file) {
+    handleClickDir = (resourceID, file) => () => {
         const { changePage, routing } = this.props;
         return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
-    }
+    };
 
     handleSelectResource = resourceID => () => {
         const { selected } = this.state;
@@ -358,30 +355,12 @@ class CloudDrive extends Component {
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
-                <List className={classes.resourceList}>
-                    {currentResourceList.map((resource) => {
-                        return (
-                            <ListItem
-                                button
-                                key={resource.id}
-                                onClick={this.handleClickDir.bind(this, resource.id, resource.file)}>
-                                <ListItemIcon className={classes.resourceIcon}>
-                                    {
-                                        resource.file ?
-                                            <ResourceTypeIcon ext={this.getResourceExt(resource.resource_name)}/> :
-                                            <FolderIcon/>
-                                    }
-                                </ListItemIcon>
-                                <ListItemText primary={resource.resource_name}/>
-                                <ListItemSecondaryAction>
-                                    <Checkbox
-                                        onChange={this.handleSelectResource(resource.id)}
-                                        checked={this.state.selected.indexOf(resource.id) !== -1}/>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        );
-                    })}
-                </List>
+                <ResourceList
+                    className={classes.resourceList}
+                    resourceList={currentResourceList}
+                    checked={this.state.selected}
+                    onClickDir={this.handleClickDir}
+                    toggleCheck={this.handleSelectResource}/>
                 <SpeedDial>
                     <SpeedDialItem>
                         <input
@@ -480,30 +459,12 @@ class CloudDrive extends Component {
                             <Button color="contrast" onClick={this.handleClose}>确认</Button>
                         </Toolbar>
                     </AppBar>
-                    <List className={classes.moveDirDiglogContent}>
-                        {currentResourceList.map((resource) => {
-                            return (
-                                <ListItem
-                                    button
-                                    key={resource.id}
-                                    onClick={this.handleClickDir.bind(this, resource.id, resource.file)}>
-                                    <ListItemIcon className={classes.resourceIcon}>
-                                        {
-                                            resource.file ?
-                                                <ResourceTypeIcon ext={this.getResourceExt(resource.resource_name)}/> :
-                                                <FolderIcon/>
-                                        }
-                                    </ListItemIcon>
-                                    <ListItemText primary={resource.resource_name}/>
-                                    <ListItemSecondaryAction>
-                                        <Checkbox
-                                            onChange={this.handleSelectResource(resource.id)}
-                                            checked={this.state.selected.indexOf(resource.id) !== -1}/>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                        })}
-                    </List>
+                    <ResourceList
+                        className={classes.resourceList}
+                        resourceList={currentResourceList}
+                        checked={this.state.selected}
+                        onClickDir={this.handleClickDir}
+                        toggleCheck={this.handleSelectResource}/>
                 </Dialog>
             </PageHeaderLayout>
         );
