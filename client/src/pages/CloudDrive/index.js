@@ -5,12 +5,18 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import Formsy from 'formsy-react';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Checkbox from 'material-ui/Checkbox';
 import Button from 'material-ui/Button';
+import Typography from 'material-ui/Typography';
+import Slide from 'material-ui/transitions/Slide';
 import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui-icons/Close';
 import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
+import CompareArrows from 'material-ui-icons/CompareArrows';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
@@ -26,12 +32,17 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
 
+function Transition(props) {
+    return <Slide direction="up" {...props}/>;
+}
+
 class CloudDrive extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentResourceList: [],
             createDirDiglogState: false,
+            moveDirDiglogState: false,
             selected: [],
             uploadState: false,
             uploadValue: 0,
@@ -47,6 +58,8 @@ class CloudDrive extends Component {
         this.handleCreateDir = this.handleCreateDir.bind(this);
         this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
         this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
+        this.handleOpenMoveDirDiglog = this.handleOpenMoveDirDiglog.bind(this);
+        this.handleCloseMoveDirDiglog = this.handleCloseMoveDirDiglog.bind(this);
         this.handleRemoveResource = this.handleRemoveResource.bind(this);
     }
 
@@ -128,11 +141,11 @@ class CloudDrive extends Component {
     /**  创建文件夹 **/
 
     handleOpencreateDirDiglog() {
-        this.setState({ createDirDiglogState: true });
+        this.setState({ moveDirDiglogState: true });
     }
 
     handleClosecreateDirDiglog() {
-        this.setState({ createDirDiglogState: false });
+        this.setState({ moveDirDiglogState: false });
     }
 
     async handleCreateDir(model) {
@@ -329,6 +342,17 @@ class CloudDrive extends Component {
         }
     }
 
+
+    /**  移动资源 **/
+
+    handleOpenMoveDirDiglog() {
+        this.setState({ createDirDiglogState: true });
+    }
+
+    handleCloseMoveDirDiglog() {
+        this.setState({ createDirDiglogState: false });
+    }
+
     render() {
         const { classes } = this.props;
         const { currentResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
@@ -390,6 +414,17 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-remove">
                             <IconButton
+                                onClick={this.handleOpenMoveDirDiglog}
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
+                                <CompareArrows/>
+                            </IconButton>
+                        </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <label htmlFor="icon-button-remove">
+                            <IconButton
                                 onClick={this.handleRemoveResource}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -404,7 +439,7 @@ class CloudDrive extends Component {
                     uploadValue={uploadValue}
                     uploadFilename={file ? file.name : ''}
                     done={uploadDone}/>
-                <Dialog open={this.state.createDirDiglogState}>
+                <Dialog open={this.state.moveDirDiglogState}>
                     <Formsy onValidSubmit={this.handleCreateDir}>
                         <DialogContent>
                             <FormsyText
@@ -431,6 +466,44 @@ class CloudDrive extends Component {
                             <Button type="submit" color="primary">创建</Button>
                         </DialogActions>
                     </Formsy>
+                </Dialog>
+                <Dialog
+                    fullScreen
+                    open={this.state.createDirDiglogState}
+                    transition={Transition}>
+                    <AppBar className={classes.moveDirTopBar}>
+                        <Toolbar>
+                            <IconButton color="contrast" onClick={this.handleCloseMoveDirDiglog} aria-label="Close">
+                                <CloseIcon/>
+                            </IconButton>
+                            <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">移动至...</Typography>
+                            <Button color="contrast" onClick={this.handleClose}>确认</Button>
+                        </Toolbar>
+                    </AppBar>
+                    <List className={classes.moveDirDiglogContent}>
+                        {currentResourceList.map((resource) => {
+                            return (
+                                <ListItem
+                                    button
+                                    key={resource.id}
+                                    onClick={this.handleClickDir.bind(this, resource.id, resource.file)}>
+                                    <ListItemIcon className={classes.resourceIcon}>
+                                        {
+                                            resource.file ?
+                                                <ResourceTypeIcon ext={this.getResourceExt(resource.resource_name)}/> :
+                                                <FolderIcon/>
+                                        }
+                                    </ListItemIcon>
+                                    <ListItemText primary={resource.resource_name}/>
+                                    <ListItemSecondaryAction>
+                                        <Checkbox
+                                            onChange={this.handleSelectResource(resource.id)}
+                                            checked={this.state.selected.indexOf(resource.id) !== -1}/>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            );
+                        })}
+                    </List>
                 </Dialog>
             </PageHeaderLayout>
         );
