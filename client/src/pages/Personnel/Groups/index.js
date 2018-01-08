@@ -194,7 +194,7 @@ class Oneself extends Component {
                 username,
                 password,
                 email,
-                capacity: (capacity * 1024 * 1024 * 1024 * 1024).toFixed(0),
+                capacity: (capacity * (1024 ** 3)).toFixed(0),
             }));
             this.setState((prevState) => {
                 const userList = prevState.data;
@@ -206,7 +206,7 @@ class Oneself extends Component {
                 username,
                 password,
                 email,
-                capacity: (capacity * 1024 * 1024 * 1024 * 1024).toFixed(0),
+                capacity: (capacity * (1024 ** 3)).toFixed(0),
             }));
             this.setState({
                 data: this.state.data.map((user) => {
@@ -216,7 +216,9 @@ class Oneself extends Component {
             });
         }
         this.handleCloseDialog();
+        this.setState({ selected: [] });
     }
+
 
     render() {
         const { classes } = this.props;
@@ -290,7 +292,7 @@ class Oneself extends Component {
                                                         <TableCell>{n.id}</TableCell>
                                                         <TableCell>{n.username}</TableCell>
                                                         <TableCell>{n.email}</TableCell>
-                                                        <TableCell>{n.capacity ? `${(n.capacity / 1024 / 1024 / 1024 / 1024).toFixed(0)}GB` : '无限制'}</TableCell>
+                                                        <TableCell>{n.capacity ? `${(n.capacity / (1024 ** 3)).toFixed(0)}GB` : '无限制'}</TableCell>
                                                         <TableCell>{n.created_at}</TableCell>
                                                     </TableRow>
                                                 );
@@ -390,7 +392,8 @@ class Oneself extends Component {
                                 title="容量"
                                 name="capacity"
                                 type="number"
-                                value={this.state.createMode ? '' : this.state.editUser.capacity}
+                                disabled={!this.state.editUser.capacity}
+                                value={this.state.createMode ? '' : this.state.editUser.capacity / (1024 ** 3)}
                                 validations="isInt"
                                 validationError="容量只能为正整数"
                                 required

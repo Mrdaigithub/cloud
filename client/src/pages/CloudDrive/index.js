@@ -73,7 +73,10 @@ class CloudDrive extends Component {
      */
     async getResourceList(pathnameStr = '0') {
         const currentResourceList = await requester.get(`resources?path=${pathnameStr}`);
-        this.setState({ currentResourceList });
+        this.setState({
+            currentResourceList,
+            selected: [],
+        });
     }
 
     /**
@@ -92,7 +95,7 @@ class CloudDrive extends Component {
         return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
     }
 
-    handleToggleResource = resourceID => () => {
+    handleSelectResource = resourceID => () => {
         const { selected } = this.state;
         const currentIndex = selected.indexOf(resourceID);
         const newChecked = [...selected];
@@ -309,6 +312,7 @@ class CloudDrive extends Component {
     /**  删除资源 **/
 
     async handleRemoveResource() {
+        const { fetchOneself } = this.props;
         const { selected, currentResourceList } = this.state;
         if (selected.length) {
             const deleteList = selected.map(id => requester.delete(`resources/${id}`));
@@ -321,6 +325,7 @@ class CloudDrive extends Component {
                     selected: [],
                 };
             });
+            fetchOneself();
         }
     }
 
@@ -346,7 +351,7 @@ class CloudDrive extends Component {
                                 <ListItemText primary={resource.resource_name}/>
                                 <ListItemSecondaryAction>
                                     <Checkbox
-                                        onChange={this.handleToggleResource(resource.id)}
+                                        onChange={this.handleSelectResource(resource.id)}
                                         checked={this.state.selected.indexOf(resource.id) !== -1}/>
                                 </ListItemSecondaryAction>
                             </ListItem>

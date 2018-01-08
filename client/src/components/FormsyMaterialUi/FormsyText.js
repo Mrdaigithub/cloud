@@ -24,6 +24,7 @@ class FormsyText extends Component {
             getValue,
             endAdornment,
             startAdornment,
+            disabled,
         } = this.props;
         const errorMessage = getErrorMessage();
         return (
@@ -34,6 +35,7 @@ class FormsyText extends Component {
                     id={title}
                     type={type || 'text'}
                     value={getValue() || ''}
+                    disabled={disabled || false}
                     autoComplete="off"
                     endAdornment={endAdornment}
                     startAdornment={startAdornment}
