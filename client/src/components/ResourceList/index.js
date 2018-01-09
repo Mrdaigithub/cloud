@@ -20,33 +20,31 @@ const getResourceExt = resourceName => () => {
 };
 
 
-const CloudDrive = props => (
-    <div>
-        <List className={props.classes.normal}>
-            {props.resourceList.map((resource) => {
-                return (
-                    <ListItem
-                        button
-                        key={resource.id}
-                        onClick={props.onClickDir(resource.id, resource.file)}>
-                        <ListItemIcon className={props.classes.resourceIcon}>
-                            {
-                                resource.file ?
-                                    <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
-                                    <FolderIcon/>
-                            }
-                        </ListItemIcon>
-                        <ListItemText primary={resource.resource_name}/>
-                        <ListItemSecondaryAction>
-                            <Checkbox
-                                onChange={props.toggleCheck(resource.id)}
-                                checked={props.checked.indexOf(resource.id) !== -1}/>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                );
-            })}
-        </List>
-    </div>
+const ResourceList = props => (
+    <List className={props.classes.normal}>
+        {props.resourceList.map((resource) => {
+            return (
+                <ListItem
+                    button
+                    key={resource.id}
+                    onClick={props.onClickDir(resource.id, resource.file)}>
+                    <ListItemIcon className={props.classes.resourceIcon}>
+                        {
+                            resource.file ?
+                                <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                <FolderIcon/>
+                        }
+                    </ListItemIcon>
+                    <ListItemText primary={resource.resource_name}/>
+                    <ListItemSecondaryAction>
+                        <Checkbox
+                            onChange={props.toggleCheck(resource.id)}
+                            checked={props.checked.indexOf(resource.id) !== -1}/>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            );
+        })}
+    </List>
 );
 
 const mapStateToProps = state => ({});
@@ -56,4 +54,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(withStyles(styles)(CloudDrive));
+)(withStyles(styles)(ResourceList));

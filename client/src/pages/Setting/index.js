@@ -12,14 +12,10 @@ import CloseIcon from 'material-ui-icons/Close';
 import Divider from 'material-ui/Divider';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import List, { ListItem, ListItemText } from 'material-ui/List';
-import Slide from 'material-ui/transitions/Slide';
+import Transition from '../../components/Transition';
 import { logout } from '../../store/modules/oneself';
 import styles from './styles';
 
-
-function Transition(props) {
-    return <Slide direction="up" {...props}/>;
-}
 
 class Setting extends Component {
     logout() {

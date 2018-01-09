@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
-import Slide from 'material-ui/transitions/Slide';
 import Table, {
     TableBody,
     TableCell,
@@ -36,11 +35,12 @@ import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import qs from 'qs';
 import { alert } from '../../../store/modules/assist';
-import styles from './styles';
+import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
+import styles from './styles';
 import requester from '../../../utils/requester';
 
 const columnData = [
@@ -50,10 +50,6 @@ const columnData = [
     { id: 'capacity', numeric: false, disablePadding: false, label: '容量' },
     { id: 'created_at', numeric: false, disablePadding: false, label: '创建时间' },
 ];
-
-function Transition(props) {
-    return <Slide direction="up" {...props}/>;
-}
 
 
 class Oneself extends Component {

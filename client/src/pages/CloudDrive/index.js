@@ -10,7 +10,6 @@ import Toolbar from 'material-ui/Toolbar';
 import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import Slide from 'material-ui/transitions/Slide';
 import IconButton from 'material-ui/IconButton';
 import CloseIcon from 'material-ui-icons/Close';
 import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
@@ -23,15 +22,27 @@ import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import { FileUploader } from '../../components/FileUploader';
+import Transition from '../../components/Transition';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ResourceList from '../../components/ResourceList';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
 
-function Transition(props) {
-    return <Slide direction="up" {...props}/>;
-}
+
+/**
+ * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
+ *
+ * @param url
+ * @returns {string}
+ */
+const url2path = (url) => {
+    return url.split('/')
+        .filter(item => !!item && item !== 'cloud-drive')
+        .map(item => item.trim()
+            .replace(/(^\.+|\.+$)/, ''))
+        .join('.');
+};
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -63,11 +74,11 @@ class CloudDrive extends Component {
     async componentWillMount() {
         this.unlisten = history.listen((location) => {
             if (/cloud-drive\/\d+/.test('/cloud-drive/0'.trim())) {
-                this.getResourceList(this.url2path(location.pathname));
+                this.getResourceList(url2path(location.pathname));
             }
         });
         if (!this.state.currentResourceList.length) {
-            this.getResourceList(this.url2path(this.props.location.pathname));
+            this.getResourceList(url2path(this.props.location.pathname));
         }
     }
 
@@ -87,17 +98,6 @@ class CloudDrive extends Component {
             currentResourceList,
             selected: [],
         });
-    }
-
-    /**
-     * 获取文件后缀
-     *
-     * @param resourceName
-     * @returns {string}
-     */
-    getResourceExt(resourceName) {
-        const index = resourceName.lastIndexOf('.');
-        return resourceName.substr(index + 1);
     }
 
     handleClickDir = (resourceID, file) => () => {
@@ -120,20 +120,6 @@ class CloudDrive extends Component {
         });
     };
 
-    /**
-     * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
-     *
-     * @param url
-     * @returns {string}
-     */
-    url2path(url) {
-        return url.split('/')
-            .filter(item => !!item && item !== 'cloud-drive')
-            .map(item => item.trim()
-                .replace(/(^\.+|\.+$)/, ''))
-            .join('.');
-    }
-
 
     /**  创建文件夹 **/
 
@@ -147,28 +133,28 @@ class CloudDrive extends Component {
 
     async handleCreateDir(model) {
         const { routing } = this.props;
-        const path = this.url2path(routing.location.pathname);
+        const path = url2path(routing.location.pathname);
         console.log(path);
         await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
             path,
         }));
         this.handleClosecreateDirDiglog();
-        this.getResourceList(this.url2path(routing.location.pathname));
+        this.getResourceList(url2path(routing.location.pathname));
     }
 
 
     /**  上传文件 **/
 
     handleUpload() {
-        const { capacity, used, alert } = this.props;
+        const { capacity, used } = this.props;
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
         if (this.state.currentResourceList.filter(item => item.file && item.resource_name === file.name).length) {
-            return alert('在当前目录下已有同名文件');
+            return this.props.alert('在当前目录下已有同名文件');
         }
         if (!!capacity && file.size + parseInt(used, 10) > capacity) {
-            return alert('存储容量不足');
+            return this.props.alert('存储容量不足');
         }
         this.setState({
             file,
@@ -223,7 +209,7 @@ class CloudDrive extends Component {
     async preprocess() {
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
-        const { routing, alert, fetchOneself } = this.props;
+        const { routing } = this.props;
         const {
             error,
             chunkSize,
@@ -237,11 +223,11 @@ class CloudDrive extends Component {
             file_hash: fileHash,
             locale,
             group,
-            path: this.url2path(this.props.routing.location.pathname),
+            path: url2path(this.props.routing.location.pathname),
         }));
         if (error) {
             this.resetUploadProcess();
-            return alert('文件上传失败, 暂不支持无后缀名与空文件');
+            return this.props.alert('文件上传失败, 暂不支持无后缀名与空文件');
         }
         const chunkCount = Math.ceil(size / chunkSize);
         if (savedPath.length === 0) {
@@ -249,7 +235,8 @@ class CloudDrive extends Component {
                 uploadValue: 0,
                 uploadDone: false,
             });
-            this.uploadChunk([...Array(chunkCount).keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
+            this.uploadChunk([...Array(chunkCount)
+                .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
         } else {
             this.setState({
                 uploadValue: 100,
@@ -257,7 +244,7 @@ class CloudDrive extends Component {
             });
             setTimeout(() => {
                 this.resetUploadProcess();
-                this.getResourceList(this.url2path(routing.location.pathname));
+                this.getResourceList(url2path(routing.location.pathname));
                 fetchOneself();
             }, 1500);
         }
@@ -276,7 +263,7 @@ class CloudDrive extends Component {
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
         const { name, size } = file;
-        const { routing, fetchOneself } = this.props;
+        const { routing } = this.props;
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
@@ -291,7 +278,7 @@ class CloudDrive extends Component {
             form.append('sub_dir', subDir);
             form.append('group', this.state.group);
             form.append('locale', this.state.locale);
-            form.append('path', this.url2path(this.props.routing.location.pathname));
+            form.append('path', url2path(this.props.routing.location.pathname));
             await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
@@ -300,7 +287,7 @@ class CloudDrive extends Component {
         });
         setTimeout(() => {
             this.resetUploadProcess();
-            this.getResourceList(this.url2path(routing.location.pathname));
+            this.getResourceList(url2path(routing.location.pathname));
             fetchOneself();
         }, 2000);
     }
@@ -322,7 +309,6 @@ class CloudDrive extends Component {
     /**  删除资源 **/
 
     async handleRemoveResource() {
-        const { fetchOneself } = this.props;
         const { selected, currentResourceList } = this.state;
         if (selected.length) {
             const deleteList = selected.map(id => requester.delete(`resources/${id}`));
@@ -459,12 +445,13 @@ class CloudDrive extends Component {
                             <Button color="contrast" onClick={this.handleClose}>确认</Button>
                         </Toolbar>
                     </AppBar>
-                    <ResourceList
-                        className={classes.resourceList}
-                        resourceList={currentResourceList}
-                        checked={this.state.selected}
-                        onClickDir={this.handleClickDir}
-                        toggleCheck={this.handleSelectResource}/>
+                    <div className={classes.resourceList}>
+                        <ResourceList
+                            resourceList={currentResourceList}
+                            checked={this.state.selected}
+                            onClickDir={this.handleClickDir}
+                            toggleCheck={this.handleSelectResource}/>
+                    </div>
                 </Dialog>
             </PageHeaderLayout>
         );
