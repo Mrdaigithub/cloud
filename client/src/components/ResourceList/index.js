@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
+import Undo from 'material-ui-icons/Undo';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
@@ -22,6 +23,15 @@ const getResourceExt = resourceName => () => {
 
 const ResourceList = props => (
     <List className={props.classes.normal}>
+        {
+            props.onBack ?
+                (<ListItem
+                    button
+                    onClick={props.onBack()}>
+                    <ListItemIcon className={props.classes.resourceIcon}><Undo/></ListItemIcon>
+                    <ListItemText primary="返回上一级"/>
+                </ListItem>) : null
+        }
         {props.resourceList.map((resource) => {
             return (
                 <ListItem
@@ -37,9 +47,12 @@ const ResourceList = props => (
                     </ListItemIcon>
                     <ListItemText primary={resource.resource_name}/>
                     <ListItemSecondaryAction>
-                        <Checkbox
-                            onChange={props.toggleCheck(resource.id)}
-                            checked={props.checked.indexOf(resource.id) !== -1}/>
+                        {
+                            props.checked ?
+                                (<Checkbox
+                                    onChange={props.toggleCheck(resource.id)}
+                                    checked={props.checked.indexOf(resource.id) !== -1}/>) : null
+                        }
                     </ListItemSecondaryAction>
                 </ListItem>
             );

@@ -123,7 +123,30 @@ class ResourceController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        if (Validator::make($request->all(), ['path' => 'required',])->fails()) {
+            return $this->failed(400000);
+        }
+        $user = $request->user();
+        $base_path = $this->deal_path(Resource::find($id)->path);
+        $new_path = $request->only('path')['path'];
+        $old_path = "$base_path.$id";
+        if (DB::select("SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;")[0]->is_child) {
+            return $this->failed(500000);
+        }
+        $move_id_list = DB::select("SELECT id FROM resources
+                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          WHERE user_id=? AND path <@ ?
+                          ORDER BY file ,created_at ASC;",
+            [$user->id, $old_path]);
+        $move_id_list = array_map(function ($item) {
+            return $item->id;
+        }, $move_id_list);
+        array_push($move_id_list, $id);
+        foreach ($move_id_list as $move_id) {
+            $resource = Resource::find($move_id);
+            $resource->path = preg_replace("/($base_path)/", $new_path, $resource->path);
+            if (!$resource->save()) return $this->failed(500001);
+        }
     }
 
     /**
@@ -138,7 +161,7 @@ class ResourceController extends ApiController
         $path = $this->deal_path(Resource::find($id)->path) . '.' . $id;
         $remove_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-                          WHERE user_id=? AND path >= ?
+                          WHERE user_id=? AND path <@ ?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $path]);
         $request->user()->resource()->detach($id);
