@@ -3,3 +3,5 @@ export { default as FolderIcon } from './FolderIcon';
 export { default as PdfIcon } from './PdfIcon';
 export { default as TextIcon } from './TextIcon';
 export { default as ZipIcon } from './ZipIcon';
+export { default as ExeIcon } from './ExeIcon';
+export { default as SqlIcon } from './SqlIcon';
