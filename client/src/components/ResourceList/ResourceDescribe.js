@@ -11,6 +11,16 @@ import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import Transition from '../Transition/index';
 import styles from './styles';
 
+/**
+ * 获取文件后缀
+ *
+ * @param resourceName
+ * @returns {string}
+ */
+const getResourceExt = (resourceName) => {
+    const index = resourceName.lastIndexOf('.');
+    return resourceName.substr(index + 1);
+};
 
 const ResourceDescribe = props => (
     <Dialog
@@ -30,8 +40,10 @@ const ResourceDescribe = props => (
                 alignItems={'center'}
                 className={props.classes.container}>
                 <Grid item xs={6} className={props.classes.textCenter}>
-                    <ResourceTypeIcon style={{ width: 96, height: 96 }}/>
-                    <h3 className={props.classes.resourceName}>{props.title || '未命名'}</h3>
+                    <ResourceTypeIcon
+                        style={{ width: 96, height: 96 }}
+                        ext={getResourceExt(props.name)}/>
+                    <h3 className={props.classes.resourceName}>{props.name || '未命名'}</h3>
                     <p className={props.classes.resourceDes}>{props.text || '暂未添加预览功能'}</p>
                     <Button
                         raised

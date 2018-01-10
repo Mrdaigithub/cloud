@@ -14,7 +14,7 @@ import styles from './styles';
  * @param resourceName
  * @returns {string}
  */
-const getResourceExt = resourceName => () => {
+const getResourceExt = (resourceName) => {
     const index = resourceName.lastIndexOf('.');
     return resourceName.substr(index + 1);
 };
@@ -75,7 +75,7 @@ class ResourceList extends Component {
                                 button
                                 key={resource.id}
                                 onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
-                                <ListItemIcon className={classes.resourceIcon}>
+                                <ListItemIcon className={classes.resourceListIcon}>
                                     {
                                         resource.file ?
                                             <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
@@ -97,9 +97,8 @@ class ResourceList extends Component {
                 </List>
                 <ResourceDescribe
                     open={this.state.ResourceDescribeOpen}
-                    title={this.state.resourceName}
+                    name={this.state.resourceName}
                     onDownload={this.handleDownload}
-                    // downloadHref={`//api.mrdaisite.com/api/v1/resources/download/${this.state.resourceID}`}
                     onClose={this.handleClose}/>
             </div>
         );
