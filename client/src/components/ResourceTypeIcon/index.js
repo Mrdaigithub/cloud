@@ -9,22 +9,22 @@ import {
 } from '../../components/file-type-icon';
 
 
-const ResourceTypeIcon = ({ classes, ext }) => (
+const ResourceTypeIcon = ({ style, classes, ext }) => (
     <div className={classes.normal}>
         {(() => {
             switch (ext) {
                 case 'txt':
-                    return <TextIcon/>;
+                    return <TextIcon style={style}/>;
                 case 'zip':
-                    return <ZipIcon/>;
+                    return <ZipIcon style={style}/>;
                 case 'rar':
-                    return <ZipIcon/>;
+                    return <ZipIcon style={style}/>;
                 case '7z':
-                    return <ZipIcon/>;
+                    return <ZipIcon style={style}/>;
                 case 'pdf':
-                    return <PdfIcon/>;
+                    return <PdfIcon style={style}/>;
                 default :
-                    return <FileIcon/>;
+                    return <FileIcon style={style}/>;
             }
         })()}
     </div>

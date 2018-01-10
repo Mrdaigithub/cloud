@@ -21,7 +21,7 @@ import { history } from '../../store';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
-import { FileUploader } from '../../components/FileUploader';
+import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ResourceList from '../../components/ResourceList';
@@ -148,7 +148,7 @@ class CloudDrive extends Component {
         });
     }
 
-    handleClickDir = (resourceID, file) => () => {
+    handleClickResource = (resourceID, file) => {
         const { changePage, routing } = this.props;
         return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
     };
@@ -423,7 +423,7 @@ class CloudDrive extends Component {
                     className={classes.resourceList}
                     resourceList={resourceList}
                     checked={this.state.selected}
-                    onClickDir={this.handleClickDir}
+                    onClickResource={this.handleClickResource}
                     toggleCheck={this.handleCheckResource}/>
                 <SpeedDial>
                     <SpeedDialItem>

@@ -1,10 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 import Undo from 'material-ui-icons/Undo';
+import ResourceDescribe from './ResourceDescribe';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
@@ -20,51 +19,88 @@ const getResourceExt = resourceName => () => {
     return resourceName.substr(index + 1);
 };
 
+class ResourceList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ResourceDescribeOpen: false,
+            resourceName: '',
+        };
+    }
 
-const ResourceList = props => (
-    <List className={props.classes.normal}>
-        {
-            props.onBack ?
-                (<ListItem
-                    button
-                    onClick={props.onBack()}>
-                    <ListItemIcon className={props.classes.resourceIcon}><Undo/></ListItemIcon>
-                    <ListItemText primary="返回上一级"/>
-                </ListItem>) : null
+    handleClickResource = (id, name, file) => () => {
+        if (file) {
+            this.setState({
+                ResourceDescribeOpen: true,
+                resourceName: name,
+            });
         }
-        {props.resourceList.map((resource) => {
-            return (
-                <ListItem
-                    button
-                    key={resource.id}
-                    onClick={props.onClickDir(resource.id, resource.file)}>
-                    <ListItemIcon className={props.classes.resourceIcon}>
-                        {
-                            resource.file ?
-                                <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
-                                <FolderIcon/>
-                        }
-                    </ListItemIcon>
-                    <ListItemText primary={resource.resource_name}/>
-                    <ListItemSecondaryAction>
-                        {
-                            props.checked ?
-                                (<Checkbox
-                                    onChange={props.toggleCheck(resource.id)}
-                                    checked={props.checked.indexOf(resource.id) !== -1}/>) : null
-                        }
-                    </ListItemSecondaryAction>
-                </ListItem>
-            );
-        })}
-    </List>
-);
+        if (this.props.onClickResource) {
+            this.props.onClickResource(id, file);
+        }
+    };
 
-const mapStateToProps = state => ({});
+    handleDownload = () => () => {
+        if (this.props.onDownload) this.props.onDownload();
+    };
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+    handleClose = () => {
+        this.setState({
+            ResourceDescribeOpen: false,
+            resourceName: '',
+        });
+        if (this.props.onClose) this.props.onClose();
+    };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(withStyles(styles)(ResourceList));
+    render() {
+        const { classes, onBack, resourceList, checked, toggleCheck } = this.props;
+        return (
+            <div>
+                <List className={classes.normal}>
+                    {
+                        onBack ?
+                            (<ListItem
+                                button
+                                onClick={onBack()}>
+                                <ListItemIcon className={classes.resourceListIcon}><Undo/></ListItemIcon>
+                                <ListItemText primary="返回上一级"/>
+                            </ListItem>) : null
+                    }
+                    {resourceList.map((resource) => {
+                        return (
+                            <ListItem
+                                button
+                                key={resource.id}
+                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
+                                <ListItemIcon className={classes.resourceIcon}>
+                                    {
+                                        resource.file ?
+                                            <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                            <FolderIcon/>
+                                    }
+                                </ListItemIcon>
+                                <ListItemText primary={resource.resource_name}/>
+                                <ListItemSecondaryAction>
+                                    {
+                                        checked ?
+                                            (<Checkbox
+                                                onChange={toggleCheck(resource.id)}
+                                                checked={checked.indexOf(resource.id) !== -1}/>) : null
+                                    }
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        );
+                    })}
+                </List>
+                <ResourceDescribe
+                    open={this.state.ResourceDescribeOpen}
+                    title={this.state.resourceName}
+                    onDownload={this.handleDownload}
+                    onClose={this.handleClose}/>
+            </div>
+        );
+    }
+}
+
+
+export default withStyles(styles)(ResourceList);
