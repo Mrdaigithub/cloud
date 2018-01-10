@@ -33,7 +33,11 @@ const ResourceDescribe = props => (
                     <ResourceTypeIcon style={{ width: 96, height: 96 }}/>
                     <h3 className={props.classes.resourceName}>{props.title || '未命名'}</h3>
                     <p className={props.classes.resourceDes}>{props.text || '暂未添加预览功能'}</p>
-                    <Button raised color="primary" onClick={props.onDownload}>下载</Button>
+                    <Button
+                        raised
+                        color="primary"
+                        href={props.downloadHref || null}
+                        onClick={props.onDownload}>下载</Button>
                 </Grid>
             </Grid>
         </DialogContent>

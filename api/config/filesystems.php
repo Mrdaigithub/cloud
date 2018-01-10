@@ -45,12 +45,12 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/aetherupload/file/md5_files'),
         ],
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => storage_path('app/aetherupload/file/md5_files'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],

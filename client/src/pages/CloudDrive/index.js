@@ -104,6 +104,7 @@ class CloudDrive extends Component {
         this.handleCloseMoveDirDiglog = this.handleCloseMoveDirDiglog.bind(this);
         this.handleRemoveResource = this.handleRemoveResource.bind(this);
         this.handleMoveResource = this.handleMoveResource.bind(this);
+        this.handleDownload = this.handleDownload.bind(this);
     }
 
     async componentWillMount() {
@@ -414,6 +415,20 @@ class CloudDrive extends Component {
         this.getResourceList();
     }
 
+
+    /**  下载资源 **/
+
+    async handleDownload(resourceID) {
+        const downloadUrl = await requester.get(`secret/${resourceID}`);
+        const downloadDom = document.createElement('a');
+        downloadDom.id = 'downloadUrl';
+        downloadDom.download = true;
+        downloadDom.href = downloadUrl;
+        document.querySelector('body').appendChild(downloadDom);
+        downloadDom.click();
+        document.querySelector('body').removeChild(downloadDom);
+    }
+
     render() {
         const { classes } = this.props;
         const { resourceList, moveResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
@@ -424,6 +439,7 @@ class CloudDrive extends Component {
                     resourceList={resourceList}
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
+                    onDownload={this.handleDownload}
                     toggleCheck={this.handleCheckResource}/>
                 <SpeedDial>
                     <SpeedDialItem>

@@ -24,6 +24,7 @@ class ResourceList extends Component {
         super(props);
         this.state = {
             ResourceDescribeOpen: false,
+            resourceID: '',
             resourceName: '',
         };
     }
@@ -32,6 +33,7 @@ class ResourceList extends Component {
         if (file) {
             this.setState({
                 ResourceDescribeOpen: true,
+                resourceID: id,
                 resourceName: name,
             });
         }
@@ -40,13 +42,14 @@ class ResourceList extends Component {
         }
     };
 
-    handleDownload = () => () => {
-        if (this.props.onDownload) this.props.onDownload();
+    handleDownload = () => {
+        if (this.props.onDownload) this.props.onDownload(this.state.resourceID);
     };
 
     handleClose = () => {
         this.setState({
             ResourceDescribeOpen: false,
+            resourceID: '',
             resourceName: '',
         });
         if (this.props.onClose) this.props.onClose();
@@ -96,6 +99,7 @@ class ResourceList extends Component {
                     open={this.state.ResourceDescribeOpen}
                     title={this.state.resourceName}
                     onDownload={this.handleDownload}
+                    // downloadHref={`//api.mrdaisite.com/api/v1/resources/download/${this.state.resourceID}`}
                     onClose={this.handleClose}/>
             </div>
         );

@@ -18,8 +18,10 @@ Route::namespace('Api\V1')
     ->prefix('v1')
     ->group(function () {
         Route::post('/login/password', 'AuthController@passwordLogin');
+        Route::get('resources/download/{secret}', 'ResourceController@download');
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
             Route::resource('users', 'UserController');
+            Route::get('secret/{id}', 'ResourceController@get_download_secret');
             Route::resource('resources', 'ResourceController');
         });
     });

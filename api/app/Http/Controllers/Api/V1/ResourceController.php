@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Resource;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 
 class ResourceController extends ApiController
@@ -103,6 +105,30 @@ class ResourceController extends ApiController
         //
     }
 
+    public function get_download_secret(Request $request, $id)
+    {
+        if (!count($request->user()->resource->find($id))) {
+            return $this->failed(409001);
+        }
+        $secret = Crypt::encryptString($id);
+        return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
+    }
+
+    public function download($secret)
+    {
+        $storage_path = storage_path('app/aetherupload/file/md5_files');
+        $resource = Resource::find(Crypt::decryptString($secret));
+        $files = Storage::files();
+        $download_file = array_filter($files, function ($file) use ($resource) {
+            return str_contains($file, $resource->hash);
+        });
+        if (!count($download_file)) {
+            return $this->failed(409001);
+        }
+        $download_file = $download_file[key($download_file)];
+        return response()->download("$storage_path/$download_file", $resource->resource_name);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -117,9 +143,9 @@ class ResourceController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return mixed
      */
     public function update(Request $request, $id)
     {
