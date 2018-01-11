@@ -22,6 +22,7 @@ Route::namespace('Api\V1')
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
             Route::resource('users', 'UserController');
             Route::get('secret/{id}', 'ResourceController@get_download_secret');
+            Route::get('resources/{path}', 'ResourceController@show_with_path');
             Route::resource('resources', 'ResourceController');
         });
     });

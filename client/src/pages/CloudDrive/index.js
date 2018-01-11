@@ -28,7 +28,7 @@ import ResourceList from '../../components/ResourceList';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
-import { fetchResources } from '../../store/modules/resource';
+import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
 
 
 /**
@@ -109,10 +109,10 @@ class CloudDrive extends Component {
     }
 
     async componentWillMount() {
-        const { resources } = this.props;
+        const { resources, routing } = this.props;
         if (!resources || !resources.length) {
             this.props.fetchResources(() => {
-                this.getResourceList();
+                this.getResourceList(url2path(routing.location.pathname));
             });
         } else {
             this.getResourceList();
@@ -182,15 +182,14 @@ class CloudDrive extends Component {
 
     async handleCreateDir(model) {
         const { routing } = this.props;
-        const path = url2path(routing.location.pathname);
         this.handleClosecreateDirDiglog();
-        await requester.post('resources', qs.stringify({
+        const { path } = await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
-            path,
+            path: url2path(routing.location.pathname),
         }));
-        this.props.fetchResources(() => {
-            this.getResourceList(url2path(routing.location.pathname));
-        });
+        const resourceListWithPath = await requester.get(`resources/${path}`);
+        this.props.changeResourceListWithPath(Object.keys(resourceListWithPath)[0], resourceListWithPath[Object.keys(resourceListWithPath)[0]]);
+        this.getResourceList(url2path(routing.location.pathname));
     }
 
 
@@ -380,7 +379,7 @@ class CloudDrive extends Component {
 
     handleOpenMoveDirDiglog() {
         if (!this.state.selected.length) return;
-        this.getMoveResourceList();
+        this.getResourceList(undefined, true);
         this.setState({ moveDirDiglogState: true });
     }
 
@@ -396,14 +395,14 @@ class CloudDrive extends Component {
         if (file) return;
         const newMovePath = movePath.go(this.state.movePath, resourceID);
         this.setState({ movePath: newMovePath });
-        this.getMoveResourceList(url2path(newMovePath));
+        this.getResourceList(url2path(newMovePath), true);
     };
 
     handleBackMovePath = () => () => {
         if (this.state.movePath.length === 1 && this.state.movePath.split('/')[0] === '0') return;
         const newMovePath = movePath.back(this.state.movePath);
         this.setState({ movePath: newMovePath });
-        this.getMoveResourceList(url2path(newMovePath));
+        this.getResourceList(url2path(newMovePath), true);
     };
 
     async handleMoveResource() {
@@ -572,6 +571,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     alert,
     fetchOneself,
     fetchResources,
+    changeResourceListWithPath,
 }, dispatch);
 
 export default connect(

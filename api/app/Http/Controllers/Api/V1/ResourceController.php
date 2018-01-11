@@ -91,7 +91,7 @@ class ResourceController extends ApiController
         if ($req['path']) $resource->path = $path;
         if (!$resource->save()) return $this->failed(500001);
         $user->resource()->attach($resource->id);
-        return response()->json($resource);
+        return collect(Resource::find($resource->id))->except('hash');
     }
 
     /**
@@ -103,6 +103,25 @@ class ResourceController extends ApiController
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Request $request
+     * @param $path
+     */
+    public function show_with_path(Request $request, $path)
+    {
+        return $request
+            ->user()->resource
+            ->where('path', $path)
+            ->map(function ($item) {
+                return collect($item)->except(['pivot', 'hash']);
+            })
+            ->sortBy('file')->values()
+            ->sortBy('resource_name')->values()
+            ->groupBy('path');
     }
 
     public function get_download_secret(Request $request, $id)
