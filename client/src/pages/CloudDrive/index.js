@@ -28,6 +28,7 @@ import ResourceList from '../../components/ResourceList';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
+import { fetchResources } from '../../store/modules/resource';
 
 
 /**
@@ -108,14 +109,19 @@ class CloudDrive extends Component {
     }
 
     async componentWillMount() {
+        const { resources } = this.props;
+        if (!resources || !resources.length) {
+            this.props.fetchResources(() => {
+                this.getResourceList();
+            });
+        } else {
+            this.getResourceList();
+        }
         this.unlisten = history.listen((location) => {
             if (/cloud-drive\/\d+/.test('/cloud-drive/0'.trim())) {
                 this.getResourceList(url2path(location.pathname));
             }
         });
-        if (!this.state.resourceList.length) {
-            this.getResourceList(url2path(this.props.location.pathname));
-        }
     }
 
     componentWillUnmount() {
@@ -125,28 +131,22 @@ class CloudDrive extends Component {
     /**
      * 获取当前路径的资源列表
      *
-     * @param pathnameStr
+     * @param path
+     * @param moveMode
      * @returns {Promise<void>}
      */
-    async getResourceList(pathnameStr = '0') {
-        const resourceList = await requester.get(`resources?path=${pathnameStr}`);
-        this.setState({
-            resourceList,
-            selected: [],
-        });
-    }
-
-    /**
-     * 获取移动资源的diglog list
-     *
-     * @param pathnameStr
-     * @returns {Promise<void>}
-     */
-    async getMoveResourceList(pathnameStr = '0') {
-        const moveResourceList = await requester.get(`resources?path=${pathnameStr}`);
-        this.setState({
-            moveResourceList,
-        });
+    async getResourceList(path = '0', moveMode = false) {
+        const { resources } = this.props;
+        if (moveMode) {
+            this.setState({
+                moveResourceList: this.props.resources[path] || [],
+            });
+        } else {
+            this.setState({
+                resourceList: resources[path] || [],
+                selected: [],
+            });
+        }
     }
 
     handleClickResource = (resourceID, file) => {
@@ -183,12 +183,14 @@ class CloudDrive extends Component {
     async handleCreateDir(model) {
         const { routing } = this.props;
         const path = url2path(routing.location.pathname);
+        this.handleClosecreateDirDiglog();
         await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
             path,
         }));
-        this.handleClosecreateDirDiglog();
-        this.getResourceList(url2path(routing.location.pathname));
+        this.props.fetchResources(() => {
+            this.getResourceList(url2path(routing.location.pathname));
+        });
     }
 
 
@@ -292,8 +294,10 @@ class CloudDrive extends Component {
             });
             setTimeout(() => {
                 this.resetUploadProcess();
-                this.getResourceList(url2path(routing.location.pathname));
-                fetchOneself();
+                this.props.fetchResources(() => {
+                    this.getResourceList(url2path(routing.location.pathname));
+                    this.props.fetchOneself();
+                });
             }, 1500);
         }
     }
@@ -335,8 +339,10 @@ class CloudDrive extends Component {
         });
         setTimeout(() => {
             this.resetUploadProcess();
-            this.getResourceList(url2path(routing.location.pathname));
-            fetchOneself();
+            this.props.fetchResources(() => {
+                this.getResourceList(url2path(routing.location.pathname));
+                this.props.fetchOneself();
+            });
         }, 2000);
     }
 
@@ -357,19 +363,15 @@ class CloudDrive extends Component {
     /**  删除资源 **/
 
     async handleRemoveResource() {
-        const { selected, resourceList } = this.state;
+        const { resources, routing } = this.props;
+        const resourcePath = url2path(routing.location.pathname);
+        const { selected } = this.state;
         if (selected.length) {
             const deleteList = selected.map(id => requester.delete(`resources/${id}`));
             await Promise.all(deleteList);
-            this.setState(() => {
-                return {
-                    resourceList: resourceList.filter(({ id }, index) => {
-                        return selected.indexOf(id) === -1 ? resourceList[index] : false;
-                    }),
-                    selected: [],
-                };
-            });
-            fetchOneself();
+            resources[resourcePath] = resources[resourcePath].filter(resource => selected.indexOf(resource.id) === -1);
+            this.getResourceList(resourcePath);
+            this.props.fetchOneself();
         }
     }
 
@@ -378,7 +380,7 @@ class CloudDrive extends Component {
 
     handleOpenMoveDirDiglog() {
         if (!this.state.selected.length) return;
-        this.getMoveResourceList(this.state.movePath);
+        this.getMoveResourceList();
         this.setState({ moveDirDiglogState: true });
     }
 
@@ -390,7 +392,7 @@ class CloudDrive extends Component {
         });
     }
 
-    handleClickMoveDir = (resourceID, file) => () => {
+    handleClickMoveDir = (resourceID, file) => {
         if (file) return;
         const newMovePath = movePath.go(this.state.movePath, resourceID);
         this.setState({ movePath: newMovePath });
@@ -410,9 +412,11 @@ class CloudDrive extends Component {
         const moveList = selected.map(id => requester.patch(`resources/${id}`, qs.stringify({
             path: url2path(this.state.movePath),
         })));
-        await Promise.all(moveList);
         this.handleCloseMoveDirDiglog();
-        this.getResourceList();
+        await Promise.all(moveList);
+        this.props.fetchResources(() => {
+            this.getResourceList(url2path(this.props.routing.location.pathname));
+        });
     }
 
 
@@ -424,14 +428,16 @@ class CloudDrive extends Component {
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
         downloadDom.href = downloadUrl;
-        document.querySelector('body').appendChild(downloadDom);
+        document.querySelector('body')
+            .appendChild(downloadDom);
         downloadDom.click();
-        document.querySelector('body').removeChild(downloadDom);
+        document.querySelector('body')
+            .removeChild(downloadDom);
     }
 
     render() {
         const { classes } = this.props;
-        const { resourceList, moveResourceList, uploadState, uploadValue, file, uploadDone } = this.state;
+        const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <PageHeaderLayout>
                 <ResourceList
@@ -471,9 +477,10 @@ class CloudDrive extends Component {
                         </label>
                     </SpeedDialItem>
                     <SpeedDialItem>
-                        <label htmlFor="icon-button-remove">
+                        <label htmlFor="icon-button-move">
                             <IconButton
                                 onClick={this.handleOpenMoveDirDiglog}
+                                disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span">
@@ -485,6 +492,7 @@ class CloudDrive extends Component {
                         <label htmlFor="icon-button-remove">
                             <IconButton
                                 onClick={this.handleRemoveResource}
+                                disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span">
@@ -542,8 +550,9 @@ class CloudDrive extends Component {
                     <div className={classes.resourceList}>
                         <ResourceList
                             resourceList={moveResourceList}
+                            moveMode
                             onBack={this.handleBackMovePath}
-                            onClickDir={this.handleClickMoveDir}/>
+                            onClickResource={this.handleClickMoveDir}/>
                     </div>
                 </Dialog>
             </PageHeaderLayout>
@@ -555,12 +564,14 @@ const mapStateToProps = (state, routing) => ({
     routing,
     capacity: state.oneself.capacity,
     used: state.oneself.used,
+    resources: state.resource.resources,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (push(url)),
     alert,
     fetchOneself,
+    fetchResources,
 }, dispatch);
 
 export default connect(

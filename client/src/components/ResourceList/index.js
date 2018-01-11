@@ -56,7 +56,7 @@ class ResourceList extends Component {
     };
 
     render() {
-        const { classes, onBack, resourceList, checked, toggleCheck } = this.props;
+        const { classes, moveMode, onBack, resourceList, checked, toggleCheck } = this.props;
         return (
             <div>
                 <List className={classes.normal}>
@@ -70,29 +70,30 @@ class ResourceList extends Component {
                             </ListItem>) : null
                     }
                     {resourceList.map((resource) => {
-                        return (
-                            <ListItem
-                                button
-                                key={resource.id}
-                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
-                                <ListItemIcon className={classes.resourceListIcon}>
-                                    {
-                                        resource.file ?
-                                            <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
-                                            <FolderIcon/>
-                                    }
-                                </ListItemIcon>
-                                <ListItemText primary={resource.resource_name}/>
-                                <ListItemSecondaryAction>
-                                    {
-                                        checked ?
-                                            (<Checkbox
-                                                onChange={toggleCheck(resource.id)}
-                                                checked={checked.indexOf(resource.id) !== -1}/>) : null
-                                    }
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        );
+                        return moveMode && resource.file ?
+                            null : (
+                                <ListItem
+                                    button
+                                    key={resource.id}
+                                    onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
+                                    <ListItemIcon className={classes.resourceListIcon}>
+                                        {
+                                            resource.file ?
+                                                <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                                <FolderIcon/>
+                                        }
+                                    </ListItemIcon>
+                                    <ListItemText primary={resource.resource_name}/>
+                                    <ListItemSecondaryAction>
+                                        {
+                                            checked ?
+                                                (<Checkbox
+                                                    onChange={toggleCheck(resource.id)}
+                                                    checked={checked.indexOf(resource.id) !== -1}/>) : null
+                                        }
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            );
                     })}
                 </List>
                 <ResourceDescribe

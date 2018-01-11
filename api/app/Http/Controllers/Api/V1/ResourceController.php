@@ -34,19 +34,19 @@ class ResourceController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return mixed
      */
     public function index(Request $request)
     {
-        $path = $this->deal_path($request->only('path')['path']);
-        $uid = $request->user()->id;
-        $resources = DB::select(
-            "SELECT id, resource_name, file, created_at, updated_at, path
-              FROM resources
-              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-              WHERE user_id=? AND path = ?
-              ORDER BY file ,created_at ASC;", [$uid, $path]);
-        return $resources;
+        return $request
+            ->user()->resource
+            ->map(function ($item) {
+                return collect($item)->except(['pivot', 'hash']);
+            })
+            ->sortBy('file')->values()
+            ->sortBy('resource_name')->values()
+            ->groupBy('path');
     }
 
     /**
