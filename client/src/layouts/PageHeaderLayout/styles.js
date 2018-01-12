@@ -36,12 +36,6 @@ const styles = theme => ({
     topbarBtn: {
         color: '#fff',
     },
-
-    content: {
-        height: '100vh',
-        boxSizing: 'border-box',
-        padding: '60px 0 5px 0',
-    },
 });
 
 export default styles;

@@ -2,7 +2,8 @@ import notFoundImg from '../../static/404.svg';
 
 const styles = theme => ({
     normal: {
-        height: '90vh',
+        paddingTop: '65px',
+        height: '100vh',
         boxSizing: 'border-box',
     },
     left: {

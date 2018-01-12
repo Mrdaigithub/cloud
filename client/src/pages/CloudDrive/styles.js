@@ -1,5 +1,5 @@
 const styles = theme => ({
-        resourceList: {
+        normal: {
             height: '100vh',
             padding: '60px 0 5px 0',
             boxSizing: 'border-box',

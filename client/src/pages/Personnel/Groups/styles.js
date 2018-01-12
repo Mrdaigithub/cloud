@@ -1,7 +1,12 @@
 const styles = theme => ({
+    normal: {
+        height: '100vh',
+        padding: '60px 0 5px 0',
+        boxSizing: 'border-box',
+    },
     root: {
         paddingRight: 2,
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 2,
     },
     table: {
         minWidth: 800,

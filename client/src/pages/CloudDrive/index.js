@@ -17,13 +17,11 @@ import CompareArrows from 'material-ui-icons/CompareArrows';
 import FileUpload from 'material-ui-icons/FileUpload';
 import DeleteIcon from 'material-ui-icons/Delete';
 import SparkMD5 from 'spark-md5';
-import { history } from '../../store';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ResourceList from '../../components/ResourceList';
 import styles from './styles';
 import requester from '../../utils/requester';
@@ -96,7 +94,6 @@ class CloudDrive extends Component {
             group: 'file',
             locale: 'zh',
         };
-        this.unlisten = null;
         this.handleUpload = this.handleUpload.bind(this);
         this.handleCreateDir = this.handleCreateDir.bind(this);
         this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
@@ -108,24 +105,17 @@ class CloudDrive extends Component {
         this.handleDownload = this.handleDownload.bind(this);
     }
 
-    async componentWillMount() {
-        const { resources, routing } = this.props;
-        if (!resources || !resources.length) {
-            this.props.fetchResources(() => {
-                this.getResourceList(url2path(routing.location.pathname));
+    async componentDidMount() {
+        const { routing } = this.props;
+        if (!this.props.resources) {
+            this.props.fetchResources((resources) => {
+                this.setState({
+                    resourceList: resources[url2path(routing.location.pathname)] || [],
+                });
             });
         } else {
-            this.getResourceList();
+            this.getResourceList(url2path(routing.location.pathname));
         }
-        this.unlisten = history.listen((location) => {
-            if (/cloud-drive\/\d+/.test('/cloud-drive/0'.trim())) {
-                this.getResourceList(url2path(location.pathname));
-            }
-        });
-    }
-
-    componentWillUnmount() {
-        this.unlisten();
     }
 
     /**
@@ -136,14 +126,13 @@ class CloudDrive extends Component {
      * @returns {Promise<void>}
      */
     async getResourceList(path = '0', moveMode = false) {
-        const { resources } = this.props;
         if (moveMode) {
             this.setState({
                 moveResourceList: this.props.resources[path] || [],
             });
         } else {
             this.setState({
-                resourceList: resources[path] || [],
+                resourceList: this.props.resources[path] || [],
                 selected: [],
             });
         }
@@ -438,9 +427,8 @@ class CloudDrive extends Component {
         const { classes } = this.props;
         const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
-            <PageHeaderLayout>
+            <div className={classes.normal}>
                 <ResourceList
-                    className={classes.resourceList}
                     resourceList={resourceList}
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
@@ -554,7 +542,7 @@ class CloudDrive extends Component {
                             onClickResource={this.handleClickMoveDir}/>
                     </div>
                 </Dialog>
-            </PageHeaderLayout>
+            </div>
         );
     }
 }

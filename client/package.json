@@ -18,6 +18,7 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "react-scripts": "1.0.17",
     "react-swipeable-views": "^0.12.10",
+    "react-transition-group": "^2.2.1",
     "recompose": "latest",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
