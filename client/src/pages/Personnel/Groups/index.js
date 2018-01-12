@@ -31,14 +31,12 @@ import PersonAdd from 'material-ui-icons/PersonAdd';
 import Edit from 'material-ui-icons/Edit';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { bindActionCreators } from 'redux';
-import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import qs from 'qs';
-import { alert } from '../../../store/modules/assist';
 import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
-import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
+import { fetchUsers, addUser, removeUsers } from '../../../store/modules/user';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../../utils/requester';
@@ -80,9 +78,17 @@ class Oneself extends Component {
     }
 
     async componentWillMount() {
-        this.setState({
-            data: await requester.get('/users'),
-        });
+        if (!this.props.users || !this.props.users.length) {
+            this.props.fetchUsers(() => {
+                this.getUsers();
+            });
+        } else {
+            this.getUsers();
+        }
+    }
+
+    getUsers() {
+        this.setState({ data: this.props.users });
     }
 
     handleRequestSort = (event, property) => {
@@ -171,32 +177,31 @@ class Oneself extends Component {
     }
 
     async handleDeleteUser() {
-        const deleteList = this.state.selected.map(id => requester.delete(`users/${id}`));
-        await Promise.all(deleteList);
-        this.setState(() => {
-            return {
+        this.props.removeUsers(this.state.selected, () => {
+            this.setState(() => ({
                 data: this.state.data.filter(({ id }, index) => {
                     return this.isSelected(id) ? false : this.state.data[index];
                 }),
                 selected: [],
-            };
+            }));
         });
     }
 
     async handleAddUser(model) {
         const { username, password, email, capacity } = model;
         if (this.state.createMode) {
-            const newUser = await requester.post('/users', qs.stringify({
+            this.props.addUser({
                 username,
                 password,
                 email,
                 capacity: (capacity * (1024 ** 3)).toFixed(0),
-            }));
-            this.setState((prevState) => {
-                const userList = prevState.data;
-                userList.push(newUser);
-                return { data: userList };
-            });
+            }, newUser => (
+                this.setState((prevState) => {
+                    const userList = prevState.data;
+                    userList.push(newUser);
+                    return { data: userList };
+                })
+            ));
         } else {
             const editedUser = await requester.put(`/users/${this.state.editUser.id}`, qs.stringify({
                 username,
@@ -222,14 +227,14 @@ class Oneself extends Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - (page * rowsPerPage));
 
         return (
-            <PageHeaderLayout>
+            <div className={classes.normal}>
                 <Grid
                     container
                     direction={'row'}
                     justify={'center'}
                     alignItems={'flex-start'}
                     spacing={8}>
-                    <Grid item xs={11} className={classes.normal}>
+                    <Grid item xs={11}>
                         <Paper className={classes.root}>
                             <Toolbar
                                 className={classNames(classes.root, {
@@ -388,11 +393,10 @@ class Oneself extends Component {
                                 title="容量"
                                 name="capacity"
                                 type="number"
-                                disabled={!this.state.editUser.capacity}
+                                disabled={!this.state.createMode && !this.state.editUser.capacity}
                                 value={this.state.createMode ? '' : this.state.editUser.capacity / (1024 ** 3)}
                                 validations="isInt"
                                 validationError="容量只能为正整数"
-                                required
                                 fullWidth
                                 endAdornment={<InputAdornment position="end">GB</InputAdornment>}/>
                         </DialogContent>
@@ -402,7 +406,7 @@ class Oneself extends Component {
                         </DialogActions>
                     </Formsy>
                 </Dialog>
-            </PageHeaderLayout>
+            </div>
         );
     }
 }
@@ -411,11 +415,14 @@ Oneself.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    users: state.user.users,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    alert,
-    changePage: url => replace(url),
+    fetchUsers,
+    addUser,
+    removeUsers,
 }, dispatch);
 
 export default connect(

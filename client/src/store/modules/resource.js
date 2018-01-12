@@ -3,7 +3,7 @@ import request from '../../utils/requester';
 export const GET_RESOURCES = 'resource/GET_RESOURCES';
 
 const initialState = {
-    resources: [],
+    resources: null,
 };
 
 export default (state = initialState, action) => {
@@ -28,7 +28,7 @@ export const fetchResources = (cb) => {
                 resources,
             },
         });
-        return cb();
+        return cb(resources);
     };
 };
 

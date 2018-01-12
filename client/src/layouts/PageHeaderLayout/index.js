@@ -36,7 +36,7 @@ class PageHeaderLayout extends Component {
     }
 
     componentWillMount() {
-        this.props.fetchOneself();
+        if (!this.props.id) this.props.fetchOneself();
     }
 
     handleToggleDrawer = drawerOpen => () => {
@@ -186,6 +186,7 @@ class PageHeaderLayout extends Component {
 }
 
 const mapStateToProps = state => ({
+    id: state.oneself.id,
     username: state.oneself.username,
     email: state.oneself.email,
     capacity: state.oneself.capacity,

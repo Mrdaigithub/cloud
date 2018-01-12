@@ -56,6 +56,11 @@ class UserController extends ApiController
         $user->email = $req['email'];
         $user->capacity = $req['capacity'];
         if (!$user->save()) return $this->failed(500001);
+        $user = User::find($user->id);
+        $user->used = $user
+            ->resource()
+            ->where('file', true)
+            ->sum('size');
         return $user;
     }
 
