@@ -18,7 +18,7 @@ const PrivateRoute = () => (
                                     classNames="fade"
                                     timeout={300}
                                     key={location.key}>
-                                    <Switch>
+                                    <Switch location={location}>
                                         <Route
                                             location={location}
                                             key={location.key}
