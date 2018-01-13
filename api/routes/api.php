@@ -23,6 +23,7 @@ Route::namespace('Api\V1')
             Route::resource('users', 'UserController');
             Route::get('secret/{id}', 'ResourceController@get_download_secret');
             Route::get('resources/{path}', 'ResourceController@show_with_path');
+            Route::patch('resources/{id}', 'ResourceController@trash_resource');
             Route::resource('resources', 'ResourceController');
         });
     });

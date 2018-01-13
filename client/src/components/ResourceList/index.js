@@ -56,9 +56,9 @@ class ResourceList extends Component {
     };
 
     render() {
-        const { classes, moveMode, onBack, resourceList, checked, toggleCheck } = this.props;
+        const { classes, onBack, resourceList, checked, toggleCheck } = this.props;
         return (
-            <div>
+            <div className={classes.root}>
                 <List className={classes.normal}>
                     {
                         onBack ?
@@ -69,32 +69,29 @@ class ResourceList extends Component {
                                 <ListItemText primary="返回上一级"/>
                             </ListItem>) : null
                     }
-                    {resourceList.map((resource) => {
-                        return moveMode && resource.file ?
-                            null : (
-                                <ListItem
-                                    button
-                                    key={resource.id}
-                                    onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
-                                    <ListItemIcon className={classes.resourceListIcon}>
-                                        {
-                                            resource.file ?
-                                                <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
-                                                <FolderIcon/>
-                                        }
-                                    </ListItemIcon>
-                                    <ListItemText primary={resource.resource_name}/>
-                                    <ListItemSecondaryAction>
-                                        {
-                                            checked ?
-                                                (<Checkbox
-                                                    onChange={toggleCheck(resource.id)}
-                                                    checked={checked.indexOf(resource.id) !== -1}/>) : null
-                                        }
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                            );
-                    })}
+                    {resourceList.map(resource => (
+                        <ListItem
+                            button
+                            key={resource.id}
+                            onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
+                            <ListItemIcon className={classes.resourceListIcon}>
+                                {
+                                    resource.file ?
+                                        <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                        <FolderIcon/>
+                                }
+                            </ListItemIcon>
+                            <ListItemText primary={resource.resource_name}/>
+                            <ListItemSecondaryAction>
+                                {
+                                    checked ?
+                                        (<Checkbox
+                                            onChange={toggleCheck(resource.id)}
+                                            checked={checked.indexOf(resource.id) !== -1}/>) : null
+                                }
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
                 </List>
                 <ResourceDescribe
                     open={this.state.ResourceDescribeOpen}

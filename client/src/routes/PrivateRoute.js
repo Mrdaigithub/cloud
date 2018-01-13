@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageHeaderLayout from '../layouts/PageHeaderLayout';
+import Trash from '../pages/Trash';
 import CloudDrive from '../pages/CloudDrive';
 import Groups from '../pages/Personnel/Groups';
 import NotFound from '../pages/NotFound';
@@ -24,6 +25,7 @@ const PrivateRoute = () => (
                                             key={location.key}
                                             path="/cloud-drive/0"
                                             component={CloudDrive}/>
+                                        <Route exact path="/trash" component={Trash}/>
                                         <Route exact path="/personnel/groups" component={Groups}/>
                                         <Route component={NotFound}/>
                                     </Switch>

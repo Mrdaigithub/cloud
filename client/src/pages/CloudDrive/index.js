@@ -109,9 +109,7 @@ class CloudDrive extends Component {
         const { routing } = this.props;
         if (!this.props.resources) {
             this.props.fetchResources((resources) => {
-                this.setState({
-                    resourceList: resources[url2path(routing.location.pathname)] || [],
-                });
+                this.getResourceList(url2path(routing.location.pathname));
             });
         } else {
             this.getResourceList(url2path(routing.location.pathname));
@@ -128,11 +126,11 @@ class CloudDrive extends Component {
     async getResourceList(path = '0', moveMode = false) {
         if (moveMode) {
             this.setState({
-                moveResourceList: this.props.resources[path] || [],
+                moveResourceList: this.props.resources[path] ? this.props.resources[path].filter(r => !r.file && !r.trashed) : [],
             });
         } else {
             this.setState({
-                resourceList: this.props.resources[path] || [],
+                resourceList: this.props.resources[path] ? this.props.resources[path].filter(r => !r.trashed) : [],
                 selected: [],
             });
         }
@@ -355,11 +353,11 @@ class CloudDrive extends Component {
         const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
         if (selected.length) {
-            const deleteList = selected.map(id => requester.delete(`resources/${id}`));
+            const deleteList = selected.map(id => requester.patch(`resources/${id}`));
             await Promise.all(deleteList);
-            resources[resourcePath] = resources[resourcePath].filter(resource => selected.indexOf(resource.id) === -1);
+            const resourceListWithPath = resources[resourcePath].map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
+            this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
             this.getResourceList(resourcePath);
-            this.props.fetchOneself();
         }
     }
 
@@ -427,7 +425,7 @@ class CloudDrive extends Component {
         const { classes } = this.props;
         const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
-            <div className={classes.normal}>
+            <div>
                 <ResourceList
                     resourceList={resourceList}
                     checked={this.state.selected}
@@ -537,7 +535,6 @@ class CloudDrive extends Component {
                     <div className={classes.resourceList}>
                         <ResourceList
                             resourceList={moveResourceList}
-                            moveMode
                             onBack={this.handleBackMovePath}
                             onClickResource={this.handleClickMoveDir}/>
                     </div>

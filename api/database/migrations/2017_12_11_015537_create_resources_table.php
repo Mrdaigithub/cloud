@@ -20,9 +20,11 @@ class CreateResourcesTable extends Migration
             $table->string('hash')->nullable();
             $table->unsignedBigInteger('size')->default(0)->nullable()->comment('byte');
             $table->boolean('file')->default(true);
+            $table->boolean('trashed')->default(false);
             $table->timestamps();
         });
         DB::statement("ALTER TABLE resources ADD path ltree NOT NULL DEFAULT '0'");
+        DB::statement("ALTER TABLE resources ADD trash_path ltree NOT NULL DEFAULT '0'");
         DB::statement("CREATE INDEX path_gist_idx ON resources USING gist(path)");
     }
 

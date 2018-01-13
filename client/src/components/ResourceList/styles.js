@@ -1,4 +1,9 @@
 const styles = theme => ({
+    root: {
+        height: '100vh',
+        padding: '60px 0 5px 0',
+        boxSizing: 'border-box',
+    },
     normal: {
         paddingTop: 0,
     },

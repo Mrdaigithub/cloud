@@ -195,6 +195,41 @@ class ResourceController extends ApiController
     }
 
     /**
+     * trash resource
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function trash_resource(Request $request, $id)
+    {
+        $user = $request->user();
+        $resource = Resource::find($id);
+        $base_path = $this->deal_path($resource->path);
+        $path = $this->deal_path($resource->path . ".$id");
+        if ($resource->file) {
+            $resource->trashed = true;
+            if (!$resource->save()) return $this->failed(500001);
+            return $resource;
+        }
+        $trash_id_list = DB::select("SELECT id FROM resources
+                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          WHERE user_id=? AND path <@ ?
+                          ORDER BY file ,created_at ASC;",
+            [$user->id, $path]);
+        $trash_id_list = array_map(function ($item) {
+            return $item->id;
+        }, $trash_id_list);
+        array_push($trash_id_list, $id);
+        foreach ($trash_id_list as $trash_id) {
+            $resource = Resource::find($trash_id);
+            $resource->trashed = true;
+            $resource->trash_path = preg_replace("/($base_path)/", '0', $resource->path);
+            if (!$resource->save()) return $this->failed(500001);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
