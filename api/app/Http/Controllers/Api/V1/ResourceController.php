@@ -192,6 +192,7 @@ class ResourceController extends ApiController
             $resource->path = preg_replace("/($base_path)/", $new_path, $resource->path);
             if (!$resource->save()) return $this->failed(500001);
         }
+        return 0;
     }
 
     /**
@@ -227,6 +228,16 @@ class ResourceController extends ApiController
             $resource->trash_path = preg_replace("/($base_path)/", '0', $resource->path);
             if (!$resource->save()) return $this->failed(500001);
         }
+        return 0;
+    }
+
+    public function restore(Request $request, $id)
+    {
+        $resource = Resource::find($id);
+        $resource->trashed = false;
+        $resource->trash_path = '0';
+        if (!$resource->save()) return $this->failed(500001);
+        return $resource;
     }
 
     /**

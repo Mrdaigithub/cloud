@@ -24,6 +24,7 @@ class Trash extends Component {
             selected: [],
         };
         this.handleRemoveResource = this.handleRemoveResource.bind(this);
+        this.handleRestoreResource = this.handleRestoreResource.bind(this);
     }
 
     async componentWillMount() {
@@ -72,6 +73,17 @@ class Trash extends Component {
         });
     };
 
+    /**
+     * 恢复资源
+     * @returns {Promise.<void>}
+     */
+    async handleRestoreResource() {
+        const { selected } = this.state;
+        for (const id of selected) {
+            await requester.patch(`resources/restore/${id}`);
+        }
+        this.props.fetchResources(() => this.getTrashList());
+    }
 
     /**
      * 彻底删除资源
@@ -80,7 +92,7 @@ class Trash extends Component {
     async handleRemoveResource() {
         const { selected } = this.state;
         if (selected.length) {
-            for (const id of selected){
+            for (const id of selected) {
                 await requester.delete(`resources/${id}`);
             }
             this.props.fetchResources(() => {
@@ -104,7 +116,7 @@ class Trash extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-move">
                             <IconButton
-                                onClick={this.handleOpenMoveDirDiglog}
+                                onClick={this.handleRestoreResource}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
