@@ -51,6 +51,7 @@ class Trash extends Component {
         }
         this.setState({
             trashList: rList.filter(r => r.trashed && r.trash_path === '0') || [],
+            selected: [],
         });
     }
 
@@ -79,6 +80,7 @@ class Trash extends Component {
      */
     async handleRestoreResource() {
         const { selected } = this.state;
+        console.log(selected);
         for (const id of selected) {
             await requester.patch(`resources/restore/${id}`);
         }
