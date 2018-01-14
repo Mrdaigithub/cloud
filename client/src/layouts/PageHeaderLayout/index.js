@@ -151,7 +151,9 @@ class PageHeaderLayout extends Component {
                                     <Grid item xs={4}>
                                         <Typography type="title" color="inherit">
                                             <IconButton className={classes.topbarBtn}>
-                                                <SearchIcon style={{ width: 30, height: 30 }}/>
+                                                <Link className={classes.searchLink} to="/search">
+                                                    <SearchIcon style={{ width: 30, height: 30 }}/>
+                                                </Link>
                                             </IconButton>
                                         </Typography>
                                     </Grid>

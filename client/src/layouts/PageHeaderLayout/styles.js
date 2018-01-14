@@ -2,6 +2,10 @@ const styles = theme => ({
     normal: {
         height: '100vh',
     },
+    searchLink: {
+        display: 'inherit',
+        color: 'inherit',
+    },
     drawer: {
         width: '250px',
     },
