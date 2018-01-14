@@ -214,9 +214,9 @@ class ResourceController extends ApiController
         }
         $trash_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-                          WHERE user_id=? AND path <@ ?
+                          WHERE user_id=? AND path <@ ? AND trashed=?
                           ORDER BY file ,created_at ASC;",
-            [$user->id, $path]);
+            [$user->id, $path, false]);
         $trash_id_list = array_map(function ($item) {
             return $item->id;
         }, $trash_id_list);
