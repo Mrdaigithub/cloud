@@ -15,20 +15,6 @@ import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
 
 
-/**
- * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
- *
- * @param url
- * @returns {string}
- */
-const url2path = (url) => {
-    return url.split('/')
-        .filter(item => !!item && item !== 'cloud-drive')
-        .map(item => item.trim()
-            .replace(/(^\.+|\.+$)/, ''))
-        .join('.');
-};
-
 class Trash extends Component {
     constructor(props) {
         super(props);
@@ -92,17 +78,15 @@ class Trash extends Component {
      * @returns {Promise<void>}
      */
     async handleRemoveResource() {
-        const { resources } = this.props;
-        const { selected, trashList } = this.state;
+        const { selected } = this.state;
         if (selected.length) {
-            // const deleteList = selected.map(id => requester.delete(`resources/${id}`));
-            // await Promise.all(deleteList);
-            console.log(trashList);
-            selected.forEach(i => {
-                this.props.changeResourceListWithPath(i.path, resources[i.path].filter(resource => selected.indexOf(resource.id) === -1));
+            for (const id of selected){
+                await requester.delete(`resources/${id}`);
+            }
+            this.props.fetchResources(() => {
+                this.getTrashList();
+                this.props.fetchOneself();
             });
-            this.getTrashList();
-            this.props.fetchOneself();
         }
     }
 

@@ -234,16 +234,31 @@ class ResourceController extends ApiController
      *
      * @param Request $request
      * @param $id
+     * @return mixed
      */
     public function destroy(Request $request, $id)
     {
         $user = $request->user();
+        $base_path = $this->deal_path(Resource::find($id)->path);
         $path = $this->deal_path(Resource::find($id)->path) . '.' . $id;
+        $trash_path = $this->deal_path(Resource::find($id)->trash_path) . '.' . $id;
         $remove_id_list = DB::select("SELECT id FROM resources
+                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          WHERE user_id=? AND trash_path <@ ? AND trashed=?
+                          ORDER BY file ,created_at ASC;",
+            [$user->id, $trash_path, true]);
+        $old_child_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN user_resource ON resources.id = user_resource.resource_id
                           WHERE user_id=? AND path <@ ?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $path]);
+        if (count($old_child_id_list)) {
+            foreach ($old_child_id_list as $child_id) {
+                $resource = Resource::find($child_id->id);
+                $resource->path = preg_replace("/($path)/", $base_path, $resource->path);
+                if (!$resource->save()) return $this->failed(500001);
+            }
+        }
         $request->user()->resource()->detach($id);
         Resource::destroy($id);
         if (count($remove_id_list)) {
