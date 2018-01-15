@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
 import Undo from 'material-ui-icons/Undo';
+import Divider from 'material-ui/Divider';
 import ResourceDescribe from './ResourceDescribe';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
@@ -56,41 +56,53 @@ class ResourceList extends Component {
     };
 
     render() {
-        const { classes, onBack, resourceList, checked, toggleCheck } = this.props;
+        const { classes, onBack, resourceList, checked, toggleCheck, ItemIcon, onClickAction } = this.props;
         return (
             <div className={classes.root}>
                 <List className={classes.normal}>
                     {
                         onBack ?
-                            (<ListItem
-                                button
-                                onClick={onBack()}>
-                                <ListItemIcon className={classes.resourceListIcon}><Undo/></ListItemIcon>
-                                <ListItemText primary="返回上一级"/>
-                            </ListItem>) : null
+                            (
+                                <div>
+                                    <ListItem
+                                        button
+                                        onClick={onBack()}>
+                                        <ListItemIcon className={classes.resourceListIcon}><Undo/></ListItemIcon>
+                                        <ListItemText primary="返回上一级"/>
+                                    </ListItem>
+                                    <Divider/>
+                                </div>
+                            ) : null
                     }
                     {resourceList.map(resource => (
-                        <ListItem
-                            button
-                            key={resource.id}
-                            onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
-                            <ListItemIcon className={classes.resourceListIcon}>
-                                {
-                                    resource.file ?
-                                        <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
-                                        <FolderIcon/>
-                                }
-                            </ListItemIcon>
-                            <ListItemText primary={resource.resource_name}/>
-                            <ListItemSecondaryAction>
-                                {
-                                    checked ?
-                                        (<Checkbox
-                                            onChange={toggleCheck(resource.id)}
-                                            checked={checked.indexOf(resource.id) !== -1}/>) : null
-                                }
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                        <div key={resource.id}>
+                            <ListItem
+                                button
+                                className={classes.resourceItem}
+                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
+                                <ListItemIcon className={classes.resourceListIcon}>
+                                    {
+                                        resource.file ?
+                                            <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                            <FolderIcon/>
+                                    }
+                                </ListItemIcon>
+                                <ListItemText primary={resource.resource_name}/>
+                                <ListItemSecondaryAction>
+                                    {
+                                        (checked && ItemIcon && toggleCheck) ?
+                                            (<ItemIcon
+                                                onChange={toggleCheck(resource.id)}
+                                                checked={checked.indexOf(resource.id) !== -1}/>) : null
+                                    }
+                                    {
+                                        (ItemIcon && onClickAction) ?
+                                            (<ItemIcon onClick={onClickAction(resource.id)}/>) : null
+                                    }
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider/>
+                        </div>
                     ))}
                 </List>
                 <ResourceDescribe

@@ -11,6 +11,7 @@ import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import Checkbox from 'material-ui/Checkbox';
 import CloseIcon from 'material-ui-icons/Close';
 import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
 import CompareArrows from 'material-ui-icons/CompareArrows';
@@ -353,7 +354,7 @@ class CloudDrive extends Component {
         const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
         if (selected.length) {
-            const deleteList = selected.map(id => requester.patch(`resources/${id}`));
+            const deleteList = selected.map(id => requester.patch(`resources/trash/${id}`));
             await Promise.all(deleteList);
             const resourceListWithPath = resources[resourcePath].map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
             this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
@@ -428,6 +429,7 @@ class CloudDrive extends Component {
             <div>
                 <ResourceList
                     resourceList={resourceList}
+                    ItemIcon={Checkbox}
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
                     onDownload={this.handleDownload}

@@ -13,6 +13,7 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
+import Checkbox from 'material-ui/Checkbox/index';
 
 
 class Trash extends Component {
@@ -111,6 +112,7 @@ class Trash extends Component {
             <div>
                 <ResourceList
                     resourceList={trashList}
+                    ItemIcon={Checkbox}
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
                     toggleCheck={this.handleCheckResource}/>

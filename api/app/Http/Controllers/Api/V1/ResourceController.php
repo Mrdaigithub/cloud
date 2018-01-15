@@ -124,6 +124,17 @@ class ResourceController extends ApiController
             ->groupBy('path');
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+        return DB::select("SELECT id, resource_name, file, path
+              FROM resources
+              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              WHERE user_id=? AND trashed=? AND resource_name LIKE ?
+              ORDER BY file DESC , resource_name",
+            [$request->user()->id, false, "%$query%"]);
+    }
+
     public function get_download_secret(Request $request, $id)
     {
         if (!count($request->user()->resource->find($id))) {
@@ -234,6 +245,11 @@ class ResourceController extends ApiController
     public function restore(Request $request, $id)
     {
         $resource = Resource::find($id);
+        $restore_id_list = DB::update("UPDATE resources SET trashed=?, trash_path=?
+                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          WHERE user_id=? AND path <@ ?
+                          ORDER BY file ,created_at ASC;",
+            [false, '0', $request->user()->id, $resource->trash_path . '.' . $id]);
         $resource->trashed = false;
         $resource->trash_path = '0';
         if (!$resource->save()) return $this->failed(500001);

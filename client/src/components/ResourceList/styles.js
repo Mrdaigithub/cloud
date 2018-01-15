@@ -1,11 +1,7 @@
 const styles = theme => ({
-    root: {
-        height: '100vh',
-        padding: '60px 0 5px 0',
-        boxSizing: 'border-box',
-    },
+    root: {},
     normal: {
-        paddingTop: 0,
+        paddingTop: '5px',
     },
     textCenter: {
         textAlign: 'center',
@@ -15,6 +11,9 @@ const styles = theme => ({
     },
     container: {
         height: '90vh',
+    },
+    resourceItem: {
+        backgroundColor: '#fff',
     },
     resourceName: {
         fontSize: '21px',
