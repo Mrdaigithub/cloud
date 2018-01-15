@@ -244,16 +244,24 @@ class ResourceController extends ApiController
 
     public function restore(Request $request, $id)
     {
+        $user = $request->user();
         $resource = Resource::find($id);
-        $restore_id_list = DB::update("UPDATE resources SET trashed=?, trash_path=?
+        $restore_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN user_resource ON resources.id = user_resource.resource_id
-                          WHERE user_id=? AND path <@ ?
+                          WHERE user_id=? AND trash_path <@ ? AND trashed=?
                           ORDER BY file ,created_at ASC;",
-            [false, '0', $request->user()->id, $resource->trash_path . '.' . $id]);
-        $resource->trashed = false;
-        $resource->trash_path = '0';
-        if (!$resource->save()) return $this->failed(500001);
-        return $resource;
+            [$user->id, $resource->trash_path . ".$id", true]);
+        $restore_id_list = array_map(function ($item) {
+            return $item->id;
+        }, $restore_id_list);
+        array_push($restore_id_list, $id);
+        foreach ($restore_id_list as $restore_id) {
+            $resource = Resource::find($restore_id);
+            $resource->trashed = false;
+            $resource->trash_path = '0';
+            if (!$resource->save()) return $this->failed(500001);
+        }
+        return 0;
     }
 
     /**

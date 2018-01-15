@@ -38,6 +38,8 @@ const styles = theme => ({
     },
     content: {
         paddingTop: '60px',
+        boxSizing: 'border-box',
+        height: '100vh',
     },
 });
 

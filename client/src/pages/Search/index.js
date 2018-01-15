@@ -15,6 +15,19 @@ import Transition from '../../components/Transition';
 import styles from './styles';
 import requester from '../../utils/requester';
 
+/**
+ * 0.1.2.3 => 0/1/2/3
+ *
+ * @param path
+ * @returns {string}
+ */
+const path2url = (path) => {
+    console.log(path);
+    return path.split('.')
+        .map(item => item.trim())
+        .filter(item => item)
+        .join('/');
+};
 
 class Search extends Component {
     constructor(props) {
@@ -32,15 +45,12 @@ class Search extends Component {
         });
     };
 
-    handleClickResource = () => {
-        console.log(1);
+    handleClickResource = (id, file, path) => {
+        if (file) return;
+        this.props.changePage(`/cloud-drive/${path2url(path)}`);
     };
 
-    handleDownload = () => {
-        console.log('download');
-    };
-
-    handleShowResourceInfo = () => {
+    handleShowResourceInfo = () => (id, name, path) => {
         console.log('info');
     };
 
@@ -50,6 +60,25 @@ class Search extends Component {
         if (!query) return;
         const result = await requester.get(`resources/search?q=${query}`);
         this.setState({ result });
+    }
+
+    /**
+     * 下载资源
+     *
+     * @param resourceID
+     * @returns {Promise.<void>}
+     */
+    async handleDownload(resourceID) {
+        const downloadUrl = await requester.get(`secret/${resourceID}`);
+        const downloadDom = document.createElement('a');
+        downloadDom.id = 'downloadUrl';
+        downloadDom.download = true;
+        downloadDom.href = downloadUrl;
+        document.querySelector('body')
+            .appendChild(downloadDom);
+        downloadDom.click();
+        document.querySelector('body')
+            .removeChild(downloadDom);
     }
 
     render() {

@@ -426,14 +426,7 @@ class CloudDrive extends Component {
         const { classes } = this.props;
         const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
-            <div>
-                <ResourceList
-                    resourceList={resourceList}
-                    ItemIcon={Checkbox}
-                    checked={this.state.selected}
-                    onClickResource={this.handleClickResource}
-                    onDownload={this.handleDownload}
-                    toggleCheck={this.handleCheckResource}/>
+            <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
                 <SpeedDial>
                     <SpeedDialItem>
                         <input
@@ -488,6 +481,13 @@ class CloudDrive extends Component {
                         </label>
                     </SpeedDialItem>
                 </SpeedDial>
+                <ResourceList
+                    resourceList={resourceList}
+                    ItemIcon={Checkbox}
+                    checked={this.state.selected}
+                    onClickResource={this.handleClickResource}
+                    onDownload={this.handleDownload}
+                    toggleCheck={this.handleCheckResource}/>
                 <FileUploader
                     uploadState={uploadState}
                     uploadValue={uploadValue}

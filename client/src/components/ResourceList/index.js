@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import Divider from 'material-ui/Divider';
 import ResourceDescribe from './ResourceDescribe';
@@ -29,7 +30,7 @@ class ResourceList extends Component {
         };
     }
 
-    handleClickResource = (id, name, file) => () => {
+    handleClickResource = (id, name, file, path) => () => {
         if (file) {
             this.setState({
                 ResourceDescribeOpen: true,
@@ -38,7 +39,7 @@ class ResourceList extends Component {
             });
         }
         if (this.props.onClickResource) {
-            this.props.onClickResource(id, file);
+            this.props.onClickResource(id, file, path);
         }
     };
 
@@ -79,7 +80,7 @@ class ResourceList extends Component {
                             <ListItem
                                 button
                                 className={classes.resourceItem}
-                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file)}>
+                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file, resource.path)}>
                                 <ListItemIcon className={classes.resourceListIcon}>
                                     {
                                         resource.file ?
@@ -97,7 +98,11 @@ class ResourceList extends Component {
                                     }
                                     {
                                         (ItemIcon && onClickAction) ?
-                                            (<ItemIcon onClick={onClickAction(resource.id)}/>) : null
+                                            (
+                                                <IconButton>
+                                                    <ItemIcon onClick={onClickAction(resource.id)}/>
+                                                </IconButton>
+                                            ) : null
                                     }
                                 </ListItemSecondaryAction>
                             </ListItem>
