@@ -32,34 +32,23 @@ class AuthController extends ApiController
     /**
      * 使用密码方式登陆
      *
-     * @param Request $request
+     * @param LoginRequest $request
      * @return mixed
      */
     function passwordLogin(LoginRequest $request)
     {
-        $req = $request->all();
-        if (Validator::make($req,
-            [
-                'username' => 'required',
-                'password' => 'required'
-            ])->fails()) return $this->failed(400000);
-        if (Validator::make($req,
-            [
-                'username' => 'string',
-                'password' => 'string'
-            ])->fails()) return $this->failed(400001);
-        if (Validator::make($req, ['username' => 'exists:users,username'])->fails()) return $this->failed(400003);
-
-        $user = User::where('username', $req['username'])->first();
-        if (!Hash::check($req['password'], $user->password)) return $this->failed(401000, 401);
+        $username = $request->get('username');
+        $password = $request->get('password');
+        $user = User::where('username', $username)->first();
+        if (!Hash::check($password, $user->password)) return $this->failed(['password' => ['400006']]);
         return $this->fetch_access_token(
             'http://api.mrdaisite.com/oauth/token',
-            "grant_type=" . env('grant_type') . "&client_id=" . env('client_id') . "&client_secret=" . env('client_secret') . "&username=" . $user->email . "&password=" . $req['password'] . "&scope="
+            "grant_type=" . env('grant_type') . "&client_id=" . env('client_id') . "&client_secret=" . env('client_secret') . "&username=" . $user->email . "&password=" . $password . "&scope="
         );
     }
 
     function codeLogin(LoginRequest $request)
     {
-        return $request->all();
+        //
     }
 }

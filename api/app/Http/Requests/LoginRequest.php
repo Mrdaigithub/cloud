@@ -13,7 +13,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,23 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'username' => 'required|min:4|max:10|string|exists:users,username',
+            'password' => 'required|min:4|max:15|string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'username.required' => '400000',
+            'username.min' => '400001',
+            'username.max' => '400002',
+            'username.string' => '400003',
+            'username.exists' => '400005',
+            'password.required'  => '400000',
+            'password.min'  => '400001',
+            'password.max'  => '400002',
+            'password.string'  => '400003',
         ];
     }
 }

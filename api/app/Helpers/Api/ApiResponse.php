@@ -57,12 +57,12 @@ trait ApiResponse
             $this->setStatusCode($code);
         }
 
-        $status = [
-            'status' => $status,
-            'code' => $this->statusCode
-        ];
+//        $status = [
+//            'status' => $status,
+//            'code' => $this->statusCode
+//        ];
 
-        $data = array_merge($status, $data);
+        $data = array_merge($data);
         return $this->respond($data);
 
     }
@@ -77,7 +77,7 @@ trait ApiResponse
     {
 
         return $this->status($status, [
-            'message' => $message
+            'errors' => $message
         ], $code);
     }
 
@@ -91,7 +91,7 @@ trait ApiResponse
     {
 
         return $this->status($status, [
-            'message' => $message
+            'errors' => $message
         ]);
     }
 
