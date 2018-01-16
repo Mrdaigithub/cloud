@@ -27,27 +27,27 @@ const requester = axios.create({
 requester.interceptors.request.use(
     (config) => {
         const configs = config;
-        toggleLoading()(store.dispatch);
+        toggleLoading(true)(store.dispatch);
         if (sessionStorage.accessToken) {
             configs.headers.common.Authorization = `Bearer ${sessionStorage.accessToken}`;
         }
         return configs;
     },
     (err) => {
-        toggleLoading()(store.dispatch);
+        toggleLoading(false)(store.dispatch);
         alert('本地请求超时', 1500)(store.dispatch);
         return Promise.reject(err);
     });
 
 requester.interceptors.response.use(
     (response) => {
-        toggleLoading()(store.dispatch);
+        toggleLoading(false)(store.dispatch);
         return response.data;
     },
     (error) => {
         toggleLoading()(store.dispatch);
         if (!error.response) {
-            toggleLoading()(store.dispatch);
+            toggleLoading(false)(store.dispatch);
             alert('本地请求超时', 1500)(store.dispatch);
             return Promise.reject(error);
         }

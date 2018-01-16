@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
         case TOGGLE_LOADING:
             return {
                 ...state,
-                loading: !state.loading,
+                loading: action.payload.loading,
             };
         case TOGGLE_MSG:
             return {
@@ -31,10 +31,13 @@ export default (state = initialState, action) => {
     }
 };
 
-export const toggleLoading = () => {
+export const toggleLoading = (loading) => {
     return (dispatch) => {
         return dispatch({
             type: TOGGLE_LOADING,
+            payload: {
+                loading,
+            },
         });
     };
 };
