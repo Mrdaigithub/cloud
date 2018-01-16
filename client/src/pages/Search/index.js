@@ -18,7 +18,6 @@ import Info from 'material-ui-icons/Info';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceList from '../../components/ResourceList';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon/index';
-import Transition from '../../components/Transition';
 import styles from './styles';
 import requester from '../../utils/requester';
 
@@ -130,7 +129,7 @@ class Search extends Component {
                 <Dialog
                     open
                     fullScreen
-                    transition={Transition} className={classes.searchList}>
+                    className={classes.searchList}>
                     <FormControl>
                         <Input
                             id="query"

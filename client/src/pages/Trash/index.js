@@ -109,7 +109,7 @@ class Trash extends Component {
         const { classes } = this.props;
         const { trashList, selected } = this.state;
         return (
-            <div>
+            <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
                 <ResourceList
                     resourceList={trashList}
                     ItemIcon={Checkbox}
