@@ -127,7 +127,7 @@ class ResourceController extends ApiController
     public function search(Request $request)
     {
         $query = $request->input('q');
-        return DB::select("SELECT id, resource_name, file, path
+        return DB::select("SELECT id, resource_name, file, path, created_at, updated_at
               FROM resources
               LEFT JOIN user_resource ON resources.id = user_resource.resource_id
               WHERE user_id=? AND trashed=? AND resource_name LIKE ?

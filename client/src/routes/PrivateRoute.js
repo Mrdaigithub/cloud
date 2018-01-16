@@ -22,6 +22,7 @@ const PrivateRoute = () => (
                                         timeout={300}
                                         key={location.key}>
                                         <Switch location={location}>
+                                            <Route exact path="/search" component={Search}/>
                                             <Route
                                                 location={location}
                                                 key={location.key}
@@ -33,7 +34,6 @@ const PrivateRoute = () => (
                                         </Switch>
                                     </CSSTransition>
                                 </TransitionGroup>
-                                <Route exact path="/search" component={Search}/>
                             </div>
                         ) :
                         (<Redirect to="/login"/>)

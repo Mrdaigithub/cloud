@@ -30,6 +30,16 @@ class ResourceList extends Component {
         };
     }
 
+    onClickAction = ({ id, resource_name, path, created_at, updated_at }) => () => {
+        this.props.onClickAction({
+            id,
+            name: resource_name,
+            path,
+            createdAt: created_at,
+            updatedAt: updated_at,
+        });
+    };
+
     handleClickResource = (id, name, file, path) => () => {
         if (file) {
             this.setState({
@@ -100,7 +110,8 @@ class ResourceList extends Component {
                                         (ItemIcon && onClickAction) ?
                                             (
                                                 <IconButton>
-                                                    <ItemIcon onClick={onClickAction(resource.id)}/>
+                                                    <ItemIcon
+                                                        onClick={this.onClickAction(resource)}/>
                                                 </IconButton>
                                             ) : null
                                     }

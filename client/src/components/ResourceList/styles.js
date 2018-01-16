@@ -14,6 +14,9 @@ const styles = theme => ({
     },
     resourceItem: {
         backgroundColor: '#fff',
+        '&:hover': {
+            backgroundColor: '#eee',
+        },
     },
     resourceName: {
         fontSize: '21px',
