@@ -18,6 +18,7 @@ Route::namespace('Api\V1')
     ->prefix('v1')
     ->group(function () {
         Route::post('/login/password', 'AuthController@passwordLogin');
+        Route::post('/login/code', 'AuthController@codeLogin');
         Route::get('resources/download/{secret}', 'ResourceController@download');
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
             Route::resource('users', 'UserController');

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
-use Validator;
 use App\Models\User;
 
 class AuthController extends ApiController
@@ -34,7 +35,7 @@ class AuthController extends ApiController
      * @param Request $request
      * @return mixed
      */
-    function passwordLogin(Request $request)
+    function passwordLogin(LoginRequest $request)
     {
         $req = $request->all();
         if (Validator::make($req,
@@ -57,8 +58,8 @@ class AuthController extends ApiController
         );
     }
 
-    function codeLogin(Request $request)
+    function codeLogin(LoginRequest $request)
     {
-
+        return $request->all();
     }
 }
