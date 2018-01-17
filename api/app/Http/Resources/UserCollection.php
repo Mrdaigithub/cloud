@@ -17,7 +17,7 @@ class UserCollection extends ResourceCollection
     {
         return array_map(function ($item) {
             $item['used'] = User::find($item['id'])
-                ->resource()
+                ->resources()
                 ->where('file', true)
                 ->sum('size');
             return $item;

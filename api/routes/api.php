@@ -21,12 +21,12 @@ Route::namespace('Api\V1')
         Route::post('/login/code', 'AuthController@codeLogin');
         Route::get('resources/download/{secret}', 'ResourceController@download');
         Route::middleware(['api.auth', 'auth:api'])->group(function () {
-            Route::resource('users', 'UserController');
             Route::get('secret/{id}', 'ResourceController@get_download_secret');
             Route::get('resources/search', 'ResourceController@search');
             Route::get('resources/{path}', 'ResourceController@show_with_path');
             Route::patch('resources/trash/{id}', 'ResourceController@trash_resource');
             Route::patch('resources/restore/{id}', 'ResourceController@restore');
             Route::resource('resources', 'ResourceController');
+            Route::resource('users', 'UserController');
         });
     });

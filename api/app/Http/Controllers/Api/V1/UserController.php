@@ -4,127 +4,86 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
-use Validator;
-use App\Models\User;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Models\Resource;
 
 
 class UserController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Display a users listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return UserCollection
      */
-    public function index(Request $request)
+    public function index()
     {
         return new UserCollection(User::orderBy('id')->get());
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\StoreUserRequest $request
+     * @return UserResource|mixed
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreUserRequest $request)
     {
-        $req = $request->all();
-        if (Validator::make($req,
-            [
-                'username' => 'required',
-                'password' => 'required',
-                'email' => 'required',
-                'capacity' => 'required'
-            ])->fails()) return $this->failed(400000);
-        if (Validator::make($req,
-            [
-                'username' => 'string',
-                'password' => 'string',
-                'capacity' => 'numeric'
-            ])->fails()) return $this->failed(400001);
-        if (Validator::make($req,
-            [
-                'email' => 'email',
-                'capacity' => 'between:0,1099511627776'
-            ])->fails()) return $this->failed(400002);
-
         $user = new User();
-        $user->username = $req['username'];
-        $user->password = bcrypt($req['password']);
-        $user->email = $req['email'];
-        $user->capacity = $req['capacity'];
-        if (!$user->save()) return $this->failed(500001);
-        $user = User::find($user->id);
-        $user->used = $user
-            ->resource()
-            ->where('file', true)
-            ->sum('size');
-        return $user;
+        $user->username = $request->get('username');
+        $user->password = bcrypt($request->get('password'));
+        $user->email = $request->get('email');
+        $request->has('capacity') ? $user->capacity = $request->get('capacity') : null;
+        if (!$user->save()) return $this->failed(500000, 500);
+        return new UserResource(User::find($user->id));
     }
 
     /**
-     * Display the specified resource.
+     * Display the user.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param $id
+     * @return UserResource
      */
     public function show(Request $request, $id)
     {
         if ($id == 0) {
             return new UserResource($request->user());
         }
+        return new UserResource(Resource::find($id));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the user in storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\UpdateUserRequest $request
+     * @param $id
+     * @return UserResource|mixed
      */
-    public function edit($id)
+    public function update(\App\Http\Requests\UpdateUserRequest $request, $id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $req = $request->all();
-        if (Validator::make($req,
-            [
-                'username' => 'string',
-                'capacity' => 'numeric'
-            ])->fails()) return $this->failed(400001);
-        if (Validator::make($req,
-            [
-                'email' => 'email',
-                'capacity' => 'between:0,1099511627776'
-            ])->fails()) return $this->failed(400002);
         $user = User::find($id);
-        $user->username = $req['username'];
-        if (key_exists('password', $req) && $req['password']) $user->password = bcrypt($req['password']);
-        $user->email = $req['email'];
-        $user->capacity = $req['capacity'];
-        if (!$user->save()) return $this->failed(500001);
-        return $user;
+        $request->has('username') ? $user->username = $request->get('username') : null;
+        $request->has('password') ? $user->password = bcrypt($request->get('password')) : null;
+        $request->has('email') ? $user->email = $request->get('email') : null;
+        $request->has('capacity') ? $user->capacity = $request->get('capacity') : null;
+        if (!$user->save()) return $this->failed(500000, 500);
+        return new UserResource(User::find($id));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the user with resources from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function destroy($id)
     {
-        return User::destroy($id);
+        $user = User::find($id);
+        $user->resources()->each(function ($item, $key) {
+            Resource::destroy($item->id);
+        });
+        $user->resources()->detach();
+        User::destroy($id);
     }
 }

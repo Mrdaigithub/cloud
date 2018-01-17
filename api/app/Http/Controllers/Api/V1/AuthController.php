@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\LoginRequest;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
@@ -40,7 +38,7 @@ class AuthController extends ApiController
         $username = $request->get('username');
         $password = $request->get('password');
         $user = User::where('username', $username)->first();
-        if (!Hash::check($password, $user->password)) return $this->failed(['password' => ['400006']]);
+        if (!Hash::check($password, $user->password)) return $this->failed('401000', 401);
         return $this->fetch_access_token(
             'http://api.mrdaisite.com/oauth/token',
             "grant_type=" . env('grant_type') . "&client_id=" . env('client_id') . "&client_secret=" . env('client_secret') . "&username=" . $user->email . "&password=" . $password . "&scope="

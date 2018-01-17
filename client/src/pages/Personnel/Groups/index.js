@@ -203,7 +203,7 @@ class Oneself extends Component {
                 })
             ));
         } else {
-            const editedUser = await requester.put(`/users/${this.state.editUser.id}`, qs.stringify({
+            const editedUser = await requester.patch(`/users/${this.state.editUser.id}`, qs.stringify({
                 username,
                 password,
                 email,

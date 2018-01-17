@@ -81,7 +81,7 @@ class ResourceController extends ApiController
         }
         if (DB::select("SELECT count(id)
               FROM resources
-              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              LEFT JOIN resource_user ON resources.id = resource_user.resource_id
               WHERE user_id=? AND path = ? AND resource_name=?",
                 [$user->id, $path, $resource_name])[0]->count != 0) {
             return $this->failed(409000);
@@ -129,7 +129,7 @@ class ResourceController extends ApiController
         $query = $request->input('q');
         return DB::select("SELECT id, resource_name, file, path, created_at, updated_at
               FROM resources
-              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              LEFT JOIN resource_user ON resources.id = resource_user.resource_id
               WHERE user_id=? AND trashed=? AND resource_name LIKE ?
               ORDER BY file DESC , resource_name",
             [$request->user()->id, false, "%$query%"]);
@@ -190,7 +190,7 @@ class ResourceController extends ApiController
             return $this->failed(500000);
         }
         $move_id_list = DB::select("SELECT id FROM resources
-                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND path <@ ?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $old_path]);
@@ -225,7 +225,7 @@ class ResourceController extends ApiController
             return $resource;
         }
         $trash_id_list = DB::select("SELECT id FROM resources
-                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND path <@ ? AND trashed=?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $path, false]);
@@ -247,7 +247,7 @@ class ResourceController extends ApiController
         $user = $request->user();
         $resource = Resource::find($id);
         $restore_id_list = DB::select("SELECT id FROM resources
-                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND trash_path <@ ? AND trashed=?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $resource->trash_path . ".$id", true]);
@@ -278,12 +278,12 @@ class ResourceController extends ApiController
         $path = $this->deal_path(Resource::find($id)->path) . '.' . $id;
         $trash_path = $this->deal_path(Resource::find($id)->trash_path) . '.' . $id;
         $remove_id_list = DB::select("SELECT id FROM resources
-                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND trash_path <@ ? AND trashed=?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $trash_path, true]);
         $old_child_id_list = DB::select("SELECT id FROM resources
-                          LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+                          LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND path <@ ?
                           ORDER BY file ,created_at ASC;",
             [$user->id, $path]);

@@ -41,7 +41,7 @@ class ResourceExists
         $resource_name = $request->only('file_name')['file_name'];
         if (DB::select("SELECT count(id)
               FROM resources
-              LEFT JOIN user_resource ON resources.id = user_resource.resource_id
+              LEFT JOIN resource_user ON resources.id = resource_user.resource_id
               WHERE user_id=? AND path ~ ? AND resource_name=?",
                 [$uid, $path, $resource_name])[0]->count != 0) {
             return $this->failed(409000);

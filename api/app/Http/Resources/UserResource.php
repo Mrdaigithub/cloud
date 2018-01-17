@@ -22,7 +22,7 @@ class UserResource extends Resource
             'is_admin' => $this->is_admin,
             'capacity' => $this->capacity,
             'used' => $item['used'] = User::find($this->id)
-                ->resource()
+                ->resources()
                 ->where('file', true)
                 ->sum('size'),
             'created_at' => $this->created_at,

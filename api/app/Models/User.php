@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
+    protected $table = 'users';
+
     protected $fillable = [
         'username', 'email'
     ];
@@ -17,13 +19,8 @@ class User extends Authenticatable
         'password'
     ];
 
-    public function resource()
+    public function resources()
     {
-        return $this->belongsToMany(
-            'App\Models\Resource',
-            'user_resource',
-            'user_id',
-            'resource_id'
-        );
+        return $this->belongsToMany('App\Models\Resource');
     }
 }

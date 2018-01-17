@@ -57,12 +57,11 @@ trait ApiResponse
             $this->setStatusCode($code);
         }
 
-//        $status = [
-//            'status' => $status,
-//            'code' => $this->statusCode
-//        ];
+        $message = [
+            'message' => Foundationresponse::$statusTexts[$this->statusCode]
+        ];
 
-        $data = array_merge($data);
+        $data = array_merge($message, $data);
         return $this->respond($data);
 
     }
