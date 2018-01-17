@@ -25,7 +25,6 @@ class StoreResourceRequest extends FormRequest
     {
         return [
             'resource_name' => 'required|max:50|string',
-            'path' => ['string', 'regex:/^0(\.\d+)*$/u'],
         ];
     }
 
@@ -35,8 +34,6 @@ class StoreResourceRequest extends FormRequest
             'resource_name.required' => '400000',
             'resource_name.max' => '400002',
             'resource_name.string' => '400003',
-            'path.string' => '400003',
-            'path.regex' => '400004',
         ];
     }
 }

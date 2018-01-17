@@ -10,7 +10,6 @@ import VisibilityOff from 'material-ui-icons/VisibilityOff';
 import { bindActionCreators } from 'redux';
 import { replace } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
-import qs from 'qs';
 import { login, clearToken } from '../../store/modules/oneself';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
@@ -18,7 +17,6 @@ import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import GithubIcon from '../../components/GithubIcon';
 import logo from '../../static/logo.svg';
-import requester from '../../utils/requester';
 
 
 class Login extends Component {

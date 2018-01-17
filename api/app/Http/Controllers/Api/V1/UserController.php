@@ -35,7 +35,7 @@ class UserController extends ApiController
         $user->password = bcrypt($request->get('password'));
         $user->email = $request->get('email');
         $request->has('capacity') ? $user->capacity = $request->get('capacity') : null;
-        if (!$user->save()) return $this->failed(500000, 500);
+        if (!$user->save()) return $this->failed(500001, 500);
         return new UserResource(User::find($user->id));
     }
 
@@ -68,7 +68,7 @@ class UserController extends ApiController
         $request->has('password') ? $user->password = bcrypt($request->get('password')) : null;
         $request->has('email') ? $user->email = $request->get('email') : null;
         $request->has('capacity') ? $user->capacity = $request->get('capacity') : null;
-        if (!$user->save()) return $this->failed(500000, 500);
+        if (!$user->save()) return $this->failed(500001, 500);
         return new UserResource(User::find($id));
     }
 

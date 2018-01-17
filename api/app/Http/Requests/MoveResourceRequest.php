@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateResourceRequest extends FormRequest
+class MoveResourceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class UpdateResourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'resource_name' => 'max:50|string',
             'path' => ['required', 'string', 'regex:/^0(\.\d+)*$/u'],
         ];
     }
@@ -32,9 +31,6 @@ class UpdateResourceRequest extends FormRequest
     public function messages()
     {
         return [
-            'resource_name.required' => '400000',
-            'resource_name.max' => '400002',
-            'resource_name.string' => '400003',
             'path.required' => '400000',
             'path.string' => '400003',
             'path.regex' => '400004',

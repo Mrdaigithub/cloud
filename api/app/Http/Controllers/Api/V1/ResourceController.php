@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\ErrorHandler\Collecting;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PathResourceCollection;
 use App\Http\Resources\ResourceResource;
@@ -37,7 +36,7 @@ class ResourceController extends ApiController
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return mixed
+     * @return PathResourceCollection
      */
     public function index(Request $request)
     {
@@ -47,8 +46,8 @@ class ResourceController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\StoreResourceRequest $request
+     * @return ResourceResource|mixed
      */
     public function store(\App\Http\Requests\StoreResourceRequest $request)
     {
@@ -65,7 +64,7 @@ class ResourceController extends ApiController
         $resource->resource_name = $request->get('resource_name');
         $resource->file = false;
         $resource->path = $request->get('path');
-        if (!$resource->save()) return $this->failed(500000, 500);
+        if (!$resource->save()) return $this->failed(500001, 500);
         $user->resources()->attach($resource->id);
         return new ResourceResource(Resource::find($resource->id));
     }
@@ -84,14 +83,21 @@ class ResourceController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param Request $request
+     * @param \App\Http\Requests\ShowPathResourceRequest $request
      * @param $path
+     * @return PathResourceCollection
      */
     public function show_with_path(\App\Http\Requests\ShowPathResourceRequest $request, $path)
     {
         return new PathResourceCollection($request->user()->resources()->where('path', $path)->get());
     }
 
+    /**
+     * Search the resource
+     *
+     * @param \App\Http\Requests\SearchResourceRequest $request
+     * @return mixed
+     */
     public function search(\App\Http\Requests\SearchResourceRequest $request)
     {
         $query = $request->input('q');
@@ -103,6 +109,13 @@ class ResourceController extends ApiController
             [$request->user()->id, false, "%$query%"]);
     }
 
+    /**
+     * Get the download secret url
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed|string
+     */
     public function get_download_secret(Request $request, $id)
     {
         if (!count($request->user()->resources()->find($id))) {
@@ -112,6 +125,12 @@ class ResourceController extends ApiController
         return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
     }
 
+    /**
+     * Download the resource by secret url
+     *
+     * @param $secret
+     * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function download($secret)
     {
         $storage_path = storage_path('app/aetherupload/file/md5_files');
@@ -128,13 +147,13 @@ class ResourceController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Move resource to the path
      *
-     * @param Request $request
+     * @param \App\Http\Requests\MoveResourceRequest $request
      * @param $id
      * @return mixed
      */
-    public function update(\App\Http\Requests\UpdateResourceRequest $request, $id)
+    public function move(\App\Http\Requests\MoveResourceRequest $request, $id)
     {
         $user = $request->user();
         $resource = Resource::find($id);
@@ -142,7 +161,7 @@ class ResourceController extends ApiController
         $new_path = $request->get('path');
         $old_path = "$base_path.$id";
         if (DB::select("SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;")[0]->is_child) {
-            return $this->failed(500000);
+            return $this->failed(500000, 500);
         }
         $move_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -156,9 +175,24 @@ class ResourceController extends ApiController
         foreach ($move_id_list as $move_id) {
             $resource = Resource::find($move_id);
             $resource->path = preg_replace("/($base_path)/", $new_path, $resource->path);
-            if (!$resource->save()) return $this->failed(500001);
+            if (!$resource->save()) return $this->failed(500001, 500);
         }
-        return 0;
+        return $resource;
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function update(\App\Http\Requests\UpdateResourceRequest $request, $id)
+    {
+        $resource = Resource::find($id);
+        $request->has('resource_name') ? $resource->resource_name = $request->get('resource_name') : null;
+        if (!$resource->save()) return $this->failed(500001, 500);
+        return $resource;
     }
 
     /**
@@ -172,11 +206,11 @@ class ResourceController extends ApiController
     {
         $user = $request->user();
         $resource = Resource::find($id);
-        $base_path = $this->deal_path($resource->path);
-        $path = $this->deal_path($resource->path . ".$id");
+        $base_path = $resource->path;
+        $path = $resource->path . ".$id";
         if ($resource->file) {
             $resource->trashed = true;
-            if (!$resource->save()) return $this->failed(500001);
+            if (!$resource->save()) return $this->failed(500001, 500);
             return $resource;
         }
         $trash_id_list = DB::select("SELECT id FROM resources
@@ -192,11 +226,18 @@ class ResourceController extends ApiController
             $resource = Resource::find($trash_id);
             $resource->trashed = true;
             $resource->trash_path = preg_replace("/($base_path)/", '0', $resource->path);
-            if (!$resource->save()) return $this->failed(500001);
+            if (!$resource->save()) return $this->failed(500001, 500);
         }
-        return 0;
+        return $resource;
     }
 
+    /**
+     * restore the resource
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
     public function restore(Request $request, $id)
     {
         $user = $request->user();
@@ -214,9 +255,9 @@ class ResourceController extends ApiController
             $resource = Resource::find($restore_id);
             $resource->trashed = false;
             $resource->trash_path = '0';
-            if (!$resource->save()) return $this->failed(500001);
+            if (!$resource->save()) return $this->failed(500001, 500);
         }
-        return 0;
+        return $resource;
     }
 
     /**
@@ -229,9 +270,9 @@ class ResourceController extends ApiController
     public function destroy(Request $request, $id)
     {
         $user = $request->user();
-        $base_path = $this->deal_path(Resource::find($id)->path);
-        $path = $this->deal_path(Resource::find($id)->path) . '.' . $id;
-        $trash_path = $this->deal_path(Resource::find($id)->trash_path) . '.' . $id;
+        $base_path = Resource::find($id)->path;
+        $path = Resource::find($id)->path . '.' . $id;
+        $trash_path = Resource::find($id)->trash_path . '.' . $id;
         $remove_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND trash_path <@ ? AND trashed=?
