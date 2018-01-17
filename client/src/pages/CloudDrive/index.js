@@ -410,7 +410,7 @@ class CloudDrive extends Component {
     /**  下载资源 **/
 
     async handleDownload(resourceID) {
-        const downloadUrl = await requester.get(`secret/${resourceID}`);
+        const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;

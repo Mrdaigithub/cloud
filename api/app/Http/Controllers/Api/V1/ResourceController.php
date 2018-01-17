@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Api\ApiController;
 use Illuminate\Http\Request;
-use Validator;
-use Illuminate\Support\Facades\DB;
-use App\Models\Resource;
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\ErrorHandler\Collecting;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\PathResourceCollection;
+use App\Http\Resources\ResourceResource;
+use App\Models\Resource;
 
 
 class ResourceController extends ApiController
@@ -39,24 +41,7 @@ class ResourceController extends ApiController
      */
     public function index(Request $request)
     {
-        return $request
-            ->user()->resource
-            ->map(function ($item) {
-                return collect($item)->except(['pivot', 'hash']);
-            })
-            ->sortBy('file')->values()
-            ->sortBy('resource_name')->values()
-            ->groupBy('path');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return new PathResourceCollection($request->user()->resources()->get());
     }
 
     /**
@@ -65,33 +50,24 @@ class ResourceController extends ApiController
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreResourceRequest $request)
     {
-        $req = $request->all();
-        $resource = new Resource();
+        $resource = new resource();
         $user = $request->user();
-        $path = $this->deal_path($request->only('path')['path']);
-        $resource_name = $request->only('resource_name')['resource_name'];
 
-        if (Validator::make($req, ['resource_name' => 'required',])->fails()) {
-            return $this->failed(400000);
-        }
-        if (Validator::make($req, ['new_dir' => 'string',])->fails()) {
-            return $this->failed(400001);
-        }
         if (DB::select("SELECT count(id)
               FROM resources
               LEFT JOIN resource_user ON resources.id = resource_user.resource_id
               WHERE user_id=? AND path = ? AND resource_name=?",
-                [$user->id, $path, $resource_name])[0]->count != 0) {
-            return $this->failed(409000);
+                [$user->id, $request->get('path'), $request->get('resource_name')])[0]->count != 0) {
+            return $this->failed(400006);
         }
-        $resource->resource_name = $resource_name;
+        $resource->resource_name = $request->get('resource_name');
         $resource->file = false;
-        if ($req['path']) $resource->path = $path;
-        if (!$resource->save()) return $this->failed(500001);
-        $user->resource()->attach($resource->id);
-        return collect(Resource::find($resource->id))->except('hash');
+        $resource->path = $request->get('path');
+        if (!$resource->save()) return $this->failed(500000, 500);
+        $user->resources()->attach($resource->id);
+        return new ResourceResource(Resource::find($resource->id));
     }
 
     /**
@@ -111,20 +87,12 @@ class ResourceController extends ApiController
      * @param Request $request
      * @param $path
      */
-    public function show_with_path(Request $request, $path)
+    public function show_with_path(\App\Http\Requests\ShowPathResourceRequest $request, $path)
     {
-        return $request
-            ->user()->resource
-            ->where('path', $path)
-            ->map(function ($item) {
-                return collect($item)->except(['pivot', 'hash']);
-            })
-            ->sortBy('file')->values()
-            ->sortBy('resource_name')->values()
-            ->groupBy('path');
+        return new PathResourceCollection($request->user()->resources()->where('path', $path)->get());
     }
 
-    public function search(Request $request)
+    public function search(\App\Http\Requests\SearchResourceRequest $request)
     {
         $query = $request->input('q');
         return DB::select("SELECT id, resource_name, file, path, created_at, updated_at
@@ -137,8 +105,8 @@ class ResourceController extends ApiController
 
     public function get_download_secret(Request $request, $id)
     {
-        if (!count($request->user()->resource->find($id))) {
-            return $this->failed(409001);
+        if (!count($request->user()->resources()->find($id))) {
+            return $this->failed(400006);
         }
         $secret = Crypt::encryptString($id);
         return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
@@ -160,31 +128,18 @@ class ResourceController extends ApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param Request $request
      * @param $id
      * @return mixed
      */
-    public function update(Request $request, $id)
+    public function update(\App\Http\Requests\UpdateResourceRequest $request, $id)
     {
-        if (Validator::make($request->all(), ['path' => 'required',])->fails()) {
-            return $this->failed(400000);
-        }
         $user = $request->user();
-        $base_path = $this->deal_path(Resource::find($id)->path);
-        $new_path = $request->only('path')['path'];
+        $resource = Resource::find($id);
+        $base_path = $resource->path;
+        $new_path = $request->get('path');
         $old_path = "$base_path.$id";
         if (DB::select("SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;")[0]->is_child) {
             return $this->failed(500000);
@@ -294,11 +249,11 @@ class ResourceController extends ApiController
                 if (!$resource->save()) return $this->failed(500001);
             }
         }
-        $request->user()->resource()->detach($id);
+        $request->user()->resources()->detach($id);
         Resource::destroy($id);
         if (count($remove_id_list)) {
             foreach ($remove_id_list as $remove_id) {
-                $request->user()->resource()->detach($remove_id->id);
+                $request->user()->resources()->detach($remove_id->id);
                 Resource::destroy($remove_id->id);
             }
         }
