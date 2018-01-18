@@ -14,23 +14,6 @@ use App\Models\Resource;
 
 class ResourceController extends ApiController
 {
-    /**
-     * 处理path格式 =>（root.xxx.yyy.zzz）
-     *
-     * @param $path
-     * @return string
-     */
-    private function deal_path($path)
-    {
-        $path = array_filter(
-            array_map(function ($item) {
-                return trim("$item.");
-            }, explode(".", trim($path))),
-            function ($item) {
-                return !!$item;
-            });
-        return trim(implode('', $path), '.');
-    }
 
     /**
      * Display a listing of the resource.
