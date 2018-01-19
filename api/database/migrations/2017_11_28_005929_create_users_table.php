@@ -16,8 +16,9 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('username')->unique();
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string('email')->unique()->nullable();
+            $table->string('password')->nullable();
+            $table->string('origin')->default('local');
             $table->boolean('is_admin')->default(false);
             $table->unsignedBigInteger('capacity')->default(5368709120)->nullable()->comment('byte');
             $table->timestamps();
