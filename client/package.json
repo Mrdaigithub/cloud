@@ -33,7 +33,8 @@
     "eslint-plugin-react": "^6.8.0"
   },
   "scripts": {
-    "start": "set PORT=80 && react-scripts start",
+    "lstart": "PORT=80 react-scripts start",
+    "wstart": "set PORT=80 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

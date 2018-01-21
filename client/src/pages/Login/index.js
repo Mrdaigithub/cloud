@@ -15,9 +15,7 @@ import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
-import GithubIcon from '../../components/GithubIcon';
 import logo from '../../static/logo.svg';
-import requester from '../../utils/requester';
 
 
 class Login extends Component {
@@ -25,24 +23,11 @@ class Login extends Component {
         super(props);
         this.state = {
             showPassword: false,
-            github: {
-                clientID: 'fbc7ce7b78d475a3a327',
-                state: Math.round(Math.random() * new Date().getTime()),
-                redirectUri: 'http://client.web.mrdaisite.com/login',
-            },
         };
     }
 
     async componentWillMount() {
         this.props.clearToken();
-        if (window.location.search) {
-            const githubCode = window.location.search
-                .replace(/^\?/, '')
-                .split('&')
-                .filter(item => item.split('=')[1] && item.split('=')[0] === 'code')[0]
-                .split('=')[1];
-            await requester.get(`login/code/github/${githubCode}`);
-        }
     }
 
     handleClickShowPasssword() {
@@ -61,7 +46,6 @@ class Login extends Component {
 
     render() {
         const { classes } = this.props;
-        const { github } = this.state;
         return (
             <BasicLayout>
                 <Grid className={classes.normal} container direction={'row'} justify={'center'} alignItems={'center'}>
@@ -98,14 +82,6 @@ class Login extends Component {
                                 raised color="primary"
                                 className={classes.loginButton}>登录</Button>
                         </Formsy>
-                        <Grid container alignItems={'center'} justify={'flex-start'}>
-                            <Grid item xs={2}>
-                                <IconButton
-                                    href={`https://github.com/login/oauth/authorize?client_id=${github.clientID}&state=${github.state}&redirect_uri=${github.redirectUri}`}>
-                                    <GithubIcon/>
-                                </IconButton>
-                            </Grid>
-                        </Grid>
                     </Grid>
                 </Grid>
             </BasicLayout>

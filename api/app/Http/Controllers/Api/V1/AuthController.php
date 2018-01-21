@@ -55,30 +55,4 @@ class AuthController extends ApiController
             "grant_type=" . env('grant_type') . "&client_id=" . env('client_id') . "&client_secret=" . env('client_secret') . "&username=" . $user->email . "&password=" . $password . "&scope="
         );
     }
-
-    /**
-     * Github OAuth 登陆
-     *
-     * @param LoginRequest $request
-     */
-    function githubCodeLogin($code)
-    {
-        parse_str($this->post(
-            'https://github.com/login/oauth/access_token',
-            http_build_query([
-                "client_id" => env('github_client_id'),
-                "client_secret" => env('github_client_secret'),
-                "code" => $code
-            ])
-        ), $result);
-        $github_user = json_decode($this->get(
-            "https://api.github.com/user?access_token=" . $result['access_token']
-        ));
-        $user = new User();
-        $user->username = $github_user->login;
-        $user->email = $github_user->email;
-        $user->origin = 'github';
-        if (!$user->save()) return $this->failed(500001, 500);
-        return $result;
-    }
 }
