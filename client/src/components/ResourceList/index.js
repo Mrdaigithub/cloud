@@ -4,7 +4,7 @@ import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } f
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import Divider from 'material-ui/Divider';
-import ResourceDescribe from './ResourceDescribe';
+import ResourcePreview from './ResourcePreview';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
@@ -121,7 +121,7 @@ class ResourceList extends Component {
                         </div>
                     ))}
                 </List>
-                <ResourceDescribe
+                <ResourcePreview
                     open={this.state.ResourceDescribeOpen}
                     name={this.state.resourceName}
                     onDownload={this.handleDownload}

@@ -58,7 +58,7 @@ class PageHeaderLayout extends Component {
         } = this.props;
         return (
             <div className={classes.normal}>
-                <Drawer open={this.state.drawerOpen} onRequestClose={this.handleToggleDrawer(false)}>
+                <Drawer open={this.state.drawerOpen} onClose={this.handleToggleDrawer(false)}>
                     <div
                         className={classes.drawer}
                         onTouchStart={this.handleToggleDrawer(true)}
@@ -135,7 +135,7 @@ class PageHeaderLayout extends Component {
                                         <Typography type="title" color="inherit">
                                             <IconButton
                                                 onClick={this.handleToggleDrawer(true)}
-                                                color="contrast"
+                                                color="inherit"
                                                 aria-label="Menu">
                                                 <MenuIcon/>
                                             </IconButton>
