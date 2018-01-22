@@ -33,7 +33,7 @@ class Setting extends Component {
                 transition={Transition}>
                 <AppBar className={classes.settingTopBar}>
                     <Toolbar>
-                        <IconButton color="contrast" onClick={onClose} aria-label="Close">
+                        <IconButton color="inherit" onClick={onClose} aria-label="Close">
                             <CloseIcon/>
                         </IconButton>
                         <Typography type="title" color="inherit">设置</Typography>

@@ -28,8 +28,6 @@ class ResourceList extends Component {
         super(props);
         this.state = {
             ResourceDescribeOpen: false,
-            resourceID: '',
-            resourceName: '',
         };
     }
 
@@ -43,29 +41,24 @@ class ResourceList extends Component {
         });
     };
 
-    handleClickResource = (resource) => () => {
-        console.log(resource);
-        // if (file) {
-        //     this.setState({ ResourceDescribeOpen: true });
-        //     console.log();
-        // this.props.getSelectedResource(name)
-        // }
-        // if (this.props.onClickResource) {
-        //     this.props.onClickResource(id, file, path);
-        // }
+    handleClickResource = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
+        if (file) {
+            this.setState({ ResourceDescribeOpen: true });
+            this.props.getSelectedResource(id, resource_name, getResourceExt(resource_name), path, created_at, updated_at);
+        }
+        if (this.props.onClickResource) {
+            this.props.onClickResource(id, file, path);
+        }
     };
 
     handleDownload = () => {
-        if (this.props.onDownload) this.props.onDownload(this.state.resourceID);
+        if (this.props.resourceID) this.props.onDownload(this.props.resourceID);
     };
 
     handleClose = () => {
-        this.setState({
-            ResourceDescribeOpen: false,
-            resourceID: '',
-            resourceName: '',
-        });
+        this.setState({ ResourceDescribeOpen: false });
         if (this.props.onClose) this.props.onClose();
+        this.props.clearSelectedResource();
     };
 
     render() {
@@ -133,7 +126,9 @@ class ResourceList extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    resourceID: state.resource.selectedResource.resourceID,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getSelectedResource,

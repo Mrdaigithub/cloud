@@ -527,11 +527,11 @@ class CloudDrive extends Component {
                     transition={Transition}>
                     <AppBar className={classes.moveDirTopBar}>
                         <Toolbar>
-                            <IconButton color="contrast" onClick={this.handleCloseMoveDirDiglog} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.handleCloseMoveDirDiglog} aria-label="Close">
                                 <CloseIcon/>
                             </IconButton>
                             <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">移动至...</Typography>
-                            <Button color="contrast" onClick={this.handleMoveResource}>确认</Button>
+                            <Button color="inherit" onClick={this.handleMoveResource}>确认</Button>
                         </Toolbar>
                     </AppBar>
                     <div className={classes.resourceList}>

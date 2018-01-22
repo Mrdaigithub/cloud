@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
+import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -14,24 +15,16 @@ import Delete from 'material-ui-icons/Delete';
 import Edit from 'material-ui-icons/Edit';
 import Info from 'material-ui-icons/Info';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
+import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
 
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-const getResourceExt = (resourceName) => {
-    const index = resourceName.lastIndexOf('.');
-    return resourceName.substr(index + 1);
-};
 
 class ResourceDescribe extends Component {
     constructor(props) {
         super(props);
         this.state = {
             anchorEl: null,
+            rightDrawer: false,
         };
     }
 
@@ -41,6 +34,15 @@ class ResourceDescribe extends Component {
 
     handleCloseMenu = () => {
         this.setState({ anchorEl: null });
+    };
+
+    handleShowResourceInfo = () => {
+        this.setState({ rightDrawer: true });
+        this.handleCloseMenu();
+    };
+
+    closeDrawer = () => {
+        this.setState({ rightDrawer: false });
     };
 
     render() {
@@ -59,8 +61,8 @@ class ResourceDescribe extends Component {
                                 <ResourceTypeIcon
                                     style={{ width: ':30px', height: '30px', verticalAlign: 'middle', marginRight: '10px' }}
                                     className={props.classes.modalHeaderFileIcon}
-                                    ext={getResourceExt(props.name)}/>
-                                {props.name || '未命名'}
+                                    ext={this.props.selectedResource.resourceExt}/>
+                                {this.props.selectedResource.resourceName || '未命名'}
                             </Typography>
                             <IconButton color="inherit" onClick={props.onDownload}>
                                 <FileDownload/>
@@ -92,7 +94,7 @@ class ResourceDescribe extends Component {
                                     </ListItemIcon>
                                     <ListItemText inset primary="删除"/>
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem onClick={this.handleShowResourceInfo}>
                                     <ListItemIcon>
                                         <Info/>
                                     </ListItemIcon>
@@ -101,6 +103,9 @@ class ResourceDescribe extends Component {
                             </Menu>
                         </Toolbar>
                     </AppBar>
+                    <ResourceDetail
+                        open={this.state.rightDrawer}
+                        onClose={this.closeDrawer}/>
                     <div className={props.classes.modal}>
                         asdadsasd
                     </div>
@@ -110,5 +115,10 @@ class ResourceDescribe extends Component {
     }
 }
 
+const mapStateToProps = state => ({
+    selectedResource: state.resource.selectedResource,
+});
 
-export default withStyles(styles)(ResourceDescribe);
+export default connect(
+    mapStateToProps,
+)(withStyles(styles)(ResourceDescribe));

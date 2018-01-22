@@ -7,6 +7,7 @@ export const CLEAR_SELECTED_RESOURCE = 'resource/CLEAR_SELECTED_RESOURCE';
 const initialState = {
     resources: null,
     selectedResource: {
+        resourceID: null,
         resourceName: '',
         resourceExt: '',
         resourcePath: '0',
@@ -31,6 +32,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 selectedResource: {
+                    resourceID: null,
                     resourceName: '',
                     resourceExt: '',
                     resourcePath: '0',
@@ -57,12 +59,13 @@ export const fetchResources = (cb) => {
     };
 };
 
-export const getSelectedResource = (resourceName, resourceExt, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
+export const getSelectedResource = (resourceID, resourceName, resourceExt, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
     return async (dispatch) => {
         return dispatch({
             type: GET_SELECTED_RESOURCE,
             payload: {
                 selectedResource: {
+                    resourceID,
                     resourceName,
                     resourceExt,
                     resourcePath,
