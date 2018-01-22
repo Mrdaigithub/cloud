@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import { connect } from 'react-redux';
 import Typography from 'material-ui/Typography';
 import Card, { CardHeader, CardContent } from 'material-ui/Card';
 import Drawer from 'material-ui/Drawer';
@@ -21,10 +22,10 @@ const ResourceDetail = props => (
                 tabIndex={0}
                 role="button">
                 <CardHeader
-                    avatar={props.resourceExt === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.resourceExt}/>}
+                    avatar={props.selectedResource.resourceExt === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceExt}/>}
                     title={
                         <Grid item xs={12}>
-                            <h2 className={props.classes.rightDrawerCardTitle}>{props.resourceName}</h2>
+                            <h2 className={props.classes.rightDrawerCardTitle}>{props.selectedResource.resourceName}</h2>
                         </Grid>
                     }/>
                 <Divider/>
@@ -34,7 +35,7 @@ const ResourceDetail = props => (
                         className={props.classes.rightDrawerCardContentText}>
                         类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span className={props.classes.rightDrawerCardContentRightText}>
-                            {props.resourceExt.toUpperCase()}
+                            {props.selectedResource.resourceExt.toUpperCase()}
                         </span>
                     </Typography>
                     <Typography
@@ -42,7 +43,7 @@ const ResourceDetail = props => (
                         className={props.classes.rightDrawerCardContentText}>
                         路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span className={props.classes.rightDrawerCardContentRightText}>
-                            {props.resourcePath}
+                            {props.selectedResource.resourcePath}
                         </span>
                     </Typography>
                     <Typography
@@ -50,7 +51,7 @@ const ResourceDetail = props => (
                         className={props.classes.rightDrawerCardContentText}>
                         创建时间
                         <span className={props.classes.rightDrawerCardContentRightText}>
-                            {props.resoruceCreatedAt}
+                            {props.selectedResource.resourceCreatedAt}
                         </span>
                     </Typography>
                     <Typography
@@ -58,7 +59,7 @@ const ResourceDetail = props => (
                         className={props.classes.rightDrawerCardContentText}>
                         修改时间
                         <span className={props.classes.rightDrawerCardContentRightText}>
-                            {props.resourceUpdatedAt}
+                            {props.selectedResource.resourceUpdatedAt}
                         </span>
                     </Typography>
                 </CardContent>
@@ -68,4 +69,10 @@ const ResourceDetail = props => (
 );
 
 
-export default withStyles(styles)(ResourceDetail);
+const mapStateToProps = state => ({
+    selectedResource: state.resource.selectedResource,
+});
+
+export default connect(
+    mapStateToProps,
+)(withStyles(styles)(ResourceDetail));

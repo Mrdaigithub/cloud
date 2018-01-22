@@ -12,6 +12,7 @@ import SearchIcon from 'material-ui-icons/Search';
 import Info from 'material-ui-icons/Info';
 import ResourceList from '../../components/ResourceList';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
+import { getSelectedResource, clearSelectedResource } from '../../store/modules/resource';
 import styles from './styles';
 import requester from '../../utils/requester';
 
@@ -47,23 +48,13 @@ class Search extends Component {
             rightDrawer: false,
             query: '',
             result: [],
-            showName: '',
-            showExt: '',
-            showPath: '',
-            showCreatedAt: '',
-            showUpdatedAt: '',
         };
         this.handleSearch = this.handleSearch.bind(this);
     }
 
     closeDrawer = () => {
-        this.setState({
-            rightDrawer: false,
-            showName: '',
-            showPath: '',
-            showCreatedAt: '',
-            showUpdatedAt: '',
-        });
+        this.setState({ rightDrawer: false });
+        this.props.clearSelectedResource();
     };
 
     handleInput = name => (event) => {
@@ -78,13 +69,9 @@ class Search extends Component {
     };
 
     handleShowResourceInfo = ({ name, path, createdAt, updatedAt }) => {
+        this.props.getSelectedResource(name, getResourceExt(name), path, createdAt, updatedAt);
         this.setState({
             rightDrawer: true,
-            showName: name,
-            showExt: getResourceExt(name),
-            showPath: path,
-            showCreatedAt: createdAt,
-            showUpdatedAt: updatedAt,
         });
     };
 
@@ -117,7 +104,7 @@ class Search extends Component {
 
     render() {
         const { classes, goBackPage } = this.props;
-        const { query, result, showName, showExt, showPath, showCreatedAt, showUpdatedAt } = this.state;
+        const { query, result } = this.state;
         return (
             <div>
                 <Dialog
@@ -161,12 +148,7 @@ class Search extends Component {
                 </Dialog>
                 <ResourceDetail
                     open={this.state.rightDrawer}
-                    onClose={this.closeDrawer}
-                    resourceName={showName}
-                    resourceExt={showExt === '文件夹' ? '文件夹' : showExt}
-                    resourcePath={showPath}
-                    resoruceCreatedAt={showCreatedAt}
-                    resourceUpdatedAt={showUpdatedAt}/>
+                    onClose={this.closeDrawer}/>
             </div>
         );
     }
@@ -177,6 +159,8 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (replace(url)),
     goBackPage: () => (goBack()),
+    getSelectedResource,
+    clearSelectedResource,
 }, dispatch);
 
 export default connect(

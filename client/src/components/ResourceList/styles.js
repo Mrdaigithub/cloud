@@ -36,7 +36,7 @@ const styles = theme => ({
     modal: {
         position: 'absolute',
         width: '90vw',
-        height: '88vh',
+        height: '87vh',
         boxSizing: 'border-box',
         top: '70px',
         left: '5vw',

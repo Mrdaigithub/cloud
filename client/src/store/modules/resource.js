@@ -1,9 +1,18 @@
 import request from '../../utils/requester';
 
 export const GET_RESOURCES = 'resource/GET_RESOURCES';
+export const GET_SELECTED_RESOURCE = 'resource/GET_SELECTED_RESOURCE';
+export const CLEAR_SELECTED_RESOURCE = 'resource/CLEAR_SELECTED_RESOURCE';
 
 const initialState = {
     resources: null,
+    selectedResource: {
+        resourceName: '',
+        resourceExt: '',
+        resourcePath: '0',
+        resourceCreatedAt: '',
+        resourceUpdatedAt: '',
+    },
 };
 
 export default (state = initialState, action) => {
@@ -12,6 +21,22 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 resources: action.payload.resources,
+            };
+        case GET_SELECTED_RESOURCE:
+            return {
+                ...state,
+                selectedResource: action.payload.selectedResource,
+            };
+        case CLEAR_SELECTED_RESOURCE:
+            return {
+                ...state,
+                selectedResource: {
+                    resourceName: '',
+                    resourceExt: '',
+                    resourcePath: '0',
+                    resourceCreatedAt: '',
+                    resourceUpdatedAt: '',
+                },
             };
 
         default:
@@ -29,6 +54,31 @@ export const fetchResources = (cb) => {
             },
         });
         return cb(resources);
+    };
+};
+
+export const getSelectedResource = (resourceName, resourceExt, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
+    return async (dispatch) => {
+        return dispatch({
+            type: GET_SELECTED_RESOURCE,
+            payload: {
+                selectedResource: {
+                    resourceName,
+                    resourceExt,
+                    resourcePath,
+                    resourceCreatedAt,
+                    resourceUpdatedAt,
+                },
+            },
+        });
+    };
+};
+
+export const clearSelectedResource = () => {
+    return async (dispatch) => {
+        return dispatch({
+            type: CLEAR_SELECTED_RESOURCE,
+        });
     };
 };
 

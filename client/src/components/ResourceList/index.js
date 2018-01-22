@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
@@ -8,6 +10,7 @@ import ResourcePreview from './ResourcePreview';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
+import { clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
 /**
  * 获取文件后缀
@@ -40,17 +43,16 @@ class ResourceList extends Component {
         });
     };
 
-    handleClickResource = (id, name, file, path) => () => {
-        if (file) {
-            this.setState({
-                ResourceDescribeOpen: true,
-                resourceID: id,
-                resourceName: name,
-            });
-        }
-        if (this.props.onClickResource) {
-            this.props.onClickResource(id, file, path);
-        }
+    handleClickResource = (resource) => () => {
+        console.log(resource);
+        // if (file) {
+        //     this.setState({ ResourceDescribeOpen: true });
+        //     console.log();
+        // this.props.getSelectedResource(name)
+        // }
+        // if (this.props.onClickResource) {
+        //     this.props.onClickResource(id, file, path);
+        // }
     };
 
     handleDownload = () => {
@@ -90,7 +92,7 @@ class ResourceList extends Component {
                             <ListItem
                                 button
                                 className={classes.resourceItem}
-                                onClick={this.handleClickResource(resource.id, resource.resource_name, resource.file, resource.path)}>
+                                onClick={this.handleClickResource(resource)}>
                                 <ListItemIcon className={classes.resourceListIcon}>
                                     {
                                         resource.file ?
@@ -131,5 +133,14 @@ class ResourceList extends Component {
     }
 }
 
+const mapStateToProps = state => ({});
 
-export default withStyles(styles)(ResourceList);
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getSelectedResource,
+    clearSelectedResource,
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(withStyles(styles)(ResourceList));
