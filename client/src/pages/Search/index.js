@@ -3,21 +3,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
 import { replace, goBack } from 'react-router-redux';
-import Drawer from 'material-ui/Drawer';
 import Dialog from 'material-ui/Dialog';
-import Card, { CardHeader, CardContent } from 'material-ui/Card';
-import Grid from 'material-ui/Grid';
 import Input, { InputAdornment } from 'material-ui/Input';
-import Divider from 'material-ui/Divider';
-import Typography from 'material-ui/Typography';
 import { FormControl } from 'material-ui/Form';
 import IconButton from 'material-ui/IconButton';
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import SearchIcon from 'material-ui-icons/Search';
 import Info from 'material-ui-icons/Info';
-import { FolderIcon } from '../../components/file-type-icon';
 import ResourceList from '../../components/ResourceList';
-import ResourceTypeIcon from '../../components/ResourceTypeIcon/index';
+import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
 import requester from '../../utils/requester';
 
@@ -165,61 +159,14 @@ class Search extends Component {
                             onDownload={this.handleDownload}/>
                     </div>
                 </Dialog>
-                <Drawer
-                    anchor="right"
+                <ResourceDetail
                     open={this.state.rightDrawer}
-                    onRequestClose={this.closeDrawer}>
-                    <div className={classes.rightDrawer}>
-                        <Card
-                            className={classes.rightDrawerCard}
-                            tabIndex={0}
-                            role="button"
-                            onKeyDown={this.closeDrawer}>
-                            <CardHeader
-                                avatar={showExt === '文件夹' ? <FolderIcon className={classes.iconColor}/> : <ResourceTypeIcon ext={showExt}/>}
-                                title={
-                                    <Grid item xs={12}>
-                                        <h2 className={classes.rightDrawerCardTitle}>{showName}</h2>
-                                    </Grid>
-                                }/>
-                            <Divider/>
-                            <CardContent>
-                                <Typography
-                                    component="p"
-                                    className={classes.rightDrawerCardContentText}>
-                                    类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span className={classes.rightDrawerCardContentRightText}>
-                                        {showExt.toUpperCase()}
-                                    </span>
-                                </Typography>
-                                <Typography
-                                    component="p"
-                                    className={classes.rightDrawerCardContentText}>
-                                    路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span className={classes.rightDrawerCardContentRightText}>
-                                        {`/${path2url(showPath)}`}
-                                    </span>
-                                </Typography>
-                                <Typography
-                                    component="p"
-                                    className={classes.rightDrawerCardContentText}>
-                                    创建时间
-                                    <span className={classes.rightDrawerCardContentRightText}>
-                                        {showCreatedAt}
-                                    </span>
-                                </Typography>
-                                <Typography
-                                    component="p"
-                                    className={classes.rightDrawerCardContentText}>
-                                    修改时间
-                                    <span className={classes.rightDrawerCardContentRightText}>
-                                        {showUpdatedAt}
-                                    </span>
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </Drawer>
+                    onClose={this.closeDrawer}
+                    resourceName={showName}
+                    resourceExt={showExt === '文件夹' ? '文件夹' : showExt}
+                    resourcePath={showPath}
+                    resoruceCreatedAt={showCreatedAt}
+                    resourceUpdatedAt={showUpdatedAt}/>
             </div>
         );
     }

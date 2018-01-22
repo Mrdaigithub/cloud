@@ -4,6 +4,7 @@ const styles = theme => ({
     normal: {
         background: `url(${logo}) no-repeat center #eeeeef`,
         backgroundSize: '80px',
+        height: '100vh',
     },
     nowrap: {
         overflow: 'hidden',
@@ -20,31 +21,6 @@ const styles = theme => ({
     },
     searchItem: {
         backgroundColor: '#fff',
-    },
-    rightDrawer: {
-        backgroundColor: '#ededed',
-        height: '100vh',
-    },
-    rightDrawerCard: {
-        boxShadow: 'none',
-    },
-    rightDrawerCardTitle: {
-        extend: 'nowrap',
-        width: '20vw',
-        maxWidth: '55vw',
-        fontSize: '20px',
-        paddingRight: '30px',
-    },
-    rightDrawerCardContentText: {
-        extend: 'nowrap',
-        fontSize: '12px',
-        padding: '6px 0',
-
-    },
-    rightDrawerCardContentRightText: {
-        extend: 'rightDrawerCardContentText',
-        paddingLeft: '50px',
-        color: '#7d7d7d',
     },
 });
 
