@@ -6,6 +6,7 @@ import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import DeleteIcon from 'material-ui-icons/Delete';
+import Checkbox from 'material-ui/Checkbox';
 import { alert } from '../../store/modules/assist';
 import ResourceList from '../../components/ResourceList';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
@@ -13,7 +14,6 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
-import Checkbox from 'material-ui/Checkbox/index';
 
 
 class Trash extends Component {
@@ -83,7 +83,7 @@ class Trash extends Component {
         const { selected } = this.state;
         console.log(selected);
         for (const id of selected) {
-            await requester.patch(`resources/restore/${id}`);
+            await requester.patch(`resources/${id}/restore`);
         }
         this.props.fetchResources(() => this.getTrashList());
     }

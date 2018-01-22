@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -17,6 +18,8 @@ import Info from 'material-ui-icons/Info';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
+import requester from '../../utils/requester';
+import { fetchResources } from '../../store/modules/resource';
 
 
 class ResourceDescribe extends Component {
@@ -26,6 +29,7 @@ class ResourceDescribe extends Component {
             anchorEl: null,
             rightDrawer: false,
         };
+        this.handleRemoveResource = this.handleRemoveResource.bind(this);
     }
 
     handleClickMenu = (event) => {
@@ -41,9 +45,28 @@ class ResourceDescribe extends Component {
         this.handleCloseMenu();
     };
 
-    closeDrawer = () => {
+    handleCloseDrawer = () => {
         this.setState({ rightDrawer: false });
     };
+
+    handleCloseModal = () => {
+        this.handleCloseMenu();
+        this.handleCloseDrawer();
+        if (this.props.onClose) this.props.onClose();
+    };
+
+
+    /**
+     * 删除资源
+     *
+     * @returns {Promise<void>}
+     */
+    async handleRemoveResource() {
+        const { selectedResource } = this.props;
+        await requester.patch(`resources/${selectedResource.resourceID}/trash`);
+        this.props.fetchResources(() => {});
+        this.handleCloseModal();
+    }
 
     render() {
         const props = this.props;
@@ -88,7 +111,7 @@ class ResourceDescribe extends Component {
                                     </ListItemIcon>
                                     <ListItemText inset primary="重命名"/>
                                 </MenuItem>
-                                <MenuItem onClick={props.remove}>
+                                <MenuItem onClick={this.handleRemoveResource}>
                                     <ListItemIcon>
                                         <Delete/>
                                     </ListItemIcon>
@@ -105,7 +128,7 @@ class ResourceDescribe extends Component {
                     </AppBar>
                     <ResourceDetail
                         open={this.state.rightDrawer}
-                        onClose={this.closeDrawer}/>
+                        onClose={this.handleCloseDrawer}/>
                     <div className={props.classes.modal}>
                         asdadsasd
                     </div>
@@ -119,6 +142,11 @@ const mapStateToProps = state => ({
     selectedResource: state.resource.selectedResource,
 });
 
+const mapDispatchToProps = dispatch => bindActionCreators({
+    fetchResources,
+}, dispatch);
+
 export default connect(
     mapStateToProps,
+    mapDispatchToProps,
 )(withStyles(styles)(ResourceDescribe));
