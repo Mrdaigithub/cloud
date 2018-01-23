@@ -11,6 +11,7 @@ import ArrowBack from 'material-ui-icons/ArrowBack';
 import SearchIcon from 'material-ui-icons/Search';
 import Info from 'material-ui-icons/Info';
 import ResourceList from '../../components/ResourceList';
+import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { getSelectedResource, clearSelectedResource } from '../../store/modules/resource';
 import styles from './styles';
@@ -45,15 +46,16 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rightDrawer: false,
+            ResourcePreviewOpen: false,
+            ResourceDetailOpen: false,
             query: '',
             result: [],
         };
         this.handleSearch = this.handleSearch.bind(this);
     }
 
-    closeDrawer = () => {
-        this.setState({ rightDrawer: false });
+    handleCloseResourceDetail = () => {
+        this.setState({ ResourceDetailOpen: false });
         this.props.clearSelectedResource();
     };
 
@@ -63,15 +65,24 @@ class Search extends Component {
         });
     };
 
-    handleClickResource = (id, file, path) => {
-        if (file) return;
-        this.props.changePage(`/cloud-drive/${path2url(path)}`);
+    handleOpenResourcePreview = ({ id, name, path, file, createdAt, updatedAt }) => {
+        if (!file) {
+            this.props.changePage(`/cloud-drive/${path2url(path)}`);
+        } else {
+            this.props.getSelectedResource(id, name, path, file, createdAt, updatedAt);
+            this.setState({ ResourcePreviewOpen: true });
+        }
     };
 
-    handleShowResourceInfo = ({ name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource(name, getResourceExt(name), path, createdAt, updatedAt);
+    handleCloseResourcePreview = () => {
+        this.setState({ ResourcePreviewOpen: false });
+        this.props.clearSelectedResource();
+    };
+
+    handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
+        this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
         this.setState({
-            rightDrawer: true,
+            ResourceDetailOpen: true,
         });
     };
 
@@ -89,8 +100,8 @@ class Search extends Component {
      * @param resourceID
      * @returns {Promise.<void>}
      */
-    async handleDownload(resourceID) {
-        const downloadUrl = await requester.get(`secret/${resourceID}`);
+    handleDownload = resourceID => async () => {
+        const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
@@ -100,7 +111,7 @@ class Search extends Component {
         downloadDom.click();
         document.querySelector('body')
             .removeChild(downloadDom);
-    }
+    };
 
     render() {
         const { classes, goBackPage } = this.props;
@@ -141,19 +152,25 @@ class Search extends Component {
                             className={classes.searchList}
                             resourceList={result}
                             ItemIcon={Info}
-                            onClickResource={this.handleClickResource}
-                            onClickAction={this.handleShowResourceInfo}/>
+                            onClickResource={this.handleOpenResourcePreview}
+                            onClickAction={this.handleOpenResourceDetail}/>
+                        <ResourcePreview
+                            open={this.state.ResourcePreviewOpen}
+                            onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
+                            onClose={this.handleCloseResourcePreview}/>
                     </div>
                 </Dialog>
                 <ResourceDetail
-                    open={this.state.rightDrawer}
-                    onClose={this.closeDrawer}/>
+                    open={this.state.ResourceDetailOpen}
+                    onClose={this.handleCloseResourceDetail}/>
             </div>
         );
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    selectedResource: state.resource.selectedResource,
+});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (replace(url)),

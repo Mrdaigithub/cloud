@@ -94,7 +94,6 @@ class Trash extends Component {
      */
     handleRestoreResource = () => async () => {
         const { selected } = this.state;
-        console.log(selected);
         for (const id of selected) {
             await requester.patch(`resources/${id}/restore`);
         }

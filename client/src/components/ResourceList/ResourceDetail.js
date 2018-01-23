@@ -16,7 +16,7 @@ const ResourceDetail = props => (
         anchor="right"
         open={props.open}
         onClose={props.onClose}>
-        <div className={props.classes.rightDrawer}>
+        <div className={props.classes.ResourceDetailOpen}>
             <Card
                 className={props.classes.rightDrawerCard}
                 tabIndex={0}

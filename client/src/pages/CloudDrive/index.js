@@ -502,7 +502,6 @@ class CloudDrive extends Component {
                         toggleCheck={this.handleCheckResource}/>
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
-                        name={this.state.selectedResource}
                         onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
                         onClose={this.handleToggleResourcePreview()}/>
                 </div>

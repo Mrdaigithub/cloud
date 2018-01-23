@@ -41,12 +41,12 @@ class ResourceDescribe extends Component {
     };
 
     handleShowResourceInfo = () => {
-        this.setState({ rightDrawer: true });
+        this.setState({ ResourceDetailOpen: true });
         this.handleCloseMenu();
     };
 
     handleCloseDrawer = () => {
-        this.setState({ rightDrawer: false });
+        this.setState({ ResourceDetailOpen: false });
     };
 
     handleCloseModal = () => {
@@ -127,7 +127,7 @@ class ResourceDescribe extends Component {
                         </Toolbar>
                     </AppBar>
                     <ResourceDetail
-                        open={this.state.rightDrawer}
+                        open={this.state.ResourceDetailOpen}
                         onClose={this.handleCloseDrawer}/>
                     <div className={props.classes.modal}>
                         asdadsasd
