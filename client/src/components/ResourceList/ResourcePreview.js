@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import qs from 'qs';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -12,7 +13,6 @@ import Formsy from 'formsy-react';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { ListItemIcon, ListItemText } from 'material-ui/List';
 import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -28,7 +28,7 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { fetchResources } from '../../store/modules/resource';
+import { fetchResources, getSelectedResource } from '../../store/modules/resource';
 
 
 class ResourceDescribe extends Component {
@@ -76,9 +76,21 @@ class ResourceDescribe extends Component {
      *
      * @returns {Promise<void>}
      */
-    handleRename = async () => {
+    handleRename = async (model) => {
+        const { newName } = model;
         const { selectedResource } = this.props;
-        console.log(selectedResource.resourceID);
+        const {
+            id,
+            resource_name,
+            path,
+            created_at,
+            updated_at,
+        } = await requester.patch(`resources/${selectedResource.resourceID}`, qs.stringify({
+            resource_name: newName,
+        }));
+        this.props.getSelectedResource(id, resource_name, path, created_at, updated_at);
+        this.props.fetchResources(() => null);
+        this.handleToggleRenameDialog()();
     };
 
 
@@ -95,9 +107,9 @@ class ResourceDescribe extends Component {
     };
 
     render() {
-        const props = this.props;
-        const { open, classes, onDownload } = this.props;
+        const { open, classes, onDownload, selectedResource } = this.props;
         const { anchorEl, RenameDialogOpen } = this.state;
+        const newName = selectedResource.resourceName;
         return (
             <div>
                 <Modal
@@ -112,8 +124,8 @@ class ResourceDescribe extends Component {
                                     <ResourceTypeIcon
                                         style={{ width: ':30px', height: '30px', verticalAlign: 'middle', marginRight: '10px' }}
                                         className={classes.modalHeaderFileIcon}
-                                        ext={this.props.selectedResource.resourceExt}/>
-                                    {this.props.selectedResource.resourceName || '未命名'}
+                                        ext={selectedResource.resourceExt}/>
+                                    {selectedResource.resourceName || '未命名'}
                                 </Typography>
                                 <IconButton color="inherit" onClick={onDownload}>
                                     <FileDownload/>
@@ -157,30 +169,30 @@ class ResourceDescribe extends Component {
                         <ResourceDetail
                             open={this.state.ResourceDetailOpen}
                             onClose={this.handleToggleResourceDetail()}/>
-                        <div className={props.classes.modal}>
+                        <div className={classes.modal}>
                             asdadsasd
                         </div>
                     </div>
                 </Modal>
                 <Dialog
                     open={RenameDialogOpen}>
-                    <DialogTitle>重命名资源</DialogTitle>
-                    <DialogContent>
-                        <Formsy onValidSubmit={this.handleRename}>
+                    <Formsy onValidSubmit={this.handleRename}>
+                        <DialogTitle>重命名资源</DialogTitle>
+                        <DialogContent>
                             <FormsyText
-                                title="资源名称"
-                                name="name"
-                                validations={{ matchRegexp: /(\w|\d){1,20}/ }}
-                                validationError="新名称不合法"
+                                name="newName"
+                                value={newName}
+                                validations={{ matchRegexp: /(\w|\d){1,50}/ }}
+                                validationError="名称不合法"
                                 required
                                 fullWidth
                                 autoFocus/>
-                        </Formsy>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleToggleRenameDialog()} color="primary">关闭</Button>
-                        <Button onClick={this.handleClose} color="primary">确认</Button>
-                    </DialogActions>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleToggleRenameDialog()} color="primary">关闭</Button>
+                            <Button type="submit" color="primary">确认</Button>
+                        </DialogActions>
+                    </Formsy>
                 </Dialog>
             </div>
         );
@@ -193,6 +205,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchResources,
+    getSelectedResource,
 }, dispatch);
 
 export default connect(

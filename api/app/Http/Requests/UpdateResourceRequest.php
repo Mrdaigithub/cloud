@@ -25,17 +25,15 @@ class UpdateResourceRequest extends FormRequest
     {
         return [
             'resource_name' => 'max:50|string',
-            'path' => ['required', 'string', 'regex:/^0(\.\d+)*$/u'],
+            'path' => ['string', 'regex:/^0(\.\d+)*$/u'],
         ];
     }
 
     public function messages()
     {
         return [
-            'resource_name.required' => '400000',
             'resource_name.max' => '400002',
             'resource_name.string' => '400003',
-            'path.required' => '400000',
             'path.string' => '400003',
             'path.regex' => '400004',
         ];

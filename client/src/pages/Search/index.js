@@ -72,6 +72,7 @@ class Search extends Component {
             this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
             this.setState({ ResourcePreviewOpen: true });
         }
+        this.setState({ result: [] });
     };
 
     handleCloseResourcePreview = () => {

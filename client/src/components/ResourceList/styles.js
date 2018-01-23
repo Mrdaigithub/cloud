@@ -54,10 +54,11 @@ const styles = theme => ({
     },
     rightDrawerCardTitle: {
         extend: 'nowrap',
-        width: '20vw',
-        maxWidth: '55vw',
+        width: '30vw',
         fontSize: '20px',
-        paddingRight: '30px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     rightDrawerCardContentText: {
         extend: 'nowrap',

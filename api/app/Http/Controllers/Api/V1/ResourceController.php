@@ -173,8 +173,17 @@ class ResourceController extends ApiController
      */
     public function update(\App\Http\Requests\UpdateResourceRequest $request, $id)
     {
+        $user = $request->user();
         $resource = Resource::find($id);
-        $request->has('resource_name') ? $resource->resource_name = $request->get('resource_name') : null;
+        if ($request->has('resource_name')) {
+            if ($user->resources
+                ->where('path', $resource->path)
+                ->where('resource_name', $request->get('resource_name'))
+                ->count()){
+                return $this->failed(400006);
+            }
+            $resource->resource_name = $request->get('resource_name');
+        }
         if (!$resource->save()) return $this->failed(500001, 500);
         return $resource;
     }
@@ -227,9 +236,9 @@ class ResourceController extends ApiController
         $user = $request->user();
         $resource = Resource::find($id);
         if ($user->resources
-            ->where('path', $resource->path)
-            ->where('resource_name', $resource->resource_name)
-            ->count() > 1){
+                ->where('path', $resource->path)
+                ->where('resource_name', $resource->resource_name)
+                ->count() > 1) {
             return $this->failed(400006);
         }
         $restore_id_list = DB::select("SELECT id FROM resources
