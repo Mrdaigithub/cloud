@@ -69,7 +69,7 @@ class Search extends Component {
         if (!file) {
             this.props.changePage(`/cloud-drive/${path2url(path)}`);
         } else {
-            this.props.getSelectedResource(id, name, path, file, createdAt, updatedAt);
+            this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
             this.setState({ ResourcePreviewOpen: true });
         }
     };
