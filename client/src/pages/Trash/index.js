@@ -1,31 +1,38 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import DeleteIcon from 'material-ui-icons/Delete';
 import Checkbox from 'material-ui/Checkbox';
-import { alert } from '../../store/modules/assist';
 import ResourceList from '../../components/ResourceList';
+import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
-import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
+import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
+/**
+ * 获取文件后缀
+ *
+ * @param resourceName
+ * @returns {string}
+ */
+const getResourceExt = (resourceName) => {
+    const index = resourceName.lastIndexOf('.');
+    return resourceName.substr(index + 1);
+};
 
 class Trash extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: true,
+            ResourceDetailOpen: false,
             trashList: [],
             selected: [],
         };
-        this.handleRemoveResource = this.handleRemoveResource.bind(this);
-        this.handleRestoreResource = this.handleRestoreResource.bind(this);
     }
 
     async componentWillMount() {
@@ -56,8 +63,14 @@ class Trash extends Component {
         });
     }
 
-    handleClickResource = (resourceID, file) => {
-        console.log('show resource info');
+    handleClickResource = ({ id, name, path, createdAt, updatedAt }) => {
+        this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+        this.setState({ ResourceDetailOpen: true });
+    };
+
+    handleCloseResourceDetail = () => {
+        this.setState({ ResourceDetailOpen: false });
+        this.props.clearSelectedResource();
     };
 
     handleCheckResource = resourceID => () => {
@@ -79,20 +92,20 @@ class Trash extends Component {
      * 恢复资源
      * @returns {Promise.<void>}
      */
-    async handleRestoreResource() {
+    handleRestoreResource = () => async () => {
         const { selected } = this.state;
         console.log(selected);
         for (const id of selected) {
             await requester.patch(`resources/${id}/restore`);
         }
         this.props.fetchResources(() => this.getTrashList());
-    }
+    };
 
     /**
      * 彻底删除资源
      * @returns {Promise<void>}
      */
-    async handleRemoveResource() {
+    handleRemoveResource = () => async () => {
         const { selected } = this.state;
         if (selected.length) {
             for (const id of selected) {
@@ -103,7 +116,7 @@ class Trash extends Component {
                 this.props.fetchOneself();
             });
         }
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -116,11 +129,14 @@ class Trash extends Component {
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
                     toggleCheck={this.handleCheckResource}/>
+                <ResourceDetail
+                    open={this.state.ResourceDetailOpen}
+                    onClose={this.handleCloseResourceDetail}/>
                 <SpeedDial>
                     <SpeedDialItem>
                         <label htmlFor="icon-button-move">
                             <IconButton
-                                onClick={this.handleRestoreResource}
+                                onClick={this.handleRestoreResource()}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -132,7 +148,7 @@ class Trash extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-remove">
                             <IconButton
-                                onClick={this.handleRemoveResource}
+                                onClick={this.handleRemoveResource()}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -147,19 +163,16 @@ class Trash extends Component {
     }
 }
 
-const mapStateToProps = (state, routing) => ({
-    routing,
-    capacity: state.oneself.capacity,
-    used: state.oneself.used,
+const mapStateToProps = state => ({
     resources: state.resource.resources,
+    selectedResource: state.resource.selectedResource,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
-    alert,
     fetchOneself,
     fetchResources,
-    changeResourceListWithPath,
+    getSelectedResource,
+    clearSelectedResource,
 }, dispatch);
 
 export default connect(

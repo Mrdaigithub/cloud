@@ -25,7 +25,6 @@ import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
-import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
@@ -167,7 +166,7 @@ class CloudDrive extends Component {
         });
     };
 
-    handleToggleResourcePreview = () => (open = false) => {
+    handleToggleResourcePreview = (open = false) => () => {
         this.setState({ ResourcePreviewOpen: Boolean(open) });
         if (!open) {
             this.props.clearSelectedResource();
@@ -177,13 +176,13 @@ class CloudDrive extends Component {
 
     /**  创建文件夹 **/
 
-    handleToggleCreateDirDialog = () => (open = false) => {
+    handleToggleCreateDirDialog = (open = false) => () => {
         this.setState({ createDirDialogOpen: Boolean(open) });
     };
 
     handleCreateDir = () => async (model) => {
         const { routing } = this.props;
-        this.handleToggleCreateDirDialog(false);
+        this.handleToggleCreateDirDialog()();
         const { path } = await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
             path: url2path(routing.location.pathname),
@@ -367,7 +366,7 @@ class CloudDrive extends Component {
         const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
         if (selected.length) {
-            const deleteList = selected.map(id => requester.patch(`resources/trash/${id}`));
+            const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
             await Promise.all(deleteList);
             const resourceListWithPath = resources[resourcePath].map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
             this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
@@ -392,9 +391,9 @@ class CloudDrive extends Component {
         }
     };
 
-    handleClickMoveDir = (resourceID, file) => {
+    handleClickMoveDir = () => ({ id, file }) => {
         if (file) return;
-        const newMovePath = movePath.go(this.state.movePath, resourceID);
+        const newMovePath = movePath.go(this.state.movePath, id);
         this.setState({ movePath: newMovePath });
         this.getResourceList(url2path(newMovePath), true);
     };
@@ -407,12 +406,12 @@ class CloudDrive extends Component {
     };
 
     handleMoveResource = () => async () => {
-        if (!this.state.selected.length) return;
         const { selected } = this.state;
-        const moveList = selected.map(id => requester.patch(`resources/${id}`, qs.stringify({
+        if (!selected.length) return;
+        const moveList = selected.map(id => requester.patch(`resources/${id}/move`, qs.stringify({
             path: url2path(this.state.movePath),
         })));
-        this.handleToggleMoveResourceDialog();
+        this.handleToggleMoveResourceDialog()();
         await Promise.all(moveList);
         this.props.fetchResources(() => {
             this.getResourceList(url2path(this.props.routing.location.pathname));
@@ -422,8 +421,8 @@ class CloudDrive extends Component {
 
     /**  下载资源 **/
 
-    handleDownload = () => async () => {
-        const downloadUrl = await requester.get(`resources/secret/${this.props.selectedResource.resourceID}`);
+    handleDownload = resourceID => async () => {
+        const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
@@ -504,7 +503,7 @@ class CloudDrive extends Component {
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
                         name={this.state.selectedResource}
-                        onDownload={this.handleDownload()}
+                        onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
                         onClose={this.handleToggleResourcePreview()}/>
                 </div>
                 <FileUploader
@@ -535,7 +534,7 @@ class CloudDrive extends Component {
                                 autoFocus/>
                         </DialogContent>
                         <DialogActions>
-                            <Button color="primary" onClick={this.handleToggleCreateDirDialog(false)}>关闭</Button>
+                            <Button color="primary" onClick={this.handleToggleCreateDirDialog()}>关闭</Button>
                             <Button type="submit" color="primary">创建</Button>
                         </DialogActions>
                     </Formsy>
@@ -550,14 +549,14 @@ class CloudDrive extends Component {
                                 <CloseIcon/>
                             </IconButton>
                             <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">移动至...</Typography>
-                            <Button color="inherit" onClick={this.handleMoveResource}>确认</Button>
+                            <Button color="inherit" onClick={this.handleMoveResource()}>确认</Button>
                         </Toolbar>
                     </AppBar>
                     <div className={classes.resourceList}>
                         <ResourceList
                             resourceList={moveResourceList}
                             onBack={this.handleBackMovePath}
-                            onClickResource={this.handleClickMoveDir}/>
+                            onClickResource={this.handleClickMoveDir()}/>
                     </div>
                 </Dialog>
             </div>

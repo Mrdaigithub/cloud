@@ -36,12 +36,10 @@ class ResourceController extends ApiController
     {
         $resource = new resource();
         $user = $request->user();
-
-        if (DB::select("SELECT count(id)
-              FROM resources
-              LEFT JOIN resource_user ON resources.id = resource_user.resource_id
-              WHERE user_id=? AND path = ? AND resource_name=?",
-                [$user->id, $request->get('path'), $request->get('resource_name')])[0]->count != 0) {
+        if (!!$user->resources
+            ->where('resource_name', $request->get('resource_name'))
+            ->where('path', $request->get('path'))
+            ->where('trashed', false)->count()) {
             return $this->failed(400006);
         }
         $resource->resource_name = $request->get('resource_name');
@@ -140,11 +138,14 @@ class ResourceController extends ApiController
     {
         $user = $request->user();
         $resource = Resource::find($id);
+        $r = new Resource();
         $base_path = $resource->path;
         $new_path = $request->get('path');
         $old_path = "$base_path.$id";
         if (DB::select("SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;")[0]->is_child) {
             return $this->failed(500000, 500);
+        } elseif (Resource::where('path', $new_path)->where('resource_name', $resource->resource_name)->exists()) {
+            return $this->failed(400006);
         }
         $move_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -225,6 +226,12 @@ class ResourceController extends ApiController
     {
         $user = $request->user();
         $resource = Resource::find($id);
+        if ($user->resources
+            ->where('path', $resource->path)
+            ->where('resource_name', $resource->resource_name)
+            ->count() > 1){
+            return $this->failed(400006);
+        }
         $restore_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND trash_path <@ ? AND trashed=?
