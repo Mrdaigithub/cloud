@@ -6,7 +6,6 @@ import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } f
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import Divider from 'material-ui/Divider';
-import ResourcePreview from './ResourcePreview';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
@@ -31,34 +30,30 @@ class ResourceList extends Component {
         };
     }
 
-    onClickAction = ({ id, resource_name, path, created_at, updated_at }) => () => {
-        this.props.onClickAction({
-            id,
-            name: resource_name,
-            path,
-            createdAt: created_at,
-            updatedAt: updated_at,
-        });
+    onClickAction = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
+        if (this.props.onClickAction) {
+            this.props.onClickAction({
+                id,
+                name: resource_name,
+                path,
+                file,
+                createdAt: created_at,
+                updatedAt: updated_at,
+            });
+        }
     };
 
     handleClickResource = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
-        if (file) {
-            this.setState({ ResourceDescribeOpen: true });
-            this.props.getSelectedResource(id, resource_name, getResourceExt(resource_name), path, created_at, updated_at);
-        }
         if (this.props.onClickResource) {
-            this.props.onClickResource(id, file, path);
+            this.props.onClickResource({
+                id,
+                name: resource_name,
+                path,
+                file,
+                createdAt: created_at,
+                updatedAt: updated_at,
+            });
         }
-    };
-
-    handleDownload = () => {
-        if (this.props.resourceID) this.props.onDownload(this.props.resourceID);
-    };
-
-    handleClose = () => {
-        this.setState({ ResourceDescribeOpen: false });
-        if (this.props.onClose) this.props.onClose();
-        this.props.clearSelectedResource();
     };
 
     render() {
@@ -116,11 +111,6 @@ class ResourceList extends Component {
                         </div>
                     ))}
                 </List>
-                <ResourcePreview
-                    open={this.state.ResourceDescribeOpen}
-                    name={this.state.resourceName}
-                    onDownload={this.handleDownload}
-                    onClose={this.handleClose}/>
             </div>
         );
     }

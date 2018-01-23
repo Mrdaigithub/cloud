@@ -24,10 +24,12 @@ import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
+import ResourcePreview from '../../components/ResourceList/ResourcePreview';
+import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
-import { fetchResources, changeResourceListWithPath } from '../../store/modules/resource';
+import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
 
 /**
@@ -76,6 +78,17 @@ const movePath = {
     },
 };
 
+/**
+ * 获取文件后缀
+ *
+ * @param resourceName
+ * @returns {string}
+ */
+const getResourceExt = (resourceName) => {
+    const index = resourceName.lastIndexOf('.');
+    return resourceName.substr(index + 1);
+};
+
 class CloudDrive extends Component {
     constructor(props) {
         super(props);
@@ -84,8 +97,9 @@ class CloudDrive extends Component {
             moveResourceList: [],
             movePath: '0',
             selected: [],
-            createDirDiglogState: false,
-            moveDirDiglogState: false,
+            createDirDialogOpen: false,
+            moveResourceDialogOpen: false,
+            ResourcePreviewOpen: false,
             uploadState: false,
             uploadValue: 0,
             uploadDone: false,
@@ -95,15 +109,6 @@ class CloudDrive extends Component {
             group: 'file',
             locale: 'zh',
         };
-        this.handleUpload = this.handleUpload.bind(this);
-        this.handleCreateDir = this.handleCreateDir.bind(this);
-        this.handleOpencreateDirDiglog = this.handleOpencreateDirDiglog.bind(this);
-        this.handleClosecreateDirDiglog = this.handleClosecreateDirDiglog.bind(this);
-        this.handleOpenMoveDirDiglog = this.handleOpenMoveDirDiglog.bind(this);
-        this.handleCloseMoveDirDiglog = this.handleCloseMoveDirDiglog.bind(this);
-        this.handleRemoveResource = this.handleRemoveResource.bind(this);
-        this.handleMoveResource = this.handleMoveResource.bind(this);
-        this.handleDownload = this.handleDownload.bind(this);
     }
 
     async componentDidMount() {
@@ -137,9 +142,14 @@ class CloudDrive extends Component {
         }
     }
 
-    handleClickResource = (resourceID, file) => {
-        const { changePage, routing } = this.props;
-        return file ? null : changePage(`${routing.location.pathname}/${resourceID}`);
+    handleClickResource = ({ id, name, path, file, createdAt, updatedAt }) => {
+        if (file) {
+            this.setState({ ResourcePreviewOpen: true });
+            this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+        } else {
+            const { changePage, routing } = this.props;
+            changePage(`${routing.location.pathname}/${id}`);
+        }
     };
 
     handleCheckResource = resourceID => () => {
@@ -157,20 +167,23 @@ class CloudDrive extends Component {
         });
     };
 
+    handleToggleResourcePreview = () => (open = false) => {
+        this.setState({ ResourcePreviewOpen: Boolean(open) });
+        if (!open) {
+            this.props.clearSelectedResource();
+        }
+    };
+
 
     /**  创建文件夹 **/
 
-    handleOpencreateDirDiglog() {
-        this.setState({ createDirDiglogState: true });
-    }
+    handleToggleCreateDirDialog = () => (open = false) => {
+        this.setState({ createDirDialogOpen: Boolean(open) });
+    };
 
-    handleClosecreateDirDiglog() {
-        this.setState({ createDirDiglogState: false });
-    }
-
-    async handleCreateDir(model) {
+    handleCreateDir = () => async (model) => {
         const { routing } = this.props;
-        this.handleClosecreateDirDiglog();
+        this.handleToggleCreateDirDialog(false);
         const { path } = await requester.post('resources', qs.stringify({
             resource_name: model.newDir,
             path: url2path(routing.location.pathname),
@@ -178,12 +191,12 @@ class CloudDrive extends Component {
         const resourceListWithPath = await requester.get(`resources/${path}`);
         this.props.changeResourceListWithPath(Object.keys(resourceListWithPath)[0], resourceListWithPath[Object.keys(resourceListWithPath)[0]]);
         this.getResourceList(url2path(routing.location.pathname));
-    }
+    };
 
 
     /**  上传文件 **/
 
-    handleUpload() {
+    handleUpload = () => () => {
         const { capacity, used } = this.props;
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
@@ -199,7 +212,7 @@ class CloudDrive extends Component {
             uploadDone: false,
         });
         this.calculateHash(file);
-    }
+    };
 
     /**
      * 预先计算上传文件的Hash值
@@ -349,7 +362,7 @@ class CloudDrive extends Component {
 
     /**  删除资源 **/
 
-    async handleRemoveResource() {
+    handleRemoveResource = () => async () => {
         const { resources, routing } = this.props;
         const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
@@ -360,24 +373,24 @@ class CloudDrive extends Component {
             this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
             this.getResourceList(resourcePath);
         }
-    }
+    };
 
 
     /**  移动资源 **/
 
-    handleOpenMoveDirDiglog() {
-        if (!this.state.selected.length) return;
-        this.getResourceList(undefined, true);
-        this.setState({ moveDirDiglogState: true });
-    }
-
-    handleCloseMoveDirDiglog() {
-        this.setState({
-            moveDirDiglogState: false,
-            moveResourceList: [],
-            movePath: '0',
-        });
-    }
+    handleToggleMoveResourceDialog = (open = false) => () => {
+        if (open) {
+            if (!this.state.selected.length) return;
+            this.getResourceList(undefined, true);
+            this.setState({ moveResourceDialogOpen: true });
+        } else {
+            this.setState({
+                moveResourceDialogOpen: false,
+                moveResourceList: [],
+                movePath: '0',
+            });
+        }
+    };
 
     handleClickMoveDir = (resourceID, file) => {
         if (file) return;
@@ -393,24 +406,24 @@ class CloudDrive extends Component {
         this.getResourceList(url2path(newMovePath), true);
     };
 
-    async handleMoveResource() {
+    handleMoveResource = () => async () => {
         if (!this.state.selected.length) return;
         const { selected } = this.state;
         const moveList = selected.map(id => requester.patch(`resources/${id}`, qs.stringify({
             path: url2path(this.state.movePath),
         })));
-        this.handleCloseMoveDirDiglog();
+        this.handleToggleMoveResourceDialog();
         await Promise.all(moveList);
         this.props.fetchResources(() => {
             this.getResourceList(url2path(this.props.routing.location.pathname));
         });
-    }
+    };
 
 
     /**  下载资源 **/
 
-    async handleDownload(resourceID) {
-        const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
+    handleDownload = () => async () => {
+        const downloadUrl = await requester.get(`resources/secret/${this.props.selectedResource.resourceID}`);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
@@ -420,7 +433,7 @@ class CloudDrive extends Component {
         downloadDom.click();
         document.querySelector('body')
             .removeChild(downloadDom);
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -434,7 +447,7 @@ class CloudDrive extends Component {
                             className={classes.SpeedDialItemInput}
                             id="icon-button-file"
                             name="icon-button-file"
-                            onChange={this.handleUpload}
+                            onChange={this.handleUpload()}
                             type="file"/>
                         <label htmlFor="icon-button-file">
                             <IconButton
@@ -451,7 +464,7 @@ class CloudDrive extends Component {
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span"
-                                onClick={this.handleOpencreateDirDiglog}>
+                                onClick={this.handleToggleCreateDirDialog(true)}>
                                 <CreateNewFolder/>
                             </IconButton>
                         </label>
@@ -459,7 +472,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-move">
                             <IconButton
-                                onClick={this.handleOpenMoveDirDiglog}
+                                onClick={this.handleToggleMoveResourceDialog(true)}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -471,7 +484,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-remove">
                             <IconButton
-                                onClick={this.handleRemoveResource}
+                                onClick={this.handleRemoveResource()}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -481,20 +494,26 @@ class CloudDrive extends Component {
                         </label>
                     </SpeedDialItem>
                 </SpeedDial>
-                <ResourceList
-                    resourceList={resourceList}
-                    ItemIcon={Checkbox}
-                    checked={this.state.selected}
-                    onClickResource={this.handleClickResource}
-                    onDownload={this.handleDownload}
-                    toggleCheck={this.handleCheckResource}/>
+                <div id="resourceContent">
+                    <ResourceList
+                        resourceList={resourceList}
+                        ItemIcon={Checkbox}
+                        checked={this.state.selected}
+                        onClickResource={this.handleClickResource}
+                        toggleCheck={this.handleCheckResource}/>
+                    <ResourcePreview
+                        open={this.state.ResourcePreviewOpen}
+                        name={this.state.selectedResource}
+                        onDownload={this.handleDownload()}
+                        onClose={this.handleToggleResourcePreview()}/>
+                </div>
                 <FileUploader
                     uploadState={uploadState}
                     uploadValue={uploadValue}
                     uploadFilename={file ? file.name : ''}
                     done={uploadDone}/>
-                <Dialog open={this.state.createDirDiglogState}>
-                    <Formsy onValidSubmit={this.handleCreateDir}>
+                <Dialog open={this.state.createDirDialogOpen}>
+                    <Formsy onValidSubmit={this.handleCreateDir()}>
                         <DialogContent>
                             <FormsyText
                                 title="文件夹名称"
@@ -516,18 +535,18 @@ class CloudDrive extends Component {
                                 autoFocus/>
                         </DialogContent>
                         <DialogActions>
-                            <Button color="primary" onClick={this.handleClosecreateDirDiglog}>关闭</Button>
+                            <Button color="primary" onClick={this.handleToggleCreateDirDialog(false)}>关闭</Button>
                             <Button type="submit" color="primary">创建</Button>
                         </DialogActions>
                     </Formsy>
                 </Dialog>
                 <Dialog
                     fullScreen
-                    open={this.state.moveDirDiglogState}
+                    open={this.state.moveResourceDialogOpen}
                     transition={Transition}>
                     <AppBar className={classes.moveDirTopBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={this.handleCloseMoveDirDiglog} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.handleToggleMoveResourceDialog()} aria-label="Close">
                                 <CloseIcon/>
                             </IconButton>
                             <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">移动至...</Typography>
@@ -551,6 +570,7 @@ const mapStateToProps = (state, routing) => ({
     capacity: state.oneself.capacity,
     used: state.oneself.used,
     resources: state.resource.resources,
+    selectedResource: state.resource.selectedResource,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -559,6 +579,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     fetchOneself,
     fetchResources,
     changeResourceListWithPath,
+    getSelectedResource,
+    clearSelectedResource,
 }, dispatch);
 
 export default connect(

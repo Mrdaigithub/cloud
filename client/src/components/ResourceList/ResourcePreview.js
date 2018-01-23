@@ -77,7 +77,7 @@ class ResourceDescribe extends Component {
                 <div>
                     <AppBar className={props.classes.modalHeader}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={props.onClose} aria-label="Close">
+                            <IconButton color="inherit" onClick={this.handleCloseModal} aria-label="Close">
                                 <CloseIcon/>
                             </IconButton>
                             <Typography type="title" color="inherit" className={props.classes.modalHeaderFlex}>

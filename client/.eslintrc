@@ -1,6 +1,16 @@
 {
   "parser": "babel-eslint",
   "extends": "airbnb",
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
   "rules": {
     "arrow-body-style": [0],
     "consistent-return": [0],
@@ -39,14 +49,5 @@
     "no-underscore-dangle": [0],
     "camelcase": [1],
     "no-unneeded-ternary":[2, { "defaultAssignment": true }]
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
-  },
-  "env": {
-    "browser": true,
-    "node": true
   }
 }

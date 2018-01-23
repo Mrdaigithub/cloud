@@ -142,8 +142,7 @@ class Search extends Component {
                             resourceList={result}
                             ItemIcon={Info}
                             onClickResource={this.handleClickResource}
-                            onClickAction={this.handleShowResourceInfo}
-                            onDownload={this.handleDownload}/>
+                            onClickAction={this.handleShowResourceInfo}/>
                     </div>
                 </Dialog>
                 <ResourceDetail
