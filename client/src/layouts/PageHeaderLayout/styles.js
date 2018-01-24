@@ -10,12 +10,12 @@ const styles = theme => ({
         width: '250px',
     },
     avatarContainer: {
-        backgroundColor: '#1ca7b5',
+        backgroundColor: theme.palette.secondary.light,
         color: '#fff',
     },
     avatarImg: {
         backgroundColor: '#fff',
-        color: '#1ca7b5',
+        color: theme.palette.secondary.light,
     },
     avatarUsername: {
         fontSize: '16px',

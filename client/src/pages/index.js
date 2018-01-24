@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import teal from 'material-ui/colors/teal';
-import indigo from 'material-ui/colors/indigo';
+import brown from 'material-ui/colors/brown';
+import grey from 'material-ui/colors/grey';
 import Snackbar from 'material-ui/Snackbar';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import withRoot from '../components/withRoot';
@@ -12,10 +12,8 @@ import CircularLoading from '../components/CircularLoading';
 const theme = createMuiTheme({
     palette: {
         type: 'light',
-        primary: indigo,
-        secondary: {
-            ...teal,
-        },
+        primary: brown,
+        secondary: grey,
     },
 });
 
@@ -24,9 +22,6 @@ const styles = theme => ({
         position: 'relative',
         height: '100vh',
         overflowX: 'hidden',
-    },
-    snackbar: {
-        margin: theme.spacing.unit,
     },
 });
 

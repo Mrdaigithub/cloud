@@ -1,5 +1,10 @@
 const styles = theme => ({
     root: {},
+    fullScreen: {
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+    },
     normal: {
         paddingTop: '5px',
     },
@@ -28,12 +33,38 @@ const styles = theme => ({
         color: '#333',
     },
     modalHeader: {
-        backgroundColor: '#7d7d7d',
+        backgroundColor: theme.palette.secondary.light,
     },
     modalHeaderFlex: {
         flex: 1,
     },
-    modal: {
+    ResourceDetail: {
+        backgroundColor: '#ededed',
+        height: '100vh',
+    },
+    ResourceDetailCard: {
+        boxShadow: 'none',
+    },
+    ResourceDetailCardTitle: {
+        extend: 'nowrap',
+        width: '30vw',
+        fontSize: '20px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
+    ResourceDetailCardContentText: {
+        extend: 'nowrap',
+        fontSize: '12px',
+        padding: '6px 0',
+
+    },
+    ResourceDetailCardContentRightText: {
+        extend: 'ResourceDetailCardContentText',
+        paddingLeft: '50px',
+        color: '#7d7d7d',
+    },
+    preview: {
         position: 'absolute',
         width: '90vw',
         height: '87vh',
@@ -44,32 +75,6 @@ const styles = theme => ({
         backgroundColor: '#fff',
         boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',
         padding: 8 * 4,
-    },
-    ResourceDetailOpen: {
-        backgroundColor: '#ededed',
-        height: '100vh',
-    },
-    rightDrawerCard: {
-        boxShadow: 'none',
-    },
-    rightDrawerCardTitle: {
-        extend: 'nowrap',
-        width: '30vw',
-        fontSize: '20px',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-    },
-    rightDrawerCardContentText: {
-        extend: 'nowrap',
-        fontSize: '12px',
-        padding: '6px 0',
-
-    },
-    rightDrawerCardContentRightText: {
-        extend: 'rightDrawerCardContentText',
-        paddingLeft: '50px',
-        color: '#7d7d7d',
     },
 });
 

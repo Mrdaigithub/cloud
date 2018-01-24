@@ -16,49 +16,49 @@ const ResourceDetail = props => (
         anchor="right"
         open={props.open}
         onClose={props.onClose}>
-        <div className={props.classes.ResourceDetailOpen}>
+        <div className={props.classes.ResourceDetail}>
             <Card
-                className={props.classes.rightDrawerCard}
+                className={props.classes.ResourceDetailCard}
                 tabIndex={0}
                 role="button">
                 <CardHeader
                     avatar={props.selectedResource.resourceExt === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceExt}/>}
                     title={
                         <Grid item xs={12}>
-                            <h2 className={props.classes.rightDrawerCardTitle}>{props.selectedResource.resourceName}</h2>
+                            <h2 className={props.classes.ResourceDetailCardTitle}>{props.selectedResource.resourceName}</h2>
                         </Grid>
                     }/>
                 <Divider/>
                 <CardContent>
                     <Typography
                         component="p"
-                        className={props.classes.rightDrawerCardContentText}>
+                        className={props.classes.ResourceDetailCardContentText}>
                         类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className={props.classes.rightDrawerCardContentRightText}>
+                        <span className={props.classes.ResourceDetailCardContentRightText}>
                             {props.selectedResource.resourceExt.toUpperCase()}
                         </span>
                     </Typography>
                     <Typography
                         component="p"
-                        className={props.classes.rightDrawerCardContentText}>
+                        className={props.classes.ResourceDetailCardContentText}>
                         路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className={props.classes.rightDrawerCardContentRightText}>
+                        <span className={props.classes.ResourceDetailCardContentRightText}>
                             {props.selectedResource.resourcePath}
                         </span>
                     </Typography>
                     <Typography
                         component="p"
-                        className={props.classes.rightDrawerCardContentText}>
+                        className={props.classes.ResourceDetailCardContentText}>
                         创建时间
-                        <span className={props.classes.rightDrawerCardContentRightText}>
+                        <span className={props.classes.ResourceDetailCardContentRightText}>
                             {props.selectedResource.resourceCreatedAt}
                         </span>
                     </Typography>
                     <Typography
                         component="p"
-                        className={props.classes.rightDrawerCardContentText}>
+                        className={props.classes.ResourceDetailCardContentText}>
                         修改时间
-                        <span className={props.classes.rightDrawerCardContentRightText}>
+                        <span className={props.classes.ResourceDetailCardContentRightText}>
                             {props.selectedResource.resourceUpdatedAt}
                         </span>
                     </Typography>

@@ -25,6 +25,7 @@ Route::namespace('Api\V1')
                 Route::get('secret/{id}', 'ResourceController@get_download_secret');
                 Route::get('search', 'ResourceController@search');
                 Route::get('{path}', 'ResourceController@show_with_path');
+                Route::get('content/{id}', 'ResourceController@show_content');
                 Route::patch('{id}/move', 'ResourceController@move');
                 Route::patch('{id}/trash', 'ResourceController@trash_resource');
                 Route::patch('{id}/restore', 'ResourceController@restore');

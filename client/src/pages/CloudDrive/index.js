@@ -25,6 +25,7 @@ import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
+import ImagePreview from '../../components/ResourceList/ImagePreview';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/modules/oneself';
@@ -508,7 +509,9 @@ class CloudDrive extends Component {
                         open={this.state.ResourcePreviewOpen}
                         onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
                         onRefresh={this.handleRefresh()}
-                        onClose={this.handleToggleResourcePreview()}/>
+                        onClose={this.handleToggleResourcePreview()}>
+                        <ImagePreview/>
+                    </ResourcePreview>
                 </div>
                 <FileUploader
                     uploadState={uploadState}

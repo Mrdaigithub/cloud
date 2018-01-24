@@ -3,7 +3,6 @@ import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import qs from 'qs';
-import Grid from 'material-ui/Grid';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
@@ -111,7 +110,7 @@ class ResourcePreview extends Component {
     };
 
     render() {
-        const { open, classes, onDownload, selectedResource, children } = this.props;
+        const { open, classes, onDownload, selectedResource } = this.props;
         const { anchorEl, RenameDialogOpen } = this.state;
         const newName = selectedResource.resourceName;
         return (
@@ -173,16 +172,9 @@ class ResourcePreview extends Component {
                         <ResourceDetail
                             open={this.state.ResourceDetailOpen}
                             onClose={this.handleToggleResourceDetail()}/>
-                        <Grid
-                            className={classes.fullScreen}
-                            container
-                            alignItems="center"
-                            direction="row"
-                            justify="center">
-                            <Grid item className={classes.textCenter}>
-                                {children}
-                            </Grid>
-                        </Grid>
+                        <div className={classes.modal}>
+                            asdadsasd
+                        </div>
                     </div>
                 </Modal>
                 <Dialog
