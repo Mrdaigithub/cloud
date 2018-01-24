@@ -173,6 +173,10 @@ class CloudDrive extends Component {
         }
     };
 
+    handleRefresh = () => () => {
+        this.getResourceList(url2path(this.props.routing.location.pathname));
+    };
+
 
     /**  创建文件夹 **/
 
@@ -503,6 +507,7 @@ class CloudDrive extends Component {
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
                         onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
+                        onRefresh={this.handleRefresh()}
                         onClose={this.handleToggleResourcePreview()}/>
                 </div>
                 <FileUploader

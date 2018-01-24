@@ -31,7 +31,7 @@ import requester from '../../utils/requester';
 import { fetchResources, getSelectedResource } from '../../store/modules/resource';
 
 
-class ResourceDescribe extends Component {
+class ResourcePreview extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -71,6 +71,10 @@ class ResourceDescribe extends Component {
         }
     };
 
+    handleRefresh = () => {
+        if (this.props.onRefresh) this.props.onRefresh();
+    };
+
     /**
      * 重命名
      *
@@ -89,10 +93,9 @@ class ResourceDescribe extends Component {
             resource_name: newName,
         }));
         this.props.getSelectedResource(id, resource_name, path, created_at, updated_at);
-        this.props.fetchResources(() => null);
+        this.props.fetchResources(() => this.handleRefresh());
         this.handleToggleRenameDialog()();
     };
-
 
     /**
      * 删除资源
@@ -102,7 +105,7 @@ class ResourceDescribe extends Component {
     handleRemove = async () => {
         const { selectedResource } = this.props;
         await requester.patch(`resources/${selectedResource.resourceID}/trash`);
-        this.props.fetchResources(() => null);
+        this.props.fetchResources(() => this.handleRefresh());
         this.handleCloseResourcePreview();
     };
 
@@ -211,4 +214,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(withStyles(styles)(ResourceDescribe));
+)(withStyles(styles)(ResourcePreview));
