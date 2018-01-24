@@ -11,19 +11,10 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
+import { getResourceExt } from '../../utils/assist';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-const getResourceExt = (resourceName) => {
-    const index = resourceName.lastIndexOf('.');
-    return resourceName.substr(index + 1);
-};
 
 class Trash extends Component {
     constructor(props) {

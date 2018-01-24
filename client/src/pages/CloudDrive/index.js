@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
+import mime from 'mime';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
@@ -25,26 +26,13 @@ import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
-import ImagePreview from '../../components/ResourceList/ImagePreview';
+import ImgPreview from '../../components/ResourceList/ImgPreview';
 import styles from './styles';
 import requester from '../../utils/requester';
+import { getResourceExt, url2path } from '../../utils/assist';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
-
-/**
- * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
- *
- * @param url
- * @returns {string}
- */
-const url2path = (url) => {
-    return url.split('/')
-        .filter(item => !!item && item !== 'cloud-drive')
-        .map(item => item.trim()
-            .replace(/(^\.+|\.+$)/, ''))
-        .join('.');
-};
 
 /**
  * 回退url /cloud-drive/0/1/2/3 => /cloud-drive/0/1/2
@@ -76,17 +64,6 @@ const movePath = {
         }
         return newMoveUrl.join('/');
     },
-};
-
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-const getResourceExt = (resourceName) => {
-    const index = resourceName.lastIndexOf('.');
-    return resourceName.substr(index + 1);
 };
 
 class CloudDrive extends Component {
@@ -510,7 +487,12 @@ class CloudDrive extends Component {
                         onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
                         onRefresh={this.handleRefresh()}
                         onClose={this.handleToggleResourcePreview()}>
-                        <ImagePreview/>
+                        {
+                            console.log(mime.getExtension(mime.getType('sb.png')))
+                            // this.props.selectedResource.resourceExt === 'png' ?
+                            //     <ImgPreview src="http://www.81178117.cn/zt/hd/1yhd/images/bg_05.jpg"/> : null
+                        }
+
                     </ResourcePreview>
                 </div>
                 <FileUploader

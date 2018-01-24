@@ -8,19 +8,10 @@ import Undo from 'material-ui-icons/Undo';
 import Divider from 'material-ui/Divider';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
+import { getResourceExt } from '../../utils/assist';
 import styles from './styles';
 import { clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-const getResourceExt = (resourceName) => {
-    const index = resourceName.lastIndexOf('.');
-    return resourceName.substr(index + 1);
-};
 
 class ResourceList extends Component {
     constructor(props) {

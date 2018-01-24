@@ -13,21 +13,11 @@ import Info from 'material-ui-icons/Info';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
+import { getResourceExt } from '../../utils/assist';
 import { getSelectedResource, clearSelectedResource } from '../../store/modules/resource';
 import styles from './styles';
 import requester from '../../utils/requester';
 
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-const getResourceExt = (resourceName) => {
-    if (resourceName.split('.').length <= 1) return '文件夹';
-    const index = resourceName.lastIndexOf('.');
-    return resourceName.substr(index + 1);
-};
 
 /**
  * 0.1.2.3 => 0/1/2/3

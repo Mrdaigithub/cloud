@@ -73,6 +73,11 @@ class ResourceController extends ApiController
         return new PathResourceCollection($request->user()->resources()->where('path', $path)->get());
     }
 
+    public function preview($id)
+    {
+        return $id;
+    }
+
     /**
      * Search the resource
      *
@@ -179,7 +184,7 @@ class ResourceController extends ApiController
             if ($user->resources
                 ->where('path', $resource->path)
                 ->where('resource_name', $request->get('resource_name'))
-                ->count()){
+                ->count()) {
                 return $this->failed(400006);
             }
             $resource->resource_name = $request->get('resource_name');
