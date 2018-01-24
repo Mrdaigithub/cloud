@@ -75,7 +75,17 @@ class ResourceController extends ApiController
 
     public function preview($id)
     {
-        return $id;
+        $storage_path = storage_path('app/aetherupload/file/md5_files');
+        $resource = Resource::find($id);
+        $files = Storage::files();
+        $file = array_filter($files, function ($file) use ($resource) {
+            return str_contains($file, $resource->hash);
+        });
+        if (!count($file)) {
+            return $this->failed(400005);
+        }
+        $file = $file[key($file)];
+        return response()->file("$storage_path/$file", 'image/jpeg');
     }
 
     /**

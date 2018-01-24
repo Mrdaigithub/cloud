@@ -77,10 +77,8 @@ const styles = theme => ({
         padding: 8 * 4,
     },
     imgPreview: {
-        '& img': {
-            maxWidth: '90vw',
-            maxHeight: '70vh',
-        },
+        maxWidth: '90vw',
+        maxHeight: '70vh',
     },
 });
 

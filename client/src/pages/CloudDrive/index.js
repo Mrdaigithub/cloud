@@ -66,6 +66,11 @@ const movePath = {
     },
 };
 
+const getPreview = (resourceName) => {
+    const mimeType = mime.getType(resourceName);
+    if (/image/.test(mimeType)) return <ImgPreview/>;
+};
+
 class CloudDrive extends Component {
     constructor(props) {
         super(props);
@@ -417,7 +422,7 @@ class CloudDrive extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, selectedResource } = this.props;
         const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
         return (
             <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
@@ -484,15 +489,10 @@ class CloudDrive extends Component {
                         toggleCheck={this.handleCheckResource}/>
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
-                        onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
+                        onDownload={this.handleDownload(selectedResource.resourceID)}
                         onRefresh={this.handleRefresh()}
                         onClose={this.handleToggleResourcePreview()}>
-                        {
-                            console.log(mime.getExtension(mime.getType('sb.png')))
-                            // this.props.selectedResource.resourceExt === 'png' ?
-                            //     <ImgPreview src="http://www.81178117.cn/zt/hd/1yhd/images/bg_05.jpg"/> : null
-                        }
-
+                        {getPreview(selectedResource.resourceName)}
                     </ResourcePreview>
                 </div>
                 <FileUploader
