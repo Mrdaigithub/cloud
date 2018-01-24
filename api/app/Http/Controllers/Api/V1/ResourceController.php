@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Defuse\Crypto\File;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Support\Facades\Crypt;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PathResourceCollection;
 use App\Http\Resources\ResourceResource;
 use App\Models\Resource;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 
 class ResourceController extends ApiController
@@ -85,7 +87,9 @@ class ResourceController extends ApiController
             return $this->failed(400005);
         }
         $file = $file[key($file)];
-        return response()->file("$storage_path/$file", 'image/jpeg');
+        $image_info = getimagesize("$storage_path/$file");
+        $img_data = file_get_contents("$storage_path/$file");
+        return "data:" . $image_info['mime'] . ";base64," . base64_encode($img_data);
     }
 
     /**
