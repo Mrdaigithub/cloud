@@ -22,7 +22,7 @@ const ResourceDetail = props => (
                 tabIndex={0}
                 role="button">
                 <CardHeader
-                    avatar={props.selectedResource.resourceExt === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceExt}/>}
+                    avatar={props.selectedResource.resourceMime === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceMime}/>}
                     title={
                         <Grid item xs={12}>
                             <h2 className={props.classes.ResourceDetailCardTitle}>{props.selectedResource.resourceName}</h2>
@@ -35,7 +35,7 @@ const ResourceDetail = props => (
                         className={props.classes.ResourceDetailCardContentText}>
                         类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourceExt.toUpperCase()}
+                            {props.selectedResource.resourceMime.toUpperCase()}
                         </span>
                     </Typography>
                     <Typography

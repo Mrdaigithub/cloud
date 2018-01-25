@@ -9,7 +9,7 @@ const initialState = {
     selectedResource: {
         resourceID: null,
         resourceName: '',
-        resourceExt: '',
+        resourceMime: '',
         resourcePath: '0',
         resourceCreatedAt: '',
         resourceUpdatedAt: '',
@@ -34,7 +34,7 @@ export default (state = initialState, action) => {
                 selectedResource: {
                     resourceID: null,
                     resourceName: '',
-                    resourceExt: '',
+                    resourceMime: '',
                     resourcePath: '0',
                     resourceCreatedAt: '',
                     resourceUpdatedAt: '',
@@ -59,7 +59,7 @@ export const fetchResources = (cb) => {
     };
 };
 
-export const getSelectedResource = (resourceID, resourceName, resourceExt, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
+export const getSelectedResource = (resourceID, resourceName, resourceMime, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
     return async (dispatch) => {
         return dispatch({
             type: GET_SELECTED_RESOURCE,
@@ -67,7 +67,7 @@ export const getSelectedResource = (resourceID, resourceName, resourceExt, resou
                 selectedResource: {
                     resourceID,
                     resourceName,
-                    resourceExt,
+                    resourceMime,
                     resourcePath,
                     resourceCreatedAt,
                     resourceUpdatedAt,

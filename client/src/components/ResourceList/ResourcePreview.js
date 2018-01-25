@@ -128,7 +128,7 @@ class ResourcePreview extends Component {
                                     <ResourceTypeIcon
                                         style={{ width: ':30px', height: '30px', verticalAlign: 'middle', marginRight: '10px' }}
                                         className={classes.modalHeaderFileIcon}
-                                        ext={selectedResource.resourceExt}/>
+                                        ext={selectedResource.resourceMime}/>
                                     {selectedResource.resourceName || '未命名'}
                                 </Typography>
                                 <IconButton color="inherit" onClick={onDownload}>

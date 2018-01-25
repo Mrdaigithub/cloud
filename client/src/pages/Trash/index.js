@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
+import mime from 'mime-types';
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -11,7 +12,6 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { getResourceExt } from '../../utils/assist';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
@@ -55,7 +55,7 @@ class Trash extends Component {
     }
 
     handleClickResource = ({ id, name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+        this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
         this.setState({ ResourceDetailOpen: true });
     };
 

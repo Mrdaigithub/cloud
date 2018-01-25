@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
-import mime from 'mime';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { withStyles } from 'material-ui/styles';
+import mime from 'mime-types';
 import Formsy from 'formsy-react';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
@@ -26,10 +26,9 @@ import FileUploader from '../../components/FileUploader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
-import ImgPreview from '../../components/ResourceList/ImgPreview';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { getResourceExt, url2path } from '../../utils/assist';
+import { url2path, getPreview } from '../../utils/assist';
 import { fetchOneself } from '../../store/modules/oneself';
 import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
@@ -66,10 +65,6 @@ const movePath = {
     },
 };
 
-const getPreview = (resourceName) => {
-    const mimeType = mime.getType(resourceName);
-    if (/image/.test(mimeType)) return <ImgPreview/>;
-};
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -126,8 +121,9 @@ class CloudDrive extends Component {
 
     handleClickResource = ({ id, name, path, file, createdAt, updatedAt }) => {
         if (file) {
-            this.setState({ ResourcePreviewOpen: true });
-            this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+            console.log(mime.lookup(name));
+            // this.setState({ ResourcePreviewOpen: true });
+            // this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
         } else {
             const { changePage, routing } = this.props;
             changePage(`${routing.location.pathname}/${id}`);

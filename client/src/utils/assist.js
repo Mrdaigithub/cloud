@@ -1,13 +1,19 @@
-import mime from 'mime';
+import React from 'react';
+import mime from 'mime-types';
+import ImgPreview from '../components/ResourceList/ImgPreview';
+import TextPreview from '../components/ResourceList/TextPreview';
 
 
-/**
- * 获取文件后缀
- *
- * @param resourceName
- * @returns {string}
- */
-export const getResourceExt = resourceName => mime.getExtension(mime.getType(resourceName));
+export const getPreview = (resourceName) => {
+    const mimeType = mime.lookup(resourceName);
+    console.log(mimeType);
+    if (/image/.test(mimeType)) return <ImgPreview/>;
+    // if (/text/.test(mimeType) ||
+    //     /javascript/.test(mimeType) ||
+    //     /php/.test(mimeType) ||) {
+    //     return <TextPreview/>;
+    // }
+};
 
 /**
  * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
@@ -23,3 +29,15 @@ export const url2path = (url) => {
         .join('.');
 };
 
+/**
+ * 0.1.2.3 => 0/1/2/3
+ *
+ * @param path
+ * @returns {string}
+ */
+export const path2url = (path) => {
+    return path.split('.')
+        .map(item => item.trim())
+        .filter(item => item)
+        .join('/');
+};

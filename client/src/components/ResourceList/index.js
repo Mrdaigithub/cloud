@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import mime from 'mime-types';
 import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
 import Undo from 'material-ui-icons/Undo';
 import Divider from 'material-ui/Divider';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
-import { getResourceExt } from '../../utils/assist';
 import styles from './styles';
 import { clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
 
@@ -75,7 +75,7 @@ class ResourceList extends Component {
                                 <ListItemIcon className={classes.resourceListIcon}>
                                     {
                                         resource.file ?
-                                            <ResourceTypeIcon ext={getResourceExt(resource.resource_name)}/> :
+                                            <ResourceTypeIcon ext={mime.lookup(resource.resource_name)}/> :
                                             <FolderIcon/>
                                     }
                                 </ListItemIcon>

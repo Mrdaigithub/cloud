@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withStyles } from 'material-ui/styles';
+import mime from 'mime-types';
 import { replace, goBack } from 'react-router-redux';
 import Dialog from 'material-ui/Dialog';
 import Input, { InputAdornment } from 'material-ui/Input';
@@ -13,24 +14,11 @@ import Info from 'material-ui-icons/Info';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
-import { getResourceExt } from '../../utils/assist';
+import { getPreview, path2url } from '../../utils/assist';
 import { getSelectedResource, clearSelectedResource } from '../../store/modules/resource';
 import styles from './styles';
 import requester from '../../utils/requester';
 
-
-/**
- * 0.1.2.3 => 0/1/2/3
- *
- * @param path
- * @returns {string}
- */
-const path2url = (path) => {
-    return path.split('.')
-        .map(item => item.trim())
-        .filter(item => item)
-        .join('/');
-};
 
 class Search extends Component {
     constructor(props) {
@@ -59,7 +47,7 @@ class Search extends Component {
         if (!file) {
             this.props.changePage(`/cloud-drive/${path2url(path)}`);
         } else {
-            this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+            this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
             this.setState({ ResourcePreviewOpen: true });
         }
         this.setState({ result: [] });
@@ -71,7 +59,7 @@ class Search extends Component {
     };
 
     handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+        this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
         this.setState({
             ResourceDetailOpen: true,
         });
@@ -105,7 +93,7 @@ class Search extends Component {
     };
 
     render() {
-        const { classes, goBackPage } = this.props;
+        const { classes, goBackPage, selectedResource } = this.props;
         const { query, result } = this.state;
         return (
             <div>
@@ -148,7 +136,9 @@ class Search extends Component {
                         <ResourcePreview
                             open={this.state.ResourcePreviewOpen}
                             onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
-                            onClose={this.handleCloseResourcePreview}/>
+                            onClose={this.handleCloseResourcePreview}>
+                            {getPreview(selectedResource.resourceName)}
+                        </ResourcePreview>
                     </div>
                 </Dialog>
                 <ResourceDetail
