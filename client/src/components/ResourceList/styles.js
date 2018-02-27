@@ -55,8 +55,12 @@ const styles = theme => ({
     },
     ResourceDetailCardContentText: {
         extend: 'nowrap',
+        width: '30vw',
         fontSize: '12px',
         padding: '6px 0',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
 
     },
     ResourceDetailCardContentRightText: {
@@ -79,6 +83,12 @@ const styles = theme => ({
     imgPreview: {
         maxWidth: '90vw',
         maxHeight: '70vh',
+    },
+    textPreview: {
+        marginTop: '8vh',
+        width: '95vw',
+        height: '85vh',
+        backgroundColor: '#fafafa',
     },
 });
 

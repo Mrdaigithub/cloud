@@ -121,9 +121,8 @@ class CloudDrive extends Component {
 
     handleClickResource = ({ id, name, path, file, createdAt, updatedAt }) => {
         if (file) {
-            console.log(mime.lookup(name));
-            // this.setState({ ResourcePreviewOpen: true });
-            // this.props.getSelectedResource(id, name, getResourceExt(name), path, createdAt, updatedAt);
+            this.setState({ ResourcePreviewOpen: true });
+            this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
         } else {
             const { changePage, routing } = this.props;
             changePage(`${routing.location.pathname}/${id}`);
@@ -488,7 +487,7 @@ class CloudDrive extends Component {
                         onDownload={this.handleDownload(selectedResource.resourceID)}
                         onRefresh={this.handleRefresh()}
                         onClose={this.handleToggleResourcePreview()}>
-                        {getPreview(selectedResource.resourceName)}
+                        {getPreview(selectedResource)}
                     </ResourcePreview>
                 </div>
                 <FileUploader

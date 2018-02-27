@@ -1,18 +1,34 @@
 import React from 'react';
-import mime from 'mime-types';
 import ImgPreview from '../components/ResourceList/ImgPreview';
 import TextPreview from '../components/ResourceList/TextPreview';
 
 
-export const getPreview = (resourceName) => {
-    const mimeType = mime.lookup(resourceName);
-    console.log(mimeType);
-    if (/image/.test(mimeType)) return <ImgPreview/>;
-    // if (/text/.test(mimeType) ||
-    //     /javascript/.test(mimeType) ||
-    //     /php/.test(mimeType) ||) {
-    //     return <TextPreview/>;
-    // }
+export const getPreview = ({ resourceMime }) => {
+    if (/image/.test(resourceMime)) return <ImgPreview/>;
+    if (resourceMime === 'text/plain' ||
+        resourceMime === 'application/pdf' ||
+        resourceMime === 'application/msword' ||
+        resourceMime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        resourceMime === 'application/vnd.oasis.opendocument.text' ||
+        resourceMime === 'application/vnd.oasis.opendocument.spreadsheet' ||
+        resourceMime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        resourceMime === 'application/vnd.oasis.opendocument.presentation' ||
+        resourceMime === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+        resourceMime === 'application/vnd.oasis.opendocument.presentation' ||
+        resourceMime === 'text/html' ||
+        resourceMime === 'text/css' ||
+        resourceMime === 'text/x-scss' ||
+        resourceMime === 'text/x-sass' ||
+        resourceMime === 'application/javascript' ||
+        resourceMime === 'video/mp2t' ||
+        resourceMime === 'vue' ||
+        resourceMime === 'application/x-httpd-php' ||
+        resourceMime === 'py' ||
+        resourceMime === 'text/markdown' ||
+        resourceMime === 'application/x-sql' ||
+        resourceMime === 'application/json') {
+        return <TextPreview/>;
+    }
 };
 
 /**

@@ -35,7 +35,7 @@ const ResourceDetail = props => (
                         className={props.classes.ResourceDetailCardContentText}>
                         类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourceMime.toUpperCase()}
+                            {props.selectedResource.resourceMime ? props.selectedResource.resourceMime.toUpperCase() : '未识别文件类型'}
                         </span>
                     </Typography>
                     <Typography

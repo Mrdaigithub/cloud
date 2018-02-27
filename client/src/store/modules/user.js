@@ -19,7 +19,6 @@ export default (state = initialState, action) => {
         case ADD_USER: {
             const users = state.users.slice(0);
             users.push(action.payload.user);
-            console.log(users);
             return {
                 ...state,
                 users,
@@ -52,7 +51,6 @@ export const fetchUsers = (cb) => {
 export const addUser = (userData, cb) => {
     return async (dispatch) => {
         const user = await requester.post('/users', qs.stringify(userData));
-        console.log(user);
         dispatch({
             type: ADD_USER,
             payload: {
