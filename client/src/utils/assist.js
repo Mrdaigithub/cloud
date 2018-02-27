@@ -1,6 +1,7 @@
 import React from 'react';
 import ImgPreview from '../components/ResourceList/ImgPreview';
 import TextPreview from '../components/ResourceList/TextPreview';
+import VideoPreview from '../components/ResourceList/VideoPreview';
 
 
 export const getPreview = ({ resourceMime }) => {
@@ -28,6 +29,14 @@ export const getPreview = ({ resourceMime }) => {
         resourceMime === 'application/x-sql' ||
         resourceMime === 'application/json') {
         return <TextPreview/>;
+    }
+    if (resourceMime === 'video/mp4' ||
+        resourceMime === 'video/x-flv' ||
+        resourceMime === 'video/mpeg' ||
+        resourceMime === 'application/vnd.osgeo.mapguide.package' ||
+        resourceMime === 'application/vnd.rn-realmedia-vbr' ||
+        resourceMime === 'video/x-matroska') {
+        return <VideoPreview/>;
     }
 };
 

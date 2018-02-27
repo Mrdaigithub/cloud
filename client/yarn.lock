@@ -989,6 +989,10 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
+balloon-css@^0.5.0:
+  version "0.5.0"
+  resolved "http://registry.npm.taobao.org/balloon-css/download/balloon-css-0.5.0.tgz#6a3c065efab9ea5f509a95d4315df00aae114fa3"
+
 base64-js@^1.0.2:
   version "1.2.1"
   resolved "http://registry.npm.taobao.org/base64-js/download/base64-js-1.2.1.tgz#a91947da1f4a516ea38e5b4ec0ec3773675e0886"
@@ -2032,6 +2036,13 @@ dot-prop@^3.0.0:
 dotenv@4.0.0:
   version "4.0.0"
   resolved "http://registry.npm.taobao.org/dotenv/download/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
+
+dplayer@^1.22.2:
+  version "1.22.2"
+  resolved "http://registry.npm.taobao.org/dplayer/download/dplayer-1.22.2.tgz#92228706118df92795080b9f781297cc96114765"
+  dependencies:
+    balloon-css "^0.5.0"
+    promise-polyfill "7.1.0"
 
 duplexer2@^0.1.4:
   version "0.1.4"
@@ -5398,6 +5409,10 @@ progress@^1.1.8:
 progress@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/progress/download/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
+
+promise-polyfill@7.1.0:
+  version "7.1.0"
+  resolved "http://registry.npm.taobao.org/promise-polyfill/download/promise-polyfill-7.1.0.tgz#4d749485b44577c14137591c6f36e5d7e2dd3378"
 
 promise@8.0.1:
   version "8.0.1"

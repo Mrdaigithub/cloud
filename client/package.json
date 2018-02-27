@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "dplayer": "^1.22.2",
     "formsy-react": "^1.1.2",
     "jss": "^9.3.3",
     "jss-preset-default": "^4.0.1",
