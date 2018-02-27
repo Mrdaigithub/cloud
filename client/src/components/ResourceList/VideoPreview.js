@@ -21,8 +21,9 @@ class VideoPreview extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
-            <div id="playerContainer"/>
+            <div id="playerContainer" className={classes.videoPreview}/>
         );
     }
 }

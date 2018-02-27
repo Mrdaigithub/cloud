@@ -90,6 +90,11 @@ const styles = theme => ({
         height: '85vh',
         backgroundColor: '#fafafa',
     },
+    videoPreview: {
+        width: '80vw',
+        maxWidth: '960px',
+        minWidth: '320px',
+    },
 });
 
 export default styles;
