@@ -687,8 +687,11 @@ services:
         - ${GOLANG_APP_PATH}:/usr/src/app
       expose:
         - "${GOLANG_HOST_HTTP_PORT}"
+      ports:
+        - 80:8010
       networks:
         - backend
+        - frontend
 
 ### Networks Setup ############################################
 
