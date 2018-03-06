@@ -91,9 +91,6 @@ const styles = theme => ({
         backgroundColor: '#fafafa',
     },
     videoPreview: {
-        width: '80vw',
-        maxWidth: '960px',
-        minWidth: '320px',
     },
 });
 

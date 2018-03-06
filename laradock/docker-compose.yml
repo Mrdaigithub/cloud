@@ -679,6 +679,17 @@ services:
         - workspace
       tty: true
 
+
+### Golang Container ####################################
+    golang:
+      build: ./golang
+      volumes:
+        - ${GOLANG_APP_PATH}:/usr/src/app
+      expose:
+        - "${GOLANG_HOST_HTTP_PORT}"
+      networks:
+        - backend
+
 ### Networks Setup ############################################
 
 networks:
