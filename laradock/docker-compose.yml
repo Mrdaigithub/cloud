@@ -683,15 +683,14 @@ services:
 ### Golang Container ####################################
     golang:
       build: ./golang
-      volumes:
-        - ${GOLANG_APP_PATH}:/usr/src/app
-      expose:
-        - "${GOLANG_HOST_HTTP_PORT}"
+      volumes_from:
+        - applications
+      depends_on:
+        - workspace
       ports:
-        - 80:8010
+        - 80:80
       networks:
         - backend
-        - frontend
 
 ### Networks Setup ############################################
 
