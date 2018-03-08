@@ -405,15 +405,16 @@ class CloudDrive extends Component {
 
     handleDownload = resourceID => async () => {
         const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
-        const downloadDom = document.createElement('a');
-        downloadDom.id = 'downloadUrl';
-        downloadDom.download = true;
-        downloadDom.href = downloadUrl;
-        document.querySelector('body')
-            .appendChild(downloadDom);
-        downloadDom.click();
-        document.querySelector('body')
-            .removeChild(downloadDom);
+        console.log(downloadUrl);
+        // const downloadDom = document.createElement('a');
+        // downloadDom.id = 'downloadUrl';
+        // downloadDom.download = true;
+        // downloadDom.href = downloadUrl;
+        // document.querySelector('body')
+        //     .appendChild(downloadDom);
+        // downloadDom.click();
+        // document.querySelector('body')
+        //     .removeChild(downloadDom);
     };
 
     render() {

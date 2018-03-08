@@ -1,17 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
+	"download"
 )
 
-func SayHello(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("Hello"))
-	fmt.Print("hello\n")
-}
-
-
 func main() {
-	http.HandleFunc("/hello", SayHello)
+	http.HandleFunc("/download/secret", download.GetDownloadSecret) //获取下载加密链接
+
 	http.ListenAndServe(":8010", nil)
 }
