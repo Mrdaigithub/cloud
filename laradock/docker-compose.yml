@@ -687,10 +687,12 @@ services:
         - applications
       depends_on:
         - workspace
-      ports:
-        - 80:80
+      expose:
+        - "${GOLANG_HOST_HTTP_PORT}"
       networks:
         - backend
+      stdin_open: true
+      tty: true
 
 ### Networks Setup ############################################
 
