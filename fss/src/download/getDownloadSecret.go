@@ -2,32 +2,28 @@ package download
 
 import (
 	"net/http"
-	"github.com/go-pg/pg"
+	_ "github.com/lib/pq"
+	"model"
 	"fmt"
 )
 
 func GetDownloadSecret(w http.ResponseWriter, req *http.Request) {
-	db := pg.Connect(&pg.Options{
-		Addr:     "47.52.241.241:5432",
-		User:     "cloud",
-		Password: "cloud",
-		Database: "cloud",
-	})
-	req.ParseForm()
-	userID := req.Form["user_id"][0]
-	resourceID := req.Form["resource_id"][0]
-	var idCount int
-	_, err := db.QueryOne(pg.Scan(&idCount), "SELECT count(id) FROM users WHERE id="+userID)
+	db := model.LinkDb()
+	rows, err := db.Query("SELECT id, username FROM users")
+	checkErr(err)
+	for rows.Next() {
+		var uid int
+		var username string
+		err = rows.Scan(&uid, &username)
+		checkErr(err)
+		fmt.Print(uid, username, "\n")
+	}
+	model.CloseDb(db)
+	w.Write([]byte("sdf"))
+}
+
+func checkErr(err error) {
 	if err != nil {
 		panic(err)
 	}
-	if idCount == 0 {
-		fmt.Print("err")
-	}
-	var r []string
-	_, rerr := db.QueryOne(pg.Scan(&r), "SELECT id FROM resources WHERE id="+resourceID)
-	if rerr != nil {
-		panic(rerr)
-	}
-	fmt.Print(r)
 }
