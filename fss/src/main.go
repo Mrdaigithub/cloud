@@ -1,12 +1,14 @@
 package main
 
 import (
-	"net/http"
-	"download"
+	"github.com/gin-gonic/gin"
+	"routes"
+	"logs"
 )
 
 func main() {
-	http.HandleFunc("/download/secret", download.GetDownloadSecret) //获取下载加密链接
-
-	http.ListenAndServe(":8010", nil)
+	logs.Record()         // record routes
+	r := gin.Default()    // init instance
+	routes.SetupRouter(r) // setup routes
+	r.Run(":8010")        // listening port
 }
