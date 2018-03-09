@@ -1,4 +1,4 @@
-package model
+package postgresql
 
 import (
 	"database/sql"
