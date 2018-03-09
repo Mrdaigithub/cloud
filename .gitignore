@@ -1,2 +1,3 @@
 .idea/
-logs/
+api/storage/logs
+*.log
