@@ -2,8 +2,11 @@ package download
 
 import (
 	"github.com/gin-gonic/gin"
-	"time"
 	"app/models"
+	"fmt"
+	"app/utils"
+	"strconv"
+	"time"
 )
 
 var DB = make(map[string]string)
@@ -21,34 +24,24 @@ func Geting(c *gin.Context) {
 func GetDownloadLink(c *gin.Context) {
 	resourceHash := c.Params.ByName("resourceHash")
 	userID := c.Params.ByName("userID")
-	c.String(200, resourceHash+userID)
-	defaultExpiredTime := time.Second * 3600 * 1
-	c.String(200, string(defaultExpiredTime))
-	models.ConnOrm()
-	//
-	//err := db.QueryRow("SELECT count(id) FROM users WHERE id = " + userID).Scan(&userExists)
-	//checkErr(err)
-	//if userExists <= 0 {
-	//	fmt.Print("err")
-	//	return
-	//}
-	//
-	//err = db.QueryRow("SELECT hash FROM resources WHERE file AND NOT trashed AND id=" + resourceID).Scan(&fileHash)
-	//checkErr(err)
-	//downloadSecret := utils.Encrypt(userID + "&" + fileHash + "&" + strconv.FormatInt(time.Now().Unix(), 10))
-	//fmt.Print(downloadSecret)
-	//postgresql.CloseDb(db)
-	//rclient := redis.LinkDb()
-	//err = rclient.Set("name", "zxc123", 5*time.Second).Err()
-	//checkErr(err)
-	//val, err := rclient.Get("name").Result()
-	//checkErr(err)
-	//fmt.Print(val)
-	//w.Write([]byte("sdf"))
-}
+	//defaultExpiredTime := time.Second * 3600 * 1
 
-func checkErr(err error) {
-	if err != nil {
-		panic(err)
+	pgDB := models.ConnOrm()
+	defer pgDB.Close()
+	var resource models.Resource
+	var resourceExists int64
+	pgDB.Where("hash = ?", resourceHash).Find(&resource).Count(&resourceExists)
+	if resourceExists <= 0 {
+		fmt.Print("resource not exists")
+		return
 	}
+	downloadSecret := utils.Encrypt(userID + "&" + resourceHash + "&" + strconv.FormatInt(time.Now().Unix(), 10))
+	fmt.Println(strconv.Itoa(int(downloadSecret)))
+
+	//rDB := models.LinkRedis()
+	//err := rDB.Set("name", "zxc123", defaultExpiredTime).Err()
+	//models.CheckErr(err)
+	//val, err := rDB.Get("name").Result()
+	//models.CheckErr(err)
+	//fmt.Print(val)
 }
