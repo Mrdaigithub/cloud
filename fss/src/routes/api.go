@@ -6,5 +6,6 @@ import (
 )
 
 func SetupRouter(r *gin.Engine) {
-	r.GET("/download/link/:userID/:resourceHash", download.GetDownloadLink)
+	r.GET("/download/link/:userID/:resourceHash/:password", download.GetDownloadLink)
+	r.GET("/test", download.Test)
 }
