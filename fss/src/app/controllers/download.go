@@ -4,27 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"app/models"
 	"fmt"
-	"app/utils"
 	"strconv"
 	"time"
+	"app/utils"
+	"net/http"
 )
 
-var DB = make(map[string]string)
-
-func Geting(c *gin.Context) {
-	user := c.Params.ByName("name")
-	value, ok := DB[user]
-	if ok {
-		c.JSON(200, gin.H{"user": user, "value": value})
-	} else {
-		c.JSON(200, gin.H{"user": user, "status": "no value"})
-	}
-}
+const (
+	defaultExpiredTime = time.Second * 3600 * 1
+	clientDomain       = "http://client.mrdaisite.com/"
+)
 
 func GetDownloadLink(c *gin.Context) {
 	resourceHash := c.Params.ByName("resourceHash")
 	userID := c.Params.ByName("userID")
-	//defaultExpiredTime := time.Second * 3600 * 1
 
 	pgDB := models.ConnOrm()
 	defer pgDB.Close()
@@ -35,13 +28,11 @@ func GetDownloadLink(c *gin.Context) {
 		fmt.Print("resource not exists")
 		return
 	}
-	downloadSecret := utils.Encrypt(userID + "&" + resourceHash + "&" + strconv.FormatInt(time.Now().Unix(), 10))
-	fmt.Println(strconv.Itoa(int(downloadSecret)))
+	downloadSecret := utils.EncryptSha1(userID + "&" + resourceHash + "&" + strconv.FormatInt(time.Now().Unix(), 10))
 
-	//rDB := models.LinkRedis()
-	//err := rDB.Set("name", "zxc123", defaultExpiredTime).Err()
-	//models.CheckErr(err)
-	//val, err := rDB.Get("name").Result()
-	//models.CheckErr(err)
-	//fmt.Print(val)
+	rDB := models.LinkRedis()
+	defer rDB.Close()
+	err := rDB.Set(downloadSecret, resourceHash, defaultExpiredTime).Err()
+	models.CheckErr(err)
+	c.JSON(http.StatusOK, gin.H{"downloadLink": clientDomain + "download/file/" + downloadSecret, "ttl": defaultExpiredTime})
 }
