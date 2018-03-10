@@ -1,3 +1,4 @@
 pkg
 bin
-.log
+*.log
+fss/src/storage/*
