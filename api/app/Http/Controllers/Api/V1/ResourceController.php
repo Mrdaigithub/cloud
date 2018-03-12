@@ -118,16 +118,11 @@ class ResourceController extends ApiController
      */
     public function get_download_secret(Request $request, $id)
     {
-        if (!count($request->user()->resources()->find($id))) {
-            return $this->failed(400006);
-        }
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, env('fss_domain')."/download/secret?user_id=$id");
-	    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	    $download_link = curl_exec($ch);
-	    curl_close($ch);
-        return $download_link;
+	    if (!count($request->user()->resources()->find($id))) {
+		    return $this->failed(400006);
+	    }
+	    $secret = Crypt::encryptString($id);
+	    return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
     }
 
     /**
