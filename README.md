@@ -17,7 +17,7 @@
 * [License](./LICENSE)
 
 ### Usage
-    docker-compose up -d
+    docker-compose up -d nginx postgres redis adminer
 
 ### features
 
