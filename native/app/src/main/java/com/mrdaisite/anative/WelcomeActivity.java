@@ -16,8 +16,7 @@ import android.view.WindowManager;
  * status bar and navigation/system bar) with user interaction.
  */
 public class WelcomeActivity extends AppCompatActivity {
-    private static final int PAUSE_TIME = 3000;
-    private Handler handler = new Handler();
+    private static final int PAUSE_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +31,16 @@ public class WelcomeActivity extends AppCompatActivity {
                 super.run();
                 try {
                     Thread.sleep(PAUSE_TIME);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    });
+                    loadingNext();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    private void loadingNext() {
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }
