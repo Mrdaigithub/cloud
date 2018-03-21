@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cloud</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="app_description">A simple cloud project</string>
+</resources>
