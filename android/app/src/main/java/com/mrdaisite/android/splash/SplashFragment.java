@@ -1,53 +1,59 @@
 package com.mrdaisite.android.splash;
 
-import android.content.Intent;
+
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.mrdaisite.android.LoginActivity;
+import com.mrdaisite.android.R;
 
-import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
 
 /**
- * Created by dai on 2018/3/22.
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
  */
-
 public class SplashFragment extends Fragment implements SplashContract.View {
 
-    private SplashContract.Presenter mPresenter;
+    private SplashContract.Presenter mPersenter;
 
     public static SplashFragment newInstance() {
-        return new SplashFragment();
+
+        Bundle args = new Bundle();
+
+        SplashFragment fragment = new SplashFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onResume() {
+        super.onResume();
+//        mPersenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        mPersenter.unsubscribe();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.delayIntoLogin(3000);
     }
 
     @Override
-    public void setPresenter(SplashContract.Presenter presenter) {
-        mPresenter = presenter;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.splash_frag, container, false);
     }
 
     @Override
-    public void showLogin() {
-        startActivity(new Intent(getContext(), LoginActivity.class));
-    }
+    public void setPresenter(SplashContract.Presenter Presenter) {
 
-    @Override
-    public void delayIntoLogin(int delayTime) {
-        Flowable.just("hello world")
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        Log.e("debug", "error");
-                        showLogin();
-                    }
-                });
     }
 }
