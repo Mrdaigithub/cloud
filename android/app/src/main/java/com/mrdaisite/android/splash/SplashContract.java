@@ -9,7 +9,7 @@ import com.mrdaisite.android.BaseView;
 
 public interface SplashContract {
     interface View extends BaseView<Presenter> {
-
+        void toMainActivity();
     }
 
     interface Presenter extends BasePresenter {

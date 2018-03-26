@@ -1,14 +1,17 @@
 package com.mrdaisite.android.splash;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mrdaisite.android.MainActivity;
 import com.mrdaisite.android.R;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
@@ -17,6 +20,7 @@ import com.mrdaisite.android.R;
  */
 public class SplashFragment extends Fragment implements SplashContract.View {
 
+    private static final short SPLASH_SHOW_SECONDS = 2;
     private SplashContract.Presenter mPersenter;
 
     public static SplashFragment newInstance() {
@@ -31,13 +35,13 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     @Override
     public void onResume() {
         super.onResume();
-//        mPersenter.subscribe();
+        mPersenter.subscribe();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-//        mPersenter.unsubscribe();
+        mPersenter.unsubscribe();
     }
 
     @Override
@@ -53,7 +57,13 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     }
 
     @Override
-    public void setPresenter(SplashContract.Presenter Presenter) {
+    public void setPresenter(SplashContract.Presenter presenter) {
+        mPersenter = checkNotNull(presenter);
+    }
 
+    @Override
+    public void toMainActivity() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

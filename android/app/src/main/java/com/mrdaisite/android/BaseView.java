@@ -5,5 +5,5 @@ package com.mrdaisite.android;
  */
 
 public interface BaseView<T> {
-    void setPresenter(T Presenter);
+    void setPresenter(T presenter);
 }
