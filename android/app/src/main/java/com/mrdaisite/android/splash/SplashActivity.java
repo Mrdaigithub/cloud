@@ -13,7 +13,6 @@ import com.mrdaisite.android.util.ActivityUtils;
 /**
  * Created by dai on 2018/3/26.
  */
-
 public class SplashActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

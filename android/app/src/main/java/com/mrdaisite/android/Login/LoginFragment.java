@@ -1,34 +1,32 @@
-package com.mrdaisite.android.splash;
-
+package com.mrdaisite.android.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mrdaisite.android.Login.LoginActivity;
 import com.mrdaisite.android.R;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
 /**
- * Created by dai on 2018/3/26.
+ * Created by dai on 2018/3/29.
  * <p>
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class SplashFragment extends Fragment implements SplashContract.View {
+public class LoginFragment extends Fragment implements LoginContract.View {
 
-    private SplashContract.Presenter mPersenter;
+    private LoginContract.Presenter mPersenter;
 
-    public static SplashFragment newInstance() {
+    public static LoginFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        SplashFragment fragment = new SplashFragment();
+        LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,27 +44,24 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mPersenter.initData();
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.splash_frag, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.login_frag, container, false);
     }
 
     @Override
-    public void setPresenter(SplashContract.Presenter presenter) {
-        mPersenter = checkNotNull(presenter);
-    }
-
     public void toLoginActivity() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPersenter = checkNotNull(presenter);
     }
 }
