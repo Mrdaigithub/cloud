@@ -5,6 +5,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * Created by dai on 2018/3/26.
+ */
 public class SchedulerProvider implements BaseSchedulerProvider {
 
     @NonNull

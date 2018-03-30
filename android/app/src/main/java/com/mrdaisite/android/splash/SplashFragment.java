@@ -34,6 +34,11 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mPersenter.subscribe();
@@ -43,11 +48,6 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     public void onPause() {
         super.onPause();
         mPersenter.unsubscribe();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override

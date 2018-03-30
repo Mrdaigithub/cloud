@@ -4,6 +4,8 @@ import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 
 /**
+ * Created by dai on 2018/3/26.
+ *
  * Implementation of the {@link BaseSchedulerProvider} making all {@link Scheduler}s execute
  * synchronously so we can easily run assertions in our tests.
  * <p>

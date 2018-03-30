@@ -39,12 +39,9 @@ public class SplashPresenter implements SplashContract.Presenter {
     public void unsubscribe() {
     }
 
-
     @Override
     public void initData() {
         Flowable.timer(SPLASH_SHOW_SECONDS, TimeUnit.SECONDS)
-//                .subscribeOn(mSchedulerProvider.io())
-//                .observeOn(mSchedulerProvider.ui())
                 .subscribe(s -> {
                     mSplashView.toLoginActivity();
                 });

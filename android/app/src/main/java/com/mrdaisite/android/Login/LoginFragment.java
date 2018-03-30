@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.mrdaisite.android.R;
 
@@ -20,6 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class LoginFragment extends Fragment implements LoginContract.View {
 
+    // UI references.
+    private AutoCompleteTextView mUsernameView;
+    private EditText mPasswordView;
+    private Button mloginButton;
+
     private LoginContract.Presenter mPersenter;
 
     public static LoginFragment newInstance() {
@@ -29,6 +37,11 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -43,15 +56,20 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         mPersenter.unsubscribe();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.login_frag, container, false);
+        View root = inflater.inflate(R.layout.login_frag, container, false);
+
+        // Set up login view
+        mUsernameView = root.findViewById(R.id.username);
+        mPasswordView = root.findViewById(R.id.password);
+        mloginButton = root.findViewById(R.id.login_button);
+        mloginButton.setOnClickListener(__ -> mPersenter.attemptLogin(
+                mUsernameView.getText().toString(),
+                mPasswordView.getText().toString()));
+
+        return root;
     }
 
     @Override

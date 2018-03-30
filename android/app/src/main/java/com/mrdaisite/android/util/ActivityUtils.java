@@ -11,7 +11,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by dai on 2018/3/26.
  */
-
 public class ActivityUtils {
     public static void addFragmentToActivity(@NonNull FragmentManager fragmentManager,
                                              @NonNull Fragment fragment, int frameId) {
