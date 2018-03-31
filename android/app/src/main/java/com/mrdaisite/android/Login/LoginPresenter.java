@@ -27,22 +27,13 @@ package com.mrdaisite.android.Login;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.mrdaisite.android.data.sources.remote.RetrofitClient;
+import com.mrdaisite.android.data.model.Token;
+import com.mrdaisite.android.data.sources.remote.RetrofitProvider;
 import com.mrdaisite.android.data.sources.remote.TokenService;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
-import org.reactivestreams.Subscription;
-
-import java.io.IOException;
-
-import io.reactivex.Flowable;
-import io.reactivex.FlowableSubscriber;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.http.GET;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -56,9 +47,14 @@ public class LoginPresenter implements LoginContract.Presenter {
     @NonNull
     private final LoginContract.View mLoginView;
 
-    public LoginPresenter(LoginFragment loginFragment) {
-        mLoginView = checkNotNull(loginFragment, "splashView cannot be null!");
+    @NonNull
+    private final BaseSchedulerProvider mSchedulerProvider;
+
+    public LoginPresenter(@NonNull LoginContract.View loginView,
+                          @NonNull BaseSchedulerProvider schedulerProvider) {
+        mLoginView = checkNotNull(loginView, "splashView cannot be null!");
         mLoginView.setPresenter(this);
+        mSchedulerProvider = checkNotNull(schedulerProvider, "schedulerProvider cannot be null");
     }
 
     @Override
@@ -76,27 +72,31 @@ public class LoginPresenter implements LoginContract.Presenter {
         checkNotNull(username, "parameter username is not exists");
         checkNotNull(password, "parameter username is not exists");
 
-        RetrofitClient.getInstance()
-                .createService(TokenService.class)
-                .getToken("root", "root")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(res -> Log.e("debug", res.toString()));
-//                .enqueue(new Callback<TokenResponse>() {
-//                    @Override
-//                    public void onResponse(
-//                            Call<TokenResponse> call, Response<TokenResponse> response) {
-//                        try {
-//                            System.out.println(response.body().string());
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        t.printStackTrace();
-//                    }
-//                });
+        RetrofitProvider.getInstance()
+                .create(TokenService.class)
+                .getToken(username, password)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new Observer<Token>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.e("debug", "onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(Token token) {
+                        Log.e("debug", String.valueOf(token));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("debug", e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e("debug", "onComplete");
+                    }
+                });
     }
 }

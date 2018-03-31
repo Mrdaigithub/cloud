@@ -22,35 +22,13 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.data.sources.remote;
+package com.mrdaisite.android.data;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.mrdaisite.android.util.schedulers.SchedulerProvider;
 
-/**
- * Created by dai on 2018/3/30.
- */
-public class RetrofitClient {
-    private static final String BASE_URL = "http://api.mrdaisite.com/";
-    private static final long TIME_OUT = 6;
-    private static Retrofit retrofit = null;
-
-    private RetrofitClient() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build();
-        }
-    }
-
-    public static RetrofitClient getInstance() {
-        return new RetrofitClient();
-    }
-
-    public <T> T createService(Class<T> tClass) {
-        return retrofit.create(tClass);
+public class Injection {
+    public static BaseSchedulerProvider provideSchedulerProvider() {
+        return SchedulerProvider.getInstance();
     }
 }

@@ -24,22 +24,35 @@
 
 package com.mrdaisite.android.data.sources.remote;
 
-import com.mrdaisite.android.data.model.Token;
+import android.support.annotation.Nullable;
 
-import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by dai on 2018/3/30.
  */
-public interface TokenService {
-    @FormUrlEncoded
-    @POST("/api/v1/login/password")
-    Observable<Token> getToken(
-            @Field("username") String username,
-            @Field("password") String password
-    );
+public class RetrofitProvider {
+    private static final String BASE_URL = "http://api.mrdaisite.com/";
+    private static final long TIME_OUT = 6;
+
+    @Nullable
+    private static Retrofit INSTANCE;
+
+    // Prevent direct instantiation.
+    private RetrofitProvider() {
+    }
+
+    public static Retrofit getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+        }
+        return INSTANCE;
+    }
 }

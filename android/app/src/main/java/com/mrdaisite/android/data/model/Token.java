@@ -41,6 +41,16 @@ public class Token {
     private String access_token;
     private String refresh_token;
 
+    @Override
+    public String toString() {
+        return "Token{" +
+                "token_type='" + token_type + '\'' +
+                ", expires_in=" + expires_in +
+                ", access_token='" + access_token + '\'' +
+                ", refresh_token='" + refresh_token + '\'' +
+                '}';
+    }
+
     public String getToken_type() {
         return token_type;
     }

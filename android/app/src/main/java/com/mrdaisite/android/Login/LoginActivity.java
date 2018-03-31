@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.util.ActivityUtils;
 
 /**
@@ -45,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     loginFragment, R.id.contentFrame);
         }
-//         Create the presenter
-        new LoginPresenter(loginFragment);
+        // Create the presenter
+        new LoginPresenter(
+                loginFragment,
+                Injection.provideSchedulerProvider()
+        );
     }
 }
