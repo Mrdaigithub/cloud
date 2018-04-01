@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android;
+package com.mrdaisite.android.ui;
 
 /**
  * Created by dai on 2018/3/26.

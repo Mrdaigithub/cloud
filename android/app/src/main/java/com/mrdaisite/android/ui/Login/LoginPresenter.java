@@ -22,14 +22,13 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.Login;
+package com.mrdaisite.android.ui.Login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
-import com.mrdaisite.android.data.sources.remote.RetrofitProvider;
-import com.mrdaisite.android.data.sources.remote.TokenService;
+import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import io.reactivex.Observer;
@@ -37,12 +36,9 @@ import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Created by dai on 2018/3/26.
- */
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private TokenService mtokenService;
+    private ApiService mApiService = MyApplication.getInstance().getApiService();
 
     @NonNull
     private final LoginContract.View mLoginView;
@@ -50,8 +46,8 @@ public class LoginPresenter implements LoginContract.Presenter {
     @NonNull
     private final BaseSchedulerProvider mSchedulerProvider;
 
-    public LoginPresenter(@NonNull LoginContract.View loginView,
-                          @NonNull BaseSchedulerProvider schedulerProvider) {
+    LoginPresenter(@NonNull LoginContract.View loginView,
+                   @NonNull BaseSchedulerProvider schedulerProvider) {
         mLoginView = checkNotNull(loginView, "splashView cannot be null!");
         mLoginView.setPresenter(this);
         mSchedulerProvider = checkNotNull(schedulerProvider, "schedulerProvider cannot be null");
@@ -72,30 +68,28 @@ public class LoginPresenter implements LoginContract.Presenter {
         checkNotNull(username, "parameter username is not exists");
         checkNotNull(password, "parameter username is not exists");
 
-        RetrofitProvider.getInstance()
-                .create(TokenService.class)
-                .getToken(username, password)
+        mApiService.getToken(username, password)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
                 .subscribe(new Observer<Token>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.e("debug", "onSubscribe");
+                        com.orhanobut.logger.Logger.e("onSubscribe");
                     }
 
                     @Override
                     public void onNext(Token token) {
-                        Log.e("debug", String.valueOf(token));
+                        com.orhanobut.logger.Logger.e(String.valueOf(token));
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("debug", e.getMessage());
+                        com.orhanobut.logger.Logger.e(e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.e("debug", "onComplete");
+                        com.orhanobut.logger.Logger.e("onComplete");
                     }
                 });
     }

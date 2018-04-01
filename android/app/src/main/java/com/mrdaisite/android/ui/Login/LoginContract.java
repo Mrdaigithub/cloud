@@ -22,13 +22,17 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android;
+package com.mrdaisite.android.ui.Login;
 
-/**
- * Created by dai on 2018/3/26.
- */
-public interface BasePresenter {
-    void subscribe();
+import com.mrdaisite.android.ui.BasePresenter;
+import com.mrdaisite.android.ui.BaseView;
 
-    void unsubscribe();
+public interface LoginContract {
+    interface View extends BaseView<Presenter> {
+        void toLoginActivity();
+    }
+
+    interface Presenter extends BasePresenter {
+        void attemptLogin(String username, String password);
+    }
 }

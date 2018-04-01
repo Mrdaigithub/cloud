@@ -22,20 +22,29 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.Login;
+package com.mrdaisite.android.data.sources.remote;
 
-import com.mrdaisite.android.BasePresenter;
-import com.mrdaisite.android.BaseView;
+import com.mrdaisite.android.data.model.Token;
 
-/**
- * Created by dai on 2018/3/29.
- */
-public interface LoginContract {
-    interface View extends BaseView<Presenter> {
-        void toLoginActivity();
-    }
+import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 
-    interface Presenter extends BasePresenter {
-        void attemptLogin(String username, String password);
-    }
+public interface ApiService {
+
+    /**
+     * 获取用户认证的token
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/login/password")
+    Observable<Token> getToken(
+            @Field("username") String username,
+            @Field("password") String password
+    );
+
 }

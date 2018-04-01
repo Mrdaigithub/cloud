@@ -22,37 +22,30 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.data.sources.remote;
+package com.mrdaisite.android.data.sources.remote.Interceptors;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.google.gson.Gson;
+import com.mrdaisite.android.LoginActivity;
+import com.mrdaisite.android.data.model.Token;
 
-/**
- * Created by dai on 2018/3/30.
- */
-public class RetrofitProvider {
-    private static final String BASE_URL = "http://api.mrdaisite.com/";
-    private static final long TIME_OUT = 6;
+import java.io.IOException;
 
-    @Nullable
-    private static Retrofit INSTANCE;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
-    // Prevent direct instantiation.
-    private RetrofitProvider() {
-    }
+public class StatusInterceptor implements Interceptor {
+    @Override
+    public Response intercept(@NonNull Chain chain) throws IOException {
+        Request request = chain.request();
+        Response response = chain.proceed(request);
+        Log.e("debug", String.valueOf(response.code()));
+//        Toast toast = Toast.makeText(, String.valueOf(response.code()), Toast.LENGTH_LONG);
 
-    public static Retrofit getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build();
-        }
-        return INSTANCE;
+        return null;
     }
 }

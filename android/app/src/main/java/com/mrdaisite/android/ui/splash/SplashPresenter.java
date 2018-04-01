@@ -22,24 +22,49 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.data.sources.remote;
+package com.mrdaisite.android.ui.splash;
 
-import com.mrdaisite.android.data.model.Token;
+import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Flowable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Created by dai on 2018/3/30.
+ * Created by dai on 2018/3/26.
  */
-public interface TokenService {
-    @FormUrlEncoded
-    @POST("/api/v1/login/password")
-    Observable<Token> getToken(
-            @Field("username") String username,
-            @Field("password") String password
-    );
+public class SplashPresenter implements SplashContract.Presenter {
+
+    private static final short SPLASH_SHOW_SECONDS = 2;
+
+    @NonNull
+    private final SplashContract.View mSplashView;
+
+    @NonNull
+    private BaseSchedulerProvider mSchedulerProvider;
+
+    public SplashPresenter(@NonNull SplashContract.View splashView) {
+        mSplashView = checkNotNull(splashView, "splashView cannot be null!");
+        mSplashView.setPresenter(this);
+    }
+
+    @Override
+    public void subscribe() {
+    }
+
+    @Override
+    public void unsubscribe() {
+    }
+
+    @Override
+    public void initData() {
+        Flowable.timer(SPLASH_SHOW_SECONDS, TimeUnit.SECONDS)
+                .subscribe(s -> {
+                    mSplashView.toLoginActivity();
+                });
+    }
 }

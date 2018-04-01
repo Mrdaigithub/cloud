@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.Login;
+package com.mrdaisite.android.ui.Login;
 
 import android.content.Intent;
 import android.os.Bundle;

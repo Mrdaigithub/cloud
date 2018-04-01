@@ -34,4 +34,7 @@ ext {
     gsonVersion = '2.8.2'
     converterGsonVersion = '2.4.0'
     adapterRxjava2 = '2.4.0'
+    loadviewhelper = '1.1.2'
+    okhttpLoggingInterceptor = '3.10.0'
+    loggers = '2.2.0'
 }

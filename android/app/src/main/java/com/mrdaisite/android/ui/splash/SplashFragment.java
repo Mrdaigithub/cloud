@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.splash;
+package com.mrdaisite.android.ui.splash;
 
 
 import android.content.Intent;
@@ -32,7 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mrdaisite.android.Login.LoginActivity;
+import com.mrdaisite.android.ui.Login.LoginActivity;
 import com.mrdaisite.android.R;
 
 import static com.google.common.base.Preconditions.checkNotNull;
