@@ -24,12 +24,16 @@
 
 package com.mrdaisite.android.ui.Login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -67,30 +71,32 @@ public class LoginPresenter implements LoginContract.Presenter {
     public void attemptLogin(String username, String password) {
         checkNotNull(username, "parameter username is not exists");
         checkNotNull(password, "parameter username is not exists");
+        SharedPreferences sharedPreferences = mLoginView.getLoginActivity().getSharedPreferences(
+                "cloud", Context.MODE_PRIVATE);
+//        sharedPreferences.edit().putInt("token", 100).apply();
+        Logger.e(String.valueOf(sharedPreferences.getInt("token", 0)));
 
-        mApiService.getToken(username, password)
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new Observer<Token>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        com.orhanobut.logger.Logger.e("onSubscribe");
-                    }
-
-                    @Override
-                    public void onNext(Token token) {
-                        com.orhanobut.logger.Logger.e(String.valueOf(token));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        com.orhanobut.logger.Logger.e(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        com.orhanobut.logger.Logger.e("onComplete");
-                    }
-                });
+//        mApiService.getToken(username, password)
+//                .subscribeOn(mSchedulerProvider.io())
+//                .observeOn(mSchedulerProvider.ui())
+//                .subscribe(new Observer<Token>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                    }
+//
+//                    @Override
+//                    public void onNext(Token token) {
+////                        com.orhanobut.logger.Logger.e(token.getAccess_token());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        com.orhanobut.logger.Logger.e(e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                    }
+//                });
     }
 }

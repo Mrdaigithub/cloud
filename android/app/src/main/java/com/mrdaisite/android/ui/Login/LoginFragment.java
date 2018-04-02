@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.mrdaisite.android.R;
 
@@ -52,6 +53,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     private EditText mPasswordView;
     private Button mloginButton;
 
+    public LoginActivity mLoginActivity;
     private LoginContract.Presenter mPersenter;
 
     public static LoginFragment newInstance() {
@@ -84,6 +86,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.login_frag, container, false);
+        mLoginActivity = (LoginActivity) getActivity();
 
         // Set up login view
         mUsernameView = root.findViewById(R.id.username);
@@ -96,10 +99,19 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         return root;
     }
 
+    public LoginActivity getLoginActivity() {
+        return mLoginActivity;
+    }
+
     @Override
     public void toLoginActivity() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

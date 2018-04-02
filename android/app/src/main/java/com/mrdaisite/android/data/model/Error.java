@@ -22,15 +22,36 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui;
+package com.mrdaisite.android.data.model;
 
-import android.widget.Toast;
+public class Error {
 
-/**
- * Created by dai on 2018/3/26.
- */
-public interface BaseView<T> {
-    void showMessage(String msg);
+    /**
+     * message : Unauthorized
+     * errors : 401000
+     */
 
-    void setPresenter(T presenter);
+    private String message;
+    private String errors;
+
+    public Error(String message, String errors) {
+        this.message = message;
+        this.errors = errors;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getErrors() {
+        return errors;
+    }
+
+    public void setErrors(String errors) {
+        this.errors = errors;
+    }
 }

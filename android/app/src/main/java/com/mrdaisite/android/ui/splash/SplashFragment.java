@@ -85,6 +85,11 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     }
 
     @Override
+    public void showMessage(String msg) {
+
+    }
+
+    @Override
     public void setPresenter(SplashContract.Presenter presenter) {
         mPersenter = checkNotNull(presenter);
     }

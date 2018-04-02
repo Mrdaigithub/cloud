@@ -41,6 +41,13 @@ public class Token {
     private String access_token;
     private String refresh_token;
 
+    public Token(String token_type, int expires_in, String access_token, String refresh_token) {
+        this.token_type = token_type;
+        this.expires_in = expires_in;
+        this.access_token = access_token;
+        this.refresh_token = refresh_token;
+    }
+
     @Override
     public String toString() {
         return "Token{" +

@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Login;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -51,5 +52,10 @@ public class LoginActivity extends AppCompatActivity {
                 loginFragment,
                 Injection.provideSchedulerProvider()
         );
+    }
+
+    public SharedPreferences getSharedPreferences(int modePrivate) {
+
+        return null;
     }
 }

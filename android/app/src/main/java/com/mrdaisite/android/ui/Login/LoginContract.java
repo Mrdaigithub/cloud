@@ -30,6 +30,7 @@ import com.mrdaisite.android.ui.BaseView;
 public interface LoginContract {
     interface View extends BaseView<Presenter> {
         void toLoginActivity();
+        LoginActivity getLoginActivity();
     }
 
     interface Presenter extends BasePresenter {

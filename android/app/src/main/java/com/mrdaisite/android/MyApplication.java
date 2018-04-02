@@ -25,8 +25,9 @@
 package com.mrdaisite.android;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.mrdaisite.android.data.model.Error;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -38,6 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -65,6 +67,16 @@ public class MyApplication extends Application {
         return mApiService;
     }
 
+    public class User {
+        public String username;
+        public String password;
+
+        public User(String uname, String pwd) {
+            this.username = uname;
+            this.password = pwd;
+        }
+    }
+
     /**
      * 初始化网络请求
      */
@@ -72,8 +84,10 @@ public class MyApplication extends Application {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(chain -> {
             Request original = chain.request();
+            Response response = chain.proceed(original);
 
             Request.Builder requestBuilder = original.newBuilder();
+            requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
             requestBuilder.method(original.method(), original.body());
 
             Request request = requestBuilder.build();
@@ -85,6 +99,7 @@ public class MyApplication extends Application {
         builder.addInterceptor(loggingInterceptor);
         builder.readTimeout(5, TimeUnit.SECONDS);
         builder.writeTimeout(5, TimeUnit.SECONDS);
+        builder.connectTimeout(10, TimeUnit.SECONDS);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(builder.build())
