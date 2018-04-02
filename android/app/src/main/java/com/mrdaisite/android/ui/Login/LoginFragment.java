@@ -104,12 +104,6 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     @Override
-    public void toLoginActivity() {
-        Intent intent = new Intent(getContext(), LoginActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }

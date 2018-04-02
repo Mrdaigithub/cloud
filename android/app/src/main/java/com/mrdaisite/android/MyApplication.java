@@ -25,9 +25,9 @@
 package com.mrdaisite.android;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.mrdaisite.android.data.model.Error;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -49,6 +49,7 @@ public class MyApplication extends Application {
 
     private static MyApplication mMyApplication;
     private ApiService mApiService;
+    public static SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
@@ -57,6 +58,7 @@ public class MyApplication extends Application {
 
         initRetrofit();
         initLogger();
+        initSharedPreferences();
     }
 
     public static MyApplication getInstance() {
@@ -65,16 +67,6 @@ public class MyApplication extends Application {
 
     public ApiService getApiService() {
         return mApiService;
-    }
-
-    public class User {
-        public String username;
-        public String password;
-
-        public User(String uname, String pwd) {
-            this.username = uname;
-            this.password = pwd;
-        }
     }
 
     /**
@@ -133,5 +125,13 @@ public class MyApplication extends Application {
                 return BuildConfig.DEBUG;
             }
         });
+    }
+
+    /**
+     * 初始化 SharedPreferences
+     */
+    private void initSharedPreferences() {
+        sharedPreferences = getApplicationContext().getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
     }
 }

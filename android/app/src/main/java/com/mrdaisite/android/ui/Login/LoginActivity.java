@@ -53,9 +53,4 @@ public class LoginActivity extends AppCompatActivity {
                 Injection.provideSchedulerProvider()
         );
     }
-
-    public SharedPreferences getSharedPreferences(int modePrivate) {
-
-        return null;
-    }
 }
