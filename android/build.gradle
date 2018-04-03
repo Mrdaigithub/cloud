@@ -39,7 +39,6 @@ ext {
     okhttpLoggingInterceptor = '3.10.0'
     loggers = '2.2.0'
     androidSpinKit = '1.1.0'
-    nougatBootAnimation = '1.0.1'
     butterKnifeVersion = '8.8.1'
     butterknifeCompiler = '8.8.1'
 }

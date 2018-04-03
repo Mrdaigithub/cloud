@@ -31,12 +31,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.R;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,9 +60,10 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     AutoCompleteTextView mUsernameView;
     @BindView(R.id.password)
     EditText mPasswordView;
-    @BindView(R.id.login_button)
-    Button mloginButton;
+    @BindView(R.id.login_form)
+    ScrollView loginForm;
 
+    LoadViewHelper helper;
     private Unbinder unbinder;
     private LoginContract.Presenter mPersenter;
 
@@ -95,12 +98,14 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.login_frag, container, false);
         unbinder = ButterKnife.bind(this, root);
+        helper = new LoadViewHelper(loginForm);
 
-        // Set up login view
-        mloginButton.setOnClickListener(__ -> mPersenter.attemptLogin(
-                mUsernameView.getText().toString(),
-                mPasswordView.getText().toString()));
         return root;
+    }
+
+    @OnClick(R.id.login_button)
+    public void loginHandle() {
+        mPersenter.attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
     }
 
     @Override
@@ -114,7 +119,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     }
 
     public void showLoading() {
-//        helper.showLoading();
+        helper.showLoading();
     }
 
     @Override
