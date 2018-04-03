@@ -38,7 +38,11 @@ dependencies {
     implementation "com.ycjiang:loadviewhelper:$rootProject.loadviewhelper"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpLoggingInterceptor"
     implementation "com.orhanobut:logger:$rootProject.loggers"
+    implementation "com.github.ybq:Android-SpinKit:$rootProject.androidSpinKit"
+    implementation "com.github.ybq:nougat-boot-animation:$rootProject.nougatBootAnimation"
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeCompiler"
 }

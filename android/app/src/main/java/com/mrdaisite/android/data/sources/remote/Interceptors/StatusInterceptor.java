@@ -26,11 +26,6 @@ package com.mrdaisite.android.data.sources.remote.Interceptors;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.mrdaisite.android.LoginActivity;
-import com.mrdaisite.android.data.model.Token;
 
 import java.io.IOException;
 

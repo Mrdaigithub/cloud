@@ -31,6 +31,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.util.ActivityUtils;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by dai on 2018/3/26.
  */

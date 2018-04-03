@@ -28,15 +28,23 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 
+import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.util.ActivityUtils;
+
+import java.util.logging.Logger;
+
+import butterknife.BindView;
 
 /**
  * Created by dai on 2018/3/29.
  */
 public class LoginActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,5 +60,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginFragment,
                 Injection.provideSchedulerProvider()
         );
+
     }
 }

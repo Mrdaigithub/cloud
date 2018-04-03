@@ -75,7 +75,7 @@ public class LoginPresenter implements LoginContract.Presenter {
                 .subscribe(new CallBackWrapper<Token>() {
                     @Override
                     public void onBegin(Disposable d) {
-
+                        mLoginView.showLoading();
                     }
 
                     @Override

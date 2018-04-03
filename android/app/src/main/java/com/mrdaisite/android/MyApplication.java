@@ -28,6 +28,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -59,6 +60,7 @@ public class MyApplication extends Application {
         initRetrofit();
         initLogger();
         initSharedPreferences();
+        initLoadingHelper();
     }
 
     public static MyApplication getInstance() {
@@ -133,5 +135,13 @@ public class MyApplication extends Application {
     private void initSharedPreferences() {
         sharedPreferences = getApplicationContext().getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+    }
+
+    /**
+     * 初始化加载界面
+     */
+    private void initLoadingHelper() {
+        LoadViewHelper.getBuilder()
+                .setLoadIng(R.id.loadingView);
     }
 }

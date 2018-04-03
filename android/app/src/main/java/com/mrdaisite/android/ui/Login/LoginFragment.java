@@ -24,7 +24,6 @@
 
 package com.mrdaisite.android.ui.Login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,7 +35,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -49,11 +54,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class LoginFragment extends Fragment implements LoginContract.View {
 
     // UI references.
-    private AutoCompleteTextView mUsernameView;
-    private EditText mPasswordView;
-    private Button mloginButton;
+    @BindView(R.id.username)
+    AutoCompleteTextView mUsernameView;
+    @BindView(R.id.password)
+    EditText mPasswordView;
+    @BindView(R.id.login_button)
+    Button mloginButton;
 
-    public LoginActivity mLoginActivity;
+    private Unbinder unbinder;
     private LoginContract.Presenter mPersenter;
 
     public static LoginFragment newInstance() {
@@ -86,21 +94,13 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.login_frag, container, false);
-        mLoginActivity = (LoginActivity) getActivity();
+        unbinder = ButterKnife.bind(this, root);
 
         // Set up login view
-        mUsernameView = root.findViewById(R.id.username);
-        mPasswordView = root.findViewById(R.id.password);
-        mloginButton = root.findViewById(R.id.login_button);
         mloginButton.setOnClickListener(__ -> mPersenter.attemptLogin(
                 mUsernameView.getText().toString(),
                 mPasswordView.getText().toString()));
-
         return root;
-    }
-
-    public LoginActivity getLoginActivity() {
-        return mLoginActivity;
     }
 
     @Override
@@ -111,5 +111,15 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
         mPersenter = checkNotNull(presenter);
+    }
+
+    public void showLoading() {
+//        helper.showLoading();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
