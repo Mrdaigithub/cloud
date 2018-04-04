@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,13 +33,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.R;
-import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +62,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @BindView(R.id.login_form)
     ScrollView loginForm;
 
-    LoadViewHelper helper;
+    private LoadViewHelper helper;
     private Unbinder unbinder;
     private LoginContract.Presenter mPersenter;
 
@@ -118,8 +117,14 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         mPersenter = checkNotNull(presenter);
     }
 
+    @Override
     public void showLoading() {
         helper.showLoading();
+    }
+
+    @Override
+    public void toBack() {
+        helper.showContent();
     }
 
     @Override

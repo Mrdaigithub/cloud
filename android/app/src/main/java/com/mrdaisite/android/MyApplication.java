@@ -142,6 +142,6 @@ public class MyApplication extends Application {
      */
     private void initLoadingHelper() {
         LoadViewHelper.getBuilder()
-                .setLoadIng(R.id.loadingView);
+                .setLoadIng(R.layout.loading_view);
     }
 }
