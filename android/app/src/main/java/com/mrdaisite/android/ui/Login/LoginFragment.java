@@ -36,7 +36,13 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.helper.loadviewhelper.load.LoadViewHelper;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mrdaisite.android.R;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,19 +57,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoginContract.View {
+public class LoginFragment extends Fragment implements LoginContract.View, Validator.ValidationListener {
 
     // UI references.
+    @NotEmpty
     @BindView(R.id.username)
     AutoCompleteTextView mUsernameView;
+
+    @NotEmpty
     @BindView(R.id.password)
     EditText mPasswordView;
+
     @BindView(R.id.login_form)
     ScrollView mLoginForm;
 
     private LoadViewHelper helper;
     private Unbinder unbinder;
     private LoginContract.Presenter mPersenter;
+    private Validator validator;
+
 
     public static LoginFragment newInstance() {
 
@@ -74,9 +86,13 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         return fragment;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
     }
 
     @Override
@@ -101,9 +117,16 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         return root;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+
     @OnClick(R.id.login_button)
     public void loginHandle() {
-        mPersenter.attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
+        validator.validate();
     }
 
     @Override
@@ -126,17 +149,22 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         helper.showContent();
     }
 
-    public void setUsernameError(String errMsg) {
-        mUsernameView.setError(errMsg);
-    }
-
-    public void setPasswordError(String errMsg) {
-        mPasswordView.setError(errMsg);
+    @Override
+    public void onValidationSucceeded() {
+        mPersenter.attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                showMessage(message);
+            }
+        }
     }
 }

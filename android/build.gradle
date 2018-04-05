@@ -19,8 +19,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url "https://jitpack.io",
-            url "https://oss.sonatype.org/content/repositories/snapshots"
+            url "https://jitpack.io"
         }
     }
 }
@@ -44,4 +43,5 @@ ext {
     androidSpinKit = '1.1.0'
     butterKnifeVersion = '8.8.1'
     butterknifeCompiler = '8.8.1'
+    androidSaripaar = '2.0.3'
 }

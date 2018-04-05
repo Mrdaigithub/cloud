@@ -35,8 +35,8 @@
             android:name=".ui.Login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:name=".ui.Drive.DriveActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

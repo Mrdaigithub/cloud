@@ -22,18 +22,22 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Login;
+package com.mrdaisite.android.ui.Drive;
 
-import com.mrdaisite.android.ui.BasePresenter;
-import com.mrdaisite.android.ui.BaseView;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
-public interface LoginContract {
-    interface View extends BaseView<Presenter> {
-        void showLoading();
-        void toBack();
-    }
+import com.mrdaisite.android.R;
 
-    interface Presenter extends BasePresenter {
-        void attemptLogin(String username, String password);
+public class DriveActivity extends AppCompatActivity {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.drive_act);
+        DriveFragment driveFragment = (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (driveFragment == null){
+            driveFragment =
+        }
     }
 }

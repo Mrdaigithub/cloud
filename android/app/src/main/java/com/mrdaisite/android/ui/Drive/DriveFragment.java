@@ -22,18 +22,9 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Login;
+package com.mrdaisite.android.ui.Drive;
 
-import com.mrdaisite.android.ui.BasePresenter;
-import com.mrdaisite.android.ui.BaseView;
+import android.support.v4.app.Fragment;
 
-public interface LoginContract {
-    interface View extends BaseView<Presenter> {
-        void showLoading();
-        void toBack();
-    }
-
-    interface Presenter extends BasePresenter {
-        void attemptLogin(String username, String password);
-    }
+public class DriveFragment extends Fragment {
 }
