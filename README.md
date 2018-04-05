@@ -1,6 +1,5 @@
 <div align="center">
-    <img src="./client/src/static/logo.svg" height="128">
-    <h2>Cloud</h2>
+    <img src=".\android\app\src\main\res\drawable\logo_200dp.png">
     <p align="center">
         <p>A simple cloud project</p>
         <!-- <a href="#"> -->
