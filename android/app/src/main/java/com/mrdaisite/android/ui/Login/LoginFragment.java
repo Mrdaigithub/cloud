@@ -126,6 +126,14 @@ public class LoginFragment extends Fragment implements LoginContract.View {
         helper.showContent();
     }
 
+    public void setUsernameError(String errMsg) {
+        mUsernameView.setError(errMsg);
+    }
+
+    public void setPasswordError(String errMsg) {
+        mPasswordView.setError(errMsg);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

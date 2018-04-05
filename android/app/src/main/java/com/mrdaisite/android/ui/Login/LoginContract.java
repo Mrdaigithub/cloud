@@ -31,9 +31,13 @@ public interface LoginContract {
     interface View extends BaseView<Presenter> {
         void showLoading();
         void toBack();
+        void setUsernameError(String username_is_illegal);
+        void setPasswordError(String password_is_illegal);
     }
 
     interface Presenter extends BasePresenter {
         void attemptLogin(String username, String password);
+        Boolean isUsernameValid(String username);
+        Boolean isPasswordValid(String password);
     }
 }

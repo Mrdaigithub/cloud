@@ -26,6 +26,7 @@ package com.mrdaisite.android.ui.Login;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
@@ -35,6 +36,7 @@ import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import io.reactivex.disposables.Disposable;
 
+import static android.provider.Settings.Global.getString;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class LoginPresenter implements LoginContract.Presenter {
@@ -66,8 +68,17 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void attemptLogin(String username, String password) {
-        checkNotNull(username, "parameter username is not exists");
-        checkNotNull(password, "parameter username is not exists");
+        if (!TextUtils.isEmpty(password) && !isUsernameValid(password)) {
+            mLoginView.setPasswordError("This password is too short");
+            return;
+        }
+        if (TextUtils.isEmpty(username)) {
+            mLoginView.setPasswordError("Username is required");
+            return;
+        } else if (!isUsernameValid(username)){
+            mLoginView.setPasswordError("Username is invalid");
+            return;
+        }
 
         mApiService.getToken(username, password)
                 .subscribeOn(mSchedulerProvider.io())
@@ -91,5 +102,13 @@ public class LoginPresenter implements LoginContract.Presenter {
                         mLoginView.toBack();
                     }
                 });
+    }
+
+    public Boolean isUsernameValid(String username) {
+        return username.length() > 3;
+    }
+
+    public Boolean isPasswordValid(String password) {
+        return password.length() > 3;
     }
 }
