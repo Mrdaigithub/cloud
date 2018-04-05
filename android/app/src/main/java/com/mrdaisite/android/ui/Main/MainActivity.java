@@ -22,20 +22,31 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.splash;
+package com.mrdaisite.android.ui.Main;
 
-import com.mrdaisite.android.ui.BasePresenter;
-import com.mrdaisite.android.ui.BaseView;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+
+import com.mrdaisite.android.R;
+import com.mrdaisite.android.util.ActivityUtils;
 
 /**
  * Created by dai on 2018/3/26.
  */
-public interface SplashContract {
-    interface View extends BaseView<Presenter> {
-        void toLoginActivity();
-    }
+public class MainActivity extends AppCompatActivity {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_act);
+        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (mainFragment == null) {
+            mainFragment = MainFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    mainFragment, R.id.contentFrame);
+        }
 
-    interface Presenter extends BasePresenter {
-        void initData();
+        // Create the presenter
+        new MainPresenter(mainFragment);
     }
 }

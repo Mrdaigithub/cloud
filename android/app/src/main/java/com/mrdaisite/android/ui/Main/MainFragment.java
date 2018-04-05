@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.splash;
+package com.mrdaisite.android.ui.Main;
 
 
 import android.content.Intent;
@@ -44,15 +44,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class SplashFragment extends Fragment implements SplashContract.View {
+public class MainFragment extends Fragment implements MainContract.View {
 
-    private SplashContract.Presenter mPersenter;
+    private MainContract.Presenter mPersenter;
 
-    public static SplashFragment newInstance() {
+    public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        SplashFragment fragment = new SplashFragment();
+        MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,7 +81,7 @@ public class SplashFragment extends Fragment implements SplashContract.View {
         mPersenter.initData();
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.splash_frag, container, false);
+        return inflater.inflate(R.layout.main_frag, container, false);
     }
 
     @Override
@@ -90,12 +90,13 @@ public class SplashFragment extends Fragment implements SplashContract.View {
     }
 
     @Override
-    public void setPresenter(SplashContract.Presenter presenter) {
+    public void setPresenter(MainContract.Presenter presenter) {
         mPersenter = checkNotNull(presenter);
     }
 
     public void toLoginActivity() {
         Intent intent = new Intent(getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

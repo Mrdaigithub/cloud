@@ -24,7 +24,6 @@
 
 package com.mrdaisite.android.ui.Login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -60,7 +59,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     @BindView(R.id.password)
     EditText mPasswordView;
     @BindView(R.id.login_form)
-    ScrollView loginForm;
+    ScrollView mLoginForm;
 
     private LoadViewHelper helper;
     private Unbinder unbinder;
@@ -97,7 +96,7 @@ public class LoginFragment extends Fragment implements LoginContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.login_frag, container, false);
         unbinder = ButterKnife.bind(this, root);
-        helper = new LoadViewHelper(loginForm);
+        helper = new LoadViewHelper(mLoginForm);
 
         return root;
     }

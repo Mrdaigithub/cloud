@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="SpinKitViewStyle">@style/SpinKitView.Large.ThreeBounce</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -9,9 +9,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="LoginStyle" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground"></item>
+    <style name="AppTheme.Launch">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
     </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

@@ -22,49 +22,20 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.splash;
+package com.mrdaisite.android.ui.Main;
 
-import android.support.annotation.NonNull;
-
-import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Flowable;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.mrdaisite.android.ui.BasePresenter;
+import com.mrdaisite.android.ui.BaseView;
 
 /**
  * Created by dai on 2018/3/26.
  */
-public class SplashPresenter implements SplashContract.Presenter {
-
-    private static final short SPLASH_SHOW_SECONDS = 2;
-
-    @NonNull
-    private final SplashContract.View mSplashView;
-
-    @NonNull
-    private BaseSchedulerProvider mSchedulerProvider;
-
-    public SplashPresenter(@NonNull SplashContract.View splashView) {
-        mSplashView = checkNotNull(splashView, "splashView cannot be null!");
-        mSplashView.setPresenter(this);
+public interface MainContract {
+    interface View extends BaseView<Presenter> {
+        void toLoginActivity();
     }
 
-    @Override
-    public void subscribe() {
-    }
-
-    @Override
-    public void unsubscribe() {
-    }
-
-    @Override
-    public void initData() {
-        Flowable.timer(SPLASH_SHOW_SECONDS, TimeUnit.SECONDS)
-                .subscribe(s -> {
-                    mSplashView.toLoginActivity();
-                });
+    interface Presenter extends BasePresenter {
+        void initData();
     }
 }

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2017 Mrdai
@@ -24,18 +22,11 @@
   ~ SOFTWARE.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/loadingView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FAFAFA">
-
-    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/loadingBar"
-        style="@style/SpinKitView.Wave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:SpinKit_Color="@color/colorAccent" />
-
-</FrameLayout>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white" />
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo_200dp" />
+    </item>
+</layer-list>
