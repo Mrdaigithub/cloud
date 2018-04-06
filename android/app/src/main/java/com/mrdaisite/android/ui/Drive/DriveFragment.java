@@ -27,14 +27,12 @@ package com.mrdaisite.android.ui.Drive;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mrdaisite.android.R;
-import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 
@@ -81,9 +79,8 @@ public class DriveFragment extends Fragment implements DriveContract.View {
 
 //        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.drive_frag, container, false);
 
-        return root;
+        return inflater.inflate(R.layout.drive_frag, container, false);
     }
 
     @Override

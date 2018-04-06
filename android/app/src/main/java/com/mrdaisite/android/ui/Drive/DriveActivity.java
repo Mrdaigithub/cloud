@@ -24,19 +24,38 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.util.ActivityUtils;
 
+import java.util.logging.Logger;
+
+import butterknife.BindView;
+
 public class DriveActivity extends AppCompatActivity {
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drive_act);
+
+        // Set up the toolbar.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+//        ActionBar actionBar = getSupportActionBar();
+        com.orhanobut.logger.Logger.e(String.valueOf(toolbar));
+//        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+
         DriveFragment driveFragment = (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (driveFragment == null) {
             driveFragment = DriveFragment.newInstance();
