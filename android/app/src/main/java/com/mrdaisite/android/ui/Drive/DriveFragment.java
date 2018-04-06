@@ -24,7 +24,75 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public class DriveFragment extends Fragment {
+import com.mrdaisite.android.R;
+import com.orhanobut.logger.Logger;
+
+import butterknife.BindView;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class DriveFragment extends Fragment implements DriveContract.View {
+
+    // UI references.
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    private DriveContract.Presenter mPresenter;
+
+    public static DriveFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        DriveFragment fragment = new DriveFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.unsubscribe();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+//        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.drive_frag, container, false);
+
+        return root;
+    }
+
+    @Override
+    public void showMessage(String msg) {
+
+    }
+
+    @Override
+    public void setPresenter(DriveContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
 }

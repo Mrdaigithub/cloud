@@ -31,6 +31,7 @@ public interface LoginContract {
     interface View extends BaseView<Presenter> {
         void showLoading();
         void toBack();
+        void toDriveActivity();
     }
 
     interface Presenter extends BasePresenter {

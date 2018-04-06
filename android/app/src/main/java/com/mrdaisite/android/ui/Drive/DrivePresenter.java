@@ -24,30 +24,33 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 
-import com.mrdaisite.android.R;
-import com.mrdaisite.android.data.Injection;
-import com.mrdaisite.android.util.ActivityUtils;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
-public class DriveActivity extends AppCompatActivity {
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class DrivePresenter implements DriveContract.Presenter {
+
+    @NonNull
+    private final DriveContract.View mDriveView;
+
+    @NonNull
+    private final BaseSchedulerProvider mSchedulerProvider;
+
+    public DrivePresenter(DriveFragment driveFragment, BaseSchedulerProvider schedulerProvider) {
+        mDriveView = checkNotNull(driveFragment);
+        mDriveView.setPresenter(this);
+        mSchedulerProvider = checkNotNull(schedulerProvider);
+    }
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.drive_act);
-        DriveFragment driveFragment = (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (driveFragment == null) {
-            driveFragment = DriveFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    driveFragment, R.id.contentFrame);
-        }
+    public void subscribe() {
 
-        // Create the presenter
-        new DrivePresenter(
-                driveFragment,
-                Injection.provideSchedulerProvider()
-        );
+    }
+
+    @Override
+    public void unsubscribe() {
+
     }
 }

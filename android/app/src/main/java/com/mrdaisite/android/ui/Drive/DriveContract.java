@@ -24,30 +24,15 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import com.mrdaisite.android.ui.BasePresenter;
+import com.mrdaisite.android.ui.BaseView;
 
-import com.mrdaisite.android.R;
-import com.mrdaisite.android.data.Injection;
-import com.mrdaisite.android.util.ActivityUtils;
+public interface DriveContract {
+    interface View extends BaseView<Presenter> {
 
-public class DriveActivity extends AppCompatActivity {
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.drive_act);
-        DriveFragment driveFragment = (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (driveFragment == null) {
-            driveFragment = DriveFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    driveFragment, R.id.contentFrame);
-        }
+    }
 
-        // Create the presenter
-        new DrivePresenter(
-                driveFragment,
-                Injection.provideSchedulerProvider()
-        );
+    interface Presenter extends BasePresenter {
+
     }
 }

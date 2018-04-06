@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.ui.Drive.DriveActivity;
 
 import java.util.List;
 
@@ -147,6 +149,13 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     @Override
     public void toBack() {
         helper.showContent();
+    }
+
+    @Override
+    public void toDriveActivity() {
+        Intent intent = new Intent(getContext(), DriveActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     @Override
