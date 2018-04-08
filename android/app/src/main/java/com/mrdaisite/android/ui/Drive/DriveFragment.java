@@ -27,12 +27,18 @@ package com.mrdaisite.android.ui.Drive;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mrdaisite.android.R;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 
@@ -44,6 +50,7 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    private String[] list = {"鉛筆", "原子筆", "鋼筆", "毛筆", "彩色筆"};
     private DriveContract.Presenter mPresenter;
 
     public static DriveFragment newInstance() {
@@ -77,10 +84,15 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.drive_frag, container, false);
 
-        return inflater.inflate(R.layout.drive_frag, container, false);
+        // Set up resources view
+        RecyclerView mRecyclerView = (RecyclerView) root.findViewById(R.id.resource_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        return root;
     }
 
     @Override
@@ -92,4 +104,5 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     public void setPresenter(DriveContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
+
 }
