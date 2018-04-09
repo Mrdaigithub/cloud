@@ -52,7 +52,7 @@ import io.objectbox.BoxStore;
 
 public class MyApplication extends Application {
 
-    public static SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences;
     private static MyApplication mMyApplication;
     private ApiService mApiService;
     private BoxStore boxStore;
@@ -62,11 +62,11 @@ public class MyApplication extends Application {
         super.onCreate();
         mMyApplication = this;
 
-        initRetrofit();
         initLogger();
         initSharedPreferences();
         initLoadingHelper();
         initBoxStore();
+        initRetrofit();
     }
 
     public static MyApplication getInstance() {
@@ -85,8 +85,15 @@ public class MyApplication extends Application {
         builder.addInterceptor(chain -> {
             Request original = chain.request();
 
+            SharedPreferences sharedPref = MyApplication.getSharedPreferences();
+            String defaultValue = getResources().getString(R.string.token_default);
+            String token = sharedPref.getString("token", defaultValue);
+
             Request.Builder requestBuilder = original.newBuilder();
             requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
+            if (token.length() > 0 && !token.equals("null")) {
+                requestBuilder.header("Authorization", "Bearer " + token);
+            }
             requestBuilder.method(original.method(), original.body());
 
             Request request = requestBuilder.build();
@@ -108,7 +115,6 @@ public class MyApplication extends Application {
                 .build();
 
         mApiService = retrofit.create(ApiService.class);
-
     }
 
     /**
@@ -164,5 +170,9 @@ public class MyApplication extends Application {
      */
     public BoxStore getBoxStore() {
         return boxStore;
+    }
+
+    public static SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 }

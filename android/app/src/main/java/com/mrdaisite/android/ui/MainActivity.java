@@ -24,8 +24,6 @@
 
 package com.mrdaisite.android.ui;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,24 +32,51 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.model.Token;
+import com.mrdaisite.android.data.model.User;
+import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.ui.Drive.DriveActivity;
 import com.mrdaisite.android.ui.Login.LoginActivity;
+import com.mrdaisite.android.util.CallBackWrapper;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.logging.Logger;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by dai on 2018/3/26.
  */
 public class MainActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
         String defaultValue = getResources().getString(R.string.token_default);
         String token = sharedPref.getString("token", defaultValue);
-        com.orhanobut.logger.Logger.e(String.valueOf(token));
-        Intent intent;
-        intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        if (token.isEmpty() || token.equals(defaultValue)) {
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            ApiService mApiService = MyApplication.getInstance().getApiService();
+            mApiService.getUser()
+                    .subscribe(new CallBackWrapper<User>() {
+                        @Override
+                        public void onBegin(Disposable d) {
+                        }
+
+                        @Override
+                        public void onSuccess(User user) {
+                            com.orhanobut.logger.Logger.e(String.valueOf(user));
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            com.orhanobut.logger.Logger.e(msg);
+                        }
+                    });
+            startActivity(new Intent(this, DriveActivity.class));
+        }
         finish();
     }
 }

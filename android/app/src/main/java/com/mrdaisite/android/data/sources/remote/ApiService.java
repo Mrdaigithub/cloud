@@ -25,10 +25,13 @@
 package com.mrdaisite.android.data.sources.remote;
 
 import com.mrdaisite.android.data.model.Token;
+import com.mrdaisite.android.data.model.User;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiService {
@@ -46,4 +49,12 @@ public interface ApiService {
             @Field("username") String username,
             @Field("password") String password
     );
+
+    /**
+     * 获取当前用户信息
+     *
+     * @return
+     */
+    @GET("/api/v1/users/0")
+    Observable<User> getUser();
 }

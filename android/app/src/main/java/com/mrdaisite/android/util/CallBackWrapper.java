@@ -37,6 +37,7 @@ import java.net.ConnectException;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -55,6 +56,7 @@ public abstract class CallBackWrapper<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        com.orhanobut.logger.Logger.e(String.valueOf(e));
 
         if (e instanceof HttpException) {
             // HTTP错误

@@ -84,7 +84,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
                     @Override
                     public void onSuccess(Token token) {
-                        SharedPreferences.Editor editor = MyApplication.sharedPreferences.edit();
+                        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
+                        SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("token", token.getAccess_token()).apply();
                         mLoginView.showMessage("login success");
                         mLoginView.toBack();
