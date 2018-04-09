@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.helper.loadviewhelper.load.LoadViewHelper;
+import com.mrdaisite.android.data.model.MyObjectBox;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -38,19 +39,23 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.util.concurrent.TimeUnit;
 
+import io.objectbox.android.AndroidObjectBrowser;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import io.objectbox.BoxStore;
+
+
 public class MyApplication extends Application {
 
+    public static SharedPreferences sharedPreferences;
     private static MyApplication mMyApplication;
     private ApiService mApiService;
-    public static SharedPreferences sharedPreferences;
+    private BoxStore boxStore;
 
     @Override
     public void onCreate() {
@@ -61,6 +66,7 @@ public class MyApplication extends Application {
         initLogger();
         initSharedPreferences();
         initLoadingHelper();
+        initBoxStore();
     }
 
     public static MyApplication getInstance() {
@@ -78,7 +84,6 @@ public class MyApplication extends Application {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(chain -> {
             Request original = chain.request();
-            Response response = chain.proceed(original);
 
             Request.Builder requestBuilder = original.newBuilder();
             requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
@@ -88,7 +93,7 @@ public class MyApplication extends Application {
             return chain.proceed(request);
         });
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Logger.d(message));
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(Logger::d);
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         builder.addInterceptor(loggingInterceptor);
         builder.readTimeout(5, TimeUnit.SECONDS);
@@ -143,5 +148,21 @@ public class MyApplication extends Application {
     private void initLoadingHelper() {
         LoadViewHelper.getBuilder()
                 .setLoadIng(R.layout.loading_view);
+    }
+
+    private void initBoxStore() {
+        boxStore = MyObjectBox.builder().androidContext(MyApplication.this).build();
+        if (BuildConfig.DEBUG) {
+            new AndroidObjectBrowser(boxStore).start(this);
+        }
+    }
+
+    /**
+     * 获取boxtore
+     *
+     * @return box
+     */
+    public BoxStore getBoxStore() {
+        return boxStore;
     }
 }

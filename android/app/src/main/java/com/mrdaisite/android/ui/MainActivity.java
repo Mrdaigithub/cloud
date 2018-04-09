@@ -22,14 +22,21 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Main;
+package com.mrdaisite.android.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.R;
-import com.mrdaisite.android.util.ActivityUtils;
+import com.mrdaisite.android.ui.Login.LoginActivity;
+
+import java.util.logging.Logger;
 
 /**
  * Created by dai on 2018/3/26.
@@ -38,15 +45,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_act);
-        MainFragment mainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (mainFragment == null) {
-            mainFragment = MainFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    mainFragment, R.id.contentFrame);
-        }
-
-        // Create the presenter
-        new MainPresenter(mainFragment);
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String defaultValue = getResources().getString(R.string.token_default);
+        String token = sharedPref.getString("token", defaultValue);
+        com.orhanobut.logger.Logger.e(String.valueOf(token));
+        Intent intent;
+        intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

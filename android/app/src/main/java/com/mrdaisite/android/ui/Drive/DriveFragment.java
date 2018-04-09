@@ -33,12 +33,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.mrdaisite.android.R;
-import com.orhanobut.logger.Logger;
+import com.mrdaisite.android.adapter.ResourceAdapter;
 
 import butterknife.BindView;
 
@@ -50,7 +47,6 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
-    private String[] list = {"鉛筆", "原子筆", "鋼筆", "毛筆", "彩色筆"};
     private DriveContract.Presenter mPresenter;
 
     public static DriveFragment newInstance() {
@@ -87,10 +83,13 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         View root = inflater.inflate(R.layout.drive_frag, container, false);
 
         // Set up resources view
-        RecyclerView mRecyclerView = (RecyclerView) root.findViewById(R.id.resource_recycler_view);
+        RecyclerView mRecyclerView = root.findViewById(R.id.resource_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        ResourceAdapter resourceAdapter = new ResourceAdapter(new String[]{"world", "hello", "world"});
+        mRecyclerView.setAdapter(resourceAdapter);
 
         return root;
     }
