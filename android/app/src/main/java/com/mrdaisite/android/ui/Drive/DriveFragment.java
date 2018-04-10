@@ -34,10 +34,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
+import com.mrdaisite.android.data.model.User;
+import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.util.CallBackWrapper;
 
 import butterknife.BindView;
+import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -61,6 +66,23 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApiService mApiService = MyApplication.getInstance().getApiService();
+        mApiService.getUser("root", "root")
+                .subscribe(new CallBackWrapper<User>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(User user) {
+                        com.orhanobut.logger.Logger.e(String.valueOf(user));
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -55,6 +54,10 @@ public interface ApiService {
      *
      * @return
      */
-    @GET("/api/v1/users/0")
-    Observable<User> getUser();
+    @FormUrlEncoded
+    @POST("/api/v1/users/0")
+    Observable<User> getUser(
+            @Field("username") String username,
+            @Field("password") String password
+    );
 }

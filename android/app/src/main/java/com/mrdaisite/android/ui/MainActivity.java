@@ -55,28 +55,30 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = MyApplication.getSharedPreferences();
         String defaultValue = getResources().getString(R.string.token_default);
         String token = sharedPref.getString("token", defaultValue);
-        if (token.isEmpty() || token.equals(defaultValue)) {
-            startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            ApiService mApiService = MyApplication.getInstance().getApiService();
-            mApiService.getUser()
-                    .subscribe(new CallBackWrapper<User>() {
-                        @Override
-                        public void onBegin(Disposable d) {
-                        }
 
-                        @Override
-                        public void onSuccess(User user) {
-                            com.orhanobut.logger.Logger.e(String.valueOf(user));
-                        }
-
-                        @Override
-                        public void onError(String msg) {
-                            com.orhanobut.logger.Logger.e(msg);
-                        }
-                    });
-            startActivity(new Intent(this, DriveActivity.class));
-        }
+        startActivity(new Intent(this, LoginActivity.class));
+//        if (token.isEmpty() || token.equals(defaultValue)) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        } else {
+//            ApiService mApiService = MyApplication.getInstance().getApiService();
+//            mApiService.getUser()
+//                    .subscribe(new CallBackWrapper<User>() {
+//                        @Override
+//                        public void onBegin(Disposable d) {
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(User user) {
+//                            com.orhanobut.logger.Logger.e(String.valueOf(user));
+//                        }
+//
+//                        @Override
+//                        public void onError(String msg) {
+//                            com.orhanobut.logger.Logger.e(msg);
+//                        }
+//                    });
+//            startActivity(new Intent(this, DriveActivity.class));
+//        }
         finish();
     }
 }

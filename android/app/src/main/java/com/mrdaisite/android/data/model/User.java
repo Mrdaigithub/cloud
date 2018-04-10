@@ -46,12 +46,12 @@ public class User {
     @Id(assignable = true)
     private long id;
     private String username;
-    private String email;
-    private boolean is_admin;
-    private long capacity;
-    private int used;
-    private Date createdAt;
-    private Date updatedAt;
+//    private String email;
+//    private boolean is_admin;
+//    private long capacity;
+//    private int used;
+//    private Date createdAt;
+//    private Date updatedAt;
 
     public long getId() {
         return id;
@@ -60,7 +60,7 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
-
+//
     public String getUsername() {
         return username;
     }
@@ -68,52 +68,52 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean isIs_admin() {
-        return is_admin;
-    }
-
-    public void setIs_admin(boolean is_admin) {
-        this.is_admin = is_admin;
-    }
-
-    public long getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(long capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getUsed() {
-        return used;
-    }
-
-    public void setUsed(int used) {
-        this.used = used;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//
+//    public String getEmail() {
+//        return email;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public boolean isIs_admin() {
+//        return is_admin;
+//    }
+//
+//    public void setIs_admin(boolean is_admin) {
+//        this.is_admin = is_admin;
+//    }
+//
+//    public long getCapacity() {
+//        return capacity;
+//    }
+//
+//    public void setCapacity(long capacity) {
+//        this.capacity = capacity;
+//    }
+//
+//    public int getUsed() {
+//        return used;
+//    }
+//
+//    public void setUsed(int used) {
+//        this.used = used;
+//    }
+//
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 }

@@ -44,9 +44,11 @@ dependencies {
     implementation "com.mobsandgeeks:android-saripaar:$rootProject.androidSaripaar"
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$rootProject.baseRecyclerViewAdapterHelper"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
-    annotationProcessor "io.objectbox:objectbox-processor:$objectboxVersion"
+    implementation "com.facebook.stetho:stetho:$rootProject.stetho"
+    implementation "com.facebook.stetho:stetho-okhttp3:$rootProject.stethoOkhttp3"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeCompiler"
+    annotationProcessor "io.objectbox:objectbox-processor:$objectboxVersion"
 }

@@ -28,6 +28,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.data.model.MyObjectBox;
 import com.mrdaisite.android.data.sources.remote.ApiService;
@@ -63,6 +65,7 @@ public class MyApplication extends Application {
         mMyApplication = this;
 
         initLogger();
+        initStetho();
         initSharedPreferences();
         initLoadingHelper();
         initBoxStore();
@@ -99,10 +102,7 @@ public class MyApplication extends Application {
             Request request = requestBuilder.build();
             return chain.proceed(request);
         });
-
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(Logger::d);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-        builder.addInterceptor(loggingInterceptor);
+        builder.addNetworkInterceptor(new StethoInterceptor());
         builder.readTimeout(5, TimeUnit.SECONDS);
         builder.writeTimeout(5, TimeUnit.SECONDS);
         builder.connectTimeout(10, TimeUnit.SECONDS);
@@ -161,6 +161,10 @@ public class MyApplication extends Application {
         if (BuildConfig.DEBUG) {
             new AndroidObjectBrowser(boxStore).start(this);
         }
+    }
+
+    private void initStetho() {
+        Stetho.initializeWithDefaults(this);
     }
 
     /**
