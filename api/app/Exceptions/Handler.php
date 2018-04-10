@@ -26,16 +26,14 @@
 			'password',
 			'password_confirmation',
 		];
-		
-		/**
-		 * Report or log an exception.
-		 *
-		 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-		 *
-		 * @param  \Exception $exception
-		 *
-		 * @return void
-		 */
+
+        /**
+         * Report or log an exception.
+         * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+         * @param  \Exception $exception
+         * @return void
+         * @throws Exception
+         */
 		public function report( Exception $exception ) {
 			parent::report( $exception );
 		}
@@ -93,7 +91,7 @@
 		protected function unauthenticated( $request, AuthenticationException $exception ) {
 			return response()->json( [
 				"errors"  => [
-					"token" => [ "401000" ]
+					"token" => [ "401001" ]
 				],
 				"message" => $exception->getMessage(),
 			], 401 );

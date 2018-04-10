@@ -6,52 +6,21 @@
 	use GuzzleHttp\Client as httpClient;
 	use App\Http\Requests\LoginRequest;
 	use App\Http\Controllers\Api\ApiController;
-	use Illuminate\Http\Request;
-	use Illuminate\Validation\ValidationException;
-	use Illuminate\Support\Facades\Hash;
+    use Illuminate\Support\Facades\Hash;
+    use Illuminate\Validation\ValidationException;
 	use App\Models\User;
-	
-	class AuthController extends ApiController {
+
+    class AuthController extends ApiController {
 		private $httpClient;
 		
 		public function __construct() {
 			$this->httpClient = new httpClient;
 		}
-		
-		
-		private static function get( $url ) {
-			$ch = curl_init();
-			curl_setopt( $ch, CURLOPT_HTTPHEADER, [
-				"User-Agent: Self"
-			] );
-			curl_setopt( $ch, CURLOPT_URL, $url );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-			$data = curl_exec( $ch );
-			curl_close( $ch );
-			
-			return $data;
-		}
-		
-		private function post( $url, $post_data ) {
-			$ch = curl_init();
-			curl_setopt( $ch, CURLOPT_HTTPHEADER, [
-				"User-Agent: Self",
-			] );
-			curl_setopt( $ch, CURLOPT_URL, $url );
-			curl_setopt( $ch, CURLOPT_POST, true );
-			curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_data );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-			$data = curl_exec( $ch );
-			curl_close( $ch );
-			
-			return $data;
-		}
-		
+
 		/**
 		 * 使用密码方式登陆
 		 *
 		 * @param LoginRequest $login_request
-		 *
 		 * @return mixed
 		 */
 		protected function passwordLogin( LoginRequest $login_request ) {
@@ -61,7 +30,7 @@
 			
 			if ( ! Hash::check( $password, $user->password ) ) {
 				throw ValidationException::withMessages( [
-					"passowrd" => [ "401000" ],
+					"password" => [ "401000" ],
 				] )->status( 401 );
 			}
 			
@@ -78,13 +47,19 @@
 				]
 			);
 		}
-		
+
+        /**
+         * 刷新token
+         *
+         * @param RefreshTokenRequest $refresh_token_request
+         * @return \Psr\Http\Message\ResponseInterface
+         */
 		protected function refreshToken( RefreshTokenRequest $refresh_token_request ) {
 			return $this->httpClient->post(
 				env( "API_DOMAIN" ) . "oauth/token", [
 					"form_params" => [
 						"grant_type"    => "refresh_token",
-						"refresh_token" => $refresh_token_request->refreshToken,
+						"refresh_token" => $refresh_token_request->refresh_token,
 						"client_id"     => env( "CLIENT_ID" ),
 						"client_secret" => env( "CLIENT_SECRET" ),
 						"scope"         => "",

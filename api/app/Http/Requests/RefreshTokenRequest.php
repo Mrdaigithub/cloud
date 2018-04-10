@@ -3,10 +3,10 @@
 	namespace App\Http\Requests;
 	
 	use Illuminate\Foundation\Http\FormRequest;
-	
-	/**
-	 * @property mixed refreshToken
-	 */
+
+    /**
+     * @property mixed refresh_token
+     */
 	class RefreshTokenRequest extends FormRequest {
 		
 		/**
