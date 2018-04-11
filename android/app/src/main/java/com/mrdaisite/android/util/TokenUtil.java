@@ -37,7 +37,7 @@ import io.reactivex.disposables.Disposable;
 
 public class TokenUtil {
     private static TokenUtil INSTANCE;
-    private SharedPreferences sharedPref = MyApplication.getSharedPreferences();
+    private SharedPreferences sharedPref = MyApplication.getInstance().getSharedPreferences();
     private ApiService mApiService = MyApplication.getInstance().getApiService();
 
     public static TokenUtil getInstance() {
@@ -59,7 +59,6 @@ public class TokenUtil {
     public void refreshToken() {
         String refreshToken = sharedPref.getString("refresh_token", "");
         if (refreshToken.equals("")) return;
-        Logger.e(String.valueOf(mApiService));
         mApiService.refreshToken(refreshToken)
                 .subscribe(new CallBackWrapper<Token>() {
                     @Override

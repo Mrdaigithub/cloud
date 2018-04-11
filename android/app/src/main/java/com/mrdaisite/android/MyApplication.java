@@ -54,8 +54,8 @@ import io.objectbox.BoxStore;
 
 public class MyApplication extends Application {
 
-    private static SharedPreferences sharedPreferences;
     private static MyApplication mMyApplication;
+    private SharedPreferences sharedPreferences;
     private ApiService mApiService;
     private BoxStore boxStore;
 
@@ -65,11 +65,11 @@ public class MyApplication extends Application {
         mMyApplication = this;
 
         initLogger();
-        initStetho();
         initSharedPreferences();
+        initStetho();
+        initRetrofit();
         initLoadingHelper();
         initBoxStore();
-        initRetrofit();
     }
 
     public static MyApplication getInstance() {
@@ -80,19 +80,25 @@ public class MyApplication extends Application {
         return mApiService;
     }
 
+    public BoxStore getBoxStore() {
+        return boxStore;
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
+    }
+
     /**
      * 初始化网络请求
      */
     private void initRetrofit() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        TokenUtil tokenUtil = TokenUtil.getInstance();
-        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
 
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             Request.Builder requestBuilder = original.newBuilder();
 
-            String accessToken = sharedPref.getString("access_token", "");
+            String accessToken = sharedPreferences.getString("access_token", "");
 
             requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
             requestBuilder.header("Authorization", "Bearer " + accessToken);
@@ -164,18 +170,5 @@ public class MyApplication extends Application {
 
     private void initStetho() {
         Stetho.initializeWithDefaults(this);
-    }
-
-    /**
-     * 获取boxtore
-     *
-     * @return box
-     */
-    public BoxStore getBoxStore() {
-        return boxStore;
-    }
-
-    public static SharedPreferences getSharedPreferences() {
-        return sharedPreferences;
     }
 }

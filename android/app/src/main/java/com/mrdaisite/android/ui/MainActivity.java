@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
-        String defaultValue = getResources().getString(R.string.token_default);
-        String token = sharedPref.getString("token", defaultValue);
+//        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
+//        String defaultValue = getResources().getString(R.string.token_default);
+//        String token = sharedPref.getString("token", defaultValue);
 
         startActivity(new Intent(this, LoginActivity.class));
 //        if (token.isEmpty() || token.equals(defaultValue)) {

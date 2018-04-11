@@ -37,7 +37,6 @@ import java.net.ConnectException;
 import java.net.SocketException;
 import java.text.ParseException;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
