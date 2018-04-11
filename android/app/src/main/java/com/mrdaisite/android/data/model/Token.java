@@ -24,39 +24,25 @@
 
 package com.mrdaisite.android.data.model;
 
-/**
- * Created by dai on 2018/3/30.
- */
+import com.google.common.base.Objects;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Transient;
+
 public class Token {
 
     /**
      * token_type : Bearer
-     * expires_in : 31536000
-     * access_token : eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQ3YTQ4ZDc5MGRlNjEyMzJkNWI0ZWVjMjc4ZDhjZGMzMzY3MGIxNmY5NDY2YjM3MTg4ZmYyMDBlOGI4ODQyM2E2MTE4OTIxYjE3M2M0M2ZlIn0.eyJhdWQiOiIxIiwianRpIjoiNDdhNDhkNzkwZGU2MTIzMmQ1YjRlZWMyNzhkOGNkYzMzNjcwYjE2Zjk0NjZiMzcxODhmZjIwMGU4Yjg4NDIzYTYxMTg5MjFiMTczYzQzZmUiLCJpYXQiOjE1MjIzODg4NjMsIm5iZiI6MTUyMjM4ODg2MywiZXhwIjoxNTUzOTI0ODYzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.QaLYLfohFFvelx6NLj1_5vgb0Pwz3G62WfjutuGHmOxLPSjQlj0yqBM2anxUeh4-3A-58getEHJMXEaAfbc83QdueFst7eFgO3IxlfNnJGE9wFLsKQpqkMno-uVP2OZ_iYCY8k9nl0IGGnDAO5bd3IKURV3vygwOplRUmpWS1xE_Bu94jC5874MdShbyajXoVPOk5KJ9AS3UcmQ1cJA_gGD-06nbxtj9QyqoOMNxD_Oa5r9gzUPhrZCXb8UpgxlneK3z_jEMAProFT4GGR2hRtinMtYHi0tRFrf8NxNDyUhffY6qQDWJf0Z1Qs96ylvzLR8itKniO0_Cly4TSIXpr-jHygaXbq40Q-V-AUIF7gTnTtpse1UK_ytjDZnsrwaJJYcGjOeHTZf5E3XyejMwI9pTnwVmYWQ20HNCDKNdkuhwqIWWx-SfqTYpxXym1N3Mnb3qr-U8hCciMhYmiDYyPZACjz8eMAQzMaHvrVejgWy74N8A3SDrUW2MulduPI_c_htvt9T2iPgwCgl-QMvMFmu_S1daE5SaM5Zd_U_A_ELNV6ShJ5UDCcLA4NWtLdOmDXe1Cs0d0QGP_Et54lr82DKwt4wHahTgFoLBIOh6YsBbBfpIfjMKBGKbyrWMKC14UrPXyURcf121x_cYVf992ZcbKHJtzMqtiwG4x54LV0U
-     * refresh_token : def50200baae3ac33f0147751afdb678b92188f168069be5f65faa7e9e10d75dcbe9c1d5b340dffa02b959908525e027d873eb174afebfc55c0ec83a7f5f3b1c80d01cf7ba5470a72dcfa3859bdcd7d53c2053c322424f1b54222e307d6b141f2841be07fe3838a1dd073419e6076c5d702fb85edbadf20e31fdaffdc0c63159ccaadd2d776fdce862776523c7922fbba40fe5d7ed5ee4be624262430c0275f929ffe423d72013075514b9474c57f405d23560e5012c7124462cc3714f9ca976a663cccf894a0627a84185b2f980d0c387b45a27530e3176500b702fd0581f01b3247b6dbf8f754d2e3a5b3d5815196237e14200c205dcd842b92c1d8795ca02b946c2cdf87cd48baae97f807a91149e3ea398fc1487fd050ddf5374ad317ca13185fe48083ef7495b467b33af25cc1274bbc07414ede08ce90be7b3bd1a473ecdc47c4bd858ff0774a9d9088228cbc26d6cbd3fb0f917d1c1da1a03259cdaf715
+     * expires_in : 1799
+     * access_token : eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE4MjFkMWY3M2I4YWQ2NDE3MWY4ODNhN2Q3MWM3YjQxYjZiNmJlYTc2ZTk3ZDcwMGUyOWJkM2VhZmUyODc2YTZmODlmZDQwNmFjNDZhZTQ5In0.eyJhdWQiOiIxIiwianRpIjoiYTgyMWQxZjczYjhhZDY0MTcxZjg4M2E3ZDcxYzdiNDFiNmI2YmVhNzZlOTdkNzAwZTI5YmQzZWFmZTI4NzZhNmY4OWZkNDA2YWM0NmFlNDkiLCJpYXQiOjE1MjM0MTQ0NjcsIm5iZiI6MTUyMzQxNDQ2NywiZXhwIjoxNTIzNDE2MjY3LCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.vFLYQVhfhB0owk119j4CkFj7NtQh1J4z9Ny_1OvBRu-Zhv6uhwue-RWk8iIaa_wovga-znapYCX_vyJvPq72JVllFqQE81XVdY7fPbxBzda4xlOpB7Ctm4WuZDlmDfmxIDbu2K5aCNIsSaMI7ZGQX5XREyMyOy0YVsWDYMqxfp2-NAON7gudQ7AyUl68Nibl3IKD02z-ulTiUgb7xh8MrC89IAuLkgSVo8d_F6PoH2QXPPJ1EOin7DfMOz5oAcwy2PRfLLWjI5RucP54jnRB91OOzhImKUvFrkvGiqfSDJQsofnHjrNOnRzmu7lii5xdyV0lSaklBnX3MalNTIEet90Lv1natXxJKJOQU9fST98CYke7ZRSOcpV1cMNnFJNS2SlxJht3v2QzsW0sSJJAiOcz-rJazeAaJ8KX315yKvfOMvY8bRSOJUr8GQNY3JfNFn6lahfhuVn7mMV59JOxAodZnjR6VLLp_Zx1OzSUfdUfu0lde6EgbMxjlEH7Frgedi8rWMpJJEPeJwjFsnCLI1usHGLTQ1qWO6MRqROuIlAV65DZwYaeqwBs7kpIK27vz-utFlj6GcxiPOrKPkK589hre69qyEBbs8ng5OtFzXkE72VNBwiyO3G8sVy6JWnKW9Vp0-RSeAxOVbwY7u2JFkz8hhXAVOiL-wBtCpuMnBo
+     * refresh_token : def50200259b9aa162fc20a303b254721ead2f5daffc2cc1b9481a522c64a6d7267963743a3217df914e922622a9be670fa291cfed8c158e559193460016ddd8603d5b50f7212293d5ff77817d980702b75e42dccae217fb85af244eca533e6e54bfe09bf72192725c525c04f3fefbd34401db5e3c461266e8f89cc1387662add80339e5248f1b25e4e07a81fdf35c7a8e87e4153f1a7fdb73a1896ce1f05d6ed613015c774268a095ab3a4059b5b7af2099c83ab61a8f70b0b6b34d6db11957321d9c473c6467bee0a364572f08d7875bfa66a1114d1a8c5c8696487686257d963bbf4194d28ac8d5af8e4d8889df3251f92d3db8a50ccb2d8ecedbd3b944f12e1d6e7bb1d95c98643c3b4a588a50a8deb0a5b97026e5d6a6f298012d8db1abe0810a3d9668455d93c0c5c31e5f8ce4061a308e3a7cccfee37a9efed9ac461c99adbda0fbee0f0a11b353df974544f304169d63b66e181b4d1c0068adb8a0c9f8
      */
 
     private String token_type;
     private int expires_in;
     private String access_token;
     private String refresh_token;
-
-    public Token(String token_type, int expires_in, String access_token, String refresh_token) {
-        this.token_type = token_type;
-        this.expires_in = expires_in;
-        this.access_token = access_token;
-        this.refresh_token = refresh_token;
-    }
-
-    @Override
-    public String toString() {
-        return "Token{" +
-                "token_type='" + token_type + '\'' +
-                ", expires_in=" + expires_in +
-                ", access_token='" + access_token + '\'' +
-                ", refresh_token='" + refresh_token + '\'' +
-                '}';
-    }
 
     public String getToken_type() {
         return token_type;
@@ -88,5 +74,15 @@ public class Token {
 
     public void setRefresh_token(String refresh_token) {
         this.refresh_token = refresh_token;
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "token_type='" + token_type + '\'' +
+                ", expires_in=" + expires_in +
+                ", access_token='" + access_token + '\'' +
+                ", refresh_token='" + refresh_token + '\'' +
+                '}';
     }
 }

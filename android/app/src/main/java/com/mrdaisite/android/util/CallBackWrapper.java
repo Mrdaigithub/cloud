@@ -46,6 +46,10 @@ import retrofit2.HttpException;
 public abstract class CallBackWrapper<T> implements Observer<T> {
     @Override
     public void onSubscribe(Disposable d) {
+        TokenUtil tokenUtil = TokenUtil.getInstance();
+        if (tokenUtil.isExpired()) {
+            tokenUtil.refreshToken();
+        }
         onBegin(d);
     }
 

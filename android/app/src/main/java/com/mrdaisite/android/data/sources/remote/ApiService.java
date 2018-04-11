@@ -50,6 +50,18 @@ public interface ApiService {
     );
 
     /**
+     * 刷新已过期的token
+     *
+     * @param refresh_token
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/token/refresh")
+    Observable<Token> refreshToken(
+            @Field("refresh_token") String refresh_token
+    );
+
+    /**
      * 获取当前用户信息
      *
      * @return

@@ -22,83 +22,63 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Login;
+package com.mrdaisite.android.util;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.EditText;
 
-import com.mobsandgeeks.saripaar.ValidationError;
-import com.mobsandgeeks.saripaar.Validator;
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.sources.remote.ApiService;
-import com.mrdaisite.android.util.CallBackWrapper;
-import com.mrdaisite.android.util.TokenUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
 
-import java.util.List;
-
-
-import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class LoginPresenter implements LoginContract.Presenter {
-
+public class TokenUtil {
+    private static TokenUtil INSTANCE;
+    private SharedPreferences sharedPref = MyApplication.getSharedPreferences();
     private ApiService mApiService = MyApplication.getInstance().getApiService();
 
-    @NonNull
-    private final LoginContract.View mLoginView;
-
-    @NonNull
-    private final BaseSchedulerProvider mSchedulerProvider;
-
-    LoginPresenter(@NonNull LoginContract.View loginView,
-                   @NonNull BaseSchedulerProvider schedulerProvider) {
-        mLoginView = checkNotNull(loginView, "splashView cannot be null!");
-        mLoginView.setPresenter(this);
-        mSchedulerProvider = checkNotNull(schedulerProvider, "schedulerProvider cannot be null");
+    public static TokenUtil getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new TokenUtil();
+        }
+        return INSTANCE;
     }
 
-    @Override
-    public void subscribe() {
-
+    public void saveToken(Token token) {
+        long expiresTime = System.currentTimeMillis() + (long) ((double) token.getExpires_in() * 1000 * 0.9);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("token_type", token.getToken_type()).apply();
+        editor.putLong("expires_time", expiresTime).apply();
+        editor.putString("access_token", token.getAccess_token()).apply();
+        editor.putString("refresh_token", token.getRefresh_token()).apply();
     }
 
-    @Override
-    public void unsubscribe() {
-
-    }
-
-    @Override
-    public void attemptLogin(String username, String password) {
-        mApiService.getToken(username, password)
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
+    public void refreshToken() {
+        String refreshToken = sharedPref.getString("refresh_token", "");
+        if (refreshToken.equals("")) return;
+        Logger.e(String.valueOf(mApiService));
+        mApiService.refreshToken(refreshToken)
                 .subscribe(new CallBackWrapper<Token>() {
                     @Override
                     public void onBegin(Disposable d) {
-//                        mLoginView.showLoading();
                     }
 
                     @Override
                     public void onSuccess(Token token) {
-                        TokenUtil tokenUtil = TokenUtil.getInstance();
-                        tokenUtil.saveToken(token);
-//                        mLoginView.showMessage("login success");
-//                        mLoginView.toBack();
-//                        mLoginView.toDriveActivity();
+                        saveToken(token);
                     }
 
                     @Override
                     public void onError(String msg) {
-                        mLoginView.showMessage(msg);
-                        mLoginView.toBack();
                     }
                 });
+    }
+
+    public Boolean isExpired() {
+        long expires_time = sharedPref.getLong("expires_time", 0);
+        return expires_time != 0 && System.currentTimeMillis() >= expires_time;
     }
 }

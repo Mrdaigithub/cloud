@@ -34,6 +34,7 @@ import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mrdaisite.android.data.model.MyObjectBox;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
+import com.mrdaisite.android.util.TokenUtil;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -44,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 import io.objectbox.android.AndroidObjectBrowser;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -85,18 +85,17 @@ public class MyApplication extends Application {
      */
     private void initRetrofit() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        TokenUtil tokenUtil = TokenUtil.getInstance();
+        SharedPreferences sharedPref = MyApplication.getSharedPreferences();
+
         builder.addInterceptor(chain -> {
             Request original = chain.request();
-
-            SharedPreferences sharedPref = MyApplication.getSharedPreferences();
-            String defaultValue = getResources().getString(R.string.token_default);
-            String token = sharedPref.getString("token", defaultValue);
-
             Request.Builder requestBuilder = original.newBuilder();
+
+            String accessToken = sharedPref.getString("access_token", "");
+
             requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
-            if (token.length() > 0 && !token.equals("null")) {
-                requestBuilder.header("Authorization", "Bearer " + token);
-            }
+            requestBuilder.header("Authorization", "Bearer " + accessToken);
             requestBuilder.method(original.method(), original.body());
 
             Request request = requestBuilder.build();

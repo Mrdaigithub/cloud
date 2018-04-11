@@ -28,6 +28,7 @@ import java.util.Date;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Transient;
 
 @Entity
 public class User {
@@ -43,7 +44,7 @@ public class User {
      * updated_at : {"date":"2018-04-09 07:39:18.000000","timezone_type":3,"timezone":"Asia/Shanghai"}
      */
 
-    @Id(assignable = true)
+    @Id
     private long id;
     private String username;
 //    private String email;
@@ -60,7 +61,7 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
-//
+
     public String getUsername() {
         return username;
     }
