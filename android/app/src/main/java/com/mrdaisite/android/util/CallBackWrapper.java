@@ -26,9 +26,14 @@ package com.mrdaisite.android.util;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.MalformedJsonException;
 import com.mrdaisite.android.data.model.Error;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 
@@ -36,6 +41,9 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.Observer;
@@ -70,8 +78,13 @@ public abstract class CallBackWrapper<T> implements Observer<T> {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            Error res = new Gson().fromJson(responseBody, Error.class);
-            onError(Constants.ERROR_CODES.get(res.getErrors()));
+            List<String> errorCodes = new ArrayList<>();
+            Error error = new Gson().fromJson(responseBody, Error.class);
+            Map<String, List<String>> keyWord = error.getErrors();
+            for (String key : keyWord.keySet()) {
+                errorCodes.addAll(keyWord.get(key));
+            }
+            onError(Constants.ERROR_CODES.get(errorCodes.get(0)));
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 || e instanceof ParseException

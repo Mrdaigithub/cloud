@@ -48,12 +48,12 @@ public class TokenUtil {
     }
 
     public void saveToken(Token token) {
-        long expiresTime = System.currentTimeMillis() + (long) ((double) token.getExpires_in() * 1000 * 0.9);
+        long expiresTime = System.currentTimeMillis() + (long) ((double) token.getExpiresIn() * 1000 * 0.9);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("token_type", token.getToken_type()).apply();
+        editor.putString("token_type", token.getTokenType()).apply();
         editor.putLong("expires_time", expiresTime).apply();
-        editor.putString("access_token", token.getAccess_token()).apply();
-        editor.putString("refresh_token", token.getRefresh_token()).apply();
+        editor.putString("access_token", token.getAccessToken()).apply();
+        editor.putString("refresh_token", token.getRefreshToken()).apply();
     }
 
     public void refreshToken() {

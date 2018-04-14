@@ -26,14 +26,16 @@
 			'password',
 			'password_confirmation',
 		];
-
-        /**
-         * Report or log an exception.
-         * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-         * @param  \Exception $exception
-         * @return void
-         * @throws Exception
-         */
+		
+		/**
+		 * Report or log an exception.
+		 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+		 *
+		 * @param  \Exception $exception
+		 *
+		 * @return void
+		 * @throws Exception
+		 */
 		public function report( Exception $exception ) {
 			parent::report( $exception );
 		}
@@ -60,8 +62,11 @@
 		 */
 		protected function invalid( $request, ValidationException $exception ) {
 			return response()->json( [
-				'errors'  => $exception->errors(),
-				'message' => $exception->getMessage(),
+				'errors'  => [
+					"username" => [ "401000", "401000" ],
+					"password" => [ "401000", "401000" ],
+				],
+				"message" => $exception->getMessage(),
 			], $exception->status );
 		}
 		

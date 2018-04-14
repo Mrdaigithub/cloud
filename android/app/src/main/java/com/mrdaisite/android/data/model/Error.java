@@ -24,20 +24,17 @@
 
 package com.mrdaisite.android.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public class Error {
-
-    /**
-     * message : Unauthorized
-     * errors : 401000
-     */
-
+    @SerializedName("message")
     private String message;
-    private String errors;
-
-    public Error(String message, String errors) {
-        this.message = message;
-        this.errors = errors;
-    }
+    @SerializedName("errors")
+    private Map<String, List<String>> errors;
 
     public String getMessage() {
         return message;
@@ -47,11 +44,19 @@ public class Error {
         this.message = message;
     }
 
-    public String getErrors() {
+    public Map<String, List<String>> getErrors() {
         return errors;
     }
 
-    public void setErrors(String errors) {
+    public void setErrors(Map<String, List<String>> errors) {
         this.errors = errors;
+    }
+
+    @Override
+    public String toString() {
+        return "Error{" +
+                "message='" + message + '\'' +
+                ", errors=" + errors +
+                '}';
     }
 }
