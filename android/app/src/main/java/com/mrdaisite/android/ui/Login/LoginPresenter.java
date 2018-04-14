@@ -82,15 +82,15 @@ public class LoginPresenter implements LoginContract.Presenter {
                 .subscribe(new CallBackWrapper<Token>() {
                     @Override
                     public void onBegin(Disposable d) {
-//                        mLoginView.showLoading();
+                        mLoginView.showLoading();
                     }
 
                     @Override
                     public void onSuccess(Token token) {
                         TokenUtil tokenUtil = TokenUtil.getInstance();
                         tokenUtil.saveToken(token);
-//                        mLoginView.showMessage("login success");
-//                        mLoginView.toBack();
+                        mLoginView.showMessage("login success");
+                        mLoginView.toBack();
 //                        mLoginView.toDriveActivity();
                     }
 

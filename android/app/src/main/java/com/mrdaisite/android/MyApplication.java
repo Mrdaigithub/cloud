@@ -99,6 +99,12 @@ public class MyApplication extends Application {
             Request.Builder requestBuilder = original.newBuilder();
 
             String accessToken = sharedPreferences.getString("access_token", "");
+            long expiresTime = sharedPreferences.getLong("expires_time", 0);
+
+            if (System.currentTimeMillis() >= expiresTime) {
+                // token过期
+                Logger.e("timeout");
+            }
 
             requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
             requestBuilder.header("Authorization", "Bearer " + accessToken);

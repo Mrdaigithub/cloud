@@ -23,8 +23,8 @@
 		 * @var array
 		 */
 		protected $dontFlash = [
-			'password',
-			'password_confirmation',
+			"password",
+			"password_confirmation",
 		];
 		
 		/**
@@ -62,10 +62,7 @@
 		 */
 		protected function invalid( $request, ValidationException $exception ) {
 			return response()->json( [
-				'errors'  => [
-					"username" => [ "401000", "401000" ],
-					"password" => [ "401000", "401000" ],
-				],
+				"errors"  => $exception->errors(),
 				"message" => $exception->getMessage(),
 			], $exception->status );
 		}
@@ -80,8 +77,8 @@
 		 */
 		protected function invalidJson( $request, ValidationException $exception ) {
 			return response()->json( [
-				'errors'  => $exception->errors(),
-				'message' => $exception->getMessage(),
+				"errors"  => $exception->errors(),
+				"message" => $exception->getMessage(),
 			], $exception->status );
 		}
 		

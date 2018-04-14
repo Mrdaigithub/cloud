@@ -26,11 +26,6 @@
 		 * @return mixed
 		 */
 		protected function passwordLogin( LoginRequest $login_request ) {
-			
-			throw ValidationException::withMessages( [
-				"password" => [ "401000" ],
-			] )->status( 401 );
-			
 			$username = $login_request->get( "username" );
 			$password = $login_request->get( "password" );
 			$user     = User::where( "username", $username )->first();

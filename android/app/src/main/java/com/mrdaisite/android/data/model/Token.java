@@ -26,6 +26,7 @@ package com.mrdaisite.android.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+
 public class Token {
 
     /**
@@ -74,5 +75,15 @@ public class Token {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    @Override
+    public String toString() {
+        return "Token{" +
+                "tokenType='" + tokenType + '\'' +
+                ", expiresIn=" + expiresIn +
+                ", accessToken='" + accessToken + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                '}';
     }
 }
