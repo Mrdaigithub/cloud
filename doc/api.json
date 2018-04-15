@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-04-10T15:20:24.069Z",
+	"__export_date": "2018-04-15T08:58:10.569Z",
 	"__export_source": "insomnia.desktop.app:v5.15.0",
 	"resources": [
 		{
@@ -64,9 +64,9 @@
 			"created": 1511922053488,
 			"description": "",
 			"environment": {},
-			"metaSortKey": -1511922053488,
-			"modified": 1511922053488,
-			"name": "user",
+			"metaSortKey": -1512964839915,
+			"modified": 1523763948181,
+			"name": "User",
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
 			"_type": "request_group"
 		},
@@ -93,16 +93,27 @@
 			"_type": "request_group"
 		},
 		{
+			"_id": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
+			"created": 1523763936335,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1512964839902.5,
+			"modified": 1523763940152,
+			"name": "Resource",
+			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
+			"_type": "request_group"
+		},
+		{
 			"_id": "req_9ea8e2bbf59f41a285fa42bb8f01fdc3",
 			"authentication": {},
 			"body": {},
 			"created": 1523371602231,
-			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符         |\n| 400004 | 请求参数格式错误             |\n| 400005 | 请求参数不存在于数据库       |\n| 400006 | 请求参数已存在于数据库       |\n| 401000 | 密码错误                     |\n| 401001 | 用户未携带有效的access_token |\n| 403000 | 权限不足                     |\n| 409000 | 上传的资源已存在于服务器     |\n| 409001 | 请求的资源不存在             |\n| 409002 | 此用户的存储容量不足         |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败           |",
+			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 409000 | 上传的资源已存在于服务器     |\n| 409001 | 请求的资源不存在             |\n| 409002 | 此用户的存储容量不足         |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败           |",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
 			"method": "GET",
-			"modified": 1523372276493,
+			"modified": 1523773544823,
 			"name": "全局错误状态码",
 			"parameters": [],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
@@ -111,7 +122,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "",
+			"url": "http://api.mrdaisite.com/api/v1/test",
 			"_type": "request"
 		},
 		{
@@ -176,8 +187,8 @@
 		{
 			"_id": "req_05a0d012b3314366aa9f15d9ce31cc72",
 			"authentication": {
-				"disabled": true,
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRmNDBjYzIwZmQzYjcyZjFjOGIzM2E3YmZlNDNhZmFmNTdkZTgwY2Q0MzJlMTM3ZmE2YTZiMjE1ZWI0NTM3ZjlkM2FlOGU1ZWFkMTY4ZTFhIn0.eyJhdWQiOiIxIiwianRpIjoiNGY0MGNjMjBmZDNiNzJmMWM4YjMzYTdiZmU0M2FmYWY1N2RlODBjZDQzMmUxMzdmYTZhNmIyMTVlYjQ1MzdmOWQzYWU4ZTVlYWQxNjhlMWEiLCJpYXQiOjE1MjMzNDY1MzIsIm5iZiI6MTUyMzM0NjUzMiwiZXhwIjoxNTIzMzQ2NTkyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.yhRNOcUcus9TXEIGzU6LHg2RVW--rnMKEBl7bX8hHZvG0C1rBesuY_dcKdqnxiqfjRws8I9tUh39lFArNrM1p3zS7fLx4wHzfw4AApGsYRO8_vXDMH6zj6pgPDAQ2ai6HpKorCyvvIeCNHyWHvYpGdwggpRKfsA08e8s5XtJbXstbdho-IQG3T5DCZ7K0EF9_FyoOELKsD_oPKa7rYWGqkGhTip66sn_wSFacylPveSAEOKkf7OmOLodEJQPAqkLBldA0FYvIzuo3kjWZThY3yfVz7ews-jon0np9MsyYVnj9VtJ1PRkmBfs802nhrWieV3_EvRj1W70hG3GUqGDe80p4RYVtMkiqnt-VbqQ5W6lCF387qstC_YwzlBrTtro6pIBasPUCjwVTW-7Ek7LxY5vpXnDnxanIsKEAnvRRF3FvhcQ_lZn3RIHtBEtOlY6S_MjTuW4vkdycpQk-DVPkSjIzyxeqLnqlFZ_Sg13eLuQNWbnTMThk0Vw7hLeOJRXtOOP5HQYd2p29sUqvR8M17M-IBEqAbQ0OXjPvw3wyj1NC_w9m-pnQeR6SVyyurUOFDOgbnl1A7Bs28flVsvHr0DcVNEH9S-rU2Y7ftKBZRnG1z5Zwr_ywZjceIXKnrnZp1n0MqBZPrMTTVMF4lbPQ4ALMd7Scxu0Y3Afa7IAUfA ",
+				"disabled": false,
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA3YWE5Mjk4Y2ExYzhjMmE3MzRlZjRlYmI2ZTEzY2MyYmI1YzI3OGVjMTAzMTYxYzEyZWViYzU2OGQ0NzcxM2YxYjI4M2Y4MGRiYTBlNjhhIn0.eyJhdWQiOiIxIiwianRpIjoiMDdhYTkyOThjYTFjOGMyYTczNGVmNGViYjZlMTNjYzJiYjVjMjc4ZWMxMDMxNjFjMTJlZWJjNTY4ZDQ3NzEzZjFiMjgzZjgwZGJhMGU2OGEiLCJpYXQiOjE1MjM3Nzg0ODEsIm5iZiI6MTUyMzc3ODQ4MSwiZXhwIjoxNTIzNzgwMjgxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.VMT0YOb3at6HAzMXU8QK8O0mUrhxtnqXS_h52MbC_G_0k_xCF7VfNPrKpw_TU0RaOQgmR4GD-iBBmfbTVL0Lj6GryJsvNpI3UoS5sRo4w3SFxxmBiu9XsGpqboIz34cLlYLV1BT17cLlGGKzO-xTzfVTXYGY3uyWVKIgPW7I4t3y9gl9ck4PRwGdID55yUYA74FcVVsPVMvJyrzN7NDxxwy69oY2z2G3Qvszgv5qGTFbOgSav4J1otHatJwV9TUu2k7Ej9sdtF4K85Bmgj4u6xLvnesDKWa0ioScwxT5Y19EQBIuAen4rMdhfcMn_gNP3UquxLbY8T9veO_KCPRKBviMRnPUwHAncmP5--sKneugGUlqblUV_MsGLu_vr5xwm3jO9VD3Fun9jS-62R35AFMNn6qoUJ1yM83upJQyo1jatz1KKII6971RAhKvYSb3JSOv4B8eBMt9RPUkBM1CB19I54zXkBEqSWz_pX7jqi2fDiaZiMX0eR2mK3885BYVOwkXYk5jlDXtqsCogTif6WmecbiO8xpddTEFvGhVFyM-a_Pok_d8Mghh1k8Tkx4WJ85NN61PHmq6Y_qjbEe0npJSwbxFBFyMobFBsZwdZQ3NxZe4CTPCq-wPGC5i4UIxlm2bIJy7c7ZYWwjMKNtOG_km1_cxOSvjMjIjhNKXzVQ",
 				"type": "bearer"
 			},
 			"body": {},
@@ -185,9 +196,9 @@
 			"description": "",
 			"headers": [],
 			"isPrivate": false,
-			"metaSortKey": -1511922059359,
+			"metaSortKey": -1516327511421,
 			"method": "GET",
-			"modified": 1523348115218,
+			"modified": 1523778505133,
 			"name": "get user list",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
@@ -255,7 +266,7 @@
 		{
 			"_id": "req_2be2ce6e7d4446a694bd1e6cf93897b9",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMxMGYzYWIxYzE0NWFmNDQzNTkzOTBjNzYzZTY3OTk5ODVhN2U0ZmNlZWI0ZTc1ZWFlYjQ5Y2NhNGY3ZGQwZDViYzEzYTRkZWUzZDc4YjhmIn0.eyJhdWQiOiIxIiwianRpIjoiMzEwZjNhYjFjMTQ1YWY0NDM1OTM5MGM3NjNlNjc5OTk4NWE3ZTRmY2VlYjRlNzVlYWViNDljY2E0ZjdkZDBkNWJjMTNhNGRlZTNkNzhiOGYiLCJpYXQiOjE1MTM5MDU1NzUsIm5iZiI6MTUxMzkwNTU3NSwiZXhwIjoxNTEzOTkxOTc1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.6QHtHlEhu4lsiX-82WtyAeK2EUK_QHV7JAFP0VDnXjyKe6Ym_68w8heuT0-jF7iV7wz4JfwgZ2r3O8_zK767dobzsC_uz-HHipJRLoSvEVefDpBeK5_TUzAfbvWAkHnHQjAL6ekgA_p8FX4SVdzs27VkKI9rY4TR-niAb15zTzs87J1hQvBR2qhtXAvOC3Q7kl4aySoqlKstcYYNfJfl58A4UfbEQjpFaLuLq_ipOtO5TXOpU7LnNLDDzCRm98Gi7AmIJrniCKy38dBxXJBFJS7-jL14TfLLlg9W566dnldakVDrSnqscbEIo4PjXKBkRyRmJXSzeOMoyMWXLtXZd5mLtD7EBgn_ceGTsqx5yj5PTW5RRHLYKzkYfXdKHhIr0QCMYpv_ly3042_Mgol0WXQpOAaj_REDvUBxr2myWiIqrmTGA_dqGsqyqUd7mAlfGccGlvz-Z_gXzd5Vr_0O0-59vuVAoaLVXiqrzm0I6zwdhV2ACN48u-iG2B0rdgol0ab8C_-ACGLbQLm1WidVyT245uBuWD1LJ8XVjvVCdpUUoBDWJTZ7rh35j4X3wBi4hThqPdsgRLwO2qzubJItJYfk81tGS4HcgUsacDJ8l4NJ7L-EX5n12ZbB_uVhgzEkZjf9ojooQ85UoTKlWOWV4QUcIVKapRC1PUvEe6JXB-Q",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijc0YjIyNjJiYWYxNTc0NWM2NWYxYjUwNTIzYWNmZTg3YTU3MjM2NTg1MjYwZjY4NmIwNDk2ODM4YTA4OTI3MDQ2ZDI5Y2VkYmZkNjMxNGVhIn0.eyJhdWQiOiIxIiwianRpIjoiNzRiMjI2MmJhZjE1NzQ1YzY1ZjFiNTA1MjNhY2ZlODdhNTcyMzY1ODUyNjBmNjg2YjA0OTY4MzhhMDg5MjcwNDZkMjljZWRiZmQ2MzE0ZWEiLCJpYXQiOjE1MjM3Nzk5MTgsIm5iZiI6MTUyMzc3OTkxOCwiZXhwIjoxNTIzNzgxNzE4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.HuXDzG5P0AMcGLJDElEL2bI1rSVVZz3WiP39XrxcaOfrHpPPFQ-KPMWNtfzclIbh2UBbTA5-Fv34LqpD2c4dhml_v4DXLy6O-gUIO8OqMc_rL-U8yNyVpuZZL0HwdqBx37AKuEHZQ_tpV0mpr-MXdqQrFxh3qDhpk_bBjNhtwGGg7fn1xkwvJ5us4kSmbLXcO5nErYT7QRstzUUXH-wMwIaB-EzBk5nEeBndi27Z4J_dgspdpN4z2iGbGKYzm8KkMYtsrl2bYesiBeiO7lm2zdmNI7BXlAK8cSJ2N2MhqC8Wu0vkfKMQ7V7SVTMJZ6C5mvQKFkuIUV1rmrLo57t0gRU7I2KwARbMHrRDkgfSYoZmBO1ggFU9vi1cWyv894ZtKn22Bcy2KLe1kBm4KXFjWDLT_4TKu50ri4HvMwPSlEfiROzWbat5Ryqsa1zIW5gas95Vjwnd4wxWQuzx3qvCws7VOLxHh4t7l4G5LjCCm_bVgnnj_hNqf51nOlVKFzGKNwSzk6Ip2wi1c-iJTEZB6VAi72EcuTX6KaZnbPXE4BvlNymjKyLugBzNeYVEHxjN-gQk2PL3PWaj1ezSO62vLy0JCFA8DG9Igzy7LMFC2nYmbvtzpgfQRLYOonnJjqBn1k-dY80mVUuSVhGhbPa6pKcjj-5QTg7itkMkddYenxE",
 				"type": "bearer"
 			},
 			"body": {},
@@ -263,9 +274,9 @@
 			"description": "",
 			"headers": [],
 			"isPrivate": false,
-			"metaSortKey": -1511922059352.75,
+			"metaSortKey": -1516327511396,
 			"method": "GET",
-			"modified": 1513923616730,
+			"modified": 1523780002562,
 			"name": "get user by id",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
@@ -393,13 +404,13 @@
 						"disabled": false,
 						"id": "pair_8c5d5aa9e9ec4e74bef08b43fdeda9b6",
 						"name": "username",
-						"value": "user1"
+						"value": "root"
 					},
 					{
 						"disabled": false,
 						"id": "pair_d403fc903f154776a3d2edd6a29b8381",
 						"name": "password",
-						"value": "user1"
+						"value": "root"
 					}
 				]
 			},
@@ -415,7 +426,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523346334787,
 			"method": "POST",
-			"modified": 1523373340030,
+			"modified": 1523778479909,
 			"name": "登录",
 			"parameters": [],
 			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
@@ -428,10 +439,60 @@
 			"_type": "request"
 		},
 		{
+			"_id": "req_f1d3458d8469454bae29b4d5234535ff",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": [
+					{
+						"disabled": false,
+						"id": "pair_82aaa1cbc2f04483903884eb06ca2de2",
+						"name": "code",
+						"value": "4a62576458aa3b7b1d70"
+					},
+					{
+						"disabled": false,
+						"id": "pair_5f31f5813a8d47f5bca9c689c9155261",
+						"name": "client_secret",
+						"value": "7819e44bb88a8cd47a2c0ac65715b463e6704262"
+					},
+					{
+						"disabled": false,
+						"id": "pair_cbb5700c808c4c8a91dfeb9cbc84b8d1",
+						"name": "client_id",
+						"value": "fbc7ce7b78d475a3a327"
+					}
+				]
+			},
+			"created": 1516327263705,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_bb7d0a78878d4782b28a067d739e8989",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1523346334737,
+			"method": "POST",
+			"modified": 1523346507228,
+			"name": "github fetch access token",
+			"parameters": [],
+			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://github.com/login/oauth/access_token",
+			"_type": "request"
+		},
+		{
 			"_id": "req_c9e0a2e66d3e428293bab80a5b692056",
 			"authentication": {
-				"disabled": false,
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQzYzA5ZGY0ZGM2ZDBhODJiMzQzYjM2MGJlMmM1MDI5YTk3NzY5NmYxNmY4ZDQ0ZjJiZjA1NDcyOTg1YzdiMTRhOGI0NWM4NTZhZmNlZmIzIn0.eyJhdWQiOiIxIiwianRpIjoiZDNjMDlkZjRkYzZkMGE4MmIzNDNiMzYwYmUyYzUwMjlhOTc3Njk2ZjE2ZjhkNDRmMmJmMDU0NzI5ODVjN2IxNGE4YjQ1Yzg1NmFmY2VmYjMiLCJpYXQiOjE1MjMzNzMzNDIsIm5iZiI6MTUyMzM3MzM0MiwiZXhwIjoxNTIzMzczNDAyLCJzdWIiOiIyIiwic2NvcGVzIjpbXX0.xmSc2R4jPDcUvCH_UsTP7wBfDevrLuW42Z620MWaguJE6JCBymEEC5LnyuWFjBfzqaTI1FwBETC3fsCBUuvS4qrJYK0Pwtp8z2eFrFqwwLEotvSJ5jknVuYrdHajPr4Z6ROZGhen3zLCSto9tURXXk2q5Wtc6BZnG4TDcnkdFS-cDCUKcVEOzVNKyxdN2FDEQOOCB1B-m5nfBYIDTdE22hVDSmFnojRLg6y-EgW3jGM5YL6uRPGVr6rbTKBX1q_6F3o-F-bEov1gStfWhajz33GHlIuy6M_JETj9jXSI_34iuao9nEK9yyCtIGvL7FYrh8bmRRNG3nbwWmaumfEhYU8JO6C9NLBS4vBMeDvGPwGcdZMHgqArKJzIw1Wlt60FnwoLRo94tZ4mfMshPg-gKa4VFL2dCUuHsNYNbtZW2qjeeesNlnFfjOEmlhg04gtrDJa5oGW3kzAadhzLZyXgQzPTXQ3b_DIWT_vFDjSN4X90NCUafkLB4XbMxS92MndiI9XyH4uqDpSX0Q03QT0yKuCVB8gp745YQznkpKNDjMRbXTf95i98R54Fyyd9s1QXySzRF9OeFgaQqV6so3b_DhzCvfVUYz26JN3O7EomWlK6IZSEqL5l-05Cn0MRq0k92TowNdgFyk3B-J6dk0D3RerezqmSPohlcSK4xn73Hco",
+				"disabled": true,
+				"token": "",
 				"type": "bearer"
 			},
 			"body": {
@@ -440,8 +501,8 @@
 					{
 						"disabled": false,
 						"id": "pair_0a8c6fe853df4664b533c90bafff3cf7",
-						"name": "refreshToken",
-						"value": "def502001d90e550b1c0fa7572a628e839d7547327b630d091cc51797fc7e29b840fb4a826cfb11b5eeeddc5b5d28b5a59cbcc4a5d04b0e17de7e1284b4a44eec719b6651eb8935c90858928dedc37c753c4f38f713d5c10936322b6e417c02bb594749cc847138f6c5c9e6ce077406a1b9c077333b24fadd1231c36fcca063d4309a2080345cdfb45d2e9d33f9b793ff9b4d2f529ac18acfbfe1714f13dc76ad8eba4c8f596d5086be2f214fdbbaafb88b74e5b62feec47409cf0f5da1e60f607f79f03e1b9dfdefa945aa295d4da52e15ebd996f9d3420712969727da9859a31139a3076ac249d6ea73844b794051a3c714e2df751d6127dec379acf1f1e2b678446514beffad09a4fb6fc5bc77742770e655d715736c6798231b57d2ee60882def955032f5c2aec80af2cca822d3440d9de44f511d55b8d814b436567cc8eccb8102c24ab4c5f26f202d0c6fe746eaa37cf3b1758bede059ac5f52b90d0098b"
+						"name": "refresh_token",
+						"value": "def5020019f3c9b8daceea51cae45aaef109cc1e566188379ae6a710b192cb7d4fff247fcb4468401599a1d5e8a0bf2be63496aa9a5860946a7f2853a07b7d0128a7e095d92aebe5ce9a4955085ed22d45073ae71eea7da1507fcb5705e61cadfbd6c3b7dd819d9cdf8df3afea002d312e3360052e704dd3c11eeabecc6f30382219d121ef72c9662d0e2d753a3ede22d8bb8f7818e0112a0b156cffb733ff1fac4f549d5fffa0c327d7ff53e8e38859c697df13ff9bf36ce907f564c068e1066c61eb39496e76620edf787d96969586bee4b770a6c543755f381dc88113c428df3810d58e7bfb055204e753fb5da38f4e96df0b4524d0fbbce65515a7d7979cc527925ea02dec2b1b887f0ce5fbdac5a131c639802da7bd4b30776ad909a91aced940a72aca57d6cb9c5dba635bb9c3e8f5618b7a841f17d75549995a7dd147d8c4054667f0ad66de776f87b4626bf3aae1a9f2f335ca05b8b0cc3a678dbc99b8"
 					}
 				]
 			},
@@ -457,7 +518,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523346334762,
 			"method": "POST",
-			"modified": 1523373389524,
+			"modified": 1523774278473,
 			"name": "刷新token",
 			"parameters": [],
 			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
@@ -467,6 +528,31 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/token/refresh",
+			"_type": "request"
+		},
+		{
+			"_id": "req_eb07353198804ae080f4d83a0cbfcacb",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA3YWE5Mjk4Y2ExYzhjMmE3MzRlZjRlYmI2ZTEzY2MyYmI1YzI3OGVjMTAzMTYxYzEyZWViYzU2OGQ0NzcxM2YxYjI4M2Y4MGRiYTBlNjhhIn0.eyJhdWQiOiIxIiwianRpIjoiMDdhYTkyOThjYTFjOGMyYTczNGVmNGViYjZlMTNjYzJiYjVjMjc4ZWMxMDMxNjFjMTJlZWJjNTY4ZDQ3NzEzZjFiMjgzZjgwZGJhMGU2OGEiLCJpYXQiOjE1MjM3Nzg0ODEsIm5iZiI6MTUyMzc3ODQ4MSwiZXhwIjoxNTIzNzgwMjgxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.VMT0YOb3at6HAzMXU8QK8O0mUrhxtnqXS_h52MbC_G_0k_xCF7VfNPrKpw_TU0RaOQgmR4GD-iBBmfbTVL0Lj6GryJsvNpI3UoS5sRo4w3SFxxmBiu9XsGpqboIz34cLlYLV1BT17cLlGGKzO-xTzfVTXYGY3uyWVKIgPW7I4t3y9gl9ck4PRwGdID55yUYA74FcVVsPVMvJyrzN7NDxxwy69oY2z2G3Qvszgv5qGTFbOgSav4J1otHatJwV9TUu2k7Ej9sdtF4K85Bmgj4u6xLvnesDKWa0ioScwxT5Y19EQBIuAen4rMdhfcMn_gNP3UquxLbY8T9veO_KCPRKBviMRnPUwHAncmP5--sKneugGUlqblUV_MsGLu_vr5xwm3jO9VD3Fun9jS-62R35AFMNn6qoUJ1yM83upJQyo1jatz1KKII6971RAhKvYSb3JSOv4B8eBMt9RPUkBM1CB19I54zXkBEqSWz_pX7jqi2fDiaZiMX0eR2mK3885BYVOwkXYk5jlDXtqsCogTif6WmecbiO8xpddTEFvGhVFyM-a_Pok_d8Mghh1k8Tkx4WJ85NN61PHmq6Y_qjbEe0npJSwbxFBFyMobFBsZwdZQ3NxZe4CTPCq-wPGC5i4UIxlm2bIJy7c7ZYWwjMKNtOG_km1_cxOSvjMjIjhNKXzVQ",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1523763967653,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1523763967653,
+			"method": "GET",
+			"modified": 1523778489588,
+			"name": "获取资源列表",
+			"parameters": [],
+			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources",
 			"_type": "request"
 		}
 	]
