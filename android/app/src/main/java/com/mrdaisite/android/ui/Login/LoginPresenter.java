@@ -33,6 +33,7 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
+import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.TokenUtil;
@@ -76,29 +77,47 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void attemptLogin(String username, String password) {
-        mApiService.getToken(username, password)
+        mApiService.getUser()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<Token>() {
+                .subscribe(new CallBackWrapper<User>() {
                     @Override
                     public void onBegin(Disposable d) {
-                        mLoginView.showLoading();
                     }
 
                     @Override
-                    public void onSuccess(Token token) {
-                        TokenUtil tokenUtil = TokenUtil.getInstance();
-                        tokenUtil.saveToken(token);
-                        mLoginView.showMessage("login success");
-                        mLoginView.toBack();
-//                        mLoginView.toDriveActivity();
+                    public void onSuccess(User user) {
+                        com.orhanobut.logger.Logger.e(String.valueOf(user));
                     }
 
                     @Override
                     public void onError(String msg) {
-                        mLoginView.showMessage(msg);
-                        mLoginView.toBack();
+                        com.orhanobut.logger.Logger.e(msg);
                     }
                 });
+//        mApiService.getToken(username, password)
+//                .subscribeOn(mSchedulerProvider.io())
+//                .observeOn(mSchedulerProvider.ui())
+//                .subscribe(new CallBackWrapper<Token>() {
+//                    @Override
+//                    public void onBegin(Disposable d) {
+//                        mLoginView.showLoading();
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Token token) {
+//                        TokenUtil tokenUtil = TokenUtil.getInstance();
+//                        tokenUtil.saveToken(token);
+//                        mLoginView.showMessage("login success");
+//                        mLoginView.toBack();
+//                        mLoginView.toDriveActivity();
+//                    }
+//
+//                    @Override
+//                    public void onError(String msg) {
+//                        mLoginView.showMessage(msg);
+//                        mLoginView.toBack();
+//                    }
+//                });
     }
 }

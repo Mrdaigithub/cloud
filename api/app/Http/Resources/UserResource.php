@@ -25,8 +25,8 @@ class UserResource extends Resource
                 ->resources()
                 ->where('file', true)
                 ->sum('size'),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->format("c"),
+            'updated_at' => $this->updated_at->format("c"),
         ];
     }
 }

@@ -32,6 +32,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.model.User;
+import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.Drive.DriveActivity;
 import com.mrdaisite.android.ui.Login.LoginActivity;
 import com.mrdaisite.android.util.CallBackWrapper;

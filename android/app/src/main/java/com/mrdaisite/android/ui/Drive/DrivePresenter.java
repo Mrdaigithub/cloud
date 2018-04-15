@@ -27,6 +27,7 @@ package com.mrdaisite.android.ui.Drive;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -46,7 +47,7 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     @Override
     public void subscribe() {
-
+        Logger.e("sub");
     }
 
     @Override

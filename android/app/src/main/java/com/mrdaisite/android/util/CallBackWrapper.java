@@ -25,6 +25,8 @@
 package com.mrdaisite.android.util;
 
 
+import android.os.NetworkOnMainThreadException;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -53,10 +55,6 @@ import retrofit2.HttpException;
 public abstract class CallBackWrapper<T> implements Observer<T> {
     @Override
     public void onSubscribe(Disposable d) {
-        TokenUtil tokenUtil = TokenUtil.getInstance();
-        if (tokenUtil.isExpired()) {
-            tokenUtil.refreshToken();
-        }
         onBegin(d);
     }
 
@@ -89,16 +87,14 @@ public abstract class CallBackWrapper<T> implements Observer<T> {
                 || e instanceof JSONException
                 || e instanceof ParseException
                 || e instanceof MalformedJsonException) {
-            // 解析数据错误
             onError("数据解析错误");
         } else if (e instanceof ConnectException) {
-            // 连接网络错误
             onError("连接失败");
         } else if (e instanceof SocketException) {
-            // 网络超时
             onError("网络连接超时");
+        } else if (e instanceof NetworkOnMainThreadException) {
+            onError("网络异常");
         } else {
-            // 未知错误
             onError("未知错误");
         }
     }

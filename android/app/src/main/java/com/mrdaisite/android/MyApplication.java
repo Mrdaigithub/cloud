@@ -30,8 +30,11 @@ import android.content.SharedPreferences;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.helper.loadviewhelper.load.LoadViewHelper;
-import com.mrdaisite.android.data.model.MyObjectBox;
+import com.mrdaisite.android.data.model.Error;
+//import com.mrdaisite.android.data.model.MyObjectBox;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.TokenUtil;
@@ -40,16 +43,29 @@ import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Nullable;
+
 import io.objectbox.android.AndroidObjectBrowser;
+import okhttp3.Authenticator;
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import io.objectbox.BoxStore;
+
+import static java.nio.charset.Charset.defaultCharset;
 
 
 public class MyApplication extends Application {
@@ -92,31 +108,22 @@ public class MyApplication extends Application {
      * 初始化网络请求
      */
     private void initRetrofit() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+                    Request.Builder requestBuilder = original.newBuilder();
 
-        builder.addInterceptor(chain -> {
-            Request original = chain.request();
-            Request.Builder requestBuilder = original.newBuilder();
+                    requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
+                    requestBuilder.header("Authorization", "Bearer " + sharedPreferences.getString("access_token", ""));
+                    requestBuilder.method(original.method(), original.body());
 
-            String accessToken = sharedPreferences.getString("access_token", "");
-            long expiresTime = sharedPreferences.getLong("expires_time", 0);
-
-            if (System.currentTimeMillis() >= expiresTime) {
-                // token过期
-                Logger.e("timeout");
-            }
-
-            requestBuilder.header("Content-Type", "application/x-www-form-urlencoded");
-            requestBuilder.header("Authorization", "Bearer " + accessToken);
-            requestBuilder.method(original.method(), original.body());
-
-            Request request = requestBuilder.build();
-            return chain.proceed(request);
-        });
-        builder.addNetworkInterceptor(new StethoInterceptor());
-        builder.readTimeout(5, TimeUnit.SECONDS);
-        builder.writeTimeout(5, TimeUnit.SECONDS);
-        builder.connectTimeout(10, TimeUnit.SECONDS);
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .addNetworkInterceptor(new StethoInterceptor())
+                .readTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(builder.build())
@@ -168,10 +175,10 @@ public class MyApplication extends Application {
     }
 
     private void initBoxStore() {
-        boxStore = MyObjectBox.builder().androidContext(MyApplication.this).build();
-        if (BuildConfig.DEBUG) {
-            new AndroidObjectBrowser(boxStore).start(this);
-        }
+//        boxStore = MyObjectBox.builder().androidContext(MyApplication.this).build();
+//        if (BuildConfig.DEBUG) {
+//            new AndroidObjectBrowser(boxStore).start(this);
+//        }
     }
 
     private void initStetho() {

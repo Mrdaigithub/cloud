@@ -22,8 +22,8 @@ class ResourceResource extends Resource
             'trashed' => $this->trashed,
             'path' => $this->path,
             'trash_path' => $this->trash_path,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->format("c"),
+            'updated_at' => $this->updated_at->format("c"),
         ];
     }
 }

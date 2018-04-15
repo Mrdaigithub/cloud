@@ -9,7 +9,6 @@
 	use Illuminate\Support\Facades\Hash;
 	use Illuminate\Validation\ValidationException;
 	use App\Models\User;
-	use Mockery\Exception;
 	
 	class AuthController extends ApiController {
 		private $httpClient;
@@ -29,7 +28,6 @@
 			$username = $login_request->get( "username" );
 			$password = $login_request->get( "password" );
 			$user     = User::where( "username", $username )->first();
-			
 			if ( ! Hash::check( $password, $user->password ) ) {
 				throw ValidationException::withMessages( [
 					"password" => [ "401000" ],
@@ -47,7 +45,7 @@
 						"scope"         => ""
 					]
 				]
-			);
+			)->getBody();
 		}
 		
 		/**
@@ -55,7 +53,7 @@
 		 *
 		 * @param RefreshTokenRequest $refresh_token_request
 		 *
-		 * @return \Psr\Http\Message\ResponseInterface
+		 * @return \Psr\Http\Message\StreamInterface
 		 */
 		protected function refreshToken( RefreshTokenRequest $refresh_token_request ) {
 			try {
@@ -69,10 +67,10 @@
 							"scope"         => "",
 						],
 					]
-				);
+				)->getBody();
 			} catch ( \Exception $exception ) {
 				throw ValidationException::withMessages( [
-					"password" => [ "401002" ],
+					"token" => [ "401002" ],
 				] )->status( 401 );
 			}
 		}

@@ -67,7 +67,7 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ApiService mApiService = MyApplication.getInstance().getApiService();
-        mApiService.getUser("root", "root")
+        mApiService.getUser()
                 .subscribe(new CallBackWrapper<User>() {
                     @Override
                     public void onBegin(Disposable d) {

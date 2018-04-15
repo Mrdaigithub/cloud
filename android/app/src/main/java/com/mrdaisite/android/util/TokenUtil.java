@@ -59,21 +59,21 @@ public class TokenUtil {
     public void refreshToken() {
         String refreshToken = sharedPref.getString("refresh_token", "");
         if (refreshToken.equals("")) return;
-        mApiService.refreshToken(refreshToken)
-                .subscribe(new CallBackWrapper<Token>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-                    }
-
-                    @Override
-                    public void onSuccess(Token token) {
-                        saveToken(token);
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                    }
-                });
+//        mApiService.refreshToken(refreshToken)
+//                .subscribe(new CallBackWrapper<Token>() {
+//                    @Override
+//                    public void onBegin(Disposable d) {
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Token token) {
+//                        saveToken(token);
+//                    }
+//
+//                    @Override
+//                    public void onError(String msg) {
+//                    }
+//                });
     }
 
     public Boolean isExpired() {

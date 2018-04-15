@@ -66,10 +66,6 @@ public interface ApiService {
      *
      * @return
      */
-    @FormUrlEncoded
-    @POST("/api/v1/users/0")
-    Observable<User> getUser(
-            @Field("username") String username,
-            @Field("password") String password
-    );
+    @GET("/api/v1/users/0")
+    Observable<User> getUser();
 }

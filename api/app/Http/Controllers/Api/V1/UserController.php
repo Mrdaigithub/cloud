@@ -50,10 +50,7 @@
 		 */
 		public function show( Request $request, $id ) {
 			if ( $id == 0 ) {
-				$res = array( 'id' => 100, 'username' => 'sb' );
-				
-				return json_encode( $res );
-//            return new UserResource($request->user());
+				return new UserResource( $request->user() );
 			}
 			
 			return new UserResource( Resource::find( $id ) );

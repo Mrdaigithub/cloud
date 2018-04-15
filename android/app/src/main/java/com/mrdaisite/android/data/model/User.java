@@ -24,11 +24,13 @@
 
 package com.mrdaisite.android.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.annotation.Transient;
+import io.objectbox.annotation.Index;
 
 @Entity
 public class User {
@@ -45,14 +47,23 @@ public class User {
      */
 
     @Id
+    @Index
+    @SerializedName("id")
     private long id;
+    @SerializedName("username")
     private String username;
-//    private String email;
-//    private boolean is_admin;
-//    private long capacity;
-//    private int used;
-//    private Date createdAt;
-//    private Date updatedAt;
+    @SerializedName("email")
+    private String email;
+    @SerializedName("is_admin")
+    private boolean isAdmin;
+    @SerializedName("capacity")
+    private long capacity;
+    @SerializedName("used")
+    private int used;
+    @SerializedName("created_at")
+    private String createdAt;
+    @SerializedName("updated_at")
+    private String updatedAt;
 
     public long getId() {
         return id;
@@ -69,52 +80,74 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public boolean isIs_admin() {
-//        return is_admin;
-//    }
-//
-//    public void setIs_admin(boolean is_admin) {
-//        this.is_admin = is_admin;
-//    }
-//
-//    public long getCapacity() {
-//        return capacity;
-//    }
-//
-//    public void setCapacity(long capacity) {
-//        this.capacity = capacity;
-//    }
-//
-//    public int getUsed() {
-//        return used;
-//    }
-//
-//    public void setUsed(int used) {
-//        this.used = used;
-//    }
-//
-//    public Date getCreatedAt() {
-//        return createdAt;
-//    }
-//
-//    public void setCreatedAt(Date createdAt) {
-//        this.createdAt = createdAt;
-//    }
-//
-//    public Date getUpdatedAt() {
-//        return updatedAt;
-//    }
-//
-//    public void setUpdatedAt(Date updatedAt) {
-//        this.updatedAt = updatedAt;
-//    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    public long getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(long capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getUsed() {
+        return used;
+    }
+
+    public void setUsed(int used) {
+        this.used = used;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", capacity=" + capacity +
+                ", used=" + used +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
