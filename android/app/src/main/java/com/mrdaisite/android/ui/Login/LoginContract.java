@@ -30,7 +30,9 @@ import com.mrdaisite.android.ui.BaseView;
 public interface LoginContract {
     interface View extends BaseView<Presenter> {
         void showLoading();
+
         void toBack();
+
         void toDriveActivity();
     }
 

@@ -29,10 +29,12 @@ import com.mrdaisite.android.ui.BaseView;
 
 public interface DriveContract {
     interface View extends BaseView<Presenter> {
+        void setProfileUsername(String username);
 
+        void setProfileEmail(String email);
     }
 
     interface Presenter extends BasePresenter {
-
+        void test();
     }
 }

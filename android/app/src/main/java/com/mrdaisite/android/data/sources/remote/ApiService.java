@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.data.sources.remote;
 
+import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
 
@@ -68,4 +69,12 @@ public interface ApiService {
      */
     @GET("/api/v1/users/0")
     Observable<User> getUser();
+
+    /**
+     * 获取用户的资源列表
+     *
+     * @return
+     */
+    @GET("/api/v1/resources")
+    Observable<Resources> getResources();
 }

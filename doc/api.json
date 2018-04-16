@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-04-15T08:58:10.569Z",
+	"__export_date": "2018-04-16T08:56:20.975Z",
 	"__export_source": "insomnia.desktop.app:v5.15.0",
 	"resources": [
 		{
@@ -128,7 +128,7 @@
 		{
 			"_id": "req_844d1bc6a0de45f0b224d8f67f6e59ed",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMxMGYzYWIxYzE0NWFmNDQzNTkzOTBjNzYzZTY3OTk5ODVhN2U0ZmNlZWI0ZTc1ZWFlYjQ5Y2NhNGY3ZGQwZDViYzEzYTRkZWUzZDc4YjhmIn0.eyJhdWQiOiIxIiwianRpIjoiMzEwZjNhYjFjMTQ1YWY0NDM1OTM5MGM3NjNlNjc5OTk4NWE3ZTRmY2VlYjRlNzVlYWViNDljY2E0ZjdkZDBkNWJjMTNhNGRlZTNkNzhiOGYiLCJpYXQiOjE1MTM5MDU1NzUsIm5iZiI6MTUxMzkwNTU3NSwiZXhwIjoxNTEzOTkxOTc1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.6QHtHlEhu4lsiX-82WtyAeK2EUK_QHV7JAFP0VDnXjyKe6Ym_68w8heuT0-jF7iV7wz4JfwgZ2r3O8_zK767dobzsC_uz-HHipJRLoSvEVefDpBeK5_TUzAfbvWAkHnHQjAL6ekgA_p8FX4SVdzs27VkKI9rY4TR-niAb15zTzs87J1hQvBR2qhtXAvOC3Q7kl4aySoqlKstcYYNfJfl58A4UfbEQjpFaLuLq_ipOtO5TXOpU7LnNLDDzCRm98Gi7AmIJrniCKy38dBxXJBFJS7-jL14TfLLlg9W566dnldakVDrSnqscbEIo4PjXKBkRyRmJXSzeOMoyMWXLtXZd5mLtD7EBgn_ceGTsqx5yj5PTW5RRHLYKzkYfXdKHhIr0QCMYpv_ly3042_Mgol0WXQpOAaj_REDvUBxr2myWiIqrmTGA_dqGsqyqUd7mAlfGccGlvz-Z_gXzd5Vr_0O0-59vuVAoaLVXiqrzm0I6zwdhV2ACN48u-iG2B0rdgol0ab8C_-ACGLbQLm1WidVyT245uBuWD1LJ8XVjvVCdpUUoBDWJTZ7rh35j4X3wBi4hThqPdsgRLwO2qzubJItJYfk81tGS4HcgUsacDJ8l4NJ7L-EX5n12ZbB_uVhgzEkZjf9ojooQ85UoTKlWOWV4QUcIVKapRC1PUvEe6JXB-Q",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE2NjljZGUxNmRhY2Q0OTZjY2NkNTRkZGI4Yjg5YWRmYTQxZGQ0Nzc2ZjU5MGEyYzg4YTkyZDI5ODMwMDI1MWU2Y2Q1YmFiNmFiODJmZDNmIn0.eyJhdWQiOiIxIiwianRpIjoiYTY2OWNkZTE2ZGFjZDQ5NmNjY2Q1NGRkYjhiODlhZGZhNDFkZDQ3NzZmNTkwYTJjODhhOTJkMjk4MzAwMjUxZTZjZDViYWI2YWI4MmZkM2YiLCJpYXQiOjE1MjM4NDE4NTMsIm5iZiI6MTUyMzg0MTg1MywiZXhwIjoxNTIzODQzNjUzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.VjqeOQFqE3lNFphPi0dcMuZhE-6lpnKPuaPYL4qkQ2EMjIb102-Bq_UOMUinyUaHqOsYdCLz4DlxruHpPm6nuuEx2Q56yeQhkalMqsipsHmE52szgC7TVB_HYeIBrPzIo8m5gj2Tqf_wBbRbAnY91WXvuEAPCmNpcBgk4FQcK06SwH_AIaiVmvLkewnKuiwexyVxqbLQtDv8jlrwWc7VbUGZuE426x_pqsZ60ZlwFgYnHKLXHubV9N25lp6dgXPjYYTd2tbLZH2X3kPaIJ96zme43I0Ea3ZAjr0Axu7i5ZLNjIvG3toeIpHoO_QSbzqe40TCfG251s5zHiyM74ryidkA_HEyO0jB3kDaN3MBhp9Ap6pGZ6uOTmoX0jvMMeyEAG8FlK4Eu7zQEpKnu_A-3H4VEsPsGCWxh9Px3bop0yuNWSNidXXSJpmJCy0wfEAJALJOSqiQgCWNCF9AK2C3fNkg-FLdPGkv2PS1-V-zwFmB6DdkZbYbQksZP1pJf36B6TV902B_rZt7IHJmuHJiUCegIdKzgh93RLdCSaNmpfibI4wvuiOr_qKDIX061YIuKpGCwwLZUgMxck-nATA3OswvudRDtDwB8LoCvBUETtDdA2Hv_nLF3VFEZxDtcurBAGad86oR36aRgomOEkuO4Ih7Dl_SM7Eoa7FG-hHMCZU",
 				"type": "bearer"
 			},
 			"body": {
@@ -138,19 +138,19 @@
 						"disabled": false,
 						"id": "pair_7860974e88d944b1ada965235c3fcb6a",
 						"name": "username",
-						"value": "admin2"
+						"value": "admin2222"
 					},
 					{
 						"disabled": false,
 						"id": "pair_725bdee3f52642c99064a6efcda2d88d",
 						"name": "password",
-						"value": "admin"
+						"value": "admin2222"
 					},
 					{
 						"disabled": false,
 						"id": "pair_32c80ade4bf94178a1f9e8d27b787ef1",
 						"name": "email",
-						"value": "ad2min@gmail.com"
+						"value": "admin2222@gmail.com"
 					},
 					{
 						"disabled": false,
@@ -172,7 +172,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1511922059346.5,
 			"method": "POST",
-			"modified": 1513909195533,
+			"modified": 1523841867192,
 			"name": "add user",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
@@ -188,18 +188,18 @@
 			"_id": "req_05a0d012b3314366aa9f15d9ce31cc72",
 			"authentication": {
 				"disabled": false,
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA3YWE5Mjk4Y2ExYzhjMmE3MzRlZjRlYmI2ZTEzY2MyYmI1YzI3OGVjMTAzMTYxYzEyZWViYzU2OGQ0NzcxM2YxYjI4M2Y4MGRiYTBlNjhhIn0.eyJhdWQiOiIxIiwianRpIjoiMDdhYTkyOThjYTFjOGMyYTczNGVmNGViYjZlMTNjYzJiYjVjMjc4ZWMxMDMxNjFjMTJlZWJjNTY4ZDQ3NzEzZjFiMjgzZjgwZGJhMGU2OGEiLCJpYXQiOjE1MjM3Nzg0ODEsIm5iZiI6MTUyMzc3ODQ4MSwiZXhwIjoxNTIzNzgwMjgxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.VMT0YOb3at6HAzMXU8QK8O0mUrhxtnqXS_h52MbC_G_0k_xCF7VfNPrKpw_TU0RaOQgmR4GD-iBBmfbTVL0Lj6GryJsvNpI3UoS5sRo4w3SFxxmBiu9XsGpqboIz34cLlYLV1BT17cLlGGKzO-xTzfVTXYGY3uyWVKIgPW7I4t3y9gl9ck4PRwGdID55yUYA74FcVVsPVMvJyrzN7NDxxwy69oY2z2G3Qvszgv5qGTFbOgSav4J1otHatJwV9TUu2k7Ej9sdtF4K85Bmgj4u6xLvnesDKWa0ioScwxT5Y19EQBIuAen4rMdhfcMn_gNP3UquxLbY8T9veO_KCPRKBviMRnPUwHAncmP5--sKneugGUlqblUV_MsGLu_vr5xwm3jO9VD3Fun9jS-62R35AFMNn6qoUJ1yM83upJQyo1jatz1KKII6971RAhKvYSb3JSOv4B8eBMt9RPUkBM1CB19I54zXkBEqSWz_pX7jqi2fDiaZiMX0eR2mK3885BYVOwkXYk5jlDXtqsCogTif6WmecbiO8xpddTEFvGhVFyM-a_Pok_d8Mghh1k8Tkx4WJ85NN61PHmq6Y_qjbEe0npJSwbxFBFyMobFBsZwdZQ3NxZe4CTPCq-wPGC5i4UIxlm2bIJy7c7ZYWwjMKNtOG_km1_cxOSvjMjIjhNKXzVQ",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwNWM5NjMyMGNlN2E0MDJiNjYzMmNhNWY3ZDI2ZmY5Y2NmODcyZjMxOGFmOWNmOTgwYTNjMGU1ZmY2MWQxNTc3MGZkZjI2MTBhMTcwMjA4In0.eyJhdWQiOiIxIiwianRpIjoiNjA1Yzk2MzIwY2U3YTQwMmI2NjMyY2E1ZjdkMjZmZjljY2Y4NzJmMzE4YWY5Y2Y5ODBhM2MwZTVmZjYxZDE1NzcwZmRmMjYxMGExNzAyMDgiLCJpYXQiOjE1MjM4NDQ1MTMsIm5iZiI6MTUyMzg0NDUxMywiZXhwIjoxNTI0MDI0NTEzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.NJDHVPz-KkQP8-G6OgcxLa-wyNeDkWNKdxEU1a9qtRvZ3gCM7peyF3cw_QuBgrk38ieLzWg8dDcJiMQE7QLmxip_brZxG4gJmvF1vGZ4r8Kn0vUhmnDhCtTlYfOO3eEYwIIdjq033Oy0v9L2Mny2jXyGGqAIi8Z0yS0WF1jyqgqLLhQahzJH8IfGHx5k1gvlSovt1-Z0v7CA5kItVo8cpubp1LZPhEyWLCTZkYut3hWpiPrrIG_2SYIx9XCoBnn9eWuXuUYex-BezD32s55CFc78e1A-hylA3tjNGo-yLa0PVqBsIpJ5dXlYT76U6QsgHyDpPGvJmI5xzOuvyZ8PAx3LMGRh8i50Yckny1SSQ6F6ynhkZvFsIdld_YdA42XooTnz1rK1XvrXkmJThL7oOKuqhkZMC8rqtjAJ5KCQZDOj5w98TlcrRT_3Ee8aAQMHP9U7erl_KnD0vRT31Jc9vhFREl9emEhPHG5SZ7ZmH5PhG-fWTfAZ6hd54790tYKl8Ou-kHwVz_Jpd8D3ExpPRK6YBqKIJll30jgNh_AUXuPzz_DHbgxzQAv2VMFUT0PPuIGZ1qRMEDIIfKeZs-B1sCo2mSwNNoRd3TLNedWaTjD2QRrqB6qzKr0pLzufxtplZR58zSWQR7RZbBzU3N0G5nEZvAjjuBOYMEd2yu7nH9E",
 				"type": "bearer"
 			},
 			"body": {},
 			"created": 1513904717093,
-			"description": "",
+			"description": "### 简要描述 :\n\n- 获取用户列表接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/users\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n[\n\t{\n\t\t\"id\": 1,\n\t\t\"username\": \"root\",\n\t\t\"email\": \"root@gmail.com\",\n\t\t\"origin\": \"local\",\n\t\t\"is_admin\": true,\n\t\t\"capacity\": null,\n\t\t\"used\": 3926801,\n\t\t\"created_at\": \"2018-04-09T07:39:10+08:00\",\n\t\t\"updated_at\": \"2018-04-09T07:39:13+08:00\"\n\t},\n\t{\n\t\t\"id\": 2,\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@gmail.com\",\n\t\t\"origin\": \"local\",\n\t\t\"is_admin\": false,\n\t\t\"capacity\": 5368709120,\n\t\t\"used\": 0,\n\t\t\"created_at\": \"2018-04-09T07:39:15+08:00\",\n\t\t\"updated_at\": \"2018-04-09T07:39:18+08:00\"\n\t}\n]\n```\n\n### 返回参数说明 :\n\n| 参数名        | 类型      | 说明     |\n| ---------- | ------- | ------ |\n| id         | long    | 用户ID   |\n| username   | String  | 用户名    |\n| email      | String  | 用户邮箱   |\n| origin     | String  | 用户来源   |\n| is_admin   | Boolean | 是否为管理员 |\n| capacity   | long    | 硬盘容量   |\n| created_at | String  | 用户创建时间 |\n| updated_at | String  | 用户更新时间 |\n| used       | long    | 已使用容量  |\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1516327511421,
 			"method": "GET",
-			"modified": 1523778505133,
-			"name": "get user list",
+			"modified": 1523848189414,
+			"name": "获取用户列表",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
 			"settingDisableRenderRequestBody": false,
@@ -266,18 +266,18 @@
 		{
 			"_id": "req_2be2ce6e7d4446a694bd1e6cf93897b9",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijc0YjIyNjJiYWYxNTc0NWM2NWYxYjUwNTIzYWNmZTg3YTU3MjM2NTg1MjYwZjY4NmIwNDk2ODM4YTA4OTI3MDQ2ZDI5Y2VkYmZkNjMxNGVhIn0.eyJhdWQiOiIxIiwianRpIjoiNzRiMjI2MmJhZjE1NzQ1YzY1ZjFiNTA1MjNhY2ZlODdhNTcyMzY1ODUyNjBmNjg2YjA0OTY4MzhhMDg5MjcwNDZkMjljZWRiZmQ2MzE0ZWEiLCJpYXQiOjE1MjM3Nzk5MTgsIm5iZiI6MTUyMzc3OTkxOCwiZXhwIjoxNTIzNzgxNzE4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.HuXDzG5P0AMcGLJDElEL2bI1rSVVZz3WiP39XrxcaOfrHpPPFQ-KPMWNtfzclIbh2UBbTA5-Fv34LqpD2c4dhml_v4DXLy6O-gUIO8OqMc_rL-U8yNyVpuZZL0HwdqBx37AKuEHZQ_tpV0mpr-MXdqQrFxh3qDhpk_bBjNhtwGGg7fn1xkwvJ5us4kSmbLXcO5nErYT7QRstzUUXH-wMwIaB-EzBk5nEeBndi27Z4J_dgspdpN4z2iGbGKYzm8KkMYtsrl2bYesiBeiO7lm2zdmNI7BXlAK8cSJ2N2MhqC8Wu0vkfKMQ7V7SVTMJZ6C5mvQKFkuIUV1rmrLo57t0gRU7I2KwARbMHrRDkgfSYoZmBO1ggFU9vi1cWyv894ZtKn22Bcy2KLe1kBm4KXFjWDLT_4TKu50ri4HvMwPSlEfiROzWbat5Ryqsa1zIW5gas95Vjwnd4wxWQuzx3qvCws7VOLxHh4t7l4G5LjCCm_bVgnnj_hNqf51nOlVKFzGKNwSzk6Ip2wi1c-iJTEZB6VAi72EcuTX6KaZnbPXE4BvlNymjKyLugBzNeYVEHxjN-gQk2PL3PWaj1ezSO62vLy0JCFA8DG9Igzy7LMFC2nYmbvtzpgfQRLYOonnJjqBn1k-dY80mVUuSVhGhbPa6pKcjj-5QTg7itkMkddYenxE",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjYwNWM5NjMyMGNlN2E0MDJiNjYzMmNhNWY3ZDI2ZmY5Y2NmODcyZjMxOGFmOWNmOTgwYTNjMGU1ZmY2MWQxNTc3MGZkZjI2MTBhMTcwMjA4In0.eyJhdWQiOiIxIiwianRpIjoiNjA1Yzk2MzIwY2U3YTQwMmI2NjMyY2E1ZjdkMjZmZjljY2Y4NzJmMzE4YWY5Y2Y5ODBhM2MwZTVmZjYxZDE1NzcwZmRmMjYxMGExNzAyMDgiLCJpYXQiOjE1MjM4NDQ1MTMsIm5iZiI6MTUyMzg0NDUxMywiZXhwIjoxNTI0MDI0NTEzLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.NJDHVPz-KkQP8-G6OgcxLa-wyNeDkWNKdxEU1a9qtRvZ3gCM7peyF3cw_QuBgrk38ieLzWg8dDcJiMQE7QLmxip_brZxG4gJmvF1vGZ4r8Kn0vUhmnDhCtTlYfOO3eEYwIIdjq033Oy0v9L2Mny2jXyGGqAIi8Z0yS0WF1jyqgqLLhQahzJH8IfGHx5k1gvlSovt1-Z0v7CA5kItVo8cpubp1LZPhEyWLCTZkYut3hWpiPrrIG_2SYIx9XCoBnn9eWuXuUYex-BezD32s55CFc78e1A-hylA3tjNGo-yLa0PVqBsIpJ5dXlYT76U6QsgHyDpPGvJmI5xzOuvyZ8PAx3LMGRh8i50Yckny1SSQ6F6ynhkZvFsIdld_YdA42XooTnz1rK1XvrXkmJThL7oOKuqhkZMC8rqtjAJ5KCQZDOj5w98TlcrRT_3Ee8aAQMHP9U7erl_KnD0vRT31Jc9vhFREl9emEhPHG5SZ7ZmH5PhG-fWTfAZ6hd54790tYKl8Ou-kHwVz_Jpd8D3ExpPRK6YBqKIJll30jgNh_AUXuPzz_DHbgxzQAv2VMFUT0PPuIGZ1qRMEDIIfKeZs-B1sCo2mSwNNoRd3TLNedWaTjD2QRrqB6qzKr0pLzufxtplZR58zSWQR7RZbBzU3N0G5nEZvAjjuBOYMEd2yu7nH9E",
 				"type": "bearer"
 			},
 			"body": {},
 			"created": 1513923362635,
-			"description": "",
+			"description": "### 简要描述 :\n\n- 通过ID获取单个用户接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/users/{id}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n\t\"id\": 1,\n\t\"username\": \"root\",\n\t\"email\": \"root@gmail.com\",\n\t\"origin\": \"local\",\n\t\"is_admin\": true,\n\t\"capacity\": null,\n\t\"used\": 3926801,\n\t\"created_at\": \"2018-04-09T07:39:10+08:00\",\n\t\"updated_at\": \"2018-04-09T07:39:13+08:00\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名        | 类型      | 说明     |\n| ---------- | ------- | ------ |\n| id         | long    | 用户ID   |\n| username   | String  | 用户名    |\n| email      | String  | 用户邮箱   |\n| origin     | String  | 用户来源   |\n| is_admin   | Boolean | 是否为管理员 |\n| capacity   | long    | 硬盘容量   |\n| created_at | String  | 用户创建时间 |\n| updated_at | String  | 用户更新时间 |\n| used       | long    | 已使用容量  |\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1516327511396,
 			"method": "GET",
-			"modified": 1523780002562,
-			"name": "get user by id",
+			"modified": 1523848155305,
+			"name": "通过ID获取单个用户",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
 			"settingDisableRenderRequestBody": false,
@@ -286,31 +286,6 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/users/0",
-			"_type": "request"
-		},
-		{
-			"_id": "req_c2dfde4ab5d54c9b8de83f4a057defea",
-			"authentication": {
-				"token": "819154545aa9400de29b67b7bf706986555410ac",
-				"type": "bearer"
-			},
-			"body": {},
-			"created": 1516327511371,
-			"description": "",
-			"headers": [],
-			"isPrivate": false,
-			"metaSortKey": -1516327511371,
-			"method": "GET",
-			"modified": 1516344701393,
-			"name": "get github user",
-			"parameters": [],
-			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"settingRebuildPath": true,
-			"settingSendCookies": true,
-			"settingStoreCookies": true,
-			"url": "https://api.github.com/user",
 			"_type": "request"
 		},
 		{
@@ -439,56 +414,6 @@
 			"_type": "request"
 		},
 		{
-			"_id": "req_f1d3458d8469454bae29b4d5234535ff",
-			"authentication": {},
-			"body": {
-				"mimeType": "application/x-www-form-urlencoded",
-				"params": [
-					{
-						"disabled": false,
-						"id": "pair_82aaa1cbc2f04483903884eb06ca2de2",
-						"name": "code",
-						"value": "4a62576458aa3b7b1d70"
-					},
-					{
-						"disabled": false,
-						"id": "pair_5f31f5813a8d47f5bca9c689c9155261",
-						"name": "client_secret",
-						"value": "7819e44bb88a8cd47a2c0ac65715b463e6704262"
-					},
-					{
-						"disabled": false,
-						"id": "pair_cbb5700c808c4c8a91dfeb9cbc84b8d1",
-						"name": "client_id",
-						"value": "fbc7ce7b78d475a3a327"
-					}
-				]
-			},
-			"created": 1516327263705,
-			"description": "",
-			"headers": [
-				{
-					"id": "pair_bb7d0a78878d4782b28a067d739e8989",
-					"name": "Content-Type",
-					"value": "application/x-www-form-urlencoded"
-				}
-			],
-			"isPrivate": false,
-			"metaSortKey": -1523346334737,
-			"method": "POST",
-			"modified": 1523346507228,
-			"name": "github fetch access token",
-			"parameters": [],
-			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"settingRebuildPath": true,
-			"settingSendCookies": true,
-			"settingStoreCookies": true,
-			"url": "https://github.com/login/oauth/access_token",
-			"_type": "request"
-		},
-		{
 			"_id": "req_c9e0a2e66d3e428293bab80a5b692056",
 			"authentication": {
 				"disabled": true,
@@ -502,7 +427,7 @@
 						"disabled": false,
 						"id": "pair_0a8c6fe853df4664b533c90bafff3cf7",
 						"name": "refresh_token",
-						"value": "def5020019f3c9b8daceea51cae45aaef109cc1e566188379ae6a710b192cb7d4fff247fcb4468401599a1d5e8a0bf2be63496aa9a5860946a7f2853a07b7d0128a7e095d92aebe5ce9a4955085ed22d45073ae71eea7da1507fcb5705e61cadfbd6c3b7dd819d9cdf8df3afea002d312e3360052e704dd3c11eeabecc6f30382219d121ef72c9662d0e2d753a3ede22d8bb8f7818e0112a0b156cffb733ff1fac4f549d5fffa0c327d7ff53e8e38859c697df13ff9bf36ce907f564c068e1066c61eb39496e76620edf787d96969586bee4b770a6c543755f381dc88113c428df3810d58e7bfb055204e753fb5da38f4e96df0b4524d0fbbce65515a7d7979cc527925ea02dec2b1b887f0ce5fbdac5a131c639802da7bd4b30776ad909a91aced940a72aca57d6cb9c5dba635bb9c3e8f5618b7a841f17d75549995a7dd147d8c4054667f0ad66de776f87b4626bf3aae1a9f2f335ca05b8b0cc3a678dbc99b8"
+						"value": "def50200a3aef126e3c9454aa82a90bad56c0d5bcfd5b7427ef10c92df3971922404d89c403bd150b56718097375af58a619b30dada1c5dd53b4d612a1a540435517a27288cb9f4ed58d125d357b32aaf4aacb87a30f8f08f3e16de9ea81960c5a56becbfb04f0fcfe656b3e6700570c52fd1330076f57d6f084c5b578da5215325082ca51dcaba0cd505891c5343763785a2ddfca9485462263960459138a5f1e147cd5ff7fa36e234412cff60b36bb2f7cb179f1c707c9140f6c03e054266625e535f0fc3b3294b593247afadcface8d8cc6546184077950ac65d9f60229604c8c9e8b7a1fdabd0fa6c8164872729b925fd99e8b29b08b1b5d2409812d2290685bcdd6a3c4cea987229e5830d3041f4240fbc1cf63af36abd62a6bfa8d9767ae50b57181a9c218910d9fbae21a127a220d2b460cb97ee98800096f395aac6b174479bba4afcace28c37002239f98e0a6df51da6593eaa8d8ea880e2976da9c8d"
 					}
 				]
 			},
@@ -518,7 +443,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523346334762,
 			"method": "POST",
-			"modified": 1523774278473,
+			"modified": 1523842359137,
 			"name": "刷新token",
 			"parameters": [],
 			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
@@ -533,17 +458,17 @@
 		{
 			"_id": "req_eb07353198804ae080f4d83a0cbfcacb",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA3YWE5Mjk4Y2ExYzhjMmE3MzRlZjRlYmI2ZTEzY2MyYmI1YzI3OGVjMTAzMTYxYzEyZWViYzU2OGQ0NzcxM2YxYjI4M2Y4MGRiYTBlNjhhIn0.eyJhdWQiOiIxIiwianRpIjoiMDdhYTkyOThjYTFjOGMyYTczNGVmNGViYjZlMTNjYzJiYjVjMjc4ZWMxMDMxNjFjMTJlZWJjNTY4ZDQ3NzEzZjFiMjgzZjgwZGJhMGU2OGEiLCJpYXQiOjE1MjM3Nzg0ODEsIm5iZiI6MTUyMzc3ODQ4MSwiZXhwIjoxNTIzNzgwMjgxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.VMT0YOb3at6HAzMXU8QK8O0mUrhxtnqXS_h52MbC_G_0k_xCF7VfNPrKpw_TU0RaOQgmR4GD-iBBmfbTVL0Lj6GryJsvNpI3UoS5sRo4w3SFxxmBiu9XsGpqboIz34cLlYLV1BT17cLlGGKzO-xTzfVTXYGY3uyWVKIgPW7I4t3y9gl9ck4PRwGdID55yUYA74FcVVsPVMvJyrzN7NDxxwy69oY2z2G3Qvszgv5qGTFbOgSav4J1otHatJwV9TUu2k7Ej9sdtF4K85Bmgj4u6xLvnesDKWa0ioScwxT5Y19EQBIuAen4rMdhfcMn_gNP3UquxLbY8T9veO_KCPRKBviMRnPUwHAncmP5--sKneugGUlqblUV_MsGLu_vr5xwm3jO9VD3Fun9jS-62R35AFMNn6qoUJ1yM83upJQyo1jatz1KKII6971RAhKvYSb3JSOv4B8eBMt9RPUkBM1CB19I54zXkBEqSWz_pX7jqi2fDiaZiMX0eR2mK3885BYVOwkXYk5jlDXtqsCogTif6WmecbiO8xpddTEFvGhVFyM-a_Pok_d8Mghh1k8Tkx4WJ85NN61PHmq6Y_qjbEe0npJSwbxFBFyMobFBsZwdZQ3NxZe4CTPCq-wPGC5i4UIxlm2bIJy7c7ZYWwjMKNtOG_km1_cxOSvjMjIjhNKXzVQ",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg1MTAyMWE3MDQ3NGI2MzZlYmZiNzllNjY0MTFhNzZhNWVhZDFmMjcyNGI0NjVkYWU2MmY1NmMwMjJmYWZmM2ExMjA2MjJhZGMwYTJhZGQyIn0.eyJhdWQiOiIxIiwianRpIjoiODUxMDIxYTcwNDc0YjYzNmViZmI3OWU2NjQxMWE3NmE1ZWFkMWYyNzI0YjQ2NWRhZTYyZjU2YzAyMmZhZmYzYTEyMDYyMmFkYzBhMmFkZDIiLCJpYXQiOjE1MjM4NjU2MzksIm5iZiI6MTUyMzg2NTYzOSwiZXhwIjoxNTI0MDQ1NjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.lpktTcPChx2yOL0Xvq5NNIFEuzwM408SmBVwtgp0Bx45_tMbna-ibEnsbqR0OoJdaJ4oIYYtpcve760SYImJldsePb_TxtXfkPmUcIaZRE7wA1RpXTUYMkymP061gKpMo0hf2jkX8Xp21gh_3E6zTi7XFzsubYGqGGFFqar26aqgrywopr0q7DfRKJnemKhWg8Nmyja-baznM3tNAkvvr9ZqWVUUVURE38Axlw1pCE2o2la-It4aSSEmhtHQ3s6Zqykr8GOV68UtlW5p3gS6J5_l41-dENYr3QtjzGm80cFv5YnCrVxTohOEqVn5TfWUV4g5RZRfK8W8pksku36rBs-233dkcDOOiSx3AzlbiUffDthcmh7McbwqetXESB5pJejFQuYS7fZfRqd4ceqBeuPXthKJb8JLujF4H9Jcp1TihjNdZ1PWJPtjCzSLKe77xyIy9_O6H3Af08660vF2EUee7mHhkDpkse5HFvt9duc0GKGVLm11kTz6EcdVjqQMQKOFqZrDz_DZz1iR2KIirovfukzRJIEs78P0BXjmpI2CyIrL6W-sMxBFQK5jS1AsRpkVbRf1lGUtzYgd3_UnHmtBOrzvWytwsxQFQyNNrGt0BTiOeaxlsXnAFxaNueGXeUpHs4bIk8uxrCOFNuv4wg0Bd4yXjrBL7Mk3KuJ3fTQ",
 				"type": "bearer"
 			},
 			"body": {},
 			"created": 1523763967653,
-			"description": "",
+			"description": "### 简要描述 :\n\n- 获取资源列表接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n    \"data\": {\n        \"0\": [\n            {\n                \"id\": 64,\n                \"resource_name\": \"2101305167.jpg\",\n                \"size\": 214642,\n                \"file\": true,\n                \"trashed\": false,\n                \"created_at\": \"2018-03-12 10:04:29\",\n                \"updated_at\": \"2018-03-12 10:04:29\",\n                \"path\": \"0.61\",\n                \"trash_path\": \"0\"\n            }\n        ]\n    }\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n\n(数组的key为资源所在路径)\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1523763967653,
 			"method": "GET",
-			"modified": 1523778489588,
+			"modified": 1523867152325,
 			"name": "获取资源列表",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",

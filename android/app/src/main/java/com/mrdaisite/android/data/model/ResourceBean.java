@@ -31,40 +31,27 @@ import io.objectbox.annotation.Id;
 import io.objectbox.annotation.Index;
 
 @Entity
-public class User {
-
-    /**
-     * id : 1
-     * username : root
-     * email : root@gmail.com
-     * origin : local
-     * is_admin : true
-     * capacity : null
-     * used : 3926801
-     * created_at : 2018-04-09T07:39:10+08:00
-     * updated_at : 2018-04-09T07:39:13+08:00
-     */
-
+public class ResourceBean {
     @Id(assignable = true)
     @Index
     @SerializedName("id")
     private long id;
-    @SerializedName("username")
-    private String username;
-    @SerializedName("email")
-    private String email;
-    @SerializedName("origin")
-    private String origin;
-    @SerializedName("is_admin")
-    private boolean isAdmin;
-    @SerializedName("capacity")
-    private long capacity;
-    @SerializedName("used")
-    private long used;
+    @SerializedName("resource_name")
+    private String resourceName;
+    @SerializedName("size")
+    private long size;
+    @SerializedName("file")
+    private boolean file;
+    @SerializedName("trashed")
+    private boolean trashed;
     @SerializedName("created_at")
     private String createdAt;
     @SerializedName("updated_at")
     private String updatedAt;
+    @SerializedName("path")
+    private String path;
+    @SerializedName("trash_path")
+    private String trashPath;
 
     public long getId() {
         return id;
@@ -74,52 +61,36 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getResourceName() {
+        return resourceName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
     }
 
-    public String getEmail() {
-        return email;
+    public long getSize() {
+        return size;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSize(long size) {
+        this.size = size;
     }
 
-    public String getOrigin() {
-        return origin;
+    public boolean isFile() {
+        return file;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setFile(boolean file) {
+        this.file = file;
     }
 
-    public boolean isIsAdmin() {
-        return isAdmin;
+    public boolean isTrashed() {
+        return trashed;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    public long getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(long capacity) {
-        this.capacity = capacity;
-    }
-
-    public long getUsed() {
-        return used;
-    }
-
-    public void setUsed(long used) {
-        this.used = used;
+    public void setTrashed(boolean trashed) {
+        this.trashed = trashed;
     }
 
     public String getCreatedAt() {
@@ -138,18 +109,34 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getTrashPath() {
+        return trashPath;
+    }
+
+    public void setTrashPath(String trashPath) {
+        this.trashPath = trashPath;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
+        return "ResourceBean{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", origin='" + origin + '\'' +
-                ", isAdmin=" + isAdmin +
-                ", capacity=" + capacity +
-                ", used=" + used +
+                ", resourceName='" + resourceName + '\'' +
+                ", size=" + size +
+                ", file=" + file +
+                ", trashed=" + trashed +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
+                ", path='" + path + '\'' +
+                ", trashPath='" + trashPath + '\'' +
                 '}';
     }
 }

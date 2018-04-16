@@ -25,7 +25,9 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.os.Bundle;
+import android.support.annotation.NavigationRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,25 +35,39 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-import com.mrdaisite.android.MyApplication;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
-import com.mrdaisite.android.data.model.User;
-import com.mrdaisite.android.data.sources.remote.ApiService;
-import com.mrdaisite.android.util.CallBackWrapper;
+import com.orhanobut.logger.Logger;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
-import io.reactivex.disposables.Disposable;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DriveFragment extends Fragment implements DriveContract.View {
 
     // UI references.
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @NotEmpty
+    @BindView(R.id.resourceRecyclerView)
+    RecyclerView mRecyclerView;
+    @NotEmpty
+    private NavigationView mNavigationView;
+    @NotEmpty
+    private View mProfileView;
+    @NotEmpty
+    private TextView mProfileUsernameView;
+    @NotEmpty
+    private TextView mProfileEmailView;
 
+    private Unbinder unbinder;
     private DriveContract.Presenter mPresenter;
 
     public static DriveFragment newInstance() {
@@ -66,23 +82,6 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ApiService mApiService = MyApplication.getInstance().getApiService();
-        mApiService.getUser()
-                .subscribe(new CallBackWrapper<User>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-                    }
-
-                    @Override
-                    public void onSuccess(User user) {
-                        com.orhanobut.logger.Logger.e(String.valueOf(user));
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
-                    }
-                });
     }
 
     @Override
@@ -101,11 +100,15 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.drive_frag, container, false);
+        unbinder = ButterKnife.bind(this, root);
 
         // Set up resources view
-        RecyclerView mRecyclerView = root.findViewById(R.id.resource_recycler_view);
+        mNavigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        mProfileView = mNavigationView.getHeaderView(0);
+        mProfileUsernameView = (TextView) mProfileView.findViewById(R.id.profileUsernameView);
+        mProfileEmailView = (TextView) mProfileView.findViewById(R.id.profileEmailView);
+
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -117,8 +120,9 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     }
 
     @Override
-    public void showMessage(String msg) {
-
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -126,4 +130,23 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         mPresenter = checkNotNull(presenter);
     }
 
+    @OnClick(R.id.testButton)
+    public void testHandle() {
+        mPresenter.test();
+    }
+
+    @Override
+    public void showMessage(String msg) {
+
+    }
+
+    @Override
+    public void setProfileUsername(String username) {
+        mProfileUsernameView.setText(username);
+    }
+
+    @Override
+    public void setProfileEmail(String email) {
+        mProfileEmailView.setText(email);
+    }
 }

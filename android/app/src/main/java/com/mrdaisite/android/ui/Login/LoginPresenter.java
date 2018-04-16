@@ -77,47 +77,29 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void attemptLogin(String username, String password) {
-        mApiService.getUser()
+        mApiService.getToken(username, password)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<User>() {
+                .subscribe(new CallBackWrapper<Token>() {
                     @Override
                     public void onBegin(Disposable d) {
+                        mLoginView.showLoading();
                     }
 
                     @Override
-                    public void onSuccess(User user) {
-                        com.orhanobut.logger.Logger.e(String.valueOf(user));
+                    public void onSuccess(Token token) {
+                        TokenUtil tokenUtil = TokenUtil.getInstance();
+                        tokenUtil.saveToken(token);
+                        mLoginView.showMessage("login success");
+                        mLoginView.toBack();
+                        mLoginView.toDriveActivity();
                     }
 
                     @Override
                     public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
+                        mLoginView.showMessage(msg);
+                        mLoginView.toBack();
                     }
                 });
-//        mApiService.getToken(username, password)
-//                .subscribeOn(mSchedulerProvider.io())
-//                .observeOn(mSchedulerProvider.ui())
-//                .subscribe(new CallBackWrapper<Token>() {
-//                    @Override
-//                    public void onBegin(Disposable d) {
-//                        mLoginView.showLoading();
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(Token token) {
-//                        TokenUtil tokenUtil = TokenUtil.getInstance();
-//                        tokenUtil.saveToken(token);
-//                        mLoginView.showMessage("login success");
-//                        mLoginView.toBack();
-//                        mLoginView.toDriveActivity();
-//                    }
-//
-//                    @Override
-//                    public void onError(String msg) {
-//                        mLoginView.showMessage(msg);
-//                        mLoginView.toBack();
-//                    }
-//                });
     }
 }

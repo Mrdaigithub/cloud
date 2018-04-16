@@ -26,12 +26,23 @@ package com.mrdaisite.android.ui.Drive;
 
 import android.support.annotation.NonNull;
 
+import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.data.model.Resources;
+import com.mrdaisite.android.data.model.User;
+import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
+
+import io.objectbox.Box;
+import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DrivePresenter implements DriveContract.Presenter {
+
+    private ApiService mApiService = MyApplication.getInstance().getApiService();
+    private Box<User> userBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
 
     @NonNull
     private final DriveContract.View mDriveView;
@@ -39,7 +50,7 @@ public class DrivePresenter implements DriveContract.Presenter {
     @NonNull
     private final BaseSchedulerProvider mSchedulerProvider;
 
-    public DrivePresenter(DriveFragment driveFragment, BaseSchedulerProvider schedulerProvider) {
+    DrivePresenter(DriveFragment driveFragment, BaseSchedulerProvider schedulerProvider) {
         mDriveView = checkNotNull(driveFragment);
         mDriveView.setPresenter(this);
         mSchedulerProvider = checkNotNull(schedulerProvider);
@@ -47,11 +58,53 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     @Override
     public void subscribe() {
-        Logger.e("sub");
+        mApiService.getUser()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<User>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(User user) {
+                        long id = userBox.put(user);
+                        User localUserData = userBox.get(id);
+                        mDriveView.setProfileUsername(localUserData.getUsername());
+                        mDriveView.setProfileEmail(localUserData.getEmail());
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
     }
 
     @Override
     public void unsubscribe() {
 
+    }
+
+    @Override
+    public void test() {
+        mApiService.getResources()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<Resources>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(Resources resources) {
+                        
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
     }
 }

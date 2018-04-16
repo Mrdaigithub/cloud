@@ -78,7 +78,6 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     private LoginContract.Presenter mPersenter;
     private Validator validator;
 
-
     public static LoginFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -87,7 +86,6 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,7 +109,8 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.login_frag, container, false);
         unbinder = ButterKnife.bind(this, root);
         helper = new LoadViewHelper(mLoginForm);
@@ -125,6 +124,10 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
         unbinder.unbind();
     }
 
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPersenter = checkNotNull(presenter);
+    }
 
     @OnClick(R.id.login_button)
     public void loginHandle() {
@@ -134,11 +137,6 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void setPresenter(LoginContract.Presenter presenter) {
-        mPersenter = checkNotNull(presenter);
     }
 
     @Override

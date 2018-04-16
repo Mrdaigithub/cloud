@@ -24,6 +24,44 @@
 
 package com.mrdaisite.android.data.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+import java.util.Map;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Index;
+
+
 public class Resources {
 
+    /**
+     * id : 61
+     * resource_name : dir
+     * size : 0
+     * file : false
+     * trashed : false
+     * created_at : 2018-03-12 10:03:50
+     * updated_at : 2018-03-12 10:03:50
+     * path : 0
+     * trash_path : 0
+     */
+    @SerializedName("data")
+    private Map<String, List<ResourceBean>> data;
+
+    public Map<String, List<ResourceBean>> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, List<ResourceBean>> data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "Resources{" +
+                "data=" + data +
+                '}';
+    }
 }
