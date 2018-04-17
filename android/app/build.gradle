@@ -46,6 +46,7 @@ dependencies {
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation "com.facebook.stetho:stetho:$rootProject.stetho"
     implementation "com.facebook.stetho:stetho-okhttp3:$rootProject.stethoOkhttp3"
+    implementation 'com.android.support:cardview-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

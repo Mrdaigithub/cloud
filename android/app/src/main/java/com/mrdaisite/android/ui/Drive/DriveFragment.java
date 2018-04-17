@@ -45,6 +45,9 @@ import com.orhanobut.logger.Logger;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -113,7 +116,10 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        ResourceAdapter resourceAdapter = new ResourceAdapter(new String[]{"world", "hello", "world"});
+        List<String> datas = new ArrayList<>();
+        datas.add("1");
+        datas.add("1");
+        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.drive_frag, datas);
         mRecyclerView.setAdapter(resourceAdapter);
 
         return root;
