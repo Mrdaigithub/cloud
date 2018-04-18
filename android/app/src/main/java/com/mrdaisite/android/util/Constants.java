@@ -25,15 +25,14 @@
 package com.mrdaisite.android.util;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import okhttp3.internal.http2.ErrorCode;
 
 public class Constants {
 
     // API服务器 base url
     public static final String BASE_URL = "http://api.mrdaisite.com/";
+
+    // 转换单元
+    public static final int CONVERT_UTIL = 1024;
 
     // API错误代码友好提示
     public static final HashMap<String, String> ERROR_CODES = new HashMap<String, String>() {

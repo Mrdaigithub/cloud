@@ -24,8 +24,11 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
+
+import java.util.List;
 
 public interface DriveContract {
     interface View extends BaseView<Presenter> {
@@ -36,5 +39,6 @@ public interface DriveContract {
 
     interface Presenter extends BasePresenter {
         void test();
+        List<ResourceBean> getResourceBeanList(String path);
     }
 }

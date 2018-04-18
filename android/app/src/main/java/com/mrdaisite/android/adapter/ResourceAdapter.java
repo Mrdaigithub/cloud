@@ -30,6 +30,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.util.ResourceUtil;
 
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder helper, ResourceBean item) {
-        helper.setText(R.id.resourceTitle, item.getResourceName());
+        helper.setText(R.id.resourceTitle, item.getResourceName())
+                .setText(R.id.resourceSize, ResourceUtil.getINSTANCE().computeFileSize(item.getSize()))
+                .setText(R.id.resourceCreatedDate, item.getCreatedAt());
     }
 }

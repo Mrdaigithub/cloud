@@ -25,5 +25,5 @@
 <vector android:autoMirrored="true" android:height="48dp"
     android:viewportHeight="1024" android:viewportWidth="1024"
     android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="" android:pathData="M819.07,68.61l0.13,-0.26h-188.8L512,273.07v0.09l-118.27,-204.8H204.93v0.21H0l512,886.87L1024,68.61"/>
+    <path android:pathData="M819.07,68.61l0.13,-0.26h-188.8L512,273.07v0.09l-118.27,-204.8H204.93v0.21H0l512,886.87L1024,68.61"/>
 </vector>

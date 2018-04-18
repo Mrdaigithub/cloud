@@ -41,10 +41,12 @@
             android:id="@+id/resourceIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:contentDescription="TsadasdODO"
+            android:paddingLeft="0dp"
             android:paddingRight="10dp"
-            app:srcCompat="@drawable/ic_folder" />
+            app:srcCompat="@drawable/ic_folder"
+            android:paddingEnd="10dp"
+            android:paddingStart="0dp" />
 
         <TextView
             android:id="@+id/resourceTitle"
@@ -52,9 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/resourceIcon"
             android:maxLines="1"
-            android:text="Title"
+            android:text=""
             android:textColor="#464646"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_toEndOf="@id/resourceIcon" />
 
         <TextView
             android:id="@+id/resourceSize"
@@ -64,7 +67,8 @@
             android:layout_toRightOf="@id/resourceIcon"
             android:maxLines="1"
             android:text="1.76GB"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_toEndOf="@id/resourceIcon" />
 
         <TextView
             android:id="@+id/resourceCreatedDate"
@@ -73,9 +77,13 @@
             android:layout_alignBottom="@id/resourceIcon"
             android:layout_toRightOf="@id/resourceSize"
             android:maxLines="1"
-            android:paddingLeft="5dp"
             android:text="4-18,2018"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:paddingStart="5dp"
+            android:layout_toEndOf="@id/resourceSize"
+            android:paddingLeft="5dp"
+            android:paddingRight="0dp"
+            android:paddingEnd="0dp" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -55,6 +55,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DriveFragment extends Fragment implements DriveContract.View {
 
+    public static String path = "0";
+
     // UI references.
     @NotEmpty
     @BindView(R.id.resourceRecyclerView)
@@ -113,14 +115,9 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        List<ResourceBean> datas = new ArrayList<ResourceBean>();
-        for (int i = 0; i < 10; i++) {
-            ResourceBean resourceBean = new ResourceBean();
-            resourceBean.setResourceName("title:" + i);
-            datas.add(resourceBean);
-        }
+        List<ResourceBean> resourceBeanList = mPresenter.getResourceBeanList(path);
 
-        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.resource_item, datas);
+        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.resource_item, resourceBeanList);
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);

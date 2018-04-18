@@ -27,12 +27,16 @@ package com.mrdaisite.android.ui.Drive;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.ResourceBean_;
 import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-import com.orhanobut.logger.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
@@ -42,7 +46,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DrivePresenter implements DriveContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
-    private Box<User> userBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
+    private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
+    private Box<ResourceBean> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(ResourceBean.class);
 
     @NonNull
     private final DriveContract.View mDriveView;
@@ -68,10 +73,33 @@ public class DrivePresenter implements DriveContract.Presenter {
 
                     @Override
                     public void onSuccess(User user) {
-                        long id = userBox.put(user);
-                        User localUserData = userBox.get(id);
+                        long id = mUserBox.put(user);
+                        User localUserData = mUserBox.get(id);
                         mDriveView.setProfileUsername(localUserData.getUsername());
                         mDriveView.setProfileEmail(localUserData.getEmail());
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
+        mApiService.getResources()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<Resources>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(Resources resources) {
+                        Map<String, List<ResourceBean>> resourcesData = resources.getData();
+                        for (List<ResourceBean> rList : resourcesData.values()) {
+                            for (ResourceBean rItem : rList) {
+                                mResourceBeanBox.put(rItem);
+                            }
+                        }
                     }
 
                     @Override
@@ -88,23 +116,10 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     @Override
     public void test() {
-        mApiService.getResources()
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<Resources>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-                    }
+    }
 
-                    @Override
-                    public void onSuccess(Resources resources) {
-                        
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
-                    }
-                });
+    @Override
+    public List<ResourceBean> getResourceBeanList(String path) {
+        return mResourceBeanBox.query().equal(ResourceBean_.path, path).build().find();
     }
 }
