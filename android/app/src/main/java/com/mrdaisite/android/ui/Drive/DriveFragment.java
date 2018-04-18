@@ -25,25 +25,23 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.os.Bundle;
-import android.support.annotation.NavigationRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
+import com.mrdaisite.android.data.model.ResourceBean;
 import com.orhanobut.logger.Logger;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,11 +113,17 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        List<ResourceBean> datas = new ArrayList<ResourceBean>();
+        for (int i = 0; i < 10; i++) {
+            ResourceBean resourceBean = new ResourceBean();
+            resourceBean.setResourceName("title:" + i);
+            datas.add(resourceBean);
+        }
 
-        List<String> datas = new ArrayList<>();
-        datas.add("1");
-        datas.add("1");
-        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.drive_frag, datas);
+        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.resource_item, datas);
+        resourceAdapter.openLoadAnimation();
+        resourceAdapter.isFirstOnly(false);
+        resourceAdapter.setUpFetchEnable(true);
         mRecyclerView.setAdapter(resourceAdapter);
 
         return root;
@@ -143,7 +147,7 @@ public class DriveFragment extends Fragment implements DriveContract.View {
 
     @Override
     public void showMessage(String msg) {
-
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

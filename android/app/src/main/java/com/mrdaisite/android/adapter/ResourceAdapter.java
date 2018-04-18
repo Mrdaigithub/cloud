@@ -25,28 +25,21 @@
 package com.mrdaisite.android.adapter;
 
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mrdaisite.android.R;
-import com.orhanobut.logger.Logger;
+import com.mrdaisite.android.data.model.ResourceBean;
 
 import java.util.List;
 
-public class ResourceAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-    public ResourceAdapter(int layoutResId, @Nullable List<String> data) {
+public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHolder> {
+    public ResourceAdapter(int layoutResId, @Nullable List<ResourceBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
-        Logger.e(String.valueOf(helper));
-        Logger.e(item);
-//        helper.setText(R.id.textView2, item);
+    protected void convert(BaseViewHolder helper, ResourceBean item) {
+        helper.setText(R.id.resourceTitle, item.getResourceName());
     }
 }

@@ -4,6 +4,7 @@ apply plugin: 'io.objectbox'
 android {
     compileSdkVersion 26
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.mrdaisite.android"
         minSdkVersion 15
         targetSdkVersion 26

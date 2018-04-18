@@ -1,0 +1,29 @@
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 Mrdai
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<vector android:autoMirrored="true" android:height="48dp"
+    android:viewportHeight="1024" android:viewportWidth="1024"
+    android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M450.74,319.41l-97.13,257.17q18.87,0 77.97,1.17t91.72,1.17q10.83,0 32.55,-1.17 -49.74,-144.6 -105.18,-258.27zM36.46,950.86l1.17,-45.13q13.17,-4.02 32.04,-7.17t32.55,-6 28.31,-8.27 25.45,-16.6 17.7,-28.89l135.46,-352.04 160.04,-413.7 73.14,0q4.53,7.97 6.29,12l117.17,274.29q18.87,44.54 60.56,147.16t65.17,156.89q8.56,19.46 33.13,82.58t41.18,96.26q11.41,25.75 19.97,32.55 10.83,8.56 50.32,16.82t47.98,11.7q3.44,21.72 3.44,32.55 0,2.27 -0.29,7.46t-0.29,7.46q-35.99,0 -108.54,-4.53t-109.13,-4.53q-43.45,0 -122.88,4.02t-101.74,4.53q0,-24.58 2.27,-44.54l74.83,-16.02q0.59,0 7.17,-1.46t8.85,-1.97 8.27,-2.56 8.56,-3.73 6.29,-4.53 5.12,-6.29 1.46,-7.97q0,-9.14 -17.7,-55.15t-41.18,-101.45 -23.99,-57.12l-257.17,-1.17q-14.85,33.13 -43.74,111.69t-28.89,92.89q0,12.58 7.97,21.43t24.87,13.97 27.72,7.68 32.55,4.83 23.41,2.27q0.59,10.83 0.59,33.13 0,5.12 -1.17,15.43 -33.13,0 -99.69,-5.71t-99.69,-5.71q-4.53,0 -15.14,2.27t-12.29,2.27q-45.71,7.97 -107.45,7.97z"/>
+</vector>

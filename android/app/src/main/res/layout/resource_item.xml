@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 Mrdai
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="0dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
+    app:contentPadding="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/resourceIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="TsadasdODO"
+            android:paddingRight="10dp"
+            app:srcCompat="@drawable/ic_folder" />
+
+        <TextView
+            android:id="@+id/resourceTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/resourceIcon"
+            android:maxLines="1"
+            android:text="Title"
+            android:textColor="#464646"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/resourceSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/resourceIcon"
+            android:layout_toRightOf="@id/resourceIcon"
+            android:maxLines="1"
+            android:text="1.76GB"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/resourceCreatedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/resourceIcon"
+            android:layout_toRightOf="@id/resourceSize"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:text="4-18,2018"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

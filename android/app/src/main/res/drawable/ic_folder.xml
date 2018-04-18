@@ -1,0 +1,32 @@
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 Mrdai
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<vector android:autoMirrored="true" android:height="48dp"
+    android:viewportHeight="1024" android:viewportWidth="1024"
+    android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#E28F2A" android:pathData="M817.6,226.22H487.12v-43.19c0,-14.19 -11.5,-25.67 -25.68,-25.67H207.93c-14.16,0 -25.66,11.49 -25.66,25.67V425.01c0,14.17 11.5,25.66 25.66,25.66h212.4c4.16,8.59 12.86,14.56 23.04,14.56h374.24c14.16,0 25.66,-11.49 25.66,-25.67v-187.65c0,-14.19 -11.5,-25.68 -25.66,-25.68z"/>
+    <path android:fillColor="#FDEEE2" android:pathData="M170.2,419.94l-13.98,-90.55h708.18v75.45z"/>
+    <path android:fillColor="#E28F2A" android:pathData="M846.29,791.19c0,14.17 -15.1,45.27 -29.27,45.27H203.4c-14.18,0 -24.15,-18.25 -24.15,-32.43l-98.69,-403.69c0,-14.19 11.49,-25.68 25.66,-25.68h790.75c14.18,0 25.68,11.49 25.68,25.68l-76.36,390.85z"/>
+    <path android:fillColor="#FDEEE2" android:pathData="M221.51,269.03h582.51v34.97H221.51z"/>
+</vector>
