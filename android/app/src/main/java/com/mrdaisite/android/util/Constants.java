@@ -24,6 +24,8 @@
 
 package com.mrdaisite.android.util;
 
+import com.mrdaisite.android.R;
+
 import java.util.HashMap;
 
 public class Constants {
@@ -56,4 +58,39 @@ public class Constants {
         }
     };
 
+    // 文件后缀与icon图标的映射
+    public static final HashMap<String, Integer> EXT_ICON_MAP = new HashMap<String, Integer>() {
+        {
+            put("3gp", R.drawable.ic_3gp);
+            put("7z", R.drawable.ic_7z);
+            put("avi", R.drawable.ic_avi);
+            put("bmp", R.drawable.ic_bmp);
+            put("css", R.drawable.ic_css);
+            put("doc", R.drawable.ic_doc);
+            put("docx", R.drawable.ic_doc);
+            put("xlsx", R.drawable.ic_excel);
+            put("xls", R.drawable.ic_excel);
+            put("exe", R.drawable.ic_exe);
+            put("msi", R.drawable.ic_exe);
+            put("gif", R.drawable.ic_gif);
+            put("html", R.drawable.ic_html);
+            put("htm", R.drawable.ic_html);
+            put("jar", R.drawable.ic_jar);
+            put("jpg", R.drawable.ic_jpg);
+            put("js", R.drawable.ic_js);
+            put("md", R.drawable.ic_md);
+            put("mp4", R.drawable.ic_mp4);
+            put("mpeg", R.drawable.ic_mpeg);
+            put("pdf", R.drawable.ic_pdf);
+            put("php", R.drawable.ic_php);
+            put("png", R.drawable.ic_png);
+            put("ppt", R.drawable.ic_ppt);
+            put("rar", R.drawable.ic_rar);
+            put("sql", R.drawable.ic_sql);
+            put("svg", R.drawable.ic_svg);
+            put("txt", R.drawable.ic_txt);
+            put("text", R.drawable.ic_txt);
+            put("vue", R.drawable.ic_vuejs);
+        }
+    };
 }

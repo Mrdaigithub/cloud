@@ -24,8 +24,11 @@
 
 package com.mrdaisite.android.util;
 
-import java.io.File;
-import java.util.logging.Logger;
+
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
+import java.time.OffsetDateTime;
 
 public class ResourceUtil {
     private static ResourceUtil INSTANCE;
@@ -63,12 +66,26 @@ public class ResourceUtil {
     }
 
     /**
-     * 获取资源mime
+     * 转化ISO8601时间格式至用户友好的格式
+     *
+     * @param iso8601
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String formatISO8601(String iso8601) {
+        OffsetDateTime odt = OffsetDateTime.parse(iso8601);
+        return odt.getYear() + "/" + odt.getMonthValue() + "/" + odt.getDayOfMonth() + "," + odt.getHour() + ":" + odt.getMinute();
+    }
+
+    /**
+     * 获取资源后缀名
      *
      * @param resourceName
+     * @return
      */
-    public String getMimeType(String resourceName) {
-        File f = new File(resourceName);
-        return new MimetypesFileTypeMap();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public String getExt(String resourceName) {
+        String[] type = resourceName.split("\\.");
+        return type[type.length - 1].toLowerCase();
     }
 }

@@ -24,25 +24,39 @@
 
 package com.mrdaisite.android.adapter;
 
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHolder> {
     public ResourceAdapter(int layoutResId, @Nullable List<ResourceBean> data) {
         super(layoutResId, data);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void convert(BaseViewHolder helper, ResourceBean item) {
-        helper.setText(R.id.resourceTitle, item.getResourceName())
-                .setText(R.id.resourceSize, ResourceUtil.getINSTANCE().computeFileSize(item.getSize()))
-                .setText(R.id.resourceCreatedDate, item.getCreatedAt());
+        helper = helper.setText(R.id.resourceTitle, item.getResourceName())
+                .setText(R.id.resourceCreatedDate, ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt()));
+        if (item.isFile()) {
+            helper.setVisible(R.id.resourceSize, true);
+            helper.setText(R.id.resourceSize, ResourceUtil.getINSTANCE().computeFileSize(item.getSize()));
+            String ext = ResourceUtil.getINSTANCE().getExt(item.getResourceName());
+            if (Constants.EXT_ICON_MAP.containsKey(ext)) {
+                helper.setImageResource(R.id.resourceIcon, Constants.EXT_ICON_MAP.get(ext));
+            } else {
+                helper.setImageResource(R.id.resourceIcon, R.drawable.ic_file);
+            }
+        }
     }
 }
