@@ -41,7 +41,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
-import com.orhanobut.logger.Logger;
+import com.mrdaisite.android.util.ResourceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class DriveFragment extends Fragment implements DriveContract.View {
 
     public static String path = "0";
+    private List<ResourceBean> resourceBeanList;
 
     // UI references.
     @NotEmpty
@@ -115,12 +116,24 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        List<ResourceBean> resourceBeanList = mPresenter.getResourceBeanList(path);
+        resourceBeanList = mPresenter.getResourceBeanList(path);
 
         ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.resource_item, resourceBeanList);
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);
+        resourceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                List<ResourceBean> data = adapter.getData();
+                ResourceBean item = data.get(position);
+                if (!item.isFile()) {
+                    path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
+                    resourceBeanList = mPresenter.getResourceBeanList(path);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
         mRecyclerView.setAdapter(resourceAdapter);
 
         return root;
@@ -135,11 +148,6 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @Override
     public void setPresenter(DriveContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
-    }
-
-    @OnClick(R.id.testButton)
-    public void testHandle() {
-        mPresenter.test();
     }
 
     @Override

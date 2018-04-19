@@ -37,6 +37,7 @@ import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
@@ -63,27 +64,9 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     @Override
     public void subscribe() {
-        mApiService.getUser()
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<User>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-                    }
-
-                    @Override
-                    public void onSuccess(User user) {
-                        long id = mUserBox.put(user);
-                        User localUserData = mUserBox.get(id);
-                        mDriveView.setProfileUsername(localUserData.getUsername());
-                        mDriveView.setProfileEmail(localUserData.getEmail());
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
-                    }
-                });
+        User userInfo = mUserBox.query().build().findFirst();
+        mDriveView.setProfileUsername(userInfo.getEmail());
+        mDriveView.setProfileEmail(userInfo.getUsername());
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
@@ -115,11 +98,15 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void test() {
-    }
-
-    @Override
     public List<ResourceBean> getResourceBeanList(String path) {
-        return mResourceBeanBox.query().equal(ResourceBean_.path, path).build().find();
+        com.orhanobut.logger.Logger.e(String.valueOf(1));
+        return mResourceBeanBox.query()
+                .equal(ResourceBean_.path, path)
+                .filter((resource) -> {
+                    return !resource.isTrashed();
+                })
+                .order(ResourceBean_.file)
+                .build()
+                .find();
     }
 }

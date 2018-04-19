@@ -38,7 +38,6 @@ public interface DriveContract {
     }
 
     interface Presenter extends BasePresenter {
-        void test();
         List<ResourceBean> getResourceBeanList(String path);
     }
 }

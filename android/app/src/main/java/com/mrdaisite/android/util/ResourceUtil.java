@@ -88,4 +88,8 @@ public class ResourceUtil {
         String[] type = resourceName.split("\\.");
         return type[type.length - 1].toLowerCase();
     }
+
+    public String pushPath(String path, long id) {
+        return path + "." + id;
+    }
 }

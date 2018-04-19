@@ -51,6 +51,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class LoginPresenter implements LoginContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
+    private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
 
     @NonNull
     private final LoginContract.View mLoginView;
@@ -90,15 +91,37 @@ public class LoginPresenter implements LoginContract.Presenter {
                     public void onSuccess(Token token) {
                         TokenUtil tokenUtil = TokenUtil.getInstance();
                         tokenUtil.saveToken(token);
-                        mLoginView.showMessage("login success");
-                        mLoginView.toBack();
-                        mLoginView.toDriveActivity();
+                        getUserInfo();
                     }
 
                     @Override
                     public void onError(String msg) {
                         mLoginView.showMessage(msg);
                         mLoginView.toBack();
+                    }
+                });
+    }
+
+    @Override
+    public void getUserInfo() {
+        mApiService.getUser()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<User>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(User user) {
+                        mUserBox.put(user);
+                        mLoginView.toBack();
+                        mLoginView.toDriveActivity();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
                     }
                 });
     }
