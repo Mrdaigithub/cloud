@@ -33,58 +33,72 @@
     app:cardUseCompatPadding="true"
     app:contentPadding="3dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/resourceIcon"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="resourceIcon"
-            android:paddingEnd="10dp"
-            android:paddingLeft="0dp"
-            android:paddingRight="10dp"
-            android:paddingStart="0dp"
-            app:srcCompat="@drawable/ic_folder" />
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/resourceTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/resourceIcon"
-            android:layout_toRightOf="@id/resourceIcon"
-            android:maxLines="1"
-            android:text=""
-            android:textColor="#464646"
-            android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/resourceIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="resourceIcon"
+                android:paddingEnd="10dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="10dp"
+                android:paddingStart="0dp"
+                app:srcCompat="@drawable/ic_folder" />
 
-        <TextView
-            android:id="@+id/resourceSize"
+            <TextView
+                android:id="@+id/resourceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/resourceIcon"
+                android:layout_toRightOf="@id/resourceIcon"
+                android:maxLines="1"
+                android:text="title"
+                android:textColor="#464646"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/resourceSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/resourceIcon"
+                android:layout_toEndOf="@id/resourceIcon"
+                android:layout_toRightOf="@id/resourceIcon"
+                android:maxLines="1"
+                android:paddingEnd="@dimen/dp_10"
+                android:paddingLeft="0dp"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingStart="0dp"
+                android:text="100GB"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/resourceCreatedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/resourceIcon"
+                android:layout_toEndOf="@id/resourceSize"
+                android:layout_toRightOf="@id/resourceSize"
+                android:maxLines="1"
+                android:text="2018/03/12 08:00:00"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <CheckBox
+            android:id="@+id/resourceCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/resourceIcon"
-            android:layout_toEndOf="@id/resourceIcon"
-            android:layout_toRightOf="@id/resourceIcon"
-            android:maxLines="1"
-            android:paddingEnd="@dimen/dp_10"
-            android:paddingLeft="0dp"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingStart="0dp"
-            android:text=""
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/resourceCreatedDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/resourceIcon"
-            android:layout_toEndOf="@id/resourceSize"
-            android:layout_toRightOf="@id/resourceSize"
-            android:maxLines="1"
-            android:text=""
-            android:textSize="14sp" />
-    </RelativeLayout>
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

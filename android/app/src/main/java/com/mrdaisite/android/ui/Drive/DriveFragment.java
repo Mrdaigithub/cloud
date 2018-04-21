@@ -35,12 +35,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -125,6 +127,13 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
                 resourceAdapter.setNewData(mPresenter.getResourceBeanList(path));
                 adapter.notifyDataSetChanged();
+            }
+        });
+        resourceAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                view.findViewById(R.id.resourceCheckBox).setChecked(true);
+                return false;
             }
         });
         mRecyclerView.setAdapter(resourceAdapter);
