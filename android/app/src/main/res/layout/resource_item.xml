@@ -40,7 +40,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
@@ -62,7 +62,7 @@
                 android:layout_toEndOf="@id/resourceIcon"
                 android:layout_toRightOf="@id/resourceIcon"
                 android:maxLines="1"
-                android:text="title"
+                android:text=""
                 android:textColor="#464646"
                 android:textSize="18sp" />
 
@@ -74,11 +74,11 @@
                 android:layout_toEndOf="@id/resourceIcon"
                 android:layout_toRightOf="@id/resourceIcon"
                 android:maxLines="1"
-                android:paddingEnd="@dimen/dp_10"
+                android:paddingEnd="10dp"
                 android:paddingLeft="0dp"
-                android:paddingRight="@dimen/dp_10"
+                android:paddingRight="10dp"
                 android:paddingStart="0dp"
-                android:text="100GB"
+                android:text=""
                 android:textSize="14sp"
                 android:visibility="gone" />
 
@@ -90,7 +90,7 @@
                 android:layout_toEndOf="@id/resourceSize"
                 android:layout_toRightOf="@id/resourceSize"
                 android:maxLines="1"
-                android:text="2018/03/12 08:00:00"
+                android:text=""
                 android:textSize="14sp" />
 
         </RelativeLayout>
@@ -98,7 +98,7 @@
         <CheckBox
             android:id="@+id/resourceCheckBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

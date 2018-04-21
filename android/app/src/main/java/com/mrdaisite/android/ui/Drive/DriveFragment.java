@@ -32,6 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,12 +130,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
                 adapter.notifyDataSetChanged();
             }
         });
-        resourceAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                view.findViewById(R.id.resourceCheckBox).setChecked(true);
-                return false;
-            }
+        resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            return true;
         });
         mRecyclerView.setAdapter(resourceAdapter);
 

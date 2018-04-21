@@ -45,7 +45,7 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())
                 .setText(R.id.resourceCreatedDate, ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt()));
         if (item.isFile()) {
-            helper.setVisible(R.id.resourceSize, true);
+            helper.setGone(R.id.resourceSize, true);
             helper.setText(R.id.resourceSize, ResourceUtil.getINSTANCE().computeFileSize(item.getSize()));
             String ext = ResourceUtil.getINSTANCE().getExt(item.getResourceName());
             if (Constants.EXT_ICON_MAP.containsKey(ext)) {
@@ -54,6 +54,7 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
                 helper.setImageResource(R.id.resourceIcon, R.drawable.ic_file);
             }
         } else {
+            helper.setGone(R.id.resourceSize, false);
             helper.setImageResource(R.id.resourceIcon, R.drawable.ic_folder);
         }
     }
