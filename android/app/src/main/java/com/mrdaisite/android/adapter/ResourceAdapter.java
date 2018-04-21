@@ -24,9 +24,7 @@
 
 package com.mrdaisite.android.adapter;
 
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -36,14 +34,12 @@ import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHolder> {
     public ResourceAdapter(int layoutResId, @Nullable List<ResourceBean> data) {
         super(layoutResId, data);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void convert(BaseViewHolder helper, ResourceBean item) {
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())
@@ -57,6 +53,8 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
             } else {
                 helper.setImageResource(R.id.resourceIcon, R.drawable.ic_file);
             }
+        } else {
+            helper.setImageResource(R.id.resourceIcon, R.drawable.ic_folder);
         }
     }
 }

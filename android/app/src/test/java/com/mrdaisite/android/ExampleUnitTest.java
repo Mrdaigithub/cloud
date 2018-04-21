@@ -1,5 +1,8 @@
 package com.mrdaisite.android;
 
+import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -13,5 +16,20 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void test_getExt() {
+        System.out.println(ResourceUtil.getINSTANCE().getExt("xx.png"));
+    }
+
+    @Test
+    public void test_popPath() {
+        System.out.println(ResourceUtil.getINSTANCE().popPath("0.61.100.1000"));
+    }
+
+    @Test
+    public void test_formatISO8601() {
+        System.out.println(ResourceUtil.getINSTANCE().formatISO8601("2018-03-12T10:04:47+08:00"));
     }
 }

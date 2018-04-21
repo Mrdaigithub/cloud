@@ -37,7 +37,7 @@ import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.Objects;
 
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
@@ -65,8 +65,8 @@ public class DrivePresenter implements DriveContract.Presenter {
     @Override
     public void subscribe() {
         User userInfo = mUserBox.query().build().findFirst();
-        mDriveView.setProfileUsername(userInfo.getEmail());
-        mDriveView.setProfileEmail(userInfo.getUsername());
+        mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getUsername());
+        mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
@@ -99,12 +99,9 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     @Override
     public List<ResourceBean> getResourceBeanList(String path) {
-        com.orhanobut.logger.Logger.e(String.valueOf(1));
         return mResourceBeanBox.query()
                 .equal(ResourceBean_.path, path)
-                .filter((resource) -> {
-                    return !resource.isTrashed();
-                })
+                .filter((resource) -> !resource.isTrashed())
                 .order(ResourceBean_.file)
                 .build()
                 .find();

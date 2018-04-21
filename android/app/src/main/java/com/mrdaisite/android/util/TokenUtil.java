@@ -40,10 +40,11 @@ public class TokenUtil {
     private SharedPreferences sharedPref = MyApplication.getInstance().getSharedPreferences();
     private ApiService mApiService = MyApplication.getInstance().getApiService();
 
+    private TokenUtil() {
+    }
+
     public static TokenUtil getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new TokenUtil();
-        }
+        if (INSTANCE == null) INSTANCE = new TokenUtil();
         return INSTANCE;
     }
 

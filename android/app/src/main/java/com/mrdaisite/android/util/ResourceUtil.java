@@ -25,22 +25,24 @@
 package com.mrdaisite.android.util;
 
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 
-import java.time.OffsetDateTime;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.text.SimpleDateFormat;
 
 public class ResourceUtil {
     private static ResourceUtil INSTANCE;
 
-    public static ResourceUtil getINSTANCE() {
-        if (INSTANCE == null) {
-            INSTANCE = new ResourceUtil();
-        }
-        return INSTANCE;
+    private ResourceUtil() {
     }
 
-    ResourceUtil() {
+    public static ResourceUtil getINSTANCE() {
+        if (INSTANCE == null) INSTANCE = new ResourceUtil();
+        return INSTANCE;
     }
 
     /**
@@ -71,10 +73,10 @@ public class ResourceUtil {
      * @param iso8601
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String formatISO8601(String iso8601) {
-        OffsetDateTime odt = OffsetDateTime.parse(iso8601);
-        return odt.getYear() + "/" + odt.getMonthValue() + "/" + odt.getDayOfMonth() + "," + odt.getHour() + ":" + odt.getMinute();
+        Date sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                .parse(iso8601, new ParsePosition(0));
+        return (1900 + sdf.getYear()) + "/" + (sdf.getMonth() + 1) + "/" + sdf.getDate() + "," + sdf.getHours() + ":" + sdf.getMinutes();
     }
 
     /**
@@ -83,13 +85,39 @@ public class ResourceUtil {
      * @param resourceName
      * @return
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String getExt(String resourceName) {
-        String[] type = resourceName.split("\\.");
-        return type[type.length - 1].toLowerCase();
+        List<String> type = Splitter.on(".")
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(resourceName);
+        return type.get(type.size() - 1).toLowerCase();
     }
 
+    /**
+     * 获取下一级路径
+     *
+     * @param path
+     * @param id
+     * @return
+     */
     public String pushPath(String path, long id) {
         return path + "." + id;
+    }
+
+    /**
+     * 获取上一级路径
+     *
+     * @param path
+     * @return
+     */
+    public String popPath(String path) {
+        List<String> pathList = new ArrayList<>(Splitter.on(".")
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(path));
+        pathList.remove(pathList.size() - 1);
+        return Joiner.on(".")
+                .skipNulls()
+                .join(pathList);
     }
 }

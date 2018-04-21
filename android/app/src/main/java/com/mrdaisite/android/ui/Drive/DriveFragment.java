@@ -27,7 +27,6 @@ package com.mrdaisite.android.ui.Drive;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,27 +35,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DriveFragment extends Fragment implements DriveContract.View {
+public class DriveFragment extends BaseFragment implements DriveContract.View {
 
     public static String path = "0";
-    private List<ResourceBean> resourceBeanList;
 
     // UI references.
     @NotEmpty
@@ -71,6 +67,7 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     @NotEmpty
     private TextView mProfileEmailView;
 
+    private ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
     private DriveContract.Presenter mPresenter;
 
@@ -108,30 +105,26 @@ public class DriveFragment extends Fragment implements DriveContract.View {
         unbinder = ButterKnife.bind(this, root);
 
         // Set up resources view
-        mNavigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+        mNavigationView = getActivity().findViewById(R.id.nav_view);
         mProfileView = mNavigationView.getHeaderView(0);
-        mProfileUsernameView = (TextView) mProfileView.findViewById(R.id.profileUsernameView);
-        mProfileEmailView = (TextView) mProfileView.findViewById(R.id.profileEmailView);
+        mProfileUsernameView = mProfileView.findViewById(R.id.profileUsernameView);
+        mProfileEmailView = mProfileView.findViewById(R.id.profileEmailView);
 
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        resourceBeanList = mPresenter.getResourceBeanList(path);
 
-        ResourceAdapter resourceAdapter = new ResourceAdapter(R.layout.resource_item, resourceBeanList);
+        resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.getResourceBeanList(path));
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);
-        resourceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                List<ResourceBean> data = adapter.getData();
-                ResourceBean item = data.get(position);
-                if (!item.isFile()) {
-                    path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                    resourceBeanList = mPresenter.getResourceBeanList(path);
-                    adapter.notifyDataSetChanged();
-                }
+        resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
+            List<ResourceBean> data = adapter.getData();
+            ResourceBean item = data.get(position);
+            if (!item.isFile()) {
+                path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
+                resourceAdapter.setNewData(mPresenter.getResourceBeanList(path));
+                adapter.notifyDataSetChanged();
             }
         });
         mRecyclerView.setAdapter(resourceAdapter);
@@ -143,6 +136,17 @@ public class DriveFragment extends Fragment implements DriveContract.View {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (!path.equals("0")) {
+            path = ResourceUtil.getINSTANCE().popPath(path);
+            resourceAdapter.setNewData(mPresenter.getResourceBeanList(path));
+            resourceAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onBackPressed();
     }
 
     @Override

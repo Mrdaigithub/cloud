@@ -54,7 +54,7 @@ import io.objectbox.BoxStore;
 
 public class MyApplication extends Application {
 
-    private static MyApplication mMyApplication;
+    private static MyApplication INSTANCES;
     private SharedPreferences sharedPreferences;
     private ApiService mApiService;
     private BoxStore boxStore;
@@ -62,7 +62,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mMyApplication = this;
+        INSTANCES = this;
 
         initLogger();
         initSharedPreferences();
@@ -73,7 +73,8 @@ public class MyApplication extends Application {
     }
 
     public static MyApplication getInstance() {
-        return mMyApplication;
+        if (INSTANCES == null) INSTANCES = new MyApplication();
+        return INSTANCES;
     }
 
     public ApiService getApiService() {

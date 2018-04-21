@@ -30,6 +30,16 @@ import java.util.HashMap;
 
 public class Constants {
 
+    private static Constants INSTANCES;
+
+    private Constants() {
+    }
+
+    public static Constants getInstances() {
+        if (INSTANCES == null) INSTANCES = new Constants();
+        return INSTANCES;
+    }
+
     // API服务器 base url
     public static final String BASE_URL = "http://api.mrdaisite.com/";
 
