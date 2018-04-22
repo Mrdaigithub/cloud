@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.adapter;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -32,16 +33,20 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
 public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHolder> {
+
     public ResourceAdapter(int layoutResId, @Nullable List<ResourceBean> data) {
         super(layoutResId, data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, ResourceBean item) {
+
+        // 设置resource item的title,时间,icon
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())
                 .setText(R.id.resourceCreatedDate, ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt()));
         if (item.isFile()) {
@@ -57,5 +62,8 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
             helper.setGone(R.id.resourceSize, false);
             helper.setImageResource(R.id.resourceIcon, R.drawable.ic_folder);
         }
+
+        // 设置singleItemMenuButton子控件
+        helper.addOnClickListener(R.id.singleItemMenuButton);
     }
 }

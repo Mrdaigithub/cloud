@@ -30,20 +30,21 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -86,6 +87,12 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -132,6 +139,25 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             return true;
+        });
+        resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+            popupMenu.inflate(R.menu.resource_item_menu);
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                switch (menuItem.getItemId()){
+                    case R.id.resourceItemMenuRename:
+                        // handle menu1 click
+                        break;
+                    case R.id.resourceItemMenuRemove:
+                        // handle menu2 click
+                        break;
+                    case R.id.resourceItemMenuMove:
+                        // handle menu3 click
+                        break;
+                }
+                return false;
+            });
+            popupMenu.show();
         });
         mRecyclerView.setAdapter(resourceAdapter);
 
