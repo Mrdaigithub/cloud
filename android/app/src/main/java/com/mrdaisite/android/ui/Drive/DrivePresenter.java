@@ -34,6 +34,7 @@ import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class DrivePresenter implements DriveContract.Presenter {
     @Override
     public void subscribe() {
         User userInfo = mUserBox.query().build().findFirst();
-        mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getUsername());
+        mDriveView.setProfileUsername(Objects.requireNonNull(userInfo).getUsername());
         mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
@@ -105,5 +106,10 @@ public class DrivePresenter implements DriveContract.Presenter {
                 .order(ResourceBean_.file)
                 .build()
                 .find();
+    }
+
+    @Override
+    public void renameResource(int position) {
+        Logger.e("rename " + position);
     }
 }

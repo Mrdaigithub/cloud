@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
@@ -35,9 +36,13 @@ public interface DriveContract {
         void setProfileUsername(String username);
 
         void setProfileEmail(String email);
+
+        void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList);
     }
 
     interface Presenter extends BasePresenter {
         List<ResourceBean> getResourceBeanList(String path);
+
+        void renameResource(int position);
     }
 }

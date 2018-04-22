@@ -133,8 +133,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
             ResourceBean item = data.get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceAdapter.setNewData(mPresenter.getResourceBeanList(path));
-                adapter.notifyDataSetChanged();
+                resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
@@ -144,9 +143,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
             PopupMenu popupMenu = new PopupMenu(getActivity(), view);
             popupMenu.inflate(R.menu.resource_item_menu);
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.resourceItemMenuRename:
-                        // handle menu1 click
+                        mPresenter.renameResource(position);
                         break;
                     case R.id.resourceItemMenuRemove:
                         // handle menu2 click
@@ -157,6 +156,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
                 }
                 return false;
             });
+            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
             popupMenu.show();
         });
         mRecyclerView.setAdapter(resourceAdapter);
@@ -174,8 +174,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
     public boolean onBackPressed() {
         if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceAdapter.setNewData(mPresenter.getResourceBeanList(path));
-            resourceAdapter.notifyDataSetChanged();
+            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
             return true;
         }
         return super.onBackPressed();
@@ -199,5 +198,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
     @Override
     public void setProfileEmail(String email) {
         mProfileEmailView.setText(email);
+    }
+
+    @Override
+    public void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList) {
+        resourceAdapter.setNewData(currentResourceList);
+        resourceAdapter.notifyDataSetChanged();
     }
 }
