@@ -43,6 +43,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.ui.Drive.DriveActivity;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -158,6 +159,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
 
     @Override
     public void onValidationSucceeded() {
+        Logger.e(String.valueOf(mUsernameView));
         mPersenter.attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
     }
 

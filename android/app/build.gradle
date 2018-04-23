@@ -3,6 +3,9 @@ apply plugin: 'io.objectbox'
 
 android {
     compileSdkVersion 26
+    dataBinding{
+        enabled = true
+    }
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
         applicationId "com.mrdaisite.android"
