@@ -40,7 +40,7 @@ public interface DriveContract {
 
         void setProfileEmail(String email);
 
-        void showRenameDialog(LayoutInflater inflater, ViewGroup container);
+        void showRenameDialog();
 
         void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList);
     }

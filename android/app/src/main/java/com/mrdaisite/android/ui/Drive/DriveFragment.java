@@ -24,14 +24,7 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,10 +35,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -57,7 +48,6 @@ import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -158,20 +148,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 switch (menuItem.getItemId()) {
                     case R.id.resourceItemMenuRename:
-//                        mPresenter.renameResource(position);
-//                        showRenameDialog(inflater, container);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.rename)
-                                .setView(inflater.inflate(R.layout.dialog_rename, null))
-                                .setNegativeButton(R.string.cancel, null)
-                                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                                    View mRenameView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_rename, null);
-                                    EditText mNewResourceName = mRenameView.findViewById(R.id.newResourceName);
-                                    showMessage(mNewResourceName.getText().toString());
-                                    mNewResourceName.setText(mNewResourceName.getText().toString() + "sb");
-                                })
-                                .create()
-                                .show();
+                        showRenameDialog();
                         break;
                     case R.id.resourceItemMenuRemove:
                         // handle menu2 click
@@ -225,10 +202,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
         mProfileEmailView.setText(email);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void showRenameDialog(LayoutInflater inflater, ViewGroup container) {
-
+    public void showRenameDialog() {
+        RenameDialogFragment.newInstance().show(getFragmentManager(), "dialog");
+//        mPresenter.renameResource(position);
     }
 
     @Override

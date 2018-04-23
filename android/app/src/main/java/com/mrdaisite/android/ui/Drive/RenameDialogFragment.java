@@ -26,8 +26,10 @@ package com.mrdaisite.android.ui.Drive;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -37,19 +39,28 @@ import com.orhanobut.logger.Logger;
 
 
 public class RenameDialogFragment extends DialogFragment {
+
+    public static RenameDialogFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        RenameDialogFragment fragment = new RenameDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.rename);
-        builder.setMessage("messages");
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-//            View mRenameView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_rename, null);
-//            EditText mNewResourceName = mRenameView.findViewById(R.id.newResourceName);
-//            Logger.e(String.valueOf(mNewResourceName));
-//            Logger.e(mNewResourceName.getText().toString());
-//            mNewResourceName.setText("nulls");
-        });
-        return builder.create();
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View mRenameView = inflater.inflate(R.layout.dialog_rename, null);
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.rename)
+                .setView(mRenameView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    EditText mNewResourceName = mRenameView.findViewById(R.id.newResourceName);
+                })
+                .create();
     }
 }
