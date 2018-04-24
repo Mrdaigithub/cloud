@@ -79,6 +79,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private static DriveContract.Presenter mPresenter;
     private Validator mValidator;
     private ResourceBean mResourceBean;
+    private List<Integer> removeResourcesList;
 
     public static DriveFragment newInstance() {
 
@@ -155,7 +156,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         showRenameDialog(position);
                         break;
                     case R.id.resourceItemMenuRemove:
-                        // handle menu2 click
+                        showRemoveDialog(position);
                         break;
                     case R.id.resourceItemMenuMove:
                         // handle menu3 click
@@ -224,6 +225,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .setCancelable(false)
                 .create()
                 .show();
+    }
+
+    public void showRemoveDialog(int position) {
+        removeResourcesList.add(position);
     }
 
     @Override

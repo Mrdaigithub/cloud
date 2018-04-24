@@ -342,7 +342,6 @@ class CloudDrive extends Component {
 
 
     /**  删除资源 **/
-
     handleRemoveResource = () => async () => {
         const { resources, routing } = this.props;
         const resourcePath = url2path(routing.location.pathname);
