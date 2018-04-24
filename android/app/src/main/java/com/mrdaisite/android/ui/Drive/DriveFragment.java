@@ -25,10 +25,9 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.app.AlertDialog;
-import android.os.Build;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,17 +36,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -57,26 +61,24 @@ import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DriveFragment extends BaseFragment implements DriveContract.View {
+public class DriveFragment extends BaseFragment implements DriveContract.View, Validator.ValidationListener {
 
     public static String path = "0";
 
     // UI references.
-    @NotEmpty
     @BindView(R.id.resourceRecyclerView)
     RecyclerView mRecyclerView;
-    @NotEmpty
-    private NavigationView mNavigationView;
-    @NotEmpty
-    private View mProfileView;
-    @NotEmpty
     private TextView mProfileUsernameView;
-    @NotEmpty
     private TextView mProfileEmailView;
+    @NotEmpty
+    @Email
+    private EditText renameResourceView;
 
     private ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
-    private DriveContract.Presenter mPresenter;
+    private static DriveContract.Presenter mPresenter;
+    private Validator mValidator;
+    private ResourceBean mResourceBean;
 
     public static DriveFragment newInstance() {
 
@@ -90,6 +92,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(this);
     }
 
     @Override
@@ -118,10 +122,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
         unbinder = ButterKnife.bind(this, root);
 
         // Set up resources view
-        mNavigationView = getActivity().findViewById(R.id.nav_view);
-        mProfileView = mNavigationView.getHeaderView(0);
-        mProfileUsernameView = mProfileView.findViewById(R.id.profileUsernameView);
-        mProfileEmailView = mProfileView.findViewById(R.id.profileEmailView);
+        NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+        View profileView = navigationView.getHeaderView(0);
+        mProfileUsernameView = profileView.findViewById(R.id.profileUsernameView);
+        mProfileEmailView = profileView.findViewById(R.id.profileEmailView);
 
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -148,7 +152,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 switch (menuItem.getItemId()) {
                     case R.id.resourceItemMenuRename:
-                        showRenameDialog();
+                        showRenameDialog(position);
                         break;
                     case R.id.resourceItemMenuRemove:
                         // handle menu2 click
@@ -203,14 +207,42 @@ public class DriveFragment extends BaseFragment implements DriveContract.View {
     }
 
     @Override
-    public void showRenameDialog() {
-        RenameDialogFragment.newInstance().show(getFragmentManager(), "dialog");
-//        mPresenter.renameResource(position);
+    public void showRenameDialog(int position) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View mRenameView = inflater.inflate(R.layout.dialog_rename, null);
+        renameResourceView = mRenameView.findViewById(R.id.newResourceName);
+        mResourceBean = mPresenter.getResourceBeanList(path).get(position);
+        renameResourceView.setText(mResourceBean.getResourceName());
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.rename)
+                .setView(mRenameView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    Logger.e(renameResourceView.getText().toString());
+                    mValidator.validate();
+                })
+                .setCancelable(false)
+                .create()
+                .show();
     }
 
     @Override
     public void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList) {
         resourceAdapter.setNewData(currentResourceList);
         resourceAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        mPresenter.renameResource(resourceAdapter, mResourceBean.getId(), renameResourceView.getText().toString());
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(getContext());
+            showMessage(message);
+        }
     }
 }

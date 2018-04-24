@@ -10,6 +10,7 @@
 	use Illuminate\Support\Facades\DB;
 	use App\Http\Resources\PathResourceCollection;
 	use App\Http\Resources\ResourceResource;
+	use App\Http\Requests\UpdateResourceRequest;
 	use App\Models\Resource;
 	use Symfony\Component\HttpFoundation\BinaryFileResponse;
 	
@@ -194,28 +195,24 @@
 		/**
 		 * Update the specified resource in storage.
 		 *
-		 * @param Request $request
+		 * @param UpdateResourceRequest $request
 		 * @param $id
 		 *
 		 * @return mixed
 		 */
-		public function update( \App\Http\Requests\UpdateResourceRequest $request, $id ) {
+		public function update( UpdateResourceRequest $request, $id ) {
 			$user     = $request->user();
 			$resource = Resource::find( $id );
 			if ( $request->has( 'resource_name' ) ) {
-				if ( $user->resources
-					->where( 'path', $resource->path )
-					->where( 'resource_name', $request->get( 'resource_name' ) )
-					->count() ) {
-					return $this->failed( 400006 );
-				}
 				$resource->resource_name = $request->get( 'resource_name' );
 			}
 			if ( ! $resource->save() ) {
-				return $this->failed( 500001, 500 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "500001" ],
+				] )->status( 500 );
 			}
 			
-			return $resource;
+			return new ResourceResource( $resource );
 		}
 		
 		/**

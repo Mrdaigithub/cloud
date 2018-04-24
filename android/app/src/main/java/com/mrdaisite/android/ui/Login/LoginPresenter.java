@@ -24,13 +24,8 @@
 
 package com.mrdaisite.android.ui.Login;
 
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.view.View;
-import android.widget.EditText;
 
-import com.mobsandgeeks.saripaar.ValidationError;
-import com.mobsandgeeks.saripaar.Validator;
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
@@ -38,9 +33,6 @@ import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.TokenUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-import com.orhanobut.logger.Logger;
-
-import java.util.List;
 
 
 import io.objectbox.Box;

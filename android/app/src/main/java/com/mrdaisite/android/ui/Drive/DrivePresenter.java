@@ -27,6 +27,7 @@ package com.mrdaisite.android.ui.Drive;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.data.model.ResourceBean_;
 import com.mrdaisite.android.data.model.Resources;
@@ -109,7 +110,25 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void renameResource(int position) {
-        Logger.e("rename " + position);
+    public void renameResource(ResourceAdapter resourceAdapter, long resourceId, String newResourceNameText) {
+        mApiService.renameResource(resourceId, newResourceNameText)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<ResourceBean>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(ResourceBean resourceBean) {
+                        mResourceBeanBox.put(resourceBean);
+                        mDriveView.resourceViewRefresh(resourceAdapter, getResourceBeanList(DriveFragment.path));
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
     }
 }

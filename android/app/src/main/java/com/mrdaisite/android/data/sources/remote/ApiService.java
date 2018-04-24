@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.data.sources.remote;
 
+import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
@@ -32,7 +33,9 @@ import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -77,4 +80,13 @@ public interface ApiService {
      */
     @GET("/api/v1/resources")
     Observable<Resources> getResources();
+
+    /**
+     * 重命名资源
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @PATCH("/api/v1/resources/{id}")
+    Observable<ResourceBean> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
 }

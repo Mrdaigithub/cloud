@@ -39,8 +39,8 @@ import android.widget.Toast;
 import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
-import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.ui.Drive.DriveActivity;
 import com.orhanobut.logger.Logger;
@@ -77,7 +77,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     private LoadViewHelper helper;
     private Unbinder unbinder;
     private LoginContract.Presenter mPersenter;
-    private Validator validator;
+    private Validator mValidator;
 
     public static LoginFragment newInstance() {
 
@@ -92,8 +92,8 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        validator = new Validator(this);
-        validator.setValidationListener(this);
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(this);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
 
     @OnClick(R.id.login_button)
     public void loginHandle() {
-        validator.validate();
+        mValidator.validate();
     }
 
     @Override
@@ -159,12 +159,12 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
 
     @Override
     public void onValidationSucceeded() {
-        Logger.e(String.valueOf(mUsernameView));
         mPersenter.attemptLogin(mUsernameView.getText().toString(), mPasswordView.getText().toString());
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
+        Logger.e(String.valueOf(errors));
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(getContext());

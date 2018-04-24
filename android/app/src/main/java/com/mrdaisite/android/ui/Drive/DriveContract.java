@@ -40,7 +40,7 @@ public interface DriveContract {
 
         void setProfileEmail(String email);
 
-        void showRenameDialog();
+        void showRenameDialog(int position);
 
         void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList);
     }
@@ -48,6 +48,6 @@ public interface DriveContract {
     interface Presenter extends BasePresenter {
         List<ResourceBean> getResourceBeanList(String path);
 
-        void renameResource(int position);
+        void renameResource(ResourceAdapter resourceAdapter, long resourceId, String newResourceName);
     }
 }
