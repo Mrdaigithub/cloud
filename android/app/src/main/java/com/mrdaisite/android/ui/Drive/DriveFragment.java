@@ -44,7 +44,6 @@ import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
@@ -53,26 +52,15 @@ import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.FlowableSubscriber;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -91,14 +79,17 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private TextView mProfileEmailView;
     @NotEmpty
     private EditText renameResourceView;
-    private Button mButton;
 
     private ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
     private static DriveContract.Presenter mPresenter;
     private Validator mValidator;
     private ResourceBean mResourceBean;
+
     private List<Integer> removeResourcesList;
+
+    public static Boolean selectMode = false;
+    private List<Integer> selectList;
 
     public static DriveFragment newInstance() {
 
@@ -152,7 +143,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        mButton = root.findViewById(R.id.test);
+        Button mButton = root.findViewById(R.id.test);
         mButton.setOnClickListener(view -> {
             Observable mObservable = Observable.just(1, 2, 3, 4)
                     .subscribeOn(Schedulers.newThread())
@@ -188,15 +179,15 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         });
 
 
-        resourceAdapter = new
-
-                ResourceAdapter(R.layout.resource_item, mPresenter.getResourceBeanList(path));
+        resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.getResourceBeanList(path));
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);
-        resourceAdapter.setOnItemClickListener((adapter, view, position) ->
-
-        {
+        resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (selectMode) {
+                view.findViewById(R.id.resourceCheckBox).checked
+                return;
+            }
             List<ResourceBean> data = adapter.getData();
             ResourceBean item = data.get(position);
             if (!item.isFile()) {
@@ -204,14 +195,14 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
             }
         });
-        resourceAdapter.setOnItemLongClickListener((adapter, view, position) ->
+        resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            selectMode = true;
+            resourceAdapter.closeLoadAnimation();
+            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
 
-        {
             return true;
         });
-        resourceAdapter.setOnItemChildClickListener((adapter, view, position) ->
-
-        {
+        resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             PopupMenu popupMenu = new PopupMenu(getActivity(), view);
             popupMenu.inflate(R.menu.resource_item_menu);
             popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -243,7 +234,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
     @Override
     public boolean onBackPressed() {
-        if (!path.equals("0")) {
+        if (selectMode) {
+            selectMode = false;
+            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
+            return true;
+        } else if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
             resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
             return true;
@@ -296,8 +291,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     @Override
-    public void resourceViewRefresh(ResourceAdapter
-                                            resourceAdapter, List<ResourceBean> currentResourceList) {
+    public void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList) {
         resourceAdapter.setNewData(currentResourceList);
         resourceAdapter.notifyDataSetChanged();
     }

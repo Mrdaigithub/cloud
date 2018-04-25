@@ -44,7 +44,7 @@ ext {
     butterKnifeVersion = '8.8.1'
     butterknifeCompiler = '8.8.1'
     androidSaripaar = '2.0.3'
-    baseRecyclerViewAdapterHelper = '2.9.37'
+    baseRecyclerViewAdapterHelper = '2.9.38'
     stetho = '1.5.0'
     stethoOkhttp3 = '1.5.0'
 }
