@@ -25,11 +25,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/resourceItemMenuRename"
-        android:title="重命名" />
+        android:title="@string/rename" />
     <item
         android:id="@+id/resourceItemMenuRemove"
-        android:title="删除" />
+        android:title="@string/remove" />
     <item
         android:id="@+id/resourceItemMenuMove"
-        android:title="移动" />
+        android:title="@string/move" />
 </menu>

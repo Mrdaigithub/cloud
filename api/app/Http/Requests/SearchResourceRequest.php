@@ -24,16 +24,16 @@ class SearchResourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'q' => 'required|max:50|string'
+            "q" => "required|max:50|string"
         ];
     }
 
     public function messages()
     {
         return [
-            'q.required' => '400000',
-            'q.max' => '400002',
-            'q.string' => '400003',
+            "q.required" => "400000",
+            "q.max" => "400002",
+            "q.string" => "400003",
         ];
     }
 }

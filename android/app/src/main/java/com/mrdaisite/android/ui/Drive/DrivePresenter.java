@@ -110,7 +110,7 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void renameResource(ResourceAdapter resourceAdapter, long resourceId, String newResourceNameText) {
+    public void renameResource(long resourceId, String newResourceNameText) {
         mApiService.renameResource(resourceId, newResourceNameText)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
@@ -122,12 +122,36 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(resourceAdapter, getResourceBeanList(DriveFragment.path));
+                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path));
                     }
 
                     @Override
                     public void onError(String msg) {
                         com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
+    }
+
+    @Override
+    public void mkdir(String newDirName) {
+        mApiService.mkdir(DriveFragment.path, newDirName)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<ResourceBean>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ResourceBean resourceBean) {
+                        mResourceBeanBox.put(resourceBean);
+                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path));
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
                     }
                 });
     }

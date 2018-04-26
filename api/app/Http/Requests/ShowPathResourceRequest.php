@@ -24,15 +24,15 @@ class ShowPathResourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'path' => ['string', 'regex:/^0(\.\d+)*$/u'],
+            "path" => ["string", "regex:/^0(\.\d+)*$/u"],
         ];
     }
 
     public function messages()
     {
         return [
-            'path.string' => '400003',
-            'path.regex' => '400004',
+            "path.string" => "400003",
+            "path.regex" => "400004",
         ];
     }
 }

@@ -42,12 +42,14 @@ public interface DriveContract {
 
         void showRenameDialog(int position);
 
-        void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList);
+        void resourceViewRefresh(List<ResourceBean> currentResourceList);
     }
 
     interface Presenter extends BasePresenter {
         List<ResourceBean> getResourceBeanList(String path);
 
-        void renameResource(ResourceAdapter resourceAdapter, long resourceId, String newResourceName);
+        void renameResource(long resourceId, String newResourceName);
+
+        void mkdir(String newDirName);
     }
 }

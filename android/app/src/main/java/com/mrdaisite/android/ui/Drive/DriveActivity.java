@@ -33,6 +33,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mrdaisite.android.R;
@@ -51,34 +52,23 @@ public class DriveActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drive_act);
 
-        // Set up the toolbar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        setupToolbar();
 
-        // Set up the navigation drawer.
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.setStatusBarBackground(R.color.colorPrimary);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
+        setupNavigationDrawer();
 
-        DriveFragment driveFragment = (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (driveFragment == null) {
-            driveFragment = DriveFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    driveFragment, R.id.contentFrame);
-        }
+        DriveFragment driveFragment = findOrCreateViewFragment();
 
         // Create the presenter
         new DrivePresenter(
                 driveFragment,
                 Injection.provideSchedulerProvider()
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drive_fragment_menu, menu);
+        return true;
     }
 
     @Override
@@ -113,5 +103,37 @@ public class DriveActivity extends BaseActivity {
                     return true;
                 }
         );
+    }
+
+    // Set up the toolbar.
+    public void setupToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        toolbar.setTitle("/");
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    // Set up the navigation drawer.
+    public void setupNavigationDrawer() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setStatusBarBackground(R.color.colorPrimary);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+    }
+
+    public DriveFragment findOrCreateViewFragment() {
+        DriveFragment driveFragment =
+                (DriveFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        if (driveFragment == null) {
+            // Create the fragment
+            driveFragment = DriveFragment.newInstance();
+            ActivityUtils.addFragmentToActivity(
+                    getSupportFragmentManager(), driveFragment, R.id.contentFrame);
+        }
+        return driveFragment;
     }
 }

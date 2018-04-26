@@ -24,25 +24,25 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'min:4|max:10|string',
-            'password' => 'min:4|max:15|string',
-            'email' => 'email',
-            'capacity' => 'numeric|between:0,1099511627776'
+            "username" => "min:4|max:10|string",
+            "password" => "min:4|max:15|string",
+            "email" => "email",
+            "capacity" => "numeric|between:0,1099511627776"
         ];
     }
 
     public function messages()
     {
         return [
-            'username.min' => '400001',
-            'username.max' => '400002',
-            'username.string' => '400003',
-            'password.min'  => '400001',
-            'password.max'  => '400002',
-            'password.string'  => '400003',
-            'email.email'  => '400004',
-            'capacity.numeric'  => '400003',
-            'capacity.between'  => '400004',
+            "username.min" => "400001",
+            "username.max" => "400002",
+            "username.string" => "400003",
+            "password.min"  => "400001",
+            "password.max"  => "400002",
+            "password.string"  => "400003",
+            "email.email"  => "400004",
+            "capacity.numeric"  => "400003",
+            "capacity.between"  => "400004",
         ];
     }
 }

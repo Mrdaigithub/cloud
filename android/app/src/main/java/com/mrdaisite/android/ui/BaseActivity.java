@@ -24,7 +24,11 @@
 
 package com.mrdaisite.android.ui;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import com.mrdaisite.android.R;
 
 import com.mrdaisite.android.util.HandleBackUtil;
 

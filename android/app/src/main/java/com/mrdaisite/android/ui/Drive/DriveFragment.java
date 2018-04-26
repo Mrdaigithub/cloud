@@ -26,17 +26,22 @@ package com.mrdaisite.android.ui.Drive;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -53,6 +58,7 @@ import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,26 +76,28 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DriveFragment extends BaseFragment implements DriveContract.View, Validator.ValidationListener {
 
-    public static String path = "0";
-
     // UI references.
     @BindView(R.id.resourceRecyclerView)
     RecyclerView mRecyclerView;
     private TextView mProfileUsernameView;
     private TextView mProfileEmailView;
     @NotEmpty
-    private EditText renameResourceView;
+    private EditText dialogTextView;
 
-    private ResourceAdapter resourceAdapter;
-    private Unbinder unbinder;
+    public static String path = "0";
     private static DriveContract.Presenter mPresenter;
+    public static ResourceAdapter resourceAdapter;
+    private Unbinder unbinder;
     private Validator mValidator;
     private ResourceBean mResourceBean;
 
-    private List<Integer> removeResourcesList;
+    private List<Integer> removeResourcesList = new ArrayList<>();
 
     public static Boolean selectMode = false;
-    private List<Integer> selectList;
+    private List<Integer> selectList = new ArrayList<>();
+
+
+    // Setup
 
     public static DriveFragment newInstance() {
 
@@ -99,6 +107,14 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void setPresenter(DriveContract.Presenter presenter) {
+        mPresenter = checkNotNull(presenter);
+    }
+
+
+    // Lifecycle
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +159,32 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
+        // Add toolbar menu listener
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.mkdir:
+                    showMkdirDialog();
+                    break;
+                case R.id.fragmentMenuRemove:
+                    break;
+            }
+            return true;
+        });
+
+
+        // Setup drop down refresh
+        SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Logger.e("refresh");
+                resourceViewRefresh(mPresenter.getResourceBeanList(path));
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
         Button mButton = root.findViewById(R.id.test);
         mButton.setOnClickListener(view -> {
             Observable mObservable = Observable.just(1, 2, 3, 4)
@@ -185,20 +227,33 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         resourceAdapter.setUpFetchEnable(true);
         resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (selectMode) {
-                view.findViewById(R.id.resourceCheckBox).checked
+                CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
+                if (mCheckbox.isChecked()) {
+                    mCheckbox.setChecked(false);
+                    for (int i = 0; i < selectList.size(); i++) {
+                        if (selectList.get(i) == position) {
+                            selectList.remove(i);
+                            break;
+                        }
+                    }
+                } else {
+                    mCheckbox.setChecked(true);
+                    selectList.add(position);
+                }
+                Logger.e(String.valueOf(selectList));
                 return;
             }
             List<ResourceBean> data = adapter.getData();
             ResourceBean item = data.get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
+                resourceViewRefresh(mPresenter.getResourceBeanList(path));
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             selectMode = true;
             resourceAdapter.closeLoadAnimation();
-            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path));
 
             return true;
         });
@@ -236,20 +291,71 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     public boolean onBackPressed() {
         if (selectMode) {
             selectMode = false;
-            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path));
+            selectList.clear();
             return true;
         } else if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceViewRefresh(resourceAdapter, mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path));
             return true;
         }
         return super.onBackPressed();
     }
 
+
+    // Show Dialog
+
     @Override
-    public void setPresenter(DriveContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter);
+    public void showRenameDialog(int position) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_text, null);
+        dialogTextView = dialogView.findViewById(R.id.dialogTextView);
+        mResourceBean = mPresenter.getResourceBeanList(path).get(position);
+        dialogTextView.setHint(R.string.rename);
+        dialogTextView.setText(mResourceBean.getResourceName());
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.rename)
+                .setView(dialogView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    mValidator.validate();
+                })
+                .setCancelable(false)
+                .create()
+                .show();
     }
+
+    public void showRemoveDialog(int position) {
+        removeResourcesList.add(position);
+        new AlertDialog.Builder(getActivity())
+                .setTitle("确认移至回收站?")
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                })
+                .create()
+                .show();
+    }
+
+    public void showMkdirDialog() {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_text, null);
+        dialogTextView = dialogView.findViewById(R.id.dialogTextView);
+        dialogTextView.setHint(R.string.mkdir);
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.mkdir)
+                .setView(dialogView)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    if (dialogTextView.getText().toString().equals("")) return;
+                    mPresenter.mkdir(dialogTextView.getText().toString());
+                })
+                .setCancelable(false)
+                .create()
+                .show();
+    }
+
+
+    // UI operate
 
     @Override
     public void showMessage(String msg) {
@@ -267,38 +373,17 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     @Override
-    public void showRenameDialog(int position) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View mRenameView = inflater.inflate(R.layout.dialog_rename, null);
-        renameResourceView = mRenameView.findViewById(R.id.newResourceName);
-        mResourceBean = mPresenter.getResourceBeanList(path).get(position);
-        renameResourceView.setText(mResourceBean.getResourceName());
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.rename)
-                .setView(mRenameView)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    Logger.e(renameResourceView.getText().toString());
-                    mValidator.validate();
-                })
-                .setCancelable(false)
-                .create()
-                .show();
-    }
-
-    public void showRemoveDialog(int position) {
-        removeResourcesList.add(position);
-    }
-
-    @Override
-    public void resourceViewRefresh(ResourceAdapter resourceAdapter, List<ResourceBean> currentResourceList) {
+    public void resourceViewRefresh(List<ResourceBean> currentResourceList) {
         resourceAdapter.setNewData(currentResourceList);
         resourceAdapter.notifyDataSetChanged();
     }
 
+
+    // Data validation
+
     @Override
     public void onValidationSucceeded() {
-        mPresenter.renameResource(resourceAdapter, mResourceBean.getId(), renameResourceView.getText().toString());
+        mPresenter.renameResource(mResourceBean.getId(), dialogTextView.getText().toString());
     }
 
     @Override

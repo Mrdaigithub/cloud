@@ -4,13 +4,15 @@
 	
 	use Defuse\Crypto\File;
 	use Illuminate\Http\Request;
-	use App\Http\Controllers\Api\ApiController;
+	use Illuminate\Validation\ValidationException;
 	use Illuminate\Support\Facades\Crypt;
 	use Illuminate\Support\Facades\Storage;
 	use Illuminate\Support\Facades\DB;
+	use App\Http\Controllers\Api\ApiController;
 	use App\Http\Resources\PathResourceCollection;
 	use App\Http\Resources\ResourceResource;
 	use App\Http\Requests\UpdateResourceRequest;
+	use App\Http\Requests\StoreResourceRequest;
 	use App\Models\Resource;
 	use Symfony\Component\HttpFoundation\BinaryFileResponse;
 	
@@ -31,24 +33,28 @@
 		/**
 		 * Store a newly created resource in storage.
 		 *
-		 * @param \App\Http\Requests\StoreResourceRequest $request
+		 * @param StoreResourceRequest $request
 		 *
-		 * @return ResourceResource|mixed
+		 * @return ResourceResource
 		 */
-		public function store( \App\Http\Requests\StoreResourceRequest $request ) {
+		public function store( StoreResourceRequest $request ) {
 			$resource = new resource();
 			$user     = $request->user();
 			if ( ! ! $user->resources
 				->where( 'resource_name', $request->get( 'resource_name' ) )
 				->where( 'path', $request->get( 'path' ) )
 				->where( 'trashed', false )->count() ) {
-				return $this->failed( 400006 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "400006" ],
+				] )->status( 400 );
 			}
 			$resource->resource_name = $request->get( 'resource_name' );
 			$resource->file          = false;
 			$resource->path          = $request->get( 'path' );
 			if ( ! $resource->save() ) {
-				return $this->failed( 500001, 500 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "500001" ],
+				] )->status( 500 );
 			}
 			$user->resources()->attach( $resource->id );
 			

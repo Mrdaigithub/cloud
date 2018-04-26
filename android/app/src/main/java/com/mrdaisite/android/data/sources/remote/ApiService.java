@@ -89,4 +89,13 @@ public interface ApiService {
     @FormUrlEncoded
     @PATCH("/api/v1/resources/{id}")
     Observable<ResourceBean> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
+
+    /**
+     * 创建文件夹
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/resources")
+    Observable<ResourceBean> mkdir(@Field("path") String path, @Field("resource_name") String newResourceName);
 }

@@ -24,16 +24,16 @@ class MoveResourceRequest extends FormRequest
     public function rules()
     {
         return [
-            'path' => ['required', 'string', 'regex:/^0(\.\d+)*$/u'],
+            "path" => ["required", "string", "regex:/^0(\.\d+)*$/u"],
         ];
     }
 
     public function messages()
     {
         return [
-            'path.required' => '400000',
-            'path.string' => '400003',
-            'path.regex' => '400004',
+            "path.required" => "400000",
+            "path.string" => "400003",
+            "path.regex" => "400004",
         ];
     }
 }

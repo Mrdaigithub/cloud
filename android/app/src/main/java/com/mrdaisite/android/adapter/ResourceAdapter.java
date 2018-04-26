@@ -56,6 +56,7 @@ public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHold
         } else {
             helper.setGone(R.id.singleItemMenuButton, true);
             helper.setGone(R.id.resourceCheckBox, false);
+            helper.setChecked(R.id.resourceCheckBox, false);
         }
         if (item.isFile()) {
             helper.setGone(R.id.resourceSize, true);
