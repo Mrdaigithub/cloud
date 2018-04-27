@@ -24,10 +24,6 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-
-import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
@@ -42,7 +38,9 @@ public interface DriveContract {
 
         void showRenameDialog(int position);
 
-        void resourceViewRefresh(List<ResourceBean> currentResourceList);
+        void resourceViewRefresh(List<ResourceBean> currentResourceList, Boolean openAnimation);
+
+        Boolean exitSelectMode();
     }
 
     interface Presenter extends BasePresenter {

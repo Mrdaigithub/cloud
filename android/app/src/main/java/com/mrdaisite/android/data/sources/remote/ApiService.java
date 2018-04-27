@@ -82,6 +82,15 @@ public interface ApiService {
     Observable<Resources> getResources();
 
     /**
+     * 创建文件夹
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/api/v1/resources")
+    Observable<ResourceBean> mkdir(@Field("path") String path, @Field("resource_name") String newResourceName);
+
+    /**
      * 重命名资源
      *
      * @return
@@ -91,11 +100,10 @@ public interface ApiService {
     Observable<ResourceBean> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
 
     /**
-     * 创建文件夹
+     * 重命名资源
      *
      * @return
      */
-    @FormUrlEncoded
-    @POST("/api/v1/resources")
-    Observable<ResourceBean> mkdir(@Field("path") String path, @Field("resource_name") String newResourceName);
+    @PATCH("/api/v1/resources/{id}/trash")
+    Observable<ResourceBean> trashedResource(@Path("id") long resourceId);
 }

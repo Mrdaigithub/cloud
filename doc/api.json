@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-04-26T07:50:46.738Z",
+	"__export_date": "2018-04-27T03:26:46.000Z",
 	"__export_source": "insomnia.desktop.app:v5.15.0",
 	"resources": [
 		{
@@ -568,7 +568,7 @@
 				]
 			},
 			"created": 1524726618060,
-			"description": "### 简要描述 :\n\n- 创建文件夹\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/\n\n### 请求方式 :\n\n- POST\n\n### 参数 :\n\n| 参数名           | 必选  | 类型     | 说明         |\n| ------------- | --- | ------ | ---------- |\n| resource_name | 是   | String | 新的文件夹名称    |\n| path          | 是   | String | 创建文件夹所在的路径 |\n\n### 返回示例 :\n\n```json\n{\n\t\"id\": 77,\n\t\"resource_name\": \"dir4\",\n\t\"size\": 0,\n\t\"file\": false,\n\t\"trashed\": false,\n\t\"path\": \"0\",\n\t\"trash_path\": \"0\",\n\t\"created_at\": \"2018-04-26T15:36:21+08:00\",\n\t\"updated_at\": \"2018-04-26T15:36:21+08:00\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n",
+			"description": "### 简要描述 :\n\n- 创建文件夹\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- POST\n\n### 参数 :\n\n| 参数名           | 必选  | 类型     | 说明         |\n| ------------- | --- | ------ | ---------- |\n| resource_name | 是   | String | 新的文件夹名称    |\n| path          | 是   | String | 创建文件夹所在的路径 |\n\n### 返回示例 :\n\n```json\n{\n\t\"id\": 77,\n\t\"resource_name\": \"dir4\",\n\t\"size\": 0,\n\t\"file\": false,\n\t\"trashed\": false,\n\t\"path\": \"0\",\n\t\"trash_path\": \"0\",\n\t\"created_at\": \"2018-04-26T15:36:21+08:00\",\n\t\"updated_at\": \"2018-04-26T15:36:21+08:00\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n",
 			"headers": [
 				{
 					"id": "pair_344eb25092ae4dc198ed62a24ad93cab",
@@ -579,7 +579,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523763967628,
 			"method": "POST",
-			"modified": 1524728905220,
+			"modified": 1524729150956,
 			"name": "创建文件夹",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
@@ -589,6 +589,40 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/resources",
+			"_type": "request"
+		},
+		{
+			"_id": "req_a7158aff520640f088ba8da24d313413",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMwMjdmNjhiNGMxNDFiZTJlZjczY2UxMTYyMmY1MDEyYzAxNzhiMTBhMWI5MmRkZWI0OWRjNDM0NjU4MWViMzc5MTdiOWM5YzBhNjFkMDM2In0.eyJhdWQiOiIxIiwianRpIjoiMzAyN2Y2OGI0YzE0MWJlMmVmNzNjZTExNjIyZjUwMTJjMDE3OGIxMGExYjkyZGRlYjQ5ZGM0MzQ2NTgxZWIzNzkxN2I5YzljMGE2MWQwMzYiLCJpYXQiOjE1MjQ3MjY2NzEsIm5iZiI6MTUyNDcyNjY3MSwiZXhwIjoxNTI0OTA2NjcxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.vZHc6CgxXiiI963ZI51kTLwrEsHlNqrpTrZxK23i9iJwjcchPWqoHoZhM5BJ0coje1cP3yaGIqf5VYvA3LBlMEkFq3dmdyrpYnyrb_B7iewaVFXkNW8AF5vS_hAdmgtCsJbVMo4XNsvR3LfQ4jGofygsyrJQZaYPZ_8JJGtOiqJXrXze5b53UgB1zOJlj8zjPyA5a6mgyr3Pi5_o-cKCy21swZl8tolWj0Vn0Svmc2oplQ2o8dqHPUdJ2VoefsUQDQvvwiuVsn2U5mF8sFKUgWZBRkqw4BWvVlFnENPFKho6eeRewGmcQyG1YpcypTYwxpkQ-cBVI2l7XKk9nbSSRfvT0TCR2hVVq2bllks4Ww_BHSrApfzAbgeNc1a09BlJtWgzB0_UNcEzGMPOsJyDXBnWlyZA70AYAeQkqcNrIc85LmJoRtvZQ_Uj1O00xBiyGdQVZ3fYGQ_LlHDGQSNoRwvKNGKC_BWs633CBAuikPWlfjv0nLtHQxFsoZhHqN1XQNgAjV_L61ZAd6eKEhuIoEGDCLC1I7WEcVuQBqSgm7eW4H0wrCZKRQtBsBIyMsvHYOsmgjIPwYim2lDPX9Skc3Xfv4_zJ3SWrewpN3sx1NXrGourQBf9McLrem1sGUjogbBFjXIm3SBDMu2i9lmKolg28hpHvkViJ9JK0i-23CM",
+				"type": "bearer"
+			},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": []
+			},
+			"created": 1524797491715,
+			"description": "### 简要描述 :\n\n- 将资源移至回收站\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/{id}/trash\n\n### 请求方式 :\n\n- PATCH\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n    \"id\": 77,\n    \"resource_name\": \"dir4\",\n    \"size\": 0,\n    \"file\": false,\n    \"trashed\": true,\n    \"path\": \"0\",\n    \"trash_path\": \"0\",\n    \"created_at\": \"2018-04-26T15:36:21+08:00\",\n    \"updated_at\": \"2018-04-26T15:36:21+08:00\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n",
+			"headers": [
+				{
+					"id": "pair_f364bda01e0b4520947ec39f74d06ff2",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1523763967553,
+			"method": "PATCH",
+			"modified": 1524799572219,
+			"name": "将资源移至回收站",
+			"parameters": [],
+			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/85/trash",
 			"_type": "request"
 		}
 	]

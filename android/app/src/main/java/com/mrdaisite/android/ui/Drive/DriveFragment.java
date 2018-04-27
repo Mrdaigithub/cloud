@@ -166,6 +166,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                     break;
                 case R.id.fragmentMenuRemove:
                     removeResourcePositionList = selectedList;
+
                     if (removeResourcePositionList.size() > 0) {
                         showRemoveDialog();
                     }
@@ -178,7 +179,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         // Setup drop down refresh
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            resourceViewRefresh(mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -244,13 +245,12 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             ResourceBean item = data.get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(mPresenter.getResourceBeanList(path));
+                resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             selectMode = true;
-            resourceAdapter.closeLoadAnimation();
-            resourceViewRefresh(mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path), false);
 
             return true;
         });
@@ -287,14 +287,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
     @Override
     public boolean onBackPressed() {
-        if (selectMode) {
-            selectMode = false;
-            resourceViewRefresh(mPresenter.getResourceBeanList(path));
-            selectedList.clear();
-            return true;
-        } else if (!path.equals("0")) {
+        if (selectMode) return exitSelectMode();
+        if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceViewRefresh(mPresenter.getResourceBeanList(path));
+            resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
             return true;
         }
         return super.onBackPressed();
@@ -376,9 +372,19 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     @Override
-    public void resourceViewRefresh(List<ResourceBean> currentResourceList) {
+    public void resourceViewRefresh(List<ResourceBean> currentResourceList, Boolean openAnimation) {
+        if (openAnimation) resourceAdapter.openLoadAnimation();
+        else resourceAdapter.closeLoadAnimation();
         resourceAdapter.setNewData(currentResourceList);
         resourceAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public Boolean exitSelectMode() {
+        selectMode = false;
+        resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
+        selectedList.clear();
+        return true;
     }
 
 
