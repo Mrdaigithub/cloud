@@ -26,6 +26,7 @@ package com.mrdaisite.android.ui.Drive;
 
 import android.support.annotation.NonNull;
 
+import com.google.common.primitives.Longs;
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
@@ -37,12 +38,18 @@ import com.mrdaisite.android.util.CallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import io.objectbox.Box;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -110,6 +117,30 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
+    public void mkdir(String newDirName) {
+        mApiService.mkdir(DriveFragment.path, newDirName)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new CallBackWrapper<ResourceBean>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ResourceBean resourceBean) {
+                        mResourceBeanBox.put(resourceBean);
+                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path));
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+    }
+
+    @Override
     public void renameResource(long resourceId, String newResourceNameText) {
         mApiService.renameResource(resourceId, newResourceNameText)
                 .subscribeOn(mSchedulerProvider.io())
@@ -133,26 +164,36 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void mkdir(String newDirName) {
-        mApiService.mkdir(DriveFragment.path, newDirName)
+    public void removeResources(List<Long> resourceIdList) {
+        Long[] resourceIdArray = resourceIdList.toArray(new Long[0]);
+        Observable observable = Observable.fromArray(resourceIdArray)
                 .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<ResourceBean>() {
-                    @Override
-                    public void onBegin(Disposable d) {
+                .flatMap((Function<Long, ObservableSource<?>>) aLong -> {
+                    mApiService.r
+                    return Observable.just(aLong + 1000, aLong + 2000, aLong + 3000);
+                })
+                .observeOn(mSchedulerProvider.ui());
 
-                    }
+        observable.subscribe(new Observer<Long>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                    @Override
-                    public void onSuccess(ResourceBean resourceBean) {
-                        mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path));
-                    }
+            }
 
-                    @Override
-                    public void onError(String msg) {
+            @Override
+            public void onNext(Long o) {
+                Logger.e(String.valueOf(o));
+            }
 
-                    }
-                });
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

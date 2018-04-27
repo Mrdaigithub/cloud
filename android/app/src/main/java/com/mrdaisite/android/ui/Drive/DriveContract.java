@@ -48,8 +48,10 @@ public interface DriveContract {
     interface Presenter extends BasePresenter {
         List<ResourceBean> getResourceBeanList(String path);
 
+        void mkdir(String newDirName);
+
         void renameResource(long resourceId, String newResourceName);
 
-        void mkdir(String newDirName);
+        void removeResources(List<Long> resourceIdList);
     }
 }
