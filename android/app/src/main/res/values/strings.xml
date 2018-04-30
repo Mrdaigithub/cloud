@@ -41,4 +41,5 @@
     <string name="upload">上传</string>
     <string name="mkdir">创建文件夹</string>
     <string name="no_data">暂无数据</string>
+    <string name="trash">回收站</string>
 </resources>
