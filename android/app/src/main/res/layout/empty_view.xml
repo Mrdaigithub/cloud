@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2017 Mrdai
@@ -24,38 +22,15 @@
   ~ SOFTWARE.
   -->
 
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/swipeRefreshView">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/driveContainer"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="test" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/resourceRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </LinearLayout>
-    </RelativeLayout>
-
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:gravity="center"
+        android:text="@string/no_data"
+        android:textSize="20sp" />
+</android.support.constraint.ConstraintLayout>

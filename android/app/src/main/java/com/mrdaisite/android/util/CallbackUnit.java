@@ -22,41 +22,8 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Drive;
+package com.mrdaisite.android.util;
 
-import com.mrdaisite.android.data.model.ResourceBean;
-import com.mrdaisite.android.ui.BasePresenter;
-import com.mrdaisite.android.ui.BaseView;
-import com.mrdaisite.android.util.CallbackUnit;
-
-import java.util.List;
-
-public interface DriveContract {
-    interface View extends BaseView<Presenter> {
-        void setProfileUsername(String username);
-
-        void setProfileEmail(String email);
-
-        void showRenameDialog(int position);
-
-        void resourceViewRefresh(Boolean openAnimation);
-
-        Boolean exitSelectMode();
-    }
-
-    interface Presenter extends BasePresenter {
-        List<ResourceBean> getResourceBeanList(String path);
-
-        void fetchRemoteResources(CallbackUnit callbackUnit);
-
-        List<ResourceBean> fetchLocalResources(String path);
-
-        void appendResourceItem(ResourceBean resourceBean);
-
-        void mkdir(String newDirName);
-
-        void renameResource(long resourceId, String newResourceName);
-
-        void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
-    }
+public interface CallbackUnit<T> {
+    void callbackFunc(T t);
 }

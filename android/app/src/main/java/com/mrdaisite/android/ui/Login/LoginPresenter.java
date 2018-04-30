@@ -30,7 +30,7 @@ import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
-import com.mrdaisite.android.util.CallBackWrapper;
+import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.TokenUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
@@ -73,7 +73,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         mApiService.getToken(username, password)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<Token>() {
+                .subscribe(new HttpCallBackWrapper<Token>() {
                     @Override
                     public void onBegin(Disposable d) {
                         mLoginView.showLoading();
@@ -99,7 +99,7 @@ public class LoginPresenter implements LoginContract.Presenter {
         mApiService.getUser()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<User>() {
+                .subscribe(new HttpCallBackWrapper<User>() {
                     @Override
                     public void onBegin(Disposable d) {
                     }

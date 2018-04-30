@@ -51,13 +51,16 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.ui.BaseFragment;
+import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,8 +182,18 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         // Setup drop down refresh
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
-            swipeRefreshLayout.setRefreshing(false);
+            mPresenter.fetchRemoteResources(resources -> {
+                Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
+                for (List<ResourceBean> rList : resourcesData.values()) {
+                    for (ResourceBean rItem : rList) {
+                        mPresenter.appendResourceItem(rItem);
+                    }
+                }
+                swipeRefreshLayout.setRefreshing(false);
+                resourceAdapter.openLoadAnimation();
+                resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
+                resourceAdapter.notifyDataSetChanged();
+            });
         });
 
 
@@ -224,6 +237,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);
+        resourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
         resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (selectMode) {
                 CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
@@ -245,12 +259,12 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             ResourceBean item = data.get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
+                resourceViewRefresh(true);
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             selectMode = true;
-            resourceViewRefresh(mPresenter.getResourceBeanList(path), false);
+            resourceViewRefresh(false);
 
             return true;
         });
@@ -290,7 +304,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (selectMode) return exitSelectMode();
         if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
+            resourceViewRefresh(true);
             return true;
         }
         return super.onBackPressed();
@@ -325,11 +339,18 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     List<Long> resourceIdList = new ArrayList<>();
-                    List<ResourceBean> resourceList = mPresenter.getResourceBeanList(path);
+                    List<ResourceBean> resourceList = mPresenter.fetchLocalResources(path);
                     for (Integer removeResourcePosition : removeResourcePositionList) {
                         resourceIdList.add(resourceList.get(removeResourcePosition).getId());
                     }
-                    mPresenter.removeResources(resourceIdList);
+                    mPresenter.removeResources(resourceIdList, o -> {
+                        removeResourcePositionList.clear();
+                        if (DriveFragment.selectMode) {
+                            selectMode = false;
+                            selectedList.clear();
+                        }
+                        resourceViewRefresh(true);
+                    });
                 })
                 .create()
                 .show();
@@ -372,17 +393,25 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     @Override
-    public void resourceViewRefresh(List<ResourceBean> currentResourceList, Boolean openAnimation) {
-        if (openAnimation) resourceAdapter.openLoadAnimation();
-        else resourceAdapter.closeLoadAnimation();
-        resourceAdapter.setNewData(currentResourceList);
-        resourceAdapter.notifyDataSetChanged();
+    public void resourceViewRefresh(Boolean openAnimation) {
+        mPresenter.fetchRemoteResources(resources -> {
+            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
+            for (List<ResourceBean> rList : resourcesData.values()) {
+                for (ResourceBean rItem : rList) {
+                    mPresenter.appendResourceItem(rItem);
+                }
+            }
+            if (openAnimation) resourceAdapter.openLoadAnimation();
+            else resourceAdapter.closeLoadAnimation();
+            resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
+            resourceAdapter.notifyDataSetChanged();
+        });
     }
 
     @Override
     public Boolean exitSelectMode() {
         selectMode = false;
-        resourceViewRefresh(mPresenter.getResourceBeanList(path), true);
+        resourceViewRefresh(false);
         selectedList.clear();
         return true;
     }
@@ -398,7 +427,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
-            View view = error.getView();
             String message = error.getCollatedErrorMessage(getContext());
             showMessage(message);
         }

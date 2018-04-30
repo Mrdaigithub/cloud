@@ -25,23 +25,11 @@
 package com.mrdaisite.android.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mrdaisite.android.MyApplication;
-import com.mrdaisite.android.R;
-import com.mrdaisite.android.data.model.User;
-import com.mrdaisite.android.data.sources.remote.ApiService;
-import com.mrdaisite.android.ui.Drive.DriveActivity;
 import com.mrdaisite.android.ui.Login.LoginActivity;
-import com.mrdaisite.android.util.CallBackWrapper;
-import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-
-import java.util.logging.Logger;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by dai on 2018/3/26.
@@ -61,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //        } else {
 //            ApiService mApiService = MyApplication.getInstance().getApiService();
 //            mApiService.getUser()
-//                    .subscribe(new CallBackWrapper<User>() {
+//                    .subscribe(new HttpCallBackWrapper<User>() {
 //                        @Override
 //                        public void onBegin(Disposable d) {
 //                        }

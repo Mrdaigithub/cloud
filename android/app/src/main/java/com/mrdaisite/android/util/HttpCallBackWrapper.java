@@ -52,7 +52,7 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import retrofit2.HttpException;
 
-public abstract class CallBackWrapper<T> implements Observer<T> {
+public abstract class HttpCallBackWrapper<T> implements Observer<T> {
     @Override
     public void onSubscribe(Disposable d) {
         onBegin(d);

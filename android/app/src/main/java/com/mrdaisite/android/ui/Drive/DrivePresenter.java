@@ -32,7 +32,8 @@ import com.mrdaisite.android.data.model.ResourceBean_;
 import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
-import com.mrdaisite.android.util.CallBackWrapper;
+import com.mrdaisite.android.util.CallbackUnit;
+import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
@@ -71,10 +72,78 @@ public class DrivePresenter implements DriveContract.Presenter {
         User userInfo = mUserBox.query().build().findFirst();
         mDriveView.setProfileUsername(Objects.requireNonNull(userInfo).getUsername());
         mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
+        mDriveView.resourceViewRefresh(true);
+    }
+
+    @Override
+    public void unsubscribe() {
+
+    }
+
+    /**
+     * 从服务器获取resource list
+     */
+    public void fetchRemoteResources(CallbackUnit callBackUnit) {
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<Resources>() {
+                .subscribe(new HttpCallBackWrapper<Resources>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                    }
+
+                    @Override
+                    public void onSuccess(Resources resources) {
+                        callBackUnit.callbackFunc(resources);
+                        Map<String, List<ResourceBean>> resourcesData = resources.getData();
+                        for (List<ResourceBean> rList : resourcesData.values()) {
+                            for (ResourceBean rItem : rList) {
+                                mResourceBeanBox.put(rItem);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        com.orhanobut.logger.Logger.e(msg);
+                    }
+                });
+    }
+
+    /**
+     * 从本地获取resource list
+     *
+     * @param path
+     * @return
+     */
+    public List<ResourceBean> fetchLocalResources(String path) {
+        return mResourceBeanBox.query()
+                .equal(ResourceBean_.path, path)
+                .filter((resource) -> !resource.isTrashed())
+                .order(ResourceBean_.file)
+                .build()
+                .find();
+    }
+
+    @Override
+    public void appendResourceItem(ResourceBean resourceBean) {
+        mResourceBeanBox.put(resourceBean);
+    }
+
+    @Override
+    public List<ResourceBean> getResourceBeanList(String path) {
+        fetchRemoteResources(resources -> {
+            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
+            for (List<ResourceBean> rList : resourcesData.values()) {
+                for (ResourceBean rItem : rList) {
+                    mResourceBeanBox.put(rItem);
+                }
+            }
+        });
+        mApiService.getResources()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new HttpCallBackWrapper<Resources>() {
                     @Override
                     public void onBegin(Disposable d) {
                     }
@@ -94,21 +163,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                         com.orhanobut.logger.Logger.e(msg);
                     }
                 });
-    }
-
-    @Override
-    public void unsubscribe() {
-
-    }
-
-    @Override
-    public List<ResourceBean> getResourceBeanList(String path) {
-        return mResourceBeanBox.query()
-                .equal(ResourceBean_.path, path)
-                .filter((resource) -> !resource.isTrashed())
-                .order(ResourceBean_.file)
-                .build()
-                .find();
+        return fetchLocalResources(path);
     }
 
     @Override
@@ -116,7 +171,7 @@ public class DrivePresenter implements DriveContract.Presenter {
         mApiService.mkdir(DriveFragment.path, newDirName)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<ResourceBean>() {
+                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
                     @Override
                     public void onBegin(Disposable d) {
 
@@ -125,7 +180,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path), true);
+                        mDriveView.resourceViewRefresh(true);
                     }
 
                     @Override
@@ -140,7 +195,7 @@ public class DrivePresenter implements DriveContract.Presenter {
         mApiService.renameResource(resourceId, newResourceNameText)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new CallBackWrapper<ResourceBean>() {
+                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
                     @Override
                     public void onBegin(Disposable d) {
                     }
@@ -148,7 +203,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path), true);
+                        mDriveView.resourceViewRefresh(true);
                     }
 
                     @Override
@@ -159,7 +214,7 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void removeResources(List<Long> resourceIdList) {
+    public void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit) {
         Observable observable = Observable.fromArray(resourceIdList.toArray(new Long[0]))
                 .subscribeOn(mSchedulerProvider.io())
                 .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.trashedResource(id))
@@ -183,8 +238,7 @@ public class DrivePresenter implements DriveContract.Presenter {
 
             @Override
             public void onComplete() {
-                mDriveView.resourceViewRefresh(getResourceBeanList(DriveFragment.path), true);
-                if (DriveFragment.selectMode) mDriveView.exitSelectMode();
+                callbackUnit.callbackFunc(null);
             }
         });
     }

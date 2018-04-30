@@ -61,7 +61,7 @@ public class TokenUtil {
         String refreshToken = sharedPref.getString("refresh_token", "");
         if (refreshToken.equals("")) return;
 //        mApiService.refreshToken(refreshToken)
-//                .subscribe(new CallBackWrapper<Token>() {
+//                .subscribe(new HttpCallBackWrapper<Token>() {
 //                    @Override
 //                    public void onBegin(Disposable d) {
 //                    }
