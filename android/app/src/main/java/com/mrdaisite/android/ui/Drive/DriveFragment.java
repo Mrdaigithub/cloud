@@ -181,20 +181,18 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
         // Setup drop down refresh
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            mPresenter.fetchRemoteResources(resources -> {
-                Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-                for (List<ResourceBean> rList : resourcesData.values()) {
-                    for (ResourceBean rItem : rList) {
-                        mPresenter.appendResourceItem(rItem);
-                    }
+        swipeRefreshLayout.setOnRefreshListener(() -> mPresenter.fetchRemoteResources(resources -> {
+            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
+            for (List<ResourceBean> rList : resourcesData.values()) {
+                for (ResourceBean rItem : rList) {
+                    mPresenter.appendResourceItem(rItem);
                 }
-                swipeRefreshLayout.setRefreshing(false);
-                resourceAdapter.openLoadAnimation();
-                resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
-                resourceAdapter.notifyDataSetChanged();
-            });
-        });
+            }
+            swipeRefreshLayout.setRefreshing(false);
+            resourceAdapter.openLoadAnimation();
+            resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
+            resourceAdapter.notifyDataSetChanged();
+        }));
 
 
         Button mButton = root.findViewById(R.id.test);
@@ -233,62 +231,64 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         });
 
 
-        resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.getResourceBeanList(path));
-        resourceAdapter.openLoadAnimation();
-        resourceAdapter.isFirstOnly(false);
-        resourceAdapter.setUpFetchEnable(true);
-        resourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
-        resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (selectMode) {
-                CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
-                if (mCheckbox.isChecked()) {
-                    mCheckbox.setChecked(false);
-                    for (int i = 0; i < selectedList.size(); i++) {
-                        if (selectedList.get(i) == position) {
-                            selectedList.remove(i);
-                            break;
+        mPresenter.fetchRemoteResources(resources -> {
+            resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
+            resourceAdapter.openLoadAnimation();
+            resourceAdapter.isFirstOnly(false);
+            resourceAdapter.setUpFetchEnable(true);
+            resourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
+            resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
+                if (selectMode) {
+                    CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
+                    if (mCheckbox.isChecked()) {
+                        mCheckbox.setChecked(false);
+                        for (int i = 0; i < selectedList.size(); i++) {
+                            if (selectedList.get(i) == position) {
+                                selectedList.remove(i);
+                                break;
+                            }
                         }
+                    } else {
+                        mCheckbox.setChecked(true);
+                        selectedList.add(position);
                     }
-                } else {
-                    mCheckbox.setChecked(true);
-                    selectedList.add(position);
+                    return;
                 }
-                return;
-            }
-            List<ResourceBean> data = adapter.getData();
-            ResourceBean item = data.get(position);
-            if (!item.isFile()) {
-                path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(true);
-            }
-        });
-        resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
-            selectMode = true;
-            resourceViewRefresh(false);
-
-            return true;
-        });
-        resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-            popupMenu.inflate(R.menu.resource_item_menu);
-            popupMenu.setOnMenuItemClickListener(menuItem -> {
-                switch (menuItem.getItemId()) {
-                    case R.id.resourceItemMenuRename:
-                        showRenameDialog(position);
-                        break;
-                    case R.id.resourceItemMenuRemove:
-                        removeResourcePositionList.add(position);
-                        showRemoveDialog();
-                        break;
-                    case R.id.resourceItemMenuMove:
-                        // handle menu3 click
-                        break;
+                List<ResourceBean> data = adapter.getData();
+                ResourceBean item = data.get(position);
+                if (!item.isFile()) {
+                    path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
+                    resourceViewRefresh(true, false);
                 }
-                return false;
             });
-            popupMenu.show();
+            resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+                selectMode = true;
+                resourceViewRefresh(false, false);
+
+                return true;
+            });
+            resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.inflate(R.menu.resource_item_menu);
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    switch (menuItem.getItemId()) {
+                        case R.id.resourceItemMenuRename:
+                            showRenameDialog(position);
+                            break;
+                        case R.id.resourceItemMenuRemove:
+                            removeResourcePositionList.add(position);
+                            showRemoveDialog();
+                            break;
+                        case R.id.resourceItemMenuMove:
+                            // handle menu3 click
+                            break;
+                    }
+                    return false;
+                });
+                popupMenu.show();
+            });
+            mRecyclerView.setAdapter(resourceAdapter);
         });
-        mRecyclerView.setAdapter(resourceAdapter);
 
         return root;
     }
@@ -304,7 +304,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (selectMode) return exitSelectMode();
         if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceViewRefresh(true);
+            resourceViewRefresh(true, false);
             return true;
         }
         return super.onBackPressed();
@@ -318,7 +318,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_text, null);
         dialogTextView = dialogView.findViewById(R.id.dialogTextView);
-        mResourceBean = mPresenter.getResourceBeanList(path).get(position);
+        mResourceBean = mPresenter.fetchLocalResources(path).get(position);
         dialogTextView.setHint(R.string.rename);
         dialogTextView.setText(mResourceBean.getResourceName());
         new AlertDialog.Builder(getActivity())
@@ -349,7 +349,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                             selectMode = false;
                             selectedList.clear();
                         }
-                        resourceViewRefresh(true);
+                        resourceViewRefresh(true, true);
                     });
                 })
                 .create()
@@ -393,25 +393,29 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     @Override
-    public void resourceViewRefresh(Boolean openAnimation) {
-        mPresenter.fetchRemoteResources(resources -> {
-            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-            for (List<ResourceBean> rList : resourcesData.values()) {
-                for (ResourceBean rItem : rList) {
-                    mPresenter.appendResourceItem(rItem);
+    public void resourceViewRefresh(Boolean openAnimation, Boolean remote) {
+        if (openAnimation) resourceAdapter.openLoadAnimation();
+        else resourceAdapter.closeLoadAnimation();
+        if (remote) {
+            mPresenter.fetchRemoteResources(resources -> {
+                Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
+                for (List<ResourceBean> rList : resourcesData.values()) {
+                    for (ResourceBean rItem : rList) {
+                        mPresenter.appendResourceItem(rItem);
+                    }
                 }
-            }
-            if (openAnimation) resourceAdapter.openLoadAnimation();
-            else resourceAdapter.closeLoadAnimation();
+                resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
+            });
+        } else {
             resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
-            resourceAdapter.notifyDataSetChanged();
-        });
+        }
+        resourceAdapter.notifyDataSetChanged();
     }
 
     @Override
     public Boolean exitSelectMode() {
         selectMode = false;
-        resourceViewRefresh(false);
+        resourceViewRefresh(false, false);
         selectedList.clear();
         return true;
     }

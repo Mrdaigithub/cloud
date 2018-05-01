@@ -82,7 +82,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.trash_frag, container, false);
-        
+
         return root;
     }
 

@@ -72,7 +72,7 @@ public class DrivePresenter implements DriveContract.Presenter {
         User userInfo = mUserBox.query().build().findFirst();
         mDriveView.setProfileUsername(Objects.requireNonNull(userInfo).getUsername());
         mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
-        mDriveView.resourceViewRefresh(true);
+//        mDriveView.resourceViewRefresh(true, true);
     }
 
     @Override
@@ -131,42 +131,6 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public List<ResourceBean> getResourceBeanList(String path) {
-        fetchRemoteResources(resources -> {
-            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-            for (List<ResourceBean> rList : resourcesData.values()) {
-                for (ResourceBean rItem : rList) {
-                    mResourceBeanBox.put(rItem);
-                }
-            }
-        });
-        mApiService.getResources()
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<Resources>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-                    }
-
-                    @Override
-                    public void onSuccess(Resources resources) {
-                        Map<String, List<ResourceBean>> resourcesData = resources.getData();
-                        for (List<ResourceBean> rList : resourcesData.values()) {
-                            for (ResourceBean rItem : rList) {
-                                mResourceBeanBox.put(rItem);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
-                    }
-                });
-        return fetchLocalResources(path);
-    }
-
-    @Override
     public void mkdir(String newDirName) {
         mApiService.mkdir(DriveFragment.path, newDirName)
                 .subscribeOn(mSchedulerProvider.io())
@@ -180,7 +144,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(true);
+                        mDriveView.resourceViewRefresh(true, true);
                     }
 
                     @Override
@@ -203,7 +167,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
-                        mDriveView.resourceViewRefresh(true);
+                        mDriveView.resourceViewRefresh(true, false);
                     }
 
                     @Override

@@ -37,16 +37,30 @@ public interface DriveContract {
 
         void setProfileEmail(String email);
 
+        /**
+         * 展示重命名的dialog
+         *
+         * @param position 资源的index
+         */
         void showRenameDialog(int position);
 
-        void resourceViewRefresh(Boolean openAnimation);
+        /**
+         * 刷新可见资源的视图
+         *
+         * @param openAnimation 刷新的开启动画
+         * @param remote        请求远程数据更新资源
+         */
+        void resourceViewRefresh(Boolean openAnimation, Boolean remote);
 
+        /**
+         * 退出选择模式
+         *
+         * @return null
+         */
         Boolean exitSelectMode();
     }
 
     interface Presenter extends BasePresenter {
-        List<ResourceBean> getResourceBeanList(String path);
-
         void fetchRemoteResources(CallbackUnit callbackUnit);
 
         List<ResourceBean> fetchLocalResources(String path);
