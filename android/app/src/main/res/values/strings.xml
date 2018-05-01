@@ -42,4 +42,7 @@
     <string name="mkdir">创建文件夹</string>
     <string name="no_data">暂无数据</string>
     <string name="trash">回收站</string>
+    <string name="clear_trash">清空回收站</string>
+    <string name="remove_permanently">永久删除</string>
+    <string name="restore">还原</string>
 </resources>

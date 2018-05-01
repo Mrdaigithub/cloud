@@ -28,10 +28,17 @@ import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.ResourceBean_;
+import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.util.CallbackUnit;
+import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
+import java.util.List;
+
 import io.objectbox.Box;
+import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -60,5 +67,37 @@ public class TrashPresenter implements TrashContract.Presenter {
     @Override
     public void unsubscribe() {
 
+    }
+
+    @Override
+    public void fetchRemoteResources(CallbackUnit callBackUnit) {
+        mApiService.getResources()
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new HttpCallBackWrapper<Resources>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Resources resources) {
+                        callBackUnit.callbackFunc(resources);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+    }
+
+    @Override
+    public List<ResourceBean> fetchLocalTrashedResources() {
+        return mResourceBeanBox.query()
+                .equal(ResourceBean_.trashPath, "0")
+                .filter((resource) -> resource.isTrashed())
+                .build()
+                .find();
     }
 }

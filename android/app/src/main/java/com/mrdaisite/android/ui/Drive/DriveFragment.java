@@ -34,11 +34,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -53,9 +50,7 @@ import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
@@ -65,13 +60,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -122,12 +110,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         super.onCreate(savedInstanceState);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -194,43 +176,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             resourceAdapter.notifyDataSetChanged();
         }));
 
-
-        Button mButton = root.findViewById(R.id.test);
-        mButton.setOnClickListener(view -> {
-            Observable mObservable = Observable.just(1, 2, 3, 4)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(Schedulers.io())
-                    .map(integer -> integer + 1000)
-                    .flatMap((Function<Integer, ObservableSource<?>>) integer -> Observable.just(integer + 1, integer + 2, integer + 3))
-                    .observeOn(AndroidSchedulers.mainThread());
-
-            Observer mObserver = new Observer<Integer>() {
-                @Override
-                public void onSubscribe(Disposable d) {
-
-                }
-
-                @Override
-                public void onNext(Integer o) {
-                    Logger.e(String.valueOf(o));
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-            };
-
-            mObservable.subscribe(mObserver);
-
-        });
-
-
         mPresenter.fetchRemoteResources(resources -> {
             resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
             resourceAdapter.openLoadAnimation();
@@ -269,7 +214,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             });
             resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-                popupMenu.inflate(R.menu.resource_item_menu);
+                popupMenu.inflate(R.menu.drive_resource_item_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.resourceItemMenuRename:
@@ -312,6 +257,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
 
     // Show Dialog
+
+    @Override
+    public void showMessage(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void showRenameDialog(int position) {
@@ -378,11 +328,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     // UI operate
 
     @Override
-    public void showMessage(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void setProfileUsername(String username) {
         mProfileUsernameView.setText(username);
     }
@@ -412,7 +357,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         resourceAdapter.notifyDataSetChanged();
     }
 
-    @Override
     public Boolean exitSelectMode() {
         selectMode = false;
         resourceViewRefresh(false, false);

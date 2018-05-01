@@ -24,15 +24,21 @@
 
 package com.mrdaisite.android.ui.Trash;
 
+import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
+import com.mrdaisite.android.util.CallbackUnit;
+
+import java.util.List;
 
 public interface TrashContract {
     interface View extends BaseView<Presenter> {
-
+        void resourceViewRefresh(Boolean openAnimation, Boolean remote);
     }
 
     interface Presenter extends BasePresenter {
+        void fetchRemoteResources(CallbackUnit callBackUnit);
 
+        List<ResourceBean> fetchLocalTrashedResources();
     }
 }

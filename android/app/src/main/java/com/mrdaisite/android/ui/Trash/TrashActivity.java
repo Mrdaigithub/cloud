@@ -26,7 +26,6 @@ package com.mrdaisite.android.ui.Trash;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -35,11 +34,7 @@ import android.view.MenuItem;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
-import com.mrdaisite.android.ui.Drive.DriveFragment;
 import com.mrdaisite.android.util.ActivityUtils;
-import com.orhanobut.logger.Logger;
-
-import okhttp3.Interceptor;
 
 public class TrashActivity extends BaseActivity {
     @Override
@@ -54,6 +49,12 @@ public class TrashActivity extends BaseActivity {
                 trashFragment,
                 Injection.provideSchedulerProvider()
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.trash_fragment_menu, menu);
+        return true;
     }
 
     @Override

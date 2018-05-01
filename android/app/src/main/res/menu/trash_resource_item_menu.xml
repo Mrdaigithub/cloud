@@ -22,9 +22,11 @@
   ~ SOFTWARE.
   -->
 
-<Spinner xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/resourceItemSpinner"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:drawable/btn_dropdown"
-    android:spinnerMode="dropdown" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/restore"
+        android:title="@string/restore" />
+    <item
+        android:id="@+id/removePermanently"
+        android:title="@string/remove_permanently" />
+</menu>

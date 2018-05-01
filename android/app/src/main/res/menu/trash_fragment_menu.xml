@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2017 Mrdai
@@ -24,31 +22,11 @@
   ~ SOFTWARE.
   -->
 
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/swipeRefreshView">
-
-    <RelativeLayout
-        android:id="@+id/driveContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/resourceRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </LinearLayout>
-    </RelativeLayout>
-
-</android.support.v4.widget.SwipeRefreshLayout>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/clearTrash"
+        app:showAsAction="never"
+        android:orderInCategory="1"
+        android:title="@string/clear_trash" />
+</menu>
