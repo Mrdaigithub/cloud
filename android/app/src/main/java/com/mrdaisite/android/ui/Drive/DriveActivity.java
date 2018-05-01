@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +40,7 @@ import android.view.MenuItem;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
+import com.mrdaisite.android.ui.Trash.TrashActivity;
 import com.mrdaisite.android.util.ActivityUtils;
 
 
@@ -86,9 +88,8 @@ public class DriveActivity extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(
                 menuItem -> {
                     switch (menuItem.getItemId()) {
-                        case R.id.drive_navigation_menu_item:
-                            break;
                         case R.id.trash_navigation_menu_item:
+                            startActivity(new Intent(this, TrashActivity.class));
                             break;
                         case R.id.settings_navigation_menu_item:
                             break;
@@ -97,7 +98,6 @@ public class DriveActivity extends BaseActivity {
                         case R.id.github_navigation_menu_item:
                             break;
                     }
-                    com.orhanobut.logger.Logger.e("to " + menuItem.getItemId() + "activity");
                     menuItem.setChecked(true);
                     mDrawerLayout.closeDrawers();
                     return true;

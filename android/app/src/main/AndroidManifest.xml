@@ -37,6 +37,9 @@
         <activity
             android:name=".ui.Drive.DriveActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Trash.TrashActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

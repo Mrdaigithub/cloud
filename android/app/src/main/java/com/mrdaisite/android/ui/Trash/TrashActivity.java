@@ -26,13 +26,20 @@ package com.mrdaisite.android.ui.Trash;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
 import com.mrdaisite.android.ui.Drive.DriveFragment;
 import com.mrdaisite.android.util.ActivityUtils;
+import com.orhanobut.logger.Logger;
+
+import okhttp3.Interceptor;
 
 public class TrashActivity extends BaseActivity {
     @Override
@@ -41,6 +48,22 @@ public class TrashActivity extends BaseActivity {
         setContentView(R.layout.trash_act);
         setupToolbar();
         TrashFragment trashFragment = findOrCreateViewFragment();
+
+        // Create the presenter
+        new TrashPresenter(
+                trashFragment,
+                Injection.provideSchedulerProvider()
+        );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Set up the toolbar.
@@ -49,7 +72,7 @@ public class TrashActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
         toolbar.setTitle(R.string.trash);
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         ab.setDisplayHomeAsUpEnabled(true);
     }
 

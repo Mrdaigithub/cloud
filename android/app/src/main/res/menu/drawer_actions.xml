@@ -28,10 +28,6 @@
         android:id="@+id/menu_group_1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/drive_navigation_menu_item"
-            android:icon="@drawable/ic_menu_drive"
-            android:title="我的云端硬盘" />
-        <item
             android:id="@+id/trash_navigation_menu_item"
             android:icon="@drawable/ic_menu_trash"
             android:title="回收站" />

@@ -24,7 +24,34 @@
 
 package com.mrdaisite.android.ui.Trash;
 
+import android.support.annotation.NonNull;
+
+import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+
+import io.objectbox.Box;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class TrashPresenter implements TrashContract.Presenter {
+
+    private ApiService mApiService = MyApplication.getInstance().getApiService();
+    private Box<ResourceBean> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(ResourceBean.class);
+
+    @NonNull
+    private final TrashContract.View mTrashView;
+
+    @NonNull
+    private final BaseSchedulerProvider mSchedulerProvider;
+
+    TrashPresenter(TrashFragment trashFragment, BaseSchedulerProvider schedulerProvider) {
+        mTrashView = checkNotNull(trashFragment);
+        mTrashView.setPresenter(this);
+        mSchedulerProvider = checkNotNull(schedulerProvider);
+    }
+
     @Override
     public void subscribe() {
 

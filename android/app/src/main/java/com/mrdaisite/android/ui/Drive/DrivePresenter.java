@@ -72,7 +72,6 @@ public class DrivePresenter implements DriveContract.Presenter {
         User userInfo = mUserBox.query().build().findFirst();
         mDriveView.setProfileUsername(Objects.requireNonNull(userInfo).getUsername());
         mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
-//        mDriveView.resourceViewRefresh(true, true);
     }
 
     @Override
