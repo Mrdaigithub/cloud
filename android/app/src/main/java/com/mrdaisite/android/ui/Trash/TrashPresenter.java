@@ -100,4 +100,28 @@ public class TrashPresenter implements TrashContract.Presenter {
                 .build()
                 .find();
     }
+
+    @Override
+    public void RestoreResource(long resourceId, CallbackUnit callbackUnit) {
+        mApiService.restoreResource(resourceId)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ResourceBean resourceBean) {
+                        mResourceBeanBox.put(resourceBean);
+                        callbackUnit.callbackFunc(resourceBean);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+    }
 }

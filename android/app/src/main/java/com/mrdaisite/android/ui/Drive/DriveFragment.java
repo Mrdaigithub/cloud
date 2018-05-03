@@ -51,6 +51,7 @@ import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.data.model.Resources;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
     public static String path = "0";
     private static DriveContract.Presenter mPresenter;
-    public static ResourceAdapter resourceAdapter;
+    private ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
     private Validator mValidator;
     private ResourceBean mResourceBean;
@@ -116,6 +117,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     public void onResume() {
         super.onResume();
         mPresenter.subscribe();
+        if (resourceAdapter != null) {
+            resourceViewRefresh(false, true);
+        }
     }
 
     @Override

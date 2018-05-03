@@ -305,7 +305,9 @@
 				     ->where( 'path', $resource->path )
 				     ->where( 'resource_name', $resource->resource_name )
 				     ->count() > 1 ) {
-				return $this->failed( 400006 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "400006" ],
+				] )->status( 400 );
 			}
 			$restore_id_list = DB::select( "SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -321,7 +323,9 @@
 				$resource->trashed    = false;
 				$resource->trash_path = '0';
 				if ( ! $resource->save() ) {
-					return $this->failed( 500001, 500 );
+					throw ValidationException::withMessages( [
+						"resource" => [ "500001" ],
+					] )->status( 500 );
 				}
 			}
 			

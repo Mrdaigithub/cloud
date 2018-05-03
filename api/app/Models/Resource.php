@@ -29,6 +29,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resource extends Model
 {
+	protected $hidden = [
+		'hash'
+	];
+	
     public function user()
     {
         return $this->hasOne('App\Models\User', 'user_id');

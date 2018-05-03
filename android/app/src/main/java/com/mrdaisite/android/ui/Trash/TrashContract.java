@@ -40,5 +40,7 @@ public interface TrashContract {
         void fetchRemoteResources(CallbackUnit callBackUnit);
 
         List<ResourceBean> fetchLocalTrashedResources();
+
+        void RestoreResource(long resourceId, CallbackUnit callbackUnit);
     }
 }

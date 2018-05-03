@@ -100,10 +100,18 @@ public interface ApiService {
     Observable<ResourceBean> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
 
     /**
-     * 重命名资源
+     * 将资源移至回收站
      *
      * @return
      */
     @PATCH("/api/v1/resources/{id}/trash")
     Observable<ResourceBean> trashedResource(@Path("id") long resourceId);
+
+    /**
+     * 还原回收站中的资源
+     *
+     * @return
+     */
+    @PATCH("/api/v1/resources/{id}/restore")
+    Observable<ResourceBean> restoreResource(@Path("id") long resourceId);
 }

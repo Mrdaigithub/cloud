@@ -34,12 +34,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
+import com.mrdaisite.android.util.CallbackUnit;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -121,6 +123,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
             }
             return true;
         });
+        Logger.e(String.valueOf(1));
 
         mResourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalTrashedResources());
         mResourceAdapter.openLoadAnimation();
@@ -133,7 +136,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 switch (menuItem.getItemId()) {
                     case R.id.restore:
-//                        showRenameDialog(position);
+                        showRestoreDialog(position);
                         break;
                     case R.id.removePermanently:
 //                        removeResourcePositionList.add(position);
@@ -168,6 +171,17 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 })
+                .create()
+                .show();
+    }
+
+    public void showRestoreDialog(int position) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("恢复此资源?")
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok,
+                        (dialogInterface, i) -> mPresenter.RestoreResource(mResourceAdapter.getData().get(position).getId(),
+                                o -> resourceViewRefresh(true, false)))
                 .create()
                 .show();
     }
