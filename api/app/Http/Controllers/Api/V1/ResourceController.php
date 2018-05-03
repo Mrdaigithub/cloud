@@ -360,7 +360,9 @@
 					$resource       = Resource::find( $child_id->id );
 					$resource->path = preg_replace( "/($path)/", $base_path, $resource->path );
 					if ( ! $resource->save() ) {
-						return $this->failed( 500001 );
+                        throw ValidationException::withMessages( [
+                            "resource" => [ "500001" ],
+                        ] )->status( 500 );
 					}
 				}
 			}

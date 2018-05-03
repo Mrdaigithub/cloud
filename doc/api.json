@@ -1,8 +1,8 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-05-03T02:19:59.695Z",
-	"__export_source": "insomnia.desktop.app:v5.15.0",
+	"__export_date": "2018-05-03T15:31:47.813Z",
+	"__export_source": "insomnia.desktop.app:v5.16.1",
 	"resources": [
 		{
 			"_id": "wrk_21acc56e4b4344609843d7b33d22fd15",
@@ -314,6 +314,31 @@
 			"_type": "request"
 		},
 		{
+			"_id": "req_c2dfde4ab5d54c9b8de83f4a057defea",
+			"authentication": {
+				"token": "819154545aa9400de29b67b7bf706986555410ac",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1516327511371,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1516327511371,
+			"method": "GET",
+			"modified": 1516344701393,
+			"name": "get github user",
+			"parameters": [],
+			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.github.com/user",
+			"_type": "request"
+		},
+		{
 			"_id": "req_a85a465d27d74f1286e6318919e6729c",
 			"authentication": {},
 			"body": {
@@ -436,6 +461,56 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/login/password",
+			"_type": "request"
+		},
+		{
+			"_id": "req_f1d3458d8469454bae29b4d5234535ff",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": [
+					{
+						"disabled": false,
+						"id": "pair_82aaa1cbc2f04483903884eb06ca2de2",
+						"name": "code",
+						"value": "4a62576458aa3b7b1d70"
+					},
+					{
+						"disabled": false,
+						"id": "pair_5f31f5813a8d47f5bca9c689c9155261",
+						"name": "client_secret",
+						"value": "7819e44bb88a8cd47a2c0ac65715b463e6704262"
+					},
+					{
+						"disabled": false,
+						"id": "pair_cbb5700c808c4c8a91dfeb9cbc84b8d1",
+						"name": "client_id",
+						"value": "fbc7ce7b78d475a3a327"
+					}
+				]
+			},
+			"created": 1516327263705,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_bb7d0a78878d4782b28a067d739e8989",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1523346334737,
+			"method": "POST",
+			"modified": 1523346507228,
+			"name": "github fetch access token",
+			"parameters": [],
+			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://github.com/login/oauth/access_token",
 			"_type": "request"
 		},
 		{
@@ -648,6 +723,31 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/resources/73/restore",
+			"_type": "request"
+		},
+		{
+			"_id": "req_e934678c40ca4cd4a7bfa55ac93a09e6",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImNjZTlkOTI3OTdlMDg3MzI1OTcxOGFhYmExNDY3MGMzM2NhOGY2MWE3MTc2NDZmNjM1NTBlNDQyMmJiZTE1MmY2NWYyMmY2ZGNmODJiODZlIn0.eyJhdWQiOiIxIiwianRpIjoiY2NlOWQ5Mjc5N2UwODczMjU5NzE4YWFiYTE0NjcwYzMzY2E4ZjYxYTcxNzY0NmY2MzU1MGU0NDIyYmJlMTUyZjY1ZjIyZjZkY2Y4MmI4NmUiLCJpYXQiOjE1MjUzNTg5NjgsIm5iZiI6MTUyNTM1ODk2OCwiZXhwIjoxNTI1NTM4OTY4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z3G7ud6uN6iCNekVDNW6x7s6pdgymE6OYlzWwQz02k5zE7se_V4wwyelo9gLHNZ9E8nKM4vEptCJ0u2T0_EhI6Nj14eO-zW7jOezuFI62hfNf8x5_7EdJdQs_OyVD4UtvHGjQyWXFTuGyth3XMVi6KFBefli9MsqdXH763UlCZo-3ZRY7QkiRKX6RcAX73HwkYZWwxKPQaH4zr4mNwJbSTy3Z_BCb_sA7SOpCDbLxfFo2pnLweBomSdgdud-XozCBFazhhpllFH2qhKVEgEzHM8uCJVni8bTsaUJPkxiGJ3p3OUVhccdPeKTLj70b-YW9Cw4CffxtmhG_AZ8s1LycVPhnU8NyF0fHZbg8cAM4iMTFn5nM6z4QZhGsOJEUcx6_Gq0GX6GesmdiZ9ds7_ewJx7k6uBzwY7hsppKdcpfjVBbKWp7KCoYee6rIKm8pvPkirT4wTTFtrr3cXbfu5BQsrT1eeyxnyh9R9fR1WD-IrGp9F__XVouw1mRzHP9i4JvjzRfbXNbdR9zgtbRXvueKM8E-n2neAIR1fGUC7CufRQAXzF1GkkkpJIOJP387HbVxH1wxsz05r2sqiXUKn5bOtfEZNgP9wx6i5AGjUgw4JTaaaM5-ecy3WM_EdJcnYjTq5SBXBNX9hrKCLa2C8DQxIAdcAwzISw4QlBbnIGr7E",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1525358870616,
+			"description": "### 简要描述 :\n\n- 永久删除回收站的资源\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/{id}\n\n### 请求方式 :\n\n- DELETE\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n```\n\n### 返回参数说明 :\n\n| 参数名 | 类型 | 说明 |\n| --- | --- | --- | --- |\n|     |     |     |     |",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1523763967453,
+			"method": "DELETE",
+			"modified": 1525359279556,
+			"name": "永久删除回收站的资源",
+			"parameters": [],
+			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/85",
 			"_type": "request"
 		}
 	]

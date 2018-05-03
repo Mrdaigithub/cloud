@@ -36,6 +36,7 @@ import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
@@ -102,7 +103,7 @@ public class TrashPresenter implements TrashContract.Presenter {
     }
 
     @Override
-    public void RestoreResource(long resourceId, CallbackUnit callbackUnit) {
+    public void restoreResource(long resourceId, CallbackUnit callbackUnit) {
         mApiService.restoreResource(resourceId)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
@@ -116,6 +117,29 @@ public class TrashPresenter implements TrashContract.Presenter {
                     public void onSuccess(ResourceBean resourceBean) {
                         mResourceBeanBox.put(resourceBean);
                         callbackUnit.callbackFunc(resourceBean);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void removeResource(long resourceId, CallbackUnit callbackUnit) {
+        mApiService.removeResource(resourceId)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new HttpCallBackWrapper<String>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String s) {
+                        com.orhanobut.logger.Logger.e(s);
                     }
 
                     @Override

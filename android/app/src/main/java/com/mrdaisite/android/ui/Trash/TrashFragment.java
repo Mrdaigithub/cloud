@@ -34,32 +34,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
-import com.mrdaisite.android.data.model.ResourceBean;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TrashFragment extends BaseFragment implements TrashContract.View {
 
-    // UI references.
-    private RecyclerView mRecyclerView;
-
     private static TrashContract.Presenter mPresenter;
     private ResourceAdapter mResourceAdapter;
-    private ResourceBean mResourceBean;
-    private Boolean selectMode = false;
-    private List<Integer> selectedList = new ArrayList<>();
-    private List<Integer> removeResourcePositionList = new ArrayList<>();
 
 
     // Setup
@@ -104,7 +92,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.trash_frag, container, false);
 
-        mRecyclerView = root.findViewById(R.id.resourceRecyclerView);
+        RecyclerView mRecyclerView = root.findViewById(R.id.resourceRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -114,16 +102,11 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.clearTrash:
-                    removeResourcePositionList = selectedList;
-
-                    if (removeResourcePositionList.size() > 0) {
-                        showRemoveDialog();
-                    }
+                    showRemoveDialog("清空回收站?");
                     break;
             }
             return true;
         });
-        Logger.e(String.valueOf(1));
 
         mResourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalTrashedResources());
         mResourceAdapter.openLoadAnimation();
@@ -139,8 +122,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                         showRestoreDialog(position);
                         break;
                     case R.id.removePermanently:
-//                        removeResourcePositionList.add(position);
-//                        showRemoveDialog();
+                        showRemoveDialog("彻底删除此文件?", position);
                         break;
                 }
                 return false;
@@ -152,11 +134,6 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         return root;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        if (selectMode) return exitSelectMode();
-        return super.onBackPressed();
-    }
 
     // Show Dialog
 
@@ -165,9 +142,36 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void showRemoveDialog() {
+    public void showRestoreDialog(int position) {
         new AlertDialog.Builder(getActivity())
-                .setTitle("彻底删除文件?")
+                .setTitle("恢复此资源?")
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok,
+                        (dialogInterface, i) -> mPresenter.restoreResource(mResourceAdapter.getData().get(position).getId(),
+                                o -> resourceViewRefresh(false, false)))
+                .create()
+                .show();
+    }
+
+    public void showRemoveDialog(String msg, int position) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(msg)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    mPresenter.removeResource(mResourceAdapter.getData().get(position).getId(), new CallbackUnit() {
+                        @Override
+                        public void callbackFunc(Object o) {
+                            resourceViewRefresh(false, false);
+                        }
+                    });
+                })
+                .create()
+                .show();
+    }
+
+    public void showRemoveDialog(String msg) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(msg)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 })
@@ -175,26 +179,8 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                 .show();
     }
 
-    public void showRestoreDialog(int position) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("恢复此资源?")
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok,
-                        (dialogInterface, i) -> mPresenter.RestoreResource(mResourceAdapter.getData().get(position).getId(),
-                                o -> resourceViewRefresh(true, false)))
-                .create()
-                .show();
-    }
-
 
     // UI operate
-
-    public Boolean exitSelectMode() {
-        selectMode = false;
-//        resourceViewRefresh(false, false);
-        selectedList.clear();
-        return true;
-    }
 
     @Override
     public void resourceViewRefresh(Boolean openAnimation, Boolean remote) {

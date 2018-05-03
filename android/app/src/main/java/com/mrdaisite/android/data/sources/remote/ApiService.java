@@ -30,6 +30,7 @@ import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
 
 import io.reactivex.Observable;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -114,4 +115,12 @@ public interface ApiService {
      */
     @PATCH("/api/v1/resources/{id}/restore")
     Observable<ResourceBean> restoreResource(@Path("id") long resourceId);
+
+    /**
+     * 永久删除回收站的资源
+     *
+     * @return
+     */
+    @DELETE("/api/v1/resources/{id}")
+    Observable<String> removeResource(@Path("id") long resourceId);
 }

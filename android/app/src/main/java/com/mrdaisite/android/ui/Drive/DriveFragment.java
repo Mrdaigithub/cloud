@@ -175,69 +175,67 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 }
             }
             swipeRefreshLayout.setRefreshing(false);
-            resourceAdapter.openLoadAnimation();
-            resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
-            resourceAdapter.notifyDataSetChanged();
+            resourceViewRefresh(false, false);
         }));
 
-        mPresenter.fetchRemoteResources(resources -> {
-            resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
-            resourceAdapter.openLoadAnimation();
-            resourceAdapter.isFirstOnly(false);
-            resourceAdapter.setUpFetchEnable(true);
-            resourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
-            resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
-                if (selectMode) {
-                    CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
-                    if (mCheckbox.isChecked()) {
-                        mCheckbox.setChecked(false);
-                        for (int i = 0; i < selectedList.size(); i++) {
-                            if (selectedList.get(i) == position) {
-                                selectedList.remove(i);
-                                break;
-                            }
+        resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
+        resourceAdapter.openLoadAnimation();
+        resourceAdapter.isFirstOnly(false);
+        resourceAdapter.setUpFetchEnable(true);
+        resourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
+        resourceAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (selectMode) {
+                CheckBox mCheckbox = view.findViewById(R.id.resourceCheckBox);
+                if (mCheckbox.isChecked()) {
+                    mCheckbox.setChecked(false);
+                    for (int i = 0; i < selectedList.size(); i++) {
+                        if (selectedList.get(i) == position) {
+                            selectedList.remove(i);
+                            break;
                         }
-                    } else {
-                        mCheckbox.setChecked(true);
-                        selectedList.add(position);
                     }
-                    return;
+                } else {
+                    mCheckbox.setChecked(true);
+                    selectedList.add(position);
                 }
-                List<ResourceBean> data = adapter.getData();
-                ResourceBean item = data.get(position);
-                if (!item.isFile()) {
-                    path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                    resourceViewRefresh(true, false);
-                }
-            });
-            resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
-                selectMode = true;
-                resourceViewRefresh(false, false);
-
-                return true;
-            });
-            resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-                popupMenu.inflate(R.menu.drive_resource_item_menu);
-                popupMenu.setOnMenuItemClickListener(menuItem -> {
-                    switch (menuItem.getItemId()) {
-                        case R.id.resourceItemMenuRename:
-                            showRenameDialog(position);
-                            break;
-                        case R.id.resourceItemMenuRemove:
-                            removeResourcePositionList.add(position);
-                            showRemoveDialog();
-                            break;
-                        case R.id.resourceItemMenuMove:
-                            // handle menu3 click
-                            break;
-                    }
-                    return false;
-                });
-                popupMenu.show();
-            });
-            mRecyclerView.setAdapter(resourceAdapter);
+                return;
+            }
+            List<ResourceBean> data = adapter.getData();
+            ResourceBean item = data.get(position);
+            if (!item.isFile()) {
+                path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
+                resourceViewRefresh(true, false);
+            }
         });
+        resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            selectMode = true;
+            resourceViewRefresh(false, false);
+
+            return true;
+        });
+        resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+            popupMenu.inflate(R.menu.drive_resource_item_menu);
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                switch (menuItem.getItemId()) {
+                    case R.id.resourceItemMenuRename:
+                        showRenameDialog(position);
+                        break;
+                    case R.id.resourceItemMenuRemove:
+                        removeResourcePositionList.add(position);
+                        showRemoveDialog();
+                        break;
+                    case R.id.resourceItemMenuMove:
+                        // handle menu3 click
+                        break;
+                }
+                return false;
+            });
+            popupMenu.show();
+        });
+        mRecyclerView.setAdapter(resourceAdapter);
+
+        resourceViewRefresh(true, true);
 
         return root;
     }
@@ -303,7 +301,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                             selectMode = false;
                             selectedList.clear();
                         }
-                        resourceViewRefresh(true, true);
+                        resourceViewRefresh(false, true);
                     });
                 })
                 .create()
