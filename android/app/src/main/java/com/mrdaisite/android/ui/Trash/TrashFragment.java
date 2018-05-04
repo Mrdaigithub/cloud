@@ -41,8 +41,8 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -180,6 +180,12 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                 .setTitle(msg)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    List<Long> resourceIdList = new ArrayList<>();
+                    for (Resource resourceItem : mResourceAdapter.getData()) {
+                        resourceIdList.add(resourceItem.getId());
+                    }
+                    mPresenter.removeResource(resourceIdList,
+                            o -> resourceViewRefresh(false, false));
                 })
                 .create()
                 .show();

@@ -46,5 +46,7 @@ public interface TrashContract {
         void restoreResource(long resourceId, CallbackUnit callbackUnit);
 
         void removeResource(long resourceId, CallbackUnit callbackUnit);
+
+        void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit);
     }
 }

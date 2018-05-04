@@ -33,11 +33,16 @@ import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
 import io.objectbox.Box;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -157,5 +162,36 @@ public class TrashPresenter implements TrashContract.Presenter {
 
                     }
                 });
+    }
+
+    public void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit) {
+        Observable observable = Observable.fromArray(resourceIdList.toArray(new Long[0]))
+                .subscribeOn(mSchedulerProvider.io())
+                .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.removeResource(id))
+                .observeOn(mSchedulerProvider.ui());
+        observable.subscribe(new Observer<Response<Void>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Response<Void> voidResponse) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                for (long resourceId : resourceIdList) {
+                    mResourceBeanBox.remove(resourceId);
+                }
+                callbackUnit.callbackFunc(null);
+            }
+        });
     }
 }
