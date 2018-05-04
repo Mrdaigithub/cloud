@@ -24,7 +24,7 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
 import com.mrdaisite.android.util.CallbackUnit;
@@ -63,9 +63,7 @@ public interface DriveContract {
     interface Presenter extends BasePresenter {
         void fetchRemoteResources(CallbackUnit callbackUnit);
 
-        List<ResourceBean> fetchLocalResources(String path);
-
-        void appendResourceItem(ResourceBean resourceBean);
+        List<Resource> fetchLocalResources(String path);
 
         void mkdir(String newDirName);
 

@@ -47,16 +47,13 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
-import com.mrdaisite.android.data.model.ResourceBean;
-import com.mrdaisite.android.data.model.Resources;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,7 +76,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
     private Validator mValidator;
-    private ResourceBean mResourceBean;
+    private Resource mResource;
 
     private List<Integer> removeResourcePositionList = new ArrayList<>();
 
@@ -118,7 +115,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         super.onResume();
         mPresenter.subscribe();
         if (resourceAdapter != null) {
-            resourceViewRefresh(false, true);
+            resourceViewRefresh(false, false);
         }
     }
 
@@ -168,14 +165,15 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         // Setup drop down refresh
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
         swipeRefreshLayout.setOnRefreshListener(() -> mPresenter.fetchRemoteResources(resources -> {
-            Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-            for (List<ResourceBean> rList : resourcesData.values()) {
-                for (ResourceBean rItem : rList) {
-                    mPresenter.appendResourceItem(rItem);
-                }
-            }
             swipeRefreshLayout.setRefreshing(false);
-            resourceViewRefresh(false, false);
+//            Map<String, List<Resource>> resourcesData = ((Resources) resources).getData();
+//            for (List<Resource> rList : resourcesData.values()) {
+//                for (Resource rItem : rList) {
+//                    mPresenter.appendResourceItem(rItem);
+//                }
+//            }
+//            swipeRefreshLayout.setRefreshing(false);
+//            resourceViewRefresh(false, false);
         }));
 
         resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
@@ -200,8 +198,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 }
                 return;
             }
-            List<ResourceBean> data = adapter.getData();
-            ResourceBean item = data.get(position);
+            List<Resource> data = adapter.getData();
+            Resource item = data.get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
                 resourceViewRefresh(true, false);
@@ -270,9 +268,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_text, null);
         dialogTextView = dialogView.findViewById(R.id.dialogTextView);
-        mResourceBean = mPresenter.fetchLocalResources(path).get(position);
+        mResource = mPresenter.fetchLocalResources(path).get(position);
         dialogTextView.setHint(R.string.rename);
-        dialogTextView.setText(mResourceBean.getResourceName());
+        dialogTextView.setText(mResource.getResourceName());
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.rename)
                 .setView(dialogView)
@@ -291,7 +289,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     List<Long> resourceIdList = new ArrayList<>();
-                    List<ResourceBean> resourceList = mPresenter.fetchLocalResources(path);
+                    List<Resource> resourceList = mPresenter.fetchLocalResources(path);
                     for (Integer removeResourcePosition : removeResourcePositionList) {
                         resourceIdList.add(resourceList.get(removeResourcePosition).getId());
                     }
@@ -345,12 +343,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         else resourceAdapter.closeLoadAnimation();
         if (remote) {
             mPresenter.fetchRemoteResources(resources -> {
-                Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-                for (List<ResourceBean> rList : resourcesData.values()) {
-                    for (ResourceBean rItem : rList) {
-                        mPresenter.appendResourceItem(rItem);
-                    }
-                }
                 resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
             });
         } else {
@@ -371,7 +363,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
     @Override
     public void onValidationSucceeded() {
-        mPresenter.renameResource(mResourceBean.getId(), dialogTextView.getText().toString());
+        mPresenter.renameResource(mResource.getId(), dialogTextView.getText().toString());
     }
 
     @Override

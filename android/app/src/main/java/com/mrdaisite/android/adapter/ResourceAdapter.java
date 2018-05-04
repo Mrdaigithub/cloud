@@ -24,28 +24,26 @@
 
 package com.mrdaisite.android.adapter;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mrdaisite.android.R;
-import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.Drive.DriveFragment;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
-public class ResourceAdapter extends BaseQuickAdapter<ResourceBean, BaseViewHolder> {
+public class ResourceAdapter extends BaseQuickAdapter<Resource, BaseViewHolder> {
 
-    public ResourceAdapter(int layoutResId, @Nullable List<ResourceBean> data) {
+    public ResourceAdapter(int layoutResId, @Nullable List<Resource> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ResourceBean item) {
+    protected void convert(BaseViewHolder helper, Resource item) {
 
         // 设置resource item的title,时间,icon
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())

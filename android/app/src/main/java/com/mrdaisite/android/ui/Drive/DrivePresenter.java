@@ -25,12 +25,10 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 
 import com.mrdaisite.android.MyApplication;
-import com.mrdaisite.android.data.model.ResourceBean;
-import com.mrdaisite.android.data.model.ResourceBean_;
-import com.mrdaisite.android.data.model.Resources;
+import com.mrdaisite.android.data.model.Resource;
+import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallbackUnit;
@@ -38,7 +36,6 @@ import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import io.objectbox.Box;
@@ -54,7 +51,7 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
     private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
-    private Box<ResourceBean> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(ResourceBean.class);
+    private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
 
     @NonNull
     private final DriveContract.View mDriveView;
@@ -87,25 +84,24 @@ public class DrivePresenter implements DriveContract.Presenter {
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<Resources>() {
+                .subscribe(new HttpCallBackWrapper<List<Resource>>() {
                     @Override
                     public void onBegin(Disposable d) {
+
                     }
 
                     @Override
-                    public void onSuccess(Resources resources) {
-                        callBackUnit.callbackFunc(resources);
-                        Map<String, List<ResourceBean>> resourcesData = resources.getData();
-                        for (List<ResourceBean> rList : resourcesData.values()) {
-                            for (ResourceBean rItem : rList) {
-                                mResourceBeanBox.put(rItem);
-                            }
+                    public void onSuccess(List<Resource> resources) {
+                        mResourceBeanBox.removeAll();
+                        for (Resource resource : resources) {
+                            mResourceBeanBox.put(resource);
                         }
+                        callBackUnit.callbackFunc(resources);
                     }
 
                     @Override
                     public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
+
                     }
                 });
     }
@@ -116,18 +112,13 @@ public class DrivePresenter implements DriveContract.Presenter {
      * @param path
      * @return
      */
-    public List<ResourceBean> fetchLocalResources(String path) {
+    public List<Resource> fetchLocalResources(String path) {
         return mResourceBeanBox.query()
-                .equal(ResourceBean_.path, path)
+                .equal(Resource_.path, path)
                 .filter((resource) -> !resource.isTrashed())
-                .order(ResourceBean_.file)
+                .order(Resource_.file)
                 .build()
                 .find();
-    }
-
-    @Override
-    public void appendResourceItem(ResourceBean resourceBean) {
-        mResourceBeanBox.put(resourceBean);
     }
 
     @Override
@@ -135,15 +126,15 @@ public class DrivePresenter implements DriveContract.Presenter {
         mApiService.mkdir(DriveFragment.path, newDirName)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
+                .subscribe(new HttpCallBackWrapper<Resource>() {
                     @Override
                     public void onBegin(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(ResourceBean resourceBean) {
-                        mResourceBeanBox.put(resourceBean);
+                    public void onSuccess(Resource resource) {
+                        mResourceBeanBox.put(resource);
                         mDriveView.resourceViewRefresh(true, true);
                     }
 
@@ -159,14 +150,14 @@ public class DrivePresenter implements DriveContract.Presenter {
         mApiService.renameResource(resourceId, newResourceNameText)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
+                .subscribe(new HttpCallBackWrapper<Resource>() {
                     @Override
                     public void onBegin(Disposable d) {
                     }
 
                     @Override
-                    public void onSuccess(ResourceBean resourceBean) {
-                        mResourceBeanBox.put(resourceBean);
+                    public void onSuccess(Resource resource) {
+                        mResourceBeanBox.put(resource);
                         mDriveView.resourceViewRefresh(true, false);
                     }
 
@@ -184,15 +175,15 @@ public class DrivePresenter implements DriveContract.Presenter {
                 .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.trashedResource(id))
                 .observeOn(mSchedulerProvider.ui());
 
-        observable.subscribe(new Observer<ResourceBean>() {
+        observable.subscribe(new Observer<Resource>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(ResourceBean resourceBean) {
-                mResourceBeanBox.put(resourceBean);
+            public void onNext(Resource resource) {
+                mResourceBeanBox.put(resource);
             }
 
             @Override

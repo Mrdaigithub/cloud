@@ -24,12 +24,14 @@
 
 package com.mrdaisite.android.data.sources.remote;
 
-import com.mrdaisite.android.data.model.ResourceBean;
-import com.mrdaisite.android.data.model.Resources;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
 
+import java.util.List;
+
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -80,7 +82,7 @@ public interface ApiService {
      * @return
      */
     @GET("/api/v1/resources")
-    Observable<Resources> getResources();
+    Observable<List<Resource>> getResources();
 
     /**
      * 创建文件夹
@@ -89,7 +91,7 @@ public interface ApiService {
      */
     @FormUrlEncoded
     @POST("/api/v1/resources")
-    Observable<ResourceBean> mkdir(@Field("path") String path, @Field("resource_name") String newResourceName);
+    Observable<Resource> mkdir(@Field("path") String path, @Field("resource_name") String newResourceName);
 
     /**
      * 重命名资源
@@ -98,7 +100,7 @@ public interface ApiService {
      */
     @FormUrlEncoded
     @PATCH("/api/v1/resources/{id}")
-    Observable<ResourceBean> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
+    Observable<Resource> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
 
     /**
      * 将资源移至回收站
@@ -106,7 +108,7 @@ public interface ApiService {
      * @return
      */
     @PATCH("/api/v1/resources/{id}/trash")
-    Observable<ResourceBean> trashedResource(@Path("id") long resourceId);
+    Observable<Resource> trashedResource(@Path("id") long resourceId);
 
     /**
      * 还原回收站中的资源
@@ -114,7 +116,7 @@ public interface ApiService {
      * @return
      */
     @PATCH("/api/v1/resources/{id}/restore")
-    Observable<ResourceBean> restoreResource(@Path("id") long resourceId);
+    Observable<Resource> restoreResource(@Path("id") long resourceId);
 
     /**
      * 永久删除回收站的资源
@@ -122,5 +124,5 @@ public interface ApiService {
      * @return
      */
     @DELETE("/api/v1/resources/{id}")
-    Observable<String> removeResource(@Path("id") long resourceId);
+    Observable<Response<Void>> removeResource(@Path("id") long resourceId);
 }

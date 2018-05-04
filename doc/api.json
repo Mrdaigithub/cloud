@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-05-03T15:31:47.813Z",
+	"__export_date": "2018-05-04T07:57:33.820Z",
 	"__export_source": "insomnia.desktop.app:v5.16.1",
 	"resources": [
 		{
@@ -558,17 +558,17 @@
 		{
 			"_id": "req_eb07353198804ae080f4d83a0cbfcacb",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjMwMjdmNjhiNGMxNDFiZTJlZjczY2UxMTYyMmY1MDEyYzAxNzhiMTBhMWI5MmRkZWI0OWRjNDM0NjU4MWViMzc5MTdiOWM5YzBhNjFkMDM2In0.eyJhdWQiOiIxIiwianRpIjoiMzAyN2Y2OGI0YzE0MWJlMmVmNzNjZTExNjIyZjUwMTJjMDE3OGIxMGExYjkyZGRlYjQ5ZGM0MzQ2NTgxZWIzNzkxN2I5YzljMGE2MWQwMzYiLCJpYXQiOjE1MjQ3MjY2NzEsIm5iZiI6MTUyNDcyNjY3MSwiZXhwIjoxNTI0OTA2NjcxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.vZHc6CgxXiiI963ZI51kTLwrEsHlNqrpTrZxK23i9iJwjcchPWqoHoZhM5BJ0coje1cP3yaGIqf5VYvA3LBlMEkFq3dmdyrpYnyrb_B7iewaVFXkNW8AF5vS_hAdmgtCsJbVMo4XNsvR3LfQ4jGofygsyrJQZaYPZ_8JJGtOiqJXrXze5b53UgB1zOJlj8zjPyA5a6mgyr3Pi5_o-cKCy21swZl8tolWj0Vn0Svmc2oplQ2o8dqHPUdJ2VoefsUQDQvvwiuVsn2U5mF8sFKUgWZBRkqw4BWvVlFnENPFKho6eeRewGmcQyG1YpcypTYwxpkQ-cBVI2l7XKk9nbSSRfvT0TCR2hVVq2bllks4Ww_BHSrApfzAbgeNc1a09BlJtWgzB0_UNcEzGMPOsJyDXBnWlyZA70AYAeQkqcNrIc85LmJoRtvZQ_Uj1O00xBiyGdQVZ3fYGQ_LlHDGQSNoRwvKNGKC_BWs633CBAuikPWlfjv0nLtHQxFsoZhHqN1XQNgAjV_L61ZAd6eKEhuIoEGDCLC1I7WEcVuQBqSgm7eW4H0wrCZKRQtBsBIyMsvHYOsmgjIPwYim2lDPX9Skc3Xfv4_zJ3SWrewpN3sx1NXrGourQBf9McLrem1sGUjogbBFjXIm3SBDMu2i9lmKolg28hpHvkViJ9JK0i-23CM",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImNjZTlkOTI3OTdlMDg3MzI1OTcxOGFhYmExNDY3MGMzM2NhOGY2MWE3MTc2NDZmNjM1NTBlNDQyMmJiZTE1MmY2NWYyMmY2ZGNmODJiODZlIn0.eyJhdWQiOiIxIiwianRpIjoiY2NlOWQ5Mjc5N2UwODczMjU5NzE4YWFiYTE0NjcwYzMzY2E4ZjYxYTcxNzY0NmY2MzU1MGU0NDIyYmJlMTUyZjY1ZjIyZjZkY2Y4MmI4NmUiLCJpYXQiOjE1MjUzNTg5NjgsIm5iZiI6MTUyNTM1ODk2OCwiZXhwIjoxNTI1NTM4OTY4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z3G7ud6uN6iCNekVDNW6x7s6pdgymE6OYlzWwQz02k5zE7se_V4wwyelo9gLHNZ9E8nKM4vEptCJ0u2T0_EhI6Nj14eO-zW7jOezuFI62hfNf8x5_7EdJdQs_OyVD4UtvHGjQyWXFTuGyth3XMVi6KFBefli9MsqdXH763UlCZo-3ZRY7QkiRKX6RcAX73HwkYZWwxKPQaH4zr4mNwJbSTy3Z_BCb_sA7SOpCDbLxfFo2pnLweBomSdgdud-XozCBFazhhpllFH2qhKVEgEzHM8uCJVni8bTsaUJPkxiGJ3p3OUVhccdPeKTLj70b-YW9Cw4CffxtmhG_AZ8s1LycVPhnU8NyF0fHZbg8cAM4iMTFn5nM6z4QZhGsOJEUcx6_Gq0GX6GesmdiZ9ds7_ewJx7k6uBzwY7hsppKdcpfjVBbKWp7KCoYee6rIKm8pvPkirT4wTTFtrr3cXbfu5BQsrT1eeyxnyh9R9fR1WD-IrGp9F__XVouw1mRzHP9i4JvjzRfbXNbdR9zgtbRXvueKM8E-n2neAIR1fGUC7CufRQAXzF1GkkkpJIOJP387HbVxH1wxsz05r2sqiXUKn5bOtfEZNgP9wx6i5AGjUgw4JTaaaM5-ecy3WM_EdJcnYjTq5SBXBNX9hrKCLa2C8DQxIAdcAwzISw4QlBbnIGr7E",
 				"type": "bearer"
 			},
 			"body": {},
 			"created": 1523763967653,
-			"description": "### 简要描述 :\n\n- 获取资源列表接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n    \"data\": {\n        \"0\": [\n            {\n                \"id\": 64,\n                \"resource_name\": \"2101305167.jpg\",\n                \"size\": 214642,\n                \"file\": true,\n                \"trashed\": false,\n                \"created_at\": \"2018-03-12 10:04:29\",\n                \"updated_at\": \"2018-03-12 10:04:29\",\n                \"path\": \"0.61\",\n                \"trash_path\": \"0\"\n            }\n        ]\n    }\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n\n(数组的key为资源所在路径)\n",
+			"description": "### 简要描述 :\n\n- 获取资源列表接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n[\n\t{\n\t\t\"id\": 103,\n\t\t\"resource_name\": \"123\",\n\t\t\"size\": 0,\n\t\t\"file\": false,\n\t\t\"trashed\": false,\n\t\t\"created_at\": \"2018-05-04T15:55:00+08:00\",\n\t\t\"updated_at\": \"2018-05-04T15:56:23+08:00\",\n\t\t\"path\": \"0\",\n\t\t\"trash_path\": \"0\"\n\t}\n]\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1523763967653,
 			"method": "GET",
-			"modified": 1524726678645,
+			"modified": 1525420626061,
 			"name": "获取资源列表",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
@@ -738,7 +738,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523763967453,
 			"method": "DELETE",
-			"modified": 1525359279556,
+			"modified": 1525405775966,
 			"name": "永久删除回收站的资源",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
@@ -747,7 +747,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://api.mrdaisite.com/api/v1/resources/85",
+			"url": "http://api.mrdaisite.com/api/v1/resources/83",
 			"_type": "request"
 		}
 	]

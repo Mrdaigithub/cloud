@@ -27,26 +27,25 @@ package com.mrdaisite.android.ui.Trash;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
-import com.mrdaisite.android.data.model.ResourceBean;
-import com.mrdaisite.android.data.model.ResourceBean_;
-import com.mrdaisite.android.data.model.Resources;
+import com.mrdaisite.android.data.model.Resource;
+import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
+import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class TrashPresenter implements TrashContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
-    private Box<ResourceBean> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(ResourceBean.class);
+    private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
 
     @NonNull
     private final TrashContract.View mTrashView;
@@ -75,14 +74,14 @@ public class TrashPresenter implements TrashContract.Presenter {
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<Resources>() {
+                .subscribe(new HttpCallBackWrapper<List<Resource>>() {
                     @Override
                     public void onBegin(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(Resources resources) {
+                    public void onSuccess(List<Resource> resources) {
                         callBackUnit.callbackFunc(resources);
                     }
 
@@ -94,9 +93,19 @@ public class TrashPresenter implements TrashContract.Presenter {
     }
 
     @Override
-    public List<ResourceBean> fetchLocalTrashedResources() {
+    public List<Resource> fetchLocalResources() {
         return mResourceBeanBox.query()
-                .equal(ResourceBean_.trashPath, "0")
+                .equal(Resource_.trashPath, "0")
+                .filter((resource) -> resource.isTrashed())
+                .order(Resource_.file)
+                .build()
+                .find();
+    }
+
+    @Override
+    public List<Resource> fetchLocalTrashedResources() {
+        return mResourceBeanBox.query()
+                .equal(Resource_.trashPath, "0")
                 .filter((resource) -> resource.isTrashed())
                 .build()
                 .find();
@@ -107,16 +116,16 @@ public class TrashPresenter implements TrashContract.Presenter {
         mApiService.restoreResource(resourceId)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<ResourceBean>() {
+                .subscribe(new HttpCallBackWrapper<Resource>() {
                     @Override
                     public void onBegin(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(ResourceBean resourceBean) {
-                        mResourceBeanBox.put(resourceBean);
-                        callbackUnit.callbackFunc(resourceBean);
+                    public void onSuccess(Resource resource) {
+                        mResourceBeanBox.put(resource);
+                        callbackUnit.callbackFunc(resource);
                     }
 
                     @Override
@@ -131,15 +140,16 @@ public class TrashPresenter implements TrashContract.Presenter {
         mApiService.removeResource(resourceId)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<String>() {
+                .subscribe(new HttpCallBackWrapper<Response<Void>>() {
                     @Override
                     public void onBegin(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(String s) {
-                        com.orhanobut.logger.Logger.e(s);
+                    public void onSuccess(Response<Void> voidResponse) {
+                        mResourceBeanBox.remove(resourceId);
+                        callbackUnit.callbackFunc(null);
                     }
 
                     @Override

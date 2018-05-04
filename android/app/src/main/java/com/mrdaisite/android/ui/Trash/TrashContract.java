@@ -24,7 +24,7 @@
 
 package com.mrdaisite.android.ui.Trash;
 
-import com.mrdaisite.android.data.model.ResourceBean;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
 import com.mrdaisite.android.util.CallbackUnit;
@@ -39,7 +39,9 @@ public interface TrashContract {
     interface Presenter extends BasePresenter {
         void fetchRemoteResources(CallbackUnit callBackUnit);
 
-        List<ResourceBean> fetchLocalTrashedResources();
+        List<Resource> fetchLocalResources();
+
+        List<Resource> fetchLocalTrashedResources();
 
         void restoreResource(long resourceId, CallbackUnit callbackUnit);
 

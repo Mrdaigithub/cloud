@@ -27,6 +27,7 @@ package com.mrdaisite.android.ui.Trash;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,9 +39,11 @@ import android.widget.Toast;
 
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
+import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.mrdaisite.android.util.CallbackUnit;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -108,6 +111,13 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
             return true;
         });
 
+        // Setup drop down refresh
+        SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            resourceViewRefresh(true, true);
+        });
+
         mResourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalTrashedResources());
         mResourceAdapter.openLoadAnimation();
         mResourceAdapter.isFirstOnly(false);
@@ -158,12 +168,8 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                 .setTitle(msg)
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    mPresenter.removeResource(mResourceAdapter.getData().get(position).getId(), new CallbackUnit() {
-                        @Override
-                        public void callbackFunc(Object o) {
-                            resourceViewRefresh(false, false);
-                        }
-                    });
+                    mPresenter.removeResource(mResourceAdapter.getData().get(position).getId(),
+                            o -> resourceViewRefresh(false, false));
                 })
                 .create()
                 .show();
@@ -188,14 +194,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         else mResourceAdapter.closeLoadAnimation();
         if (remote) {
             mPresenter.fetchRemoteResources(resources -> {
-                Logger.e(resources.toString());
-//                Map<String, List<ResourceBean>> resourcesData = ((Resources) resources).getData();
-//                for (List<ResourceBean> rList : resourcesData.values()) {
-//                    for (ResourceBean rItem : rList) {
-//                        mPresenter.appendResourceItem(rItem);
-//                    }
-//                }
-//                resourceAdapter.setNewData(mPresenter.fetchLocalResources(path));
+                mResourceAdapter.setNewData(mPresenter.fetchLocalResources());
             });
         } else {
             mResourceAdapter.setNewData(mPresenter.fetchLocalTrashedResources());

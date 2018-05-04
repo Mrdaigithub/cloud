@@ -31,7 +31,7 @@ import io.objectbox.annotation.Id;
 import io.objectbox.annotation.Index;
 
 @Entity
-public class ResourceBean {
+public class Resource {
     @Id(assignable = true)
     @Index
     @SerializedName("id")
@@ -127,7 +127,7 @@ public class ResourceBean {
 
     @Override
     public String toString() {
-        return "ResourceBean{" +
+        return "Resource{" +
                 "id=" + id +
                 ", resourceName='" + resourceName + '\'' +
                 ", size=" + size +

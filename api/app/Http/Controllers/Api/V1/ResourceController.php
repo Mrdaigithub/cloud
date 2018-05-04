@@ -341,6 +341,11 @@
 		 * @return mixed
 		 */
 		public function destroy( Request $request, $id ) {
+			if ( ! Resource::find( $id ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "409001" ],
+				] )->status( 409 );
+			}
 			$user              = $request->user();
 			$base_path         = Resource::find( $id )->path;
 			$path              = Resource::find( $id )->path . '.' . $id;
@@ -360,9 +365,9 @@
 					$resource       = Resource::find( $child_id->id );
 					$resource->path = preg_replace( "/($path)/", $base_path, $resource->path );
 					if ( ! $resource->save() ) {
-                        throw ValidationException::withMessages( [
-                            "resource" => [ "500001" ],
-                        ] )->status( 500 );
+						throw ValidationException::withMessages( [
+							"resource" => [ "500001" ],
+						] )->status( 500 );
 					}
 				}
 			}
