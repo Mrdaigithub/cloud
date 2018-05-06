@@ -26,6 +26,7 @@ package com.mrdaisite.android.ui.Drive;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -55,6 +56,7 @@ import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,6 +150,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
+                case R.id.upload:
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("file/*");
+                    startActivityForResult(intent, 123);
+                    break;
                 case R.id.mkdir:
                     showMkdirDialog();
                     break;
@@ -237,6 +244,14 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) return;
+        String uploadFilePath = data.getDataString();
+        Logger.e(Objects.requireNonNull(uploadFilePath));
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
