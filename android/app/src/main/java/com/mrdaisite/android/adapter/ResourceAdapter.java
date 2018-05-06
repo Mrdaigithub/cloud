@@ -33,6 +33,7 @@ import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.Drive.DriveFragment;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class ResourceAdapter extends BaseQuickAdapter<Resource, BaseViewHolder> 
     protected void convert(BaseViewHolder helper, Resource item) {
 
         // 设置resource item的title,时间,icon
+        ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt());
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())
                 .setText(R.id.resourceCreatedDate, ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt()));
         if (DriveFragment.selectMode) {

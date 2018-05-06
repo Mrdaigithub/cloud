@@ -27,6 +27,7 @@ package com.mrdaisite.android.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.orhanobut.logger.Logger;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;

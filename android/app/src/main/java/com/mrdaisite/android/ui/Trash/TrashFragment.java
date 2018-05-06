@@ -44,6 +44,7 @@ import com.mrdaisite.android.ui.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -158,7 +159,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok,
                         (dialogInterface, i) -> mPresenter.restoreResource(mResourceAdapter.getData().get(position).getId(),
-                                o -> resourceViewRefresh(false, false)))
+                                o -> resourceViewRefresh(false, true)))
                 .create()
                 .show();
     }

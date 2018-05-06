@@ -50,6 +50,7 @@ import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
@@ -166,15 +167,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
         swipeRefreshLayout.setOnRefreshListener(() -> mPresenter.fetchRemoteResources(resources -> {
             swipeRefreshLayout.setRefreshing(false);
-//            Map<String, List<Resource>> resourcesData = ((Resources) resources).getData();
-//            for (List<Resource> rList : resourcesData.values()) {
-//                for (Resource rItem : rList) {
-//                    mPresenter.appendResourceItem(rItem);
-//                }
-//            }
-//            swipeRefreshLayout.setRefreshing(false);
-//            resourceViewRefresh(false, false);
+            resourceViewRefresh(false, true);
         }));
+
 
         resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
         resourceAdapter.openLoadAnimation();
