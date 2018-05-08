@@ -24,6 +24,17 @@
 
 package com.mrdaisite.android.ui;
 
-public interface BaseView<T> {
-    void setPresenter(T presenter);
+import com.mrdaisite.android.adapter.ResourceAdapter;
+import com.mrdaisite.android.data.model.Resource;
+import com.mrdaisite.android.ui.BaseFragment;
+
+import java.util.List;
+
+public class CommonFragment extends BaseFragment {
+    public void resourceViewRefresh(ResourceAdapter resourceAdapter,
+                                    List<Resource> resourceList, Boolean openAnimation) {
+        if (openAnimation) resourceAdapter.openLoadAnimation();
+        else resourceAdapter.closeLoadAnimation();
+        resourceAdapter.setNewData(resourceList);
+    }
 }

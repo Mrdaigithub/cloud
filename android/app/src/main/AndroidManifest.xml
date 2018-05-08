@@ -24,7 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launch">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +39,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.Trash.TrashActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Move.MoveActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

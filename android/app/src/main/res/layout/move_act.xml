@@ -22,31 +22,20 @@
   ~ SOFTWARE.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/mkdir"
-        android:orderInCategory="1"
-        android:title="@string/mkdir"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/fragmentMenuRemove"
-        android:orderInCategory="2"
-        android:title="@string/remove"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/fragmentMenuMove"
-        android:orderInCategory="3"
-        android:title="@string/move"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/search"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/upload"
-        android:icon="@drawable/ic_upload"
-        android:title="@string/upload"
-        app:showAsAction="ifRoom" />
-</menu>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/contentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+</LinearLayout>

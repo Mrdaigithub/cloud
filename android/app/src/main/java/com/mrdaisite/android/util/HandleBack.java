@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui;
+package com.mrdaisite.android.util;
 
-public interface BaseView<T> {
-    void setPresenter(T presenter);
+public interface HandleBack {
+    boolean onBackPressed();
 }

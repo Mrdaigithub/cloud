@@ -32,10 +32,6 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.util.ActivityUtils;
 
-
-/**
- * Created by dai on 2018/3/29.
- */
 public class LoginActivity extends AppCompatActivity {
 
     @Override

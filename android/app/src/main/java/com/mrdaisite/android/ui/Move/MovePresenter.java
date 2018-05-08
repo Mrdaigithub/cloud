@@ -22,21 +22,20 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Drive;
+package com.mrdaisite.android.ui.Move;
 
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
-import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.ui.Trash.TrashContract;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
-import java.util.Objects;
 
 import io.objectbox.Box;
 import io.reactivex.Observable;
@@ -44,32 +43,30 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DrivePresenter implements DriveContract.Presenter {
+public class MovePresenter implements TrashContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
-    private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
     private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
 
     @NonNull
-    private final DriveContract.View mDriveView;
+    private final TrashContract.View mTrashView;
 
     @NonNull
     private final BaseSchedulerProvider mSchedulerProvider;
 
-    DrivePresenter(DriveFragment driveFragment, BaseSchedulerProvider schedulerProvider) {
-        mDriveView = checkNotNull(driveFragment);
-        mDriveView.setPresenter(this);
+    MovePresenter(MoveFragment trashFragment, BaseSchedulerProvider schedulerProvider) {
+        mTrashView = checkNotNull(trashFragment);
+        mTrashView.setPresenter(this);
         mSchedulerProvider = checkNotNull(schedulerProvider);
     }
 
     @Override
     public void subscribe() {
-        User userInfo = mUserBox.query().build().findFirst();
-        mDriveView.setProfileUsername(Objects.requireNonNull(userInfo).getUsername());
-        mDriveView.setProfileEmail(Objects.requireNonNull(userInfo).getEmail());
+
     }
 
     @Override
@@ -77,9 +74,7 @@ public class DrivePresenter implements DriveContract.Presenter {
 
     }
 
-    /**
-     * 从服务器获取resource list
-     */
+    @Override
     public void fetchRemoteResources(CallbackUnit callBackUnit) {
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
@@ -92,10 +87,6 @@ public class DrivePresenter implements DriveContract.Presenter {
 
                     @Override
                     public void onSuccess(List<Resource> resources) {
-                        mResourceBeanBox.removeAll();
-                        for (Resource resource : resources) {
-                            mResourceBeanBox.put(resource);
-                        }
                         callBackUnit.callbackFunc(resources);
                     }
 
@@ -106,24 +97,28 @@ public class DrivePresenter implements DriveContract.Presenter {
                 });
     }
 
-    /**
-     * 从本地获取resource list
-     *
-     * @param path
-     * @return
-     */
-    public List<Resource> fetchLocalResources(String path) {
+    @Override
+    public List<Resource> fetchLocalResources() {
         return mResourceBeanBox.query()
-                .equal(Resource_.path, path)
-                .filter((resource) -> !resource.isTrashed())
+                .equal(Resource_.trashPath, "0")
+                .filter((resource) -> resource.isTrashed())
                 .order(Resource_.file)
                 .build()
                 .find();
     }
 
     @Override
-    public void mkdir(String newDirName, CallbackUnit callbackUnit) {
-        mApiService.mkdir(DriveFragment.path, newDirName)
+    public List<Resource> fetchLocalTrashedResources() {
+        return mResourceBeanBox.query()
+                .equal(Resource_.trashPath, "0")
+                .filter((resource) -> resource.isTrashed())
+                .build()
+                .find();
+    }
+
+    @Override
+    public void restoreResource(long resourceId, CallbackUnit callbackUnit) {
+        mApiService.restoreResource(resourceId)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
                 .subscribe(new HttpCallBackWrapper<Resource>() {
@@ -135,7 +130,7 @@ public class DrivePresenter implements DriveContract.Presenter {
                     @Override
                     public void onSuccess(Resource resource) {
                         mResourceBeanBox.put(resource);
-                        callbackUnit.callbackFunc(null);
+                        callbackUnit.callbackFunc(resource);
                     }
 
                     @Override
@@ -146,44 +141,43 @@ public class DrivePresenter implements DriveContract.Presenter {
     }
 
     @Override
-    public void renameResource(long resourceId, String newResourceNameText, CallbackUnit callbackUnit) {
-        mApiService.renameResource(resourceId, newResourceNameText)
+    public void removeResource(long resourceId, CallbackUnit callbackUnit) {
+        mApiService.removeResource(resourceId)
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<Resource>() {
+                .subscribe(new HttpCallBackWrapper<Response<Void>>() {
                     @Override
                     public void onBegin(Disposable d) {
+
                     }
 
                     @Override
-                    public void onSuccess(Resource resource) {
-                        mResourceBeanBox.put(resource);
+                    public void onSuccess(Response<Void> voidResponse) {
+                        mResourceBeanBox.remove(resourceId);
                         callbackUnit.callbackFunc(null);
                     }
 
                     @Override
                     public void onError(String msg) {
-                        com.orhanobut.logger.Logger.e(msg);
+
                     }
                 });
     }
 
-    @Override
-    public void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit) {
+    public void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit) {
         Observable observable = Observable.fromArray(resourceIdList.toArray(new Long[0]))
                 .subscribeOn(mSchedulerProvider.io())
-                .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.trashedResource(id))
+                .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.removeResource(id))
                 .observeOn(mSchedulerProvider.ui());
-
-        observable.subscribe(new Observer<Resource>() {
+        observable.subscribe(new Observer<Response<Void>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(Resource resource) {
-                mResourceBeanBox.put(resource);
+            public void onNext(Response<Void> voidResponse) {
+
             }
 
             @Override
@@ -193,6 +187,9 @@ public class DrivePresenter implements DriveContract.Presenter {
 
             @Override
             public void onComplete() {
+                for (long resourceId : resourceIdList) {
+                    mResourceBeanBox.remove(resourceId);
+                }
                 callbackUnit.callbackFunc(null);
             }
         });

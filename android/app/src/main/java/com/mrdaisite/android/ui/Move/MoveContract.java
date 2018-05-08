@@ -22,8 +22,27 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui;
+package com.mrdaisite.android.ui.Move;
 
-public interface HandleBack {
-    boolean onBackPressed();
+import com.mrdaisite.android.data.model.Resource;
+import com.mrdaisite.android.ui.BasePresenter;
+import com.mrdaisite.android.ui.BaseView;
+import com.mrdaisite.android.util.CallbackUnit;
+
+import java.util.List;
+
+public interface MoveContract {
+    interface View extends BaseView<Presenter> {
+        void resourceViewRefresh(Boolean openAnimation, Boolean remote);
+    }
+
+    interface Presenter extends BasePresenter {
+        void fetchRemoteResources(CallbackUnit callBackUnit);
+
+        List<Resource> fetchLocalResources();
+
+        List<Resource> fetchLocalTrashedResources();
+
+        void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit);
+    }
 }

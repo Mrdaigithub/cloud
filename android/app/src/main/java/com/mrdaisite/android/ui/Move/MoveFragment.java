@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui.Trash;
+package com.mrdaisite.android.ui.Move;
 
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -34,39 +34,43 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
-import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.mrdaisite.android.util.CallbackUnit;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TrashFragment extends BaseFragment implements TrashContract.View {
+public class MoveFragment extends BaseFragment implements MoveContract.View {
 
-    private static TrashContract.Presenter mPresenter;
+    private static MoveContract.Presenter mPresenter;
     private ResourceAdapter mResourceAdapter;
+    private List<Long> moveIdList = new ArrayList<>();
+    private String movePath = "0";
 
 
     // Setup
 
-    public static TrashFragment newInstance() {
+    public static MoveFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        TrashFragment fragment = new TrashFragment();
+        MoveFragment fragment = new MoveFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+
     @Override
-    public void setPresenter(TrashContract.Presenter presenter) {
+    public void showMessage(String msg) {
+
+    }
+
+    @Override
+    public void setPresenter(MoveContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
 
@@ -76,6 +80,12 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getActivity().getIntent();
+        long[] moveIdArray = intent.getLongArrayExtra("moveIdList");
+        for (long id : moveIdArray) {
+            moveIdList.add(id);
+        }
     }
 
     @Override
@@ -94,7 +104,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.trash_frag, container, false);
+        View root = inflater.inflate(R.layout.move_frag, container, false);
 
         RecyclerView mRecyclerView = root.findViewById(R.id.resourceRecyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -105,8 +115,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
-                case R.id.clearTrash:
-                    showRemoveDialog("清空回收站?");
+                case R.id.move:
                     break;
             }
             return true;
@@ -124,72 +133,9 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         mResourceAdapter.isFirstOnly(false);
         mResourceAdapter.setUpFetchEnable(true);
         mResourceAdapter.setEmptyView(R.layout.empty_view, mRecyclerView);
-        mResourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-            popupMenu.inflate(R.menu.trash_resource_item_menu);
-            popupMenu.setOnMenuItemClickListener(menuItem -> {
-                switch (menuItem.getItemId()) {
-                    case R.id.restore:
-                        showRestoreDialog(position);
-                        break;
-                    case R.id.removePermanently:
-                        showRemoveDialog("彻底删除此文件?", position);
-                        break;
-                }
-                return false;
-            });
-            popupMenu.show();
-        });
         mRecyclerView.setAdapter(mResourceAdapter);
 
         return root;
-    }
-
-
-    // Show Dialog
-
-    @Override
-    public void showMessage(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
-    public void showRestoreDialog(int position) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle("恢复此资源?")
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok,
-                        (dialogInterface, i) -> mPresenter.restoreResource(mResourceAdapter.getData().get(position).getId(),
-                                o -> resourceViewRefresh(false, true)))
-                .create()
-                .show();
-    }
-
-    public void showRemoveDialog(String msg, int position) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(msg)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    mPresenter.removeResource(mResourceAdapter.getData().get(position).getId(),
-                            o -> resourceViewRefresh(false, false));
-                })
-                .create()
-                .show();
-    }
-
-    public void showRemoveDialog(String msg) {
-        new AlertDialog.Builder(getActivity())
-                .setTitle(msg)
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    List<Long> resourceIdList = new ArrayList<>();
-                    for (Resource resourceItem : mResourceAdapter.getData()) {
-                        resourceIdList.add(resourceItem.getId());
-                    }
-                    mPresenter.removeResource(resourceIdList,
-                            o -> resourceViewRefresh(false, false));
-                })
-                .create()
-                .show();
     }
 
 
@@ -200,7 +146,9 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         if (openAnimation) mResourceAdapter.openLoadAnimation();
         else mResourceAdapter.closeLoadAnimation();
         if (remote) {
-            mPresenter.fetchRemoteResources(o -> mResourceAdapter.setNewData(mPresenter.fetchLocalResources()));
+            mPresenter.fetchRemoteResources(resources -> {
+                mResourceAdapter.setNewData(mPresenter.fetchLocalResources());
+            });
         } else {
             mResourceAdapter.setNewData(mPresenter.fetchLocalTrashedResources());
         }

@@ -45,14 +45,6 @@ public interface DriveContract {
         void showRenameDialog(int position);
 
         /**
-         * 刷新可见资源的视图
-         *
-         * @param openAnimation 刷新的开启动画
-         * @param remote        请求远程数据更新资源
-         */
-        void resourceViewRefresh(Boolean openAnimation, Boolean remote);
-
-        /**
          * 退出选择模式
          *
          * @return null
@@ -65,9 +57,9 @@ public interface DriveContract {
 
         List<Resource> fetchLocalResources(String path);
 
-        void mkdir(String newDirName);
+        void mkdir(String newDirName, CallbackUnit callbackUnit);
 
-        void renameResource(long resourceId, String newResourceName);
+        void renameResource(long resourceId, String newResourceName, CallbackUnit callbackUnit);
 
         void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
     }

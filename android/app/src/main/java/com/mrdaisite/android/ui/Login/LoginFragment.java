@@ -34,14 +34,13 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Email;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Drive.DriveActivity;
 import com.orhanobut.logger.Logger;
 
@@ -60,7 +59,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoginContract.View, Validator.ValidationListener {
+public class LoginFragment extends BaseFragment implements LoginContract.View, Validator.ValidationListener {
 
     // UI references.
     @NotEmpty
@@ -133,11 +132,6 @@ public class LoginFragment extends Fragment implements LoginContract.View, Valid
     @OnClick(R.id.login_button)
     public void loginHandle() {
         mValidator.validate();
-    }
-
-    @Override
-    public void showMessage(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

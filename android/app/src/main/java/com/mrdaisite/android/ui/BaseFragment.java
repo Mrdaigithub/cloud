@@ -25,11 +25,17 @@
 package com.mrdaisite.android.ui;
 
 import android.support.v4.app.Fragment;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
+import com.mrdaisite.android.util.HandleBack;
 import com.mrdaisite.android.util.HandleBackUtil;
 
 public class BaseFragment extends Fragment implements HandleBack {
+
+    public void showMessage(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onBackPressed() {
         return HandleBackUtil.handleBackPress(this);

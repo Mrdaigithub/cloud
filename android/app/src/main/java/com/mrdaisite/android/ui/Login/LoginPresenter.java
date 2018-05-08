@@ -33,6 +33,7 @@ import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.TokenUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
 
 import io.objectbox.Box;
@@ -88,7 +89,7 @@ public class LoginPresenter implements LoginContract.Presenter {
 
                     @Override
                     public void onError(String msg) {
-                        mLoginView.showMessage(msg);
+                        Logger.e(msg);
                         mLoginView.toBack();
                     }
                 });

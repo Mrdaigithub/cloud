@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.ui;
+package com.mrdaisite.android.ui.Main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,9 +31,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mrdaisite.android.ui.Login.LoginActivity;
 
-/**
- * Created by dai on 2018/3/26.
- */
 public class MainActivity extends AppCompatActivity {
 
     @Override
