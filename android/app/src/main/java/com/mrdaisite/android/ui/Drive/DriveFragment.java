@@ -52,7 +52,6 @@ import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
-import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
@@ -211,7 +210,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             Resource item = ((List<Resource>) adapter.getData()).get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(true, false);
+                resourceViewRefresh(false, true);
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
@@ -352,10 +351,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (remote) {
             DrivePresenter.fetchRemoteResources(resourceList -> {
                 resourceAdapter.setNewData((List<Resource>) resourceList);
+                resourceAdapter.setNewData(DrivePresenter.fetchLocalResources(path));
             });
         } else {
-            List<Resource> resourceList = DrivePresenter.fetchLocalResources(path);
-            resourceAdapter.setNewData(resourceList);
+            resourceAdapter.setNewData(DrivePresenter.fetchLocalResources(path));
         }
     }
 

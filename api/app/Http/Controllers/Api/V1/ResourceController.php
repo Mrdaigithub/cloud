@@ -297,7 +297,7 @@ class ResourceController extends ApiController
             }
         }
 
-        return $resource;
+        return new ResourceResource($resource);
     }
 
     /**

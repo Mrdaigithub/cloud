@@ -47,7 +47,6 @@ public class ResourceAdapter extends BaseQuickAdapter<Resource, BaseViewHolder> 
     protected void convert(BaseViewHolder helper, Resource item) {
 
         // 设置resource item的title,时间,icon
-        ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt());
         helper = helper.setText(R.id.resourceTitle, item.getResourceName())
                 .setText(R.id.resourceCreatedDate, ResourceUtil.getINSTANCE().formatISO8601(item.getCreatedAt()));
         if (DriveFragment.selectMode) {

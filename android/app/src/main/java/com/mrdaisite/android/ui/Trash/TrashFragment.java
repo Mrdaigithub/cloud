@@ -200,7 +200,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         else mResourceAdapter.closeLoadAnimation();
         if (remote) {
             TrashPresenter.fetchRemoteResources(o ->
-                    mResourceAdapter.setNewData(TrashPresenter.fetchLocalResources("0"))
+                    mResourceAdapter.setNewData(TrashPresenter.fetchLocalTrashedResources())
             );
         } else {
             mResourceAdapter.setNewData(TrashPresenter.fetchLocalTrashedResources());
