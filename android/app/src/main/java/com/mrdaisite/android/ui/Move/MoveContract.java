@@ -24,6 +24,8 @@
 
 package com.mrdaisite.android.ui.Move;
 
+import android.telecom.Call;
+
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
@@ -37,6 +39,6 @@ public interface MoveContract {
     }
 
     interface Presenter extends BasePresenter {
-
+        void moveResourceList(List<Long> resourceIdList, String path, CallbackUnit callbackUnit);
     }
 }

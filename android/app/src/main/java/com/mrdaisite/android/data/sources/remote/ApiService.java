@@ -103,6 +103,15 @@ public interface ApiService {
     Observable<Resource> renameResource(@Path("id") long resourceId, @Field("resource_name") String newResourceName);
 
     /**
+     * 移动资源
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @PATCH("/api/v1/resources/{id}/move")
+    Observable<Resource> moveResource(@Path("id") long resourceId, @Field("path") String path);
+
+    /**
      * 将资源移至回收站
      *
      * @return

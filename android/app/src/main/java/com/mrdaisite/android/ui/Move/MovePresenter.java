@@ -28,12 +28,9 @@ import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Resource;
-import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
-import com.mrdaisite.android.ui.Trash.TrashContract;
 import com.mrdaisite.android.util.CallbackUnit;
-import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.util.List;
@@ -44,7 +41,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -75,20 +71,22 @@ public class MovePresenter extends CommonPresenter implements MoveContract.Prese
 
     }
 
-    public void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit) {
+    @Override
+    public void moveResourceList(List<Long> resourceIdList, String path, CallbackUnit callbackUnit) {
         Observable observable = Observable.fromArray(resourceIdList.toArray(new Long[0]))
                 .subscribeOn(mSchedulerProvider.io())
-                .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.removeResource(id))
+                .flatMap((Function<Long, ObservableSource<?>>) id -> mApiService.moveResource(id, path))
                 .observeOn(mSchedulerProvider.ui());
-        observable.subscribe(new Observer<Response<Void>>() {
+
+        observable.subscribe(new Observer<Resource>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(Response<Void> voidResponse) {
-
+            public void onNext(Resource resource) {
+                mResourceBeanBox.put(resource);
             }
 
             @Override
@@ -98,9 +96,6 @@ public class MovePresenter extends CommonPresenter implements MoveContract.Prese
 
             @Override
             public void onComplete() {
-                for (long resourceId : resourceIdList) {
-                    mResourceBeanBox.remove(resourceId);
-                }
                 callbackUnit.callbackFunc(null);
             }
         });

@@ -200,7 +200,6 @@ class ResourceController extends ApiController
     {
         $user = $request->user();
         $resource = Resource::find($id);
-        $r = new Resource();
         $base_path = $resource->path;
         $new_path = $request->get('path');
         $old_path = "$base_path.$id";
@@ -226,7 +225,7 @@ class ResourceController extends ApiController
             }
         }
 
-        return $resource;
+        return new ResourceResource($resource);
     }
 
     /**
