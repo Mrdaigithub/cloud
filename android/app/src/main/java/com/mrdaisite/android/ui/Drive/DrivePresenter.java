@@ -31,6 +31,7 @@ import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
@@ -47,7 +48,7 @@ import io.reactivex.functions.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DrivePresenter implements DriveContract.Presenter {
+public class DrivePresenter extends CommonPresenter implements DriveContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
     private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
@@ -75,50 +76,6 @@ public class DrivePresenter implements DriveContract.Presenter {
     @Override
     public void unsubscribe() {
 
-    }
-
-    /**
-     * 从服务器获取resource list
-     */
-    public void fetchRemoteResources(CallbackUnit callBackUnit) {
-        mApiService.getResources()
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<List<Resource>>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<Resource> resources) {
-                        mResourceBeanBox.removeAll();
-                        for (Resource resource : resources) {
-                            mResourceBeanBox.put(resource);
-                        }
-                        callBackUnit.callbackFunc(resources);
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-
-                    }
-                });
-    }
-
-    /**
-     * 从本地获取resource list
-     *
-     * @param path
-     * @return
-     */
-    public List<Resource> fetchLocalResources(String path) {
-        return mResourceBeanBox.query()
-                .equal(Resource_.path, path)
-                .filter((resource) -> !resource.isTrashed())
-                .order(Resource_.file)
-                .build()
-                .find();
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.sources.remote.ApiService;
+import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
@@ -47,7 +48,7 @@ import retrofit2.Response;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class TrashPresenter implements TrashContract.Presenter {
+public class TrashPresenter extends CommonPresenter implements TrashContract.Presenter {
 
     private ApiService mApiService = MyApplication.getInstance().getApiService();
     private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
@@ -72,48 +73,6 @@ public class TrashPresenter implements TrashContract.Presenter {
     @Override
     public void unsubscribe() {
 
-    }
-
-    @Override
-    public void fetchRemoteResources(CallbackUnit callBackUnit) {
-        mApiService.getResources()
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(new HttpCallBackWrapper<List<Resource>>() {
-                    @Override
-                    public void onBegin(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(List<Resource> resources) {
-                        callBackUnit.callbackFunc(resources);
-                    }
-
-                    @Override
-                    public void onError(String msg) {
-
-                    }
-                });
-    }
-
-    @Override
-    public List<Resource> fetchLocalResources() {
-        return mResourceBeanBox.query()
-                .equal(Resource_.trashPath, "0")
-                .filter((resource) -> resource.isTrashed())
-                .order(Resource_.file)
-                .build()
-                .find();
-    }
-
-    @Override
-    public List<Resource> fetchLocalTrashedResources() {
-        return mResourceBeanBox.query()
-                .equal(Resource_.trashPath, "0")
-                .filter((resource) -> resource.isTrashed())
-                .build()
-                .find();
     }
 
     @Override

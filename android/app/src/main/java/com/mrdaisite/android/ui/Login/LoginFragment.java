@@ -129,6 +129,11 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         mPersenter = checkNotNull(presenter);
     }
 
+    @Override
+    public void resourceViewRefresh(Boolean remote, Boolean animate) {
+
+    }
+
     @OnClick(R.id.login_button)
     public void loginHandle() {
         mValidator.validate();

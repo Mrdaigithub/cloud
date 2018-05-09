@@ -50,6 +50,7 @@ public class MoveFragment extends BaseFragment implements MoveContract.View {
     private ResourceAdapter mResourceAdapter;
     private List<Long> moveIdList = new ArrayList<>();
     private String movePath = "0";
+    private String path = "0";
 
 
     // Setup
@@ -128,7 +129,7 @@ public class MoveFragment extends BaseFragment implements MoveContract.View {
             resourceViewRefresh(true, true);
         });
 
-        mResourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalTrashedResources());
+        mResourceAdapter = new ResourceAdapter(R.layout.resource_item, MovePresenter.fetchLocalResources(path));
         mResourceAdapter.openLoadAnimation();
         mResourceAdapter.isFirstOnly(false);
         mResourceAdapter.setUpFetchEnable(true);
@@ -146,11 +147,11 @@ public class MoveFragment extends BaseFragment implements MoveContract.View {
         if (openAnimation) mResourceAdapter.openLoadAnimation();
         else mResourceAdapter.closeLoadAnimation();
         if (remote) {
-            mPresenter.fetchRemoteResources(resources -> {
-                mResourceAdapter.setNewData(mPresenter.fetchLocalResources());
+            MovePresenter.fetchRemoteResources(resources -> {
+                mResourceAdapter.setNewData(MovePresenter.fetchLocalResources(path));
             });
         } else {
-            mResourceAdapter.setNewData(mPresenter.fetchLocalTrashedResources());
+            mResourceAdapter.setNewData(MovePresenter.fetchLocalResources(path));
         }
     }
 }

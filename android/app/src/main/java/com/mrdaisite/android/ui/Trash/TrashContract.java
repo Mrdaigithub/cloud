@@ -37,12 +37,6 @@ public interface TrashContract {
     }
 
     interface Presenter extends BasePresenter {
-        void fetchRemoteResources(CallbackUnit callBackUnit);
-
-        List<Resource> fetchLocalResources();
-
-        List<Resource> fetchLocalTrashedResources();
-
         void restoreResource(long resourceId, CallbackUnit callbackUnit);
 
         void removeResource(long resourceId, CallbackUnit callbackUnit);

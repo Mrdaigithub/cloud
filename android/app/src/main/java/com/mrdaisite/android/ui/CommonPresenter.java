@@ -24,8 +24,6 @@
 
 package com.mrdaisite.android.ui;
 
-import android.support.annotation.NonNull;
-
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.data.model.Resource;
@@ -40,15 +38,15 @@ import java.util.List;
 import io.objectbox.Box;
 import io.reactivex.disposables.Disposable;
 
-public class CommonPresenter{
+public class CommonPresenter {
+    private final static BaseSchedulerProvider mSchedulerProvider = Injection.provideSchedulerProvider();
+    private static ApiService mApiService = MyApplication.getInstance().getApiService();
+    private static Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
 
-    @NonNull
-    private final BaseSchedulerProvider mSchedulerProvider = Injection.provideSchedulerProvider();
-
-    private ApiService mApiService = MyApplication.getInstance().getApiService();
-    private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
-
-    public void fetchRemoteResources(CallbackUnit callbackUnit) {
+    /**
+     * 从服务器获取resource list
+     */
+    public static void fetchRemoteResources(CallbackUnit callbackUnit) {
         mApiService.getResources()
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui())
@@ -74,10 +72,30 @@ public class CommonPresenter{
                 });
     }
 
-    public List<Resource> fetchLocalResources(Boolean trashedStatus) {
+    /**
+     * 从本地获取resource list
+     *
+     * @return
+     */
+    public static List<Resource> fetchLocalTrashedResources() {
         return mResourceBeanBox.query()
                 .equal(Resource_.trashPath, "0")
-                .filter((resource) -> trashedStatus == resource.isTrashed())
+                .filter((resource) -> resource.isTrashed())
+                .order(Resource_.file)
+                .build()
+                .find();
+    }
+
+    /**
+     * 从本地获取trashed resource list
+     *
+     * @param path
+     * @return
+     */
+    public static List<Resource> fetchLocalResources(String path) {
+        return mResourceBeanBox.query()
+                .equal(Resource_.path, path)
+                .filter((resource) -> !resource.isTrashed())
                 .order(Resource_.file)
                 .build()
                 .find();

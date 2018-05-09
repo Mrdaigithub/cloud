@@ -26,4 +26,5 @@ package com.mrdaisite.android.ui;
 
 public interface BaseView<T> {
     void setPresenter(T presenter);
+    void resourceViewRefresh(Boolean remote, Boolean animate);
 }

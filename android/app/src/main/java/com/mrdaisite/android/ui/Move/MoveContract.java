@@ -37,12 +37,6 @@ public interface MoveContract {
     }
 
     interface Presenter extends BasePresenter {
-        void fetchRemoteResources(CallbackUnit callBackUnit);
 
-        List<Resource> fetchLocalResources();
-
-        List<Resource> fetchLocalTrashedResources();
-
-        void removeResource(List<Long> resourceIdList, CallbackUnit callbackUnit);
     }
 }

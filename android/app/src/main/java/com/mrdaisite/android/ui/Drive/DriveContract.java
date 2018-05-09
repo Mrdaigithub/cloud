@@ -24,7 +24,6 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
 import com.mrdaisite.android.util.CallbackUnit;
@@ -33,6 +32,8 @@ import java.util.List;
 
 public interface DriveContract {
     interface View extends BaseView<Presenter> {
+        void resourceViewRefresh(Boolean remote, Boolean animate);
+
         void setProfileUsername(String username);
 
         void setProfileEmail(String email);
@@ -53,10 +54,6 @@ public interface DriveContract {
     }
 
     interface Presenter extends BasePresenter {
-        void fetchRemoteResources(CallbackUnit callbackUnit);
-
-        List<Resource> fetchLocalResources(String path);
-
         void mkdir(String newDirName, CallbackUnit callbackUnit);
 
         void renameResource(long resourceId, String newResourceName, CallbackUnit callbackUnit);

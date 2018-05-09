@@ -41,7 +41,6 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.mrdaisite.android.util.CallbackUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +118,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
             resourceViewRefresh(true, true);
         });
 
-        mResourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalTrashedResources());
+        mResourceAdapter = new ResourceAdapter(R.layout.resource_item, TrashPresenter.fetchLocalTrashedResources());
         mResourceAdapter.openLoadAnimation();
         mResourceAdapter.isFirstOnly(false);
         mResourceAdapter.setUpFetchEnable(true);
@@ -200,9 +199,11 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
         if (openAnimation) mResourceAdapter.openLoadAnimation();
         else mResourceAdapter.closeLoadAnimation();
         if (remote) {
-            mPresenter.fetchRemoteResources(o -> mResourceAdapter.setNewData(mPresenter.fetchLocalResources()));
+            TrashPresenter.fetchRemoteResources(o ->
+                    mResourceAdapter.setNewData(TrashPresenter.fetchLocalResources("0"))
+            );
         } else {
-            mResourceAdapter.setNewData(mPresenter.fetchLocalTrashedResources());
+            mResourceAdapter.setNewData(TrashPresenter.fetchLocalTrashedResources());
         }
     }
 }

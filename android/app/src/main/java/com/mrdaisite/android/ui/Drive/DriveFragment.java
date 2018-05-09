@@ -50,8 +50,9 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
-import com.mrdaisite.android.ui.CommonFragment;
+import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
+import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
@@ -66,7 +67,7 @@ import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class DriveFragment extends CommonFragment implements DriveContract.View, Validator.ValidationListener {
+public class DriveFragment extends BaseFragment implements DriveContract.View, Validator.ValidationListener {
 
     // UI references.
     @BindView(R.id.resourceRecyclerView)
@@ -121,7 +122,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
         super.onResume();
         mPresenter.subscribe();
         if (resourceAdapter != null) {
-            resourceViewRefresh(resourceAdapter, false, false, path);
+            resourceViewRefresh(false, false);
         }
     }
 
@@ -179,13 +180,13 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
 
         // Setup drop down refresh
         SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swipeRefreshView);
-        swipeRefreshLayout.setOnRefreshListener(() -> mPresenter.fetchRemoteResources(resources -> {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
             swipeRefreshLayout.setRefreshing(false);
-            resourceViewRefresh(resourceAdapter, false, true, path);
-        }));
+            resourceViewRefresh(true, true);
+        });
 
 
-        resourceAdapter = new ResourceAdapter(R.layout.resource_item, mPresenter.fetchLocalResources(path));
+        resourceAdapter = new ResourceAdapter(R.layout.resource_item, DrivePresenter.fetchLocalResources(path));
         resourceAdapter.openLoadAnimation();
         resourceAdapter.isFirstOnly(false);
         resourceAdapter.setUpFetchEnable(true);
@@ -210,12 +211,12 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
             Resource item = ((List<Resource>) adapter.getData()).get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
-                resourceViewRefresh(resourceAdapter, true, false, path);
+                resourceViewRefresh(true, false);
             }
         });
         resourceAdapter.setOnItemLongClickListener((adapter, view, position) -> {
             selectMode = true;
-            resourceViewRefresh(resourceAdapter, false, false, path);
+            resourceViewRefresh(false, false);
 
             return true;
         });
@@ -246,7 +247,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
         });
         mRecyclerView.setAdapter(resourceAdapter);
 
-        resourceViewRefresh(resourceAdapter, true, true, path);
+        resourceViewRefresh(true, true);
 
         return root;
     }
@@ -270,11 +271,12 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
         if (selectMode) return exitSelectMode();
         if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
-            resourceViewRefresh(resourceAdapter, true, false, path);
+            resourceViewRefresh(true, false);
             return true;
         }
         return super.onBackPressed();
     }
+
 
     // Show Dialog
 
@@ -283,7 +285,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.dialog_text, null);
         dialogTextView = dialogView.findViewById(R.id.dialogTextView);
-        mResource = mPresenter.fetchLocalResources(path).get(position);
+        mResource = DrivePresenter.fetchLocalResources(path).get(position);
         dialogTextView.setHint(R.string.rename);
         dialogTextView.setText(mResource.getResourceName());
         new AlertDialog.Builder(getActivity())
@@ -304,7 +306,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     List<Long> resourceIdList = new ArrayList<>();
-                    List<Resource> resourceList = mPresenter.fetchLocalResources(path);
+                    List<Resource> resourceList = DrivePresenter.fetchLocalResources(path);
                     for (Integer removeResourcePosition : removeResourcePositionList) {
                         resourceIdList.add(resourceList.get(removeResourcePosition).getId());
                     }
@@ -314,7 +316,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
                             selectMode = false;
                             selectedList.clear();
                         }
-                        resourceViewRefresh(resourceAdapter, false, true, path);
+                        resourceViewRefresh(false, true);
                     });
                 })
                 .create()
@@ -333,8 +335,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     if (dialogTextView.getText().toString().equals("")) return;
                     mPresenter.mkdir(dialogTextView.getText().toString(),
-                            o -> resourceViewRefresh(resourceAdapter,
-                                    true, false, path));
+                            o -> resourceViewRefresh(true, false));
                 })
                 .setCancelable(false)
                 .create()
@@ -343,6 +344,20 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
 
 
     // UI operate
+
+    @Override
+    public void resourceViewRefresh(Boolean remote, Boolean animate) {
+        if (animate) resourceAdapter.openLoadAnimation();
+        else resourceAdapter.closeLoadAnimation();
+        if (remote) {
+            DrivePresenter.fetchRemoteResources(resourceList -> {
+                resourceAdapter.setNewData((List<Resource>) resourceList);
+            });
+        } else {
+            List<Resource> resourceList = DrivePresenter.fetchLocalResources(path);
+            resourceAdapter.setNewData(resourceList);
+        }
+    }
 
     @Override
     public void setProfileUsername(String username) {
@@ -357,7 +372,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
 
     public Boolean exitSelectMode() {
         selectMode = false;
-        resourceViewRefresh(resourceAdapter, false, false, path);
+        resourceViewRefresh(false, false);
         selectedList.clear();
         return true;
     }
@@ -369,8 +384,7 @@ public class DriveFragment extends CommonFragment implements DriveContract.View,
     public void onValidationSucceeded() {
         mPresenter.renameResource(mResource.getId(),
                 dialogTextView.getText().toString(),
-                o -> resourceViewRefresh(resourceAdapter,
-                        false, false, path));
+                o -> resourceViewRefresh(false, false));
     }
 
     @Override
