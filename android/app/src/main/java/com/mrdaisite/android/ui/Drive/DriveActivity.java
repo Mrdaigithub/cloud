@@ -42,6 +42,7 @@ import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
 import com.mrdaisite.android.ui.Trash.TrashActivity;
 import com.mrdaisite.android.util.ActivityUtils;
+import com.orhanobut.logger.Logger;
 
 
 public class DriveActivity extends BaseActivity {

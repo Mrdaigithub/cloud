@@ -52,6 +52,7 @@ import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
+import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
@@ -84,6 +85,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private Resource mResource;
 
     private List<Integer> removeResourcePositionList = new ArrayList<>();
+    private List<Integer> moveResourcePositionList = new ArrayList<>();
 
     public static Boolean selectMode = false;
     private List<Integer> selectedList = new ArrayList<>();
@@ -157,7 +159,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 case R.id.upload:
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("file/*");
-                    startActivityForResult(intent, 123);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
                     break;
                 case R.id.mkdir:
                     showMkdirDialog();
@@ -170,7 +172,16 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                     }
                     break;
                 case R.id.fragmentMenuMove:
-                    Logger.e("move");
+                    moveResourcePositionList = selectedList;
+                    moveIdList.clear();
+                    for (int moveResourcePosition : moveResourcePositionList) {
+                        moveIdList.add(resourceAdapter.getData().get(moveResourcePosition).getId());
+                    }
+                    long[] moveIdArray = moveIdList.stream().mapToLong(t -> t.longValue()).toArray();
+                    Intent moveIntent = new Intent(getActivity(), MoveActivity.class);
+                    moveIntent.putExtra("moveIdArray", moveIdArray);
+                    exitSelectMode();
+                    startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                     break;
             }
             return true;
@@ -237,7 +248,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         long[] moveIdArray = moveIdList.stream().mapToLong(t -> t.longValue()).toArray();
                         Intent moveIntent = new Intent(getActivity(), MoveActivity.class);
                         moveIntent.putExtra("moveIdArray", moveIdArray);
-                        startActivity(moveIntent);
+                        startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                         break;
                 }
                 return false;
@@ -251,6 +262,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         return root;
     }
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -260,8 +272,15 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) return;
-        String uploadFilePath = data.getDataString();
-        Logger.e(Objects.requireNonNull(uploadFilePath));
+        switch (requestCode) {
+            case Constants.REQUEST_CODE_UPLOAD_START:
+                String uploadFilePath = data.getDataString();
+                Logger.e(Objects.requireNonNull(uploadFilePath));
+            case Constants.REQUEST_CODE_MOVE_START:
+                path = data.getStringExtra("path");
+                resourceViewRefresh(true, true);
+                break;
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

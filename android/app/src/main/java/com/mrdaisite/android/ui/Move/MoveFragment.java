@@ -41,12 +41,10 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
-import com.mrdaisite.android.util.CallbackUnit;
+import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -127,7 +125,13 @@ public class MoveFragment extends BaseFragment implements MoveContract.View {
                         return true;
                     }
                     mPresenter.moveResourceList(moveIdList, path,
-                            o -> resourceViewRefresh(true, false));
+                            o -> {
+                                showMessage("移动完成");
+                                Intent intent = new Intent();
+                                intent.putExtra("path", path);
+                                getActivity().setResult(Constants.REQUEST_CODE_MOVE_DONE, intent);
+                                getActivity().finish();
+                            });
                     break;
             }
             return true;

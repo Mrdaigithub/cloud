@@ -46,6 +46,11 @@ public class Constants {
     // 转换单元
     public static final int CONVERT_UTIL = 1024;
 
+    // Intent request code
+    public static final int REQUEST_CODE_UPLOAD_START = 1;
+    public static final int REQUEST_CODE_MOVE_START = 2;
+    public static final int REQUEST_CODE_MOVE_DONE = 3;
+
     // API错误代码友好提示
     public static final HashMap<String, String> ERROR_CODES = new HashMap<String, String>() {
         {
