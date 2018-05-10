@@ -32,4 +32,7 @@
     <item
         android:id="@+id/resourceItemMenuMove"
         android:title="@string/move" />
+    <item
+        android:id="@+id/fragmentMenuResourceDetail"
+        android:title="@string/detail" />
 </menu>

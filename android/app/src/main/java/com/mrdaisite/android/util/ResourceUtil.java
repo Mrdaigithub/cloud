@@ -25,8 +25,13 @@
 package com.mrdaisite.android.util;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.data.model.Resource;
 import com.orhanobut.logger.Logger;
 
 import java.text.ParsePosition;
@@ -34,6 +39,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.stream.Collectors;
+
+import io.objectbox.Box;
 
 public class ResourceUtil {
     private static ResourceUtil INSTANCE;
@@ -120,5 +128,29 @@ public class ResourceUtil {
         return Joiner.on(".")
                 .skipNulls()
                 .join(pathList);
+    }
+
+    /**
+     * {id1}.{id3}.{id3} => {name1}/{name2}/{name3}
+     *
+     * @param path
+     * @return
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public String formatPath(String path) {
+        Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
+        List<String> pathList = new ArrayList<>(Splitter.on(".")
+                .trimResults()
+                .omitEmptyStrings()
+                .splitToList(path));
+
+        for (String pItem : pathList) {
+            Logger.e(String.valueOf(mResourceBeanBox.get(Long.parseLong(pItem))));
+//            if (pathList.get(i).equals("0")) resultPath.append("/");
+//            resultPath.append(Long.parseLong(pathList.get(i)));
+////            resultPath.append(mResourceBeanBox.get(Long.parseLong(pathList.get(i))).getResourceName());
+        }
+//        return resultPath.toString();
+        return "";
     }
 }

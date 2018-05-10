@@ -76,6 +76,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private TextView mProfileEmailView;
     @NotEmpty
     private EditText dialogTextView;
+    private TextView resourceSize;
+    private TextView resourcePath;
+    private TextView resourceCreatedDate;
+    private TextView resourceUpdateDate;
 
     public static String path = "0";
     private static DriveContract.Presenter mPresenter;
@@ -250,6 +254,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         moveIntent.putExtra("moveIdArray", moveIdArray);
                         startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                         break;
+                    case R.id.fragmentMenuResourceDetail:
+                        showResourceDetailDialog(resourceAdapter.getItem(position));
+                        break;
                 }
                 return false;
             });
@@ -356,6 +363,26 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                             o -> resourceViewRefresh(true, false));
                 })
                 .setCancelable(false)
+                .create()
+                .show();
+    }
+
+    public void showResourceDetailDialog(Resource resource) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.resource_detail_dialog, null);
+        resourceSize = dialogView.findViewById(R.id.resourceSize);
+        resourcePath = dialogView.findViewById(R.id.resourcePath);
+        resourceCreatedDate = dialogView.findViewById(R.id.resourceCreatedDate);
+        resourceUpdateDate = dialogView.findViewById(R.id.resourceUpdateDate);
+        resourceSize.setText(ResourceUtil.getINSTANCE().computeFileSize(resource.getSize()));
+        resourcePath.setText(ResourceUtil.getINSTANCE().formatPath(resource.getPath()));
+        resourceCreatedDate.setText(ResourceUtil.getINSTANCE().formatISO8601(resource.getCreatedAt()));
+        resourceUpdateDate.setText(ResourceUtil.getINSTANCE().formatISO8601(resource.getUpdatedAt()));
+        new AlertDialog.Builder(getActivity())
+                .setTitle(resource.getResourceName())
+                .setView(dialogView)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                })
                 .create()
                 .show();
     }

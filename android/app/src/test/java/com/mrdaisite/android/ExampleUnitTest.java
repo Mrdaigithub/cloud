@@ -32,4 +32,9 @@ public class ExampleUnitTest {
     public void test_formatISO8601() {
         System.out.println(ResourceUtil.getINSTANCE().formatISO8601("2018-03-12T10:04:47+08:00"));
     }
+
+    @Test
+    public void test_formatPath() {
+        System.out.println(ResourceUtil.getINSTANCE().formatPath("0.1.2.3"));
+    }
 }
