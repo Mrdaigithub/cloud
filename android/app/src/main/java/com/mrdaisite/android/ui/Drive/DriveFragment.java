@@ -160,7 +160,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
         // Add toolbar menu listener
         mToolbar = getActivity().findViewById(R.id.toolbar);
-        mToolbar.setTitle("/");
+        mToolbar.setTitle(ResourceUtil.getINSTANCE().formatPath(path));
         mToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.upload:
@@ -373,6 +373,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void showResourceDetailDialog(Resource resource) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dialogView = inflater.inflate(R.layout.resource_detail_dialog, null);
