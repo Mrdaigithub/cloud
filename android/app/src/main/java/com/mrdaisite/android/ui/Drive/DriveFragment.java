@@ -44,6 +44,8 @@ import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.common.primitives.Longs;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -165,7 +167,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             switch (item.getItemId()) {
                 case R.id.upload:
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent .setType("*/*");
+                    intent.setType("*/*");
                     intent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.MINE_TYPES);
                     startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
                     break;
@@ -185,9 +187,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                     for (int moveResourcePosition : moveResourcePositionList) {
                         moveIdList.add(resourceAdapter.getData().get(moveResourcePosition).getId());
                     }
-                    long[] moveIdArray = moveIdList.stream().mapToLong(t -> t.longValue()).toArray();
                     Intent moveIntent = new Intent(getActivity(), MoveActivity.class);
-                    moveIntent.putExtra("moveIdArray", moveIdArray);
+                    moveIntent.putExtra("moveIdArray", Longs.toArray(moveIdList));
                     exitSelectMode();
                     startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                     break;
@@ -239,7 +240,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
             return true;
         });
-        resourceAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+        resourceAdapter.setOnItemChildClickListener((BaseQuickAdapter adapter, View view, int position) -> {
             PopupMenu popupMenu = new PopupMenu(getActivity(), view);
             popupMenu.inflate(R.menu.drive_resource_item_menu);
             popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -254,9 +255,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                     case R.id.resourceItemMenuMove:
                         moveIdList.clear();
                         moveIdList.add(((Resource) adapter.getItem(position)).getId());
-                        long[] moveIdArray = moveIdList.stream().mapToLong(t -> t.longValue()).toArray();
                         Intent moveIntent = new Intent(getActivity(), MoveActivity.class);
-                        moveIntent.putExtra("moveIdArray", moveIdArray);
+                        moveIntent.putExtra("moveIdArray", Longs.toArray(moveIdList));
                         startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                         break;
                     case R.id.fragmentMenuResourceDetail:
