@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -79,13 +80,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private TextView mProfileEmailView;
     @NotEmpty
     private EditText dialogTextView;
-    private TextView resourceSize;
-    private TextView resourcePath;
-    private TextView resourceCreatedDate;
-    private TextView resourceUpdateDate;
 
     public static String path = "0";
-    private static String toolbarTitle = "/";
     private static DriveContract.Presenter mPresenter;
     public static ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
@@ -254,7 +250,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         break;
                     case R.id.resourceItemMenuMove:
                         moveIdList.clear();
-                        moveIdList.add(((Resource) adapter.getItem(position)).getId());
+                        moveIdList.add(((Resource) Objects.requireNonNull(adapter.getItem(position))).getId());
                         Intent moveIntent = new Intent(getActivity(), MoveActivity.class);
                         moveIntent.putExtra("moveIdArray", Longs.toArray(moveIdList));
                         startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
@@ -315,7 +311,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     @Override
     public void showRenameDialog(int position) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_text, null);
+        assert inflater != null;
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_text, null);
         dialogTextView = dialogView.findViewById(R.id.dialogTextView);
         mResource = DrivePresenter.fetchLocalResources(path).get(position);
         dialogTextView.setHint(R.string.rename);
@@ -324,9 +321,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .setTitle(R.string.rename)
                 .setView(dialogView)
                 .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    mValidator.validate();
-                })
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> mValidator.validate())
                 .setCancelable(false)
                 .create()
                 .show();
@@ -357,7 +352,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
     public void showMkdirDialog() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.dialog_text, null);
+        assert inflater != null;
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.dialog_text, null);
         dialogTextView = dialogView.findViewById(R.id.dialogTextView);
         dialogTextView.setHint(R.string.mkdir);
         new AlertDialog.Builder(getActivity())
@@ -377,11 +373,12 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void showResourceDetailDialog(Resource resource) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View dialogView = inflater.inflate(R.layout.resource_detail_dialog, null);
-        resourceSize = dialogView.findViewById(R.id.resourceSize);
-        resourcePath = dialogView.findViewById(R.id.resourcePath);
-        resourceCreatedDate = dialogView.findViewById(R.id.resourceCreatedDate);
-        resourceUpdateDate = dialogView.findViewById(R.id.resourceUpdateDate);
+        assert inflater != null;
+        @SuppressLint("InflateParams") View dialogView = inflater.inflate(R.layout.resource_detail_dialog, null);
+        TextView resourceSize = dialogView.findViewById(R.id.resourceSize);
+        TextView resourcePath = dialogView.findViewById(R.id.resourcePath);
+        TextView resourceCreatedDate = dialogView.findViewById(R.id.resourceCreatedDate);
+        TextView resourceUpdateDate = dialogView.findViewById(R.id.resourceUpdateDate);
         resourceSize.setText(ResourceUtil.getINSTANCE().computeFileSize(resource.getSize()));
         resourcePath.setText(ResourceUtil.getINSTANCE().formatPath(resource.getPath()));
         resourceCreatedDate.setText(ResourceUtil.getINSTANCE().formatISO8601(resource.getCreatedAt()));
