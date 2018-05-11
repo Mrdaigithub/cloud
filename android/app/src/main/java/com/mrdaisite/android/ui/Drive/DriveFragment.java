@@ -165,7 +165,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             switch (item.getItemId()) {
                 case R.id.upload:
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("file/*");
+                    intent .setType("*/*");
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.MINE_TYPES);
                     startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
                     break;
                 case R.id.mkdir:

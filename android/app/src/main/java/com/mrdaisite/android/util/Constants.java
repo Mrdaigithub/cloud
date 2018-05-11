@@ -26,7 +26,9 @@ package com.mrdaisite.android.util;
 
 import com.mrdaisite.android.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Constants {
 
@@ -107,5 +109,71 @@ public class Constants {
             put("text", R.drawable.ic_txt);
             put("vue", R.drawable.ic_vuejs);
         }
+    };
+
+    // 可上传的资源mine type
+    public static final String[] MINE_TYPES = {
+            // 文本
+            "text/plain",
+            "application/pdf",
+            // 数据
+            "application/sql",
+            // 压缩档
+            "application/zip",
+            "application/x-rar-compressed",
+            "application/x-7z-compressed",
+            "application/x-bzip2",
+            "application/x-debian-package",
+            "application/gzip",
+            "application/java-archive",
+            "application/x-tar",
+            // 图片
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/bmp",
+            "image/svg+xml",
+            "image/x-icon",
+            // 音乐
+            "audio/mp3",
+            // 视频
+            "video/mp4",
+            "video/3gpp",
+            "video/x-msvideo",
+            "video/mpeg",
+            "video/quicktime",
+            "application/vnd.osgeo.mapguide.package",
+            "video/x-ms-wmv",
+            "application/vnd.rn-realmedia-vbr",
+            "video/x-flv",
+            "video/x-matroska",
+            // office
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.oasis.opendocument.text",
+            "application/vnd.oasis.opendocument.spreadsheet",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.oasis.opendocument.presentation",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            // 字体
+            "application/vnd.ms-fontobject",
+            "application/x-font-ttf",
+            "application/font-woff",
+            "application/font-woff2",
+            // 代码
+            "text/html",
+            "text/css",
+            "text/x-scss",
+            "text/x-sass",
+            "application/javascript",
+            "video/mp2t",
+            "vue",
+            "application/x-httpd-php",
+            "py",
+            "text/markdown",
+            "application/json",
+            // 可执行文件
+            "application/x-msdos-program",
+            "application/x-msdownload",
     };
 }
