@@ -138,19 +138,21 @@ public class ResourceUtil {
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public String formatPath(String path) {
+        StringBuilder resultPath = new StringBuilder();
         Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
         List<String> pathList = new ArrayList<>(Splitter.on(".")
                 .trimResults()
                 .omitEmptyStrings()
                 .splitToList(path));
-
         for (String pItem : pathList) {
-            Logger.e(String.valueOf(mResourceBeanBox.get(Long.parseLong(pItem))));
-//            if (pathList.get(i).equals("0")) resultPath.append("/");
-//            resultPath.append(Long.parseLong(pathList.get(i)));
-////            resultPath.append(mResourceBeanBox.get(Long.parseLong(pathList.get(i))).getResourceName());
+            if (Long.parseLong(pItem) == 0) {
+                resultPath.append("/");
+                continue;
+            }
+            resultPath.append(mResourceBeanBox.get(Long.parseLong(pItem)).getResourceName()).append("/");
         }
-//        return resultPath.toString();
-        return "";
+        return resultPath.toString().length() <= 1 ?
+                resultPath.toString() :
+                resultPath.toString().substring(0, resultPath.length() - 1);
     }
 }

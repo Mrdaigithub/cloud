@@ -72,6 +72,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     // UI references.
     @BindView(R.id.resourceRecyclerView)
     RecyclerView mRecyclerView;
+    private Toolbar mToolbar;
     private TextView mProfileUsernameView;
     private TextView mProfileEmailView;
     @NotEmpty
@@ -82,6 +83,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private TextView resourceUpdateDate;
 
     public static String path = "0";
+    private static String toolbarTitle = "/";
     private static DriveContract.Presenter mPresenter;
     public static ResourceAdapter resourceAdapter;
     private Unbinder unbinder;
@@ -157,8 +159,9 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
 
 
         // Add toolbar menu listener
-        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setOnMenuItemClickListener(item -> {
+        mToolbar = getActivity().findViewById(R.id.toolbar);
+        mToolbar.setTitle("/");
+        mToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.upload:
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -225,6 +228,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
             Resource item = ((List<Resource>) adapter.getData()).get(position);
             if (!item.isFile()) {
                 path = ResourceUtil.getINSTANCE().pushPath(path, item.getId());
+                mToolbar.setTitle(ResourceUtil.getINSTANCE().formatPath(path));
                 resourceViewRefresh(false, true);
             }
         });
@@ -291,11 +295,13 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onBackPressed() {
         if (selectMode) return exitSelectMode();
         if (!path.equals("0")) {
             path = ResourceUtil.getINSTANCE().popPath(path);
+            mToolbar.setTitle(ResourceUtil.getINSTANCE().formatPath(path));
             resourceViewRefresh(true, false);
             return true;
         }
