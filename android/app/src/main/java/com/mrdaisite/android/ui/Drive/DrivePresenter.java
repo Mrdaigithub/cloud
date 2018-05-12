@@ -24,18 +24,27 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.app.DialogFragment;
 import android.support.annotation.NonNull;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.model.User;
+import com.mrdaisite.android.data.model.User_;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
+import com.orhanobut.logger.Logger;
 
+import org.greenrobot.essentials.io.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -153,5 +162,26 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                 callbackUnit.callbackFunc(null);
             }
         });
+    }
+
+    @Override
+    public void handleUpload(String filepath) {
+        File f = new File(filepath);
+        boolean isAdmin = mUserBox.getAll().get(0).isIsAdmin();
+        long capacity = mUserBox.getAll().get(0).getCapacity();
+        long used = mUserBox.getAll().get(0).getUsed();
+
+        if (mResourceBeanBox.query()
+                .equal(Resource_.path, DriveFragment.path)
+                .equal(Resource_.trashed, false)
+                .equal(Resource_.resourceName, f.getName())
+                .build().find().size() > 0) {
+            mDriveView.showMessage("在当前目录下已有同名文件");
+            return;
+        }
+        if (!isAdmin && f.length() + used >= capacity) {
+            mDriveView.showMessage("存储容量不足");
+            return;
+        }
     }
 }

@@ -28,6 +28,7 @@ import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
 import com.mrdaisite.android.util.CallbackUnit;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface DriveContract {
@@ -59,5 +60,7 @@ public interface DriveContract {
         void renameResource(long resourceId, String newResourceName, CallbackUnit callbackUnit);
 
         void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
+
+        void handleUpload(String filepath) throws FileNotFoundException;
     }
 }

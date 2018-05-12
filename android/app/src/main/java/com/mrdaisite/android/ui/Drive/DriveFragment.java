@@ -28,6 +28,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -60,6 +61,7 @@ import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -282,8 +284,12 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (data == null) return;
         switch (requestCode) {
             case Constants.REQUEST_CODE_UPLOAD_START:
-                String uploadFilePath = data.getDataString();
-                Logger.e(Objects.requireNonNull(uploadFilePath));
+                try {
+                    mPresenter.handleUpload(ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData()));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
             case Constants.REQUEST_CODE_MOVE_START:
                 path = data.getStringExtra("path");
                 resourceViewRefresh(true, true);
@@ -399,6 +405,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     public void resourceViewRefresh(Boolean remote, Boolean animate) {
         if (animate) resourceAdapter.openLoadAnimation();
         else resourceAdapter.closeLoadAnimation();
+        if (path == null) path = "0";
         if (remote) {
             DrivePresenter.fetchRemoteResources(resourceList -> {
                 resourceAdapter.setNewData((List<Resource>) resourceList);
