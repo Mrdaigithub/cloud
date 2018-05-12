@@ -109,10 +109,8 @@ export const clearSelectedResource = () => {
     };
 };
 
-export const changeResourceListWithPath = (path, resourceList) => {
-    return async (dispatch, state) => {
-        const resources = state().resource.resources;
-        resources[path] = resourceList;
+export const changeResourceListWithPath = (resources) => {
+    return async (dispatch) => {
         return dispatch({
             type: GET_RESOURCES,
             payload: {

@@ -115,7 +115,7 @@ class CloudDrive extends Component {
     async componentDidMount() {
         const { routing } = this.props;
         if (!this.props.resources) {
-            this.props.fetchResources((resources) => {
+            this.props.fetchResources(() => {
                 this.getResourceList(url2path(routing.location.pathname));
             });
         } else {
@@ -201,9 +201,10 @@ class CloudDrive extends Component {
             resource_name: model.newDir,
             path: url2path(routing.location.pathname),
         }));
-        const resourceListWithPath = await requester.get(`resources/${path}`);
-        this.props.changeResourceListWithPath(Object.keys(resourceListWithPath)[0], resourceListWithPath[Object.keys(resourceListWithPath)[0]]);
-        this.getResourceList(url2path(routing.location.pathname));
+        await requester.get(`resources/${path}`);
+        this.props.fetchResources(() => {
+            this.getResourceList(url2path(routing.location.pathname));
+        });
     };
 
 
@@ -376,15 +377,13 @@ class CloudDrive extends Component {
     /**  删除资源 **/
     handleRemoveResource = () => async () => {
         const { resources, routing } = this.props;
-        const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
         if (selected.length) {
             const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
             await Promise.all(deleteList);
             const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
-            console.log(resourceListWithPath);
-            this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
-            this.getResourceList(resourcePath);
+            this.props.changeResourceListWithPath(resourceListWithPath);
+            this.getResourceList(url2path(routing.location.pathname));
         }
     };
 
@@ -437,7 +436,6 @@ class CloudDrive extends Component {
 
     handleDownload = resourceID => async () => {
         const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
-        console.log(downloadUrl);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
