@@ -52,6 +52,7 @@ public class Constants {
     public static final int REQUEST_CODE_UPLOAD_START = 1;
     public static final int REQUEST_CODE_MOVE_START = 2;
     public static final int REQUEST_CODE_MOVE_DONE = 3;
+    public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 4;
 
     // API错误代码友好提示
     public static final HashMap<String, String> ERROR_CODES = new HashMap<String, String>() {

@@ -28,6 +28,7 @@ package com.mrdaisite.android.util;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -35,21 +36,27 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.data.model.Resource;
-import com.orhanobut.logger.Logger;
 
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
-import java.util.stream.Collectors;
 
 import io.objectbox.Box;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.support.v4.app.ActivityCompat.requestPermissions;
+import static android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale;
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
+import static com.mrdaisite.android.util.Constants.CONVERT_UTIL;
+import static com.mrdaisite.android.util.Constants.REQUEST_CODE_READ_EXTERNAL_STORAGE;
 
 public class ResourceUtil {
     private static ResourceUtil INSTANCE;
@@ -69,18 +76,18 @@ public class ResourceUtil {
      * @return
      */
     public String computeFileSize(Long resourceSize) {
-        if (resourceSize < Math.pow(Constants.CONVERT_UTIL, 1)) {
+        if (resourceSize < Math.pow(CONVERT_UTIL, 1)) {
             return String.valueOf(resourceSize) + "B";
-        } else if (resourceSize < Math.pow(Constants.CONVERT_UTIL, 2)) {
-            return String.valueOf(Math.round(resourceSize / Math.pow(Constants.CONVERT_UTIL, 1))) + "KB";
-        } else if (resourceSize < Math.pow(Constants.CONVERT_UTIL, 3)) {
-            return String.valueOf(Math.round(resourceSize / Math.pow(Constants.CONVERT_UTIL, 2))) + "MB";
-        } else if (resourceSize < Math.pow(Constants.CONVERT_UTIL, 4)) {
-            return String.valueOf(Math.round(resourceSize / Math.pow(Constants.CONVERT_UTIL, 3))) + "GB";
-        } else if (resourceSize < Math.pow(Constants.CONVERT_UTIL, 5)) {
-            return String.valueOf(Math.round(resourceSize / Math.pow(Constants.CONVERT_UTIL, 4))) + "TB";
+        } else if (resourceSize < Math.pow(CONVERT_UTIL, 2)) {
+            return String.valueOf(Math.round(resourceSize / Math.pow(CONVERT_UTIL, 1))) + "KB";
+        } else if (resourceSize < Math.pow(CONVERT_UTIL, 3)) {
+            return String.valueOf(Math.round(resourceSize / Math.pow(CONVERT_UTIL, 2))) + "MB";
+        } else if (resourceSize < Math.pow(CONVERT_UTIL, 4)) {
+            return String.valueOf(Math.round(resourceSize / Math.pow(CONVERT_UTIL, 3))) + "GB";
+        } else if (resourceSize < Math.pow(CONVERT_UTIL, 5)) {
+            return String.valueOf(Math.round(resourceSize / Math.pow(CONVERT_UTIL, 4))) + "TB";
         } else {
-            return String.valueOf(Math.round(resourceSize / Math.pow(Constants.CONVERT_UTIL, 5))) + "PB";
+            return String.valueOf(Math.round(resourceSize / Math.pow(CONVERT_UTIL, 5))) + "PB";
         }
     }
 
@@ -261,5 +268,20 @@ public class ResourceUtil {
 
     private boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public boolean mayRequestReadEeternalStoragePermission(FragmentActivity fragmentActivity, Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(fragmentActivity, READ_EXTERNAL_STORAGE)) {
+            requestPermissions(fragmentActivity, new String[]{READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
+        } else {
+            requestPermissions(fragmentActivity, new String[]{READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
+        }
+        return false;
     }
 }

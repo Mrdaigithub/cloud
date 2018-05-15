@@ -24,6 +24,9 @@
 
 package com.mrdaisite.android.ui.Drive;
 
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+
 import com.mrdaisite.android.ui.BasePresenter;
 import com.mrdaisite.android.ui.BaseView;
 import com.mrdaisite.android.util.CallbackUnit;
@@ -61,6 +64,6 @@ public interface DriveContract {
 
         void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
 
-        void handleUpload(String filepath) throws FileNotFoundException;
+        void handleUpload(FragmentActivity fragmentActivity, Context context, String filepath);
     }
 }

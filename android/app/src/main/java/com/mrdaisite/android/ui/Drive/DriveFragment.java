@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -284,11 +285,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (data == null) return;
         switch (requestCode) {
             case Constants.REQUEST_CODE_UPLOAD_START:
-                try {
-                    mPresenter.handleUpload(ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData()));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                mPresenter.handleUpload(
+                        getActivity(),
+                        getContext(),
+                        ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData())
+                );
 
             case Constants.REQUEST_CODE_MOVE_START:
                 path = data.getStringExtra("path");
