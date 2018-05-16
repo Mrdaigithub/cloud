@@ -69,8 +69,8 @@ public interface DriveContract {
 
         void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
 
-        void handleUpload(String filepath);
-
         void requestReadExternalStoragePermission(FragmentActivity fragmentActivity, Context context);
+
+        void handleUpload(String filepath);
     }
 }

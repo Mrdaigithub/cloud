@@ -134,4 +134,18 @@ public interface ApiService {
      */
     @DELETE("/api/v1/resources/{id}")
     Observable<Response<Void>> removeResource(@Path("id") long resourceId);
+
+    /**
+     * 创建文件夹
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/aetherupload/preprocess")
+    Observable<Resource> preprocess(@Field("file_name") String filename,
+                                    @Field("file_size") String fileSize,
+                                    @Field("file_hash") String fileHash,
+                                    @Field("locale") String locale,
+                                    @Field("group") String group,
+                                    @Field("path") String path);
 }

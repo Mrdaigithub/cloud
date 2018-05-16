@@ -172,6 +172,22 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
         });
     }
 
+    @AfterPermissionGranted(REQUEST_CODE_READ_EXTERNAL_STORAGE)
+    public void requestReadExternalStoragePermission(FragmentActivity fragmentActivity,
+                                                     Context context) {
+        if (EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            mDriveView.toSystemFileExplorer();
+        } else {
+            EasyPermissions.requestPermissions(
+                    new PermissionRequest.Builder(fragmentActivity, REQUEST_CODE_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .setRationale(R.string.upload_need_read_write_external_storage)
+                            .setPositiveButtonText(R.string.ok)
+                            .setNegativeButtonText(R.string.cancel)
+                            .build()
+            );
+        }
+    }
+
     @Override
     public void handleUpload(String filepath) {
         File f = new File(filepath);
@@ -192,25 +208,19 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
             return;
         }
         try {
-            Logger.e(FileUtils.getMd5(f));
+            preprocess(FileUtils.getMd5(f));
         } catch (IOException e) {
+            mDriveView.showMessage("文件Hash计算失败");
             e.printStackTrace();
         }
     }
 
-    @AfterPermissionGranted(REQUEST_CODE_READ_EXTERNAL_STORAGE)
-    public void requestReadExternalStoragePermission(FragmentActivity fragmentActivity,
-                                                     Context context) {
-        if (EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            mDriveView.toSystemFileExplorer();
-        } else {
-            EasyPermissions.requestPermissions(
-                    new PermissionRequest.Builder(fragmentActivity, REQUEST_CODE_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                            .setRationale(R.string.upload_need_read_write_external_storage)
-                            .setPositiveButtonText(R.string.ok)
-                            .setNegativeButtonText(R.string.cancel)
-                            .build()
-            );
-        }
+    /**
+     * 预处理上传文件 (判断秒传)
+     *
+     * @param fileHash
+     */
+    private void preprocess(String fileHash) {
+
     }
 }
