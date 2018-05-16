@@ -28,13 +28,12 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +47,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.github.ybq.android.spinkit.animation.interpolator.Ease;
 import com.google.common.primitives.Longs;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -62,7 +62,6 @@ import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -70,8 +69,12 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.mrdaisite.android.util.Constants.REQUEST_CODE_READ_EXTERNAL_STORAGE;
 
 public class DriveFragment extends BaseFragment implements DriveContract.View, Validator.ValidationListener {
 
@@ -165,10 +168,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         mToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.upload:
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("*/*");
-                    intent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.MINE_TYPES);
-                    startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
+                    mPresenter.requestReadExternalStoragePermission(getActivity(), getContext());
                     break;
                 case R.id.mkdir:
                     showMkdirDialog();
@@ -273,7 +273,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         return root;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -285,11 +284,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (data == null) return;
         switch (requestCode) {
             case Constants.REQUEST_CODE_UPLOAD_START:
-                mPresenter.handleUpload(
-                        getActivity(),
-                        getContext(),
-                        ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData())
-                );
+                mPresenter.handleUpload(ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData()));
+                break;
 
             case Constants.REQUEST_CODE_MOVE_START:
                 path = data.getStringExtra("path");
@@ -298,6 +294,16 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -428,11 +434,18 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
 
-    public Boolean exitSelectMode() {
+    public boolean exitSelectMode() {
         selectMode = false;
         resourceViewRefresh(false, false);
         selectedList.clear();
         return true;
+    }
+
+    public void toSystemFileExplorer() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.MINE_TYPES);
+        startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
     }
 
 

@@ -27,6 +27,7 @@ package com.mrdaisite.android.ui.Drive;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -43,6 +44,11 @@ import com.mrdaisite.android.ui.BaseActivity;
 import com.mrdaisite.android.ui.Trash.TrashActivity;
 import com.mrdaisite.android.util.ActivityUtils;
 import com.orhanobut.logger.Logger;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 
 public class DriveActivity extends BaseActivity {

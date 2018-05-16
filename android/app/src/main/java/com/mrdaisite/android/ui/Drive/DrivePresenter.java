@@ -24,7 +24,8 @@
 
 package com.mrdaisite.android.ui.Drive;
 
-import android.app.DialogFragment;
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -32,23 +33,21 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import com.mrdaisite.android.MyApplication;
+import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.model.User;
-import com.mrdaisite.android.data.model.User_;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
+import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
-import com.mrdaisite.android.util.ResourceUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.essentials.io.FileUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -59,11 +58,10 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
-import static android.Manifest.permission.READ_CONTACTS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.support.v4.app.ActivityCompat.requestPermissions;
-import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.mrdaisite.android.util.Constants.REQUEST_CODE_READ_EXTERNAL_STORAGE;
 
@@ -175,7 +173,7 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
     }
 
     @Override
-    public void handleUpload(FragmentActivity fragmentActivity, Context context, String filepath) {
+    public void handleUpload(String filepath) {
         File f = new File(filepath);
         boolean isAdmin = mUserBox.getAll().get(0).isIsAdmin();
         long capacity = mUserBox.getAll().get(0).getCapacity();
@@ -193,14 +191,26 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
             mDriveView.showMessage("存储容量不足");
             return;
         }
-        requestPermissions(fragmentActivity, new String[]{READ_EXTERNAL_STORAGE}, REQUEST_CODE_READ_EXTERNAL_STORAGE);
-//        if (ResourceUtil.getINSTANCE().mayRequestReadEeternalStoragePermission(fragmentActivity, context)) {
-//            return;
-//        }
         try {
             Logger.e(FileUtils.getMd5(f));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @AfterPermissionGranted(REQUEST_CODE_READ_EXTERNAL_STORAGE)
+    public void requestReadExternalStoragePermission(FragmentActivity fragmentActivity,
+                                                     Context context) {
+        if (EasyPermissions.hasPermissions(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            mDriveView.toSystemFileExplorer();
+        } else {
+            EasyPermissions.requestPermissions(
+                    new PermissionRequest.Builder(fragmentActivity, REQUEST_CODE_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            .setRationale(R.string.upload_need_read_write_external_storage)
+                            .setPositiveButtonText(R.string.ok)
+                            .setNegativeButtonText(R.string.cancel)
+                            .build()
+            );
         }
     }
 }

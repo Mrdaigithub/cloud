@@ -54,7 +54,12 @@ public interface DriveContract {
          *
          * @return null
          */
-        Boolean exitSelectMode();
+        boolean exitSelectMode();
+
+        /**
+         * 进入系统文件管理器
+         */
+        void toSystemFileExplorer();
     }
 
     interface Presenter extends BasePresenter {
@@ -64,6 +69,8 @@ public interface DriveContract {
 
         void removeResources(List<Long> resourceIdList, CallbackUnit callbackUnit);
 
-        void handleUpload(FragmentActivity fragmentActivity, Context context, String filepath);
+        void handleUpload(String filepath);
+
+        void requestReadExternalStoragePermission(FragmentActivity fragmentActivity, Context context);
     }
 }
