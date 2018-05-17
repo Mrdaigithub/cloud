@@ -498,6 +498,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 mDisposable.dispose();
                 closeUploadProgressDialog();
                 uploadProgress.setProgress(0);
+                resourceViewRefresh(true, true);
             }
         });
     }

@@ -253,4 +253,11 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                     }
                 });
     }
+
+    /**
+     * 上传文件分块
+     */
+    private void uploadChunk() {
+        
+    }
 }

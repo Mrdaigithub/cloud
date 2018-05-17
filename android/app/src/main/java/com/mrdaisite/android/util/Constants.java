@@ -48,9 +48,6 @@ public class Constants {
     // 转换单元
     public static final int CONVERT_UTIL = 1024;
 
-    // 上传大文件切片的容量大小
-    public static final long CHUNK_SIZE = 2097152;
-
     // Intent request code
     public static final int REQUEST_CODE_UPLOAD_START = 1;
     public static final int REQUEST_CODE_MOVE_START = 2;
