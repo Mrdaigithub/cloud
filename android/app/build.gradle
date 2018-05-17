@@ -44,6 +44,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpLoggingInterceptor"
     implementation "com.orhanobut:logger:$rootProject.loggers"
     implementation "com.github.ybq:Android-SpinKit:$rootProject.androidSpinKit"
+    implementation "com.daimajia.numberprogressbar:library:1.4@aar"
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     implementation "com.mobsandgeeks:android-saripaar:$rootProject.androidSaripaar"
     implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$rootProject.baseRecyclerViewAdapterHelper"

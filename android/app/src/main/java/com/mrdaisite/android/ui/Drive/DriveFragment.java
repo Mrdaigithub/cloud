@@ -47,34 +47,44 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.github.ybq.android.spinkit.animation.interpolator.Ease;
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.common.primitives.Longs;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.ResourceAdapter;
+import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
+import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
 
+
+import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import pub.devrel.easypermissions.AppSettingsDialog;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.mrdaisite.android.util.Constants.REQUEST_CODE_READ_EXTERNAL_STORAGE;
 
 public class DriveFragment extends BaseFragment implements DriveContract.View, Validator.ValidationListener {
 
@@ -84,8 +94,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private Toolbar mToolbar;
     private TextView mProfileUsernameView;
     private TextView mProfileEmailView;
+    private View uploadProgressDialogView;
     @NotEmpty
     private EditText dialogTextView;
+    private AlertDialog UploadProgressDialog;
 
     public static String path = "0";
     private static DriveContract.Presenter mPresenter;
@@ -93,6 +105,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private Unbinder unbinder;
     private Validator mValidator;
     private Resource mResource;
+    private Disposable mDisposable;
+    private final BaseSchedulerProvider mSchedulerProvider = Injection.provideSchedulerProvider();
 
     private List<Integer> removeResourcePositionList = new ArrayList<>();
     private List<Integer> moveResourcePositionList = new ArrayList<>();
@@ -304,7 +318,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onBackPressed() {
@@ -405,6 +418,29 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                 .show();
     }
 
+    private AlertDialog createUploadProgressDialog() {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
+        uploadProgressDialogView = inflater.inflate(R.layout.upload_loading_view, null);
+        if (UploadProgressDialog == null) {
+            UploadProgressDialog = new AlertDialog.Builder(getActivity())
+                    .setView(uploadProgressDialogView)
+                    .setMessage("上传期间请勿关闭app")
+                    .setCancelable(false)
+                    .create();
+        }
+        return UploadProgressDialog;
+    }
+
+    public void showUploadProgressDialog() {
+        createUploadProgressDialog().show();
+    }
+
+    public void closeUploadProgressDialog() {
+        createUploadProgressDialog().dismiss();
+        UploadProgressDialog = null;
+    }
+
 
     // UI operate
 
@@ -433,7 +469,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         mProfileEmailView.setText(email);
     }
 
-
     public boolean exitSelectMode() {
         selectMode = false;
         resourceViewRefresh(false, false);
@@ -446,6 +481,25 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_MIME_TYPES, Constants.MINE_TYPES);
         startActivityForResult(intent, Constants.REQUEST_CODE_UPLOAD_START);
+    }
+
+    public void updateUploadProgress(int val) {
+        NumberProgressBar uploadProgress = uploadProgressDialogView.findViewById(R.id.uploadProcessBar);
+        mDisposable = Observable.interval(1000, 40, TimeUnit.MILLISECONDS)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(v -> uploadProgress.incrementProgressBy(1));
+        uploadProgress.setOnProgressBarListener((current, max) -> {
+            if (current == val) {
+                mDisposable.dispose();
+                uploadProgress.setProgress(val);
+            }
+            if (current == max) {
+                mDisposable.dispose();
+                closeUploadProgressDialog();
+                uploadProgress.setProgress(0);
+            }
+        });
     }
 
 

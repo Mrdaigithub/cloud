@@ -25,22 +25,19 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import com.mrdaisite.android.MyApplication;
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.model.Preprocess;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
-import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
@@ -207,20 +204,53 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
             mDriveView.showMessage("存储容量不足");
             return;
         }
-        try {
-            preprocess(FileUtils.getMd5(f));
-        } catch (IOException e) {
-            mDriveView.showMessage("文件Hash计算失败");
-            e.printStackTrace();
-        }
+        preprocess(f);
     }
 
     /**
      * 预处理上传文件 (判断秒传)
      *
-     * @param fileHash
+     * @param f
      */
-    private void preprocess(String fileHash) {
+    private void preprocess(File f) {
+        String filename = f.getName();
+        long fileSize = f.length();
+        String fileHash = null;
+        String locale = "zh";
+        String group = "file";
+        String path = DriveFragment.path;
 
+        try {
+            fileHash = FileUtils.getMd5(f).toLowerCase();
+        } catch (IOException e) {
+            mDriveView.showMessage("文件Hash计算失败");
+            e.printStackTrace();
+            return;
+        }
+
+        mApiService.preprocess(filename, fileSize, fileHash, locale, group, path)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(new HttpCallBackWrapper<Preprocess>() {
+                    @Override
+                    public void onBegin(Disposable d) {
+                        mDriveView.showUploadProgressDialog();
+                    }
+
+                    @Override
+                    public void onSuccess(Preprocess preprocess) {
+                        Logger.e(preprocess.toString());
+                        if (preprocess.getSavedPath().equals("")) {
+                            Logger.e("have");
+                        } else {
+                            mDriveView.updateUploadProgress(100);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+                });
     }
 }

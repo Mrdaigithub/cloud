@@ -49,6 +49,8 @@ public interface DriveContract {
          */
         void showRenameDialog(int position);
 
+        void showUploadProgressDialog();
+
         /**
          * 退出选择模式
          *
@@ -60,6 +62,8 @@ public interface DriveContract {
          * 进入系统文件管理器
          */
         void toSystemFileExplorer();
+
+        void updateUploadProgress(int val);
     }
 
     interface Presenter extends BasePresenter {

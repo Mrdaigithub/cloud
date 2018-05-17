@@ -24,6 +24,7 @@
 
 package com.mrdaisite.android.data.sources.remote;
 
+import com.mrdaisite.android.data.model.Preprocess;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Token;
 import com.mrdaisite.android.data.model.User;
@@ -142,10 +143,10 @@ public interface ApiService {
      */
     @FormUrlEncoded
     @POST("/aetherupload/preprocess")
-    Observable<Resource> preprocess(@Field("file_name") String filename,
-                                    @Field("file_size") String fileSize,
-                                    @Field("file_hash") String fileHash,
-                                    @Field("locale") String locale,
-                                    @Field("group") String group,
-                                    @Field("path") String path);
+    Observable<Preprocess> preprocess(@Field("file_name") String filename,
+                                      @Field("file_size") long fileSize,
+                                      @Field("file_hash") String fileHash,
+                                      @Field("locale") String locale,
+                                      @Field("group") String group,
+                                      @Field("path") String path);
 }

@@ -156,7 +156,7 @@ public class MyApplication extends Application {
      */
     private void initLoadingHelper() {
         LoadViewHelper.getBuilder()
-                .setLoadIng(R.layout.loading_view);
+                .setLoadIng(R.layout.login_loading_view);
     }
 
     private void initBoxStore() {
