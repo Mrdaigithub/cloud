@@ -45,6 +45,9 @@ import com.orhanobut.logger.Logger;
 import org.greenrobot.essentials.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -254,10 +257,16 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                 });
     }
 
+    private void chunkResource(){
+//        FileInputStream inputStream = new FileInputStream(f);
+//        File outFile = new File(f, "c1.css");
+//        FileOutputStream fileOutputStream = new FileOutputStream(outFile);
+    }
+
     /**
      * 上传文件分块
      */
     private void uploadChunk() {
-        
+
     }
 }

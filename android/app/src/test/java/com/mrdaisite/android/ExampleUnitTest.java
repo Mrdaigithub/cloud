@@ -1,9 +1,17 @@
 package com.mrdaisite.android;
 
+import com.mrdaisite.android.ui.Drive.DrivePresenter;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
 
 import org.junit.Test;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import static org.junit.Assert.*;
 
@@ -36,5 +44,22 @@ public class ExampleUnitTest {
     @Test
     public void test_formatPath() {
         System.out.println(ResourceUtil.getINSTANCE().formatPath("0.1.2.3"));
+    }
+
+    @Test
+    public void test_chunkResource() {
+        try {
+            byte bWrite[] = {11, 12, 13, 14};
+            OutputStream outputStream = new FileOutputStream("./test.txt");
+            for (int x = 0; x < bWrite.length; x++) {
+                outputStream.write(bWrite[x]);
+            }
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
