@@ -27,18 +27,25 @@ package com.mrdaisite.android.data.sources.remote;
 import com.mrdaisite.android.data.model.Preprocess;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Token;
+import com.mrdaisite.android.data.model.Uploading;
 import com.mrdaisite.android.data.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Response;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -137,7 +144,7 @@ public interface ApiService {
     Observable<Response<Void>> removeResource(@Path("id") long resourceId);
 
     /**
-     * 创建文件夹
+     * 文件上传预处理（判断秒传）
      *
      * @return
      */
@@ -149,4 +156,14 @@ public interface ApiService {
                                       @Field("locale") String locale,
                                       @Field("group") String group,
                                       @Field("path") String path);
+
+    /**
+     * 上传文件
+     *
+     * @param file
+     * @return
+     */
+    @Multipart
+    @POST("/aetherupload/uploading")
+    Observable<Uploading> uploading(@Part MultipartBody.Part file, @PartMap Map<String, RequestBody> partMap);
 }

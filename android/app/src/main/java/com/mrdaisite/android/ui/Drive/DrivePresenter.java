@@ -39,6 +39,7 @@ import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
 import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
+import com.mrdaisite.android.util.StreamFileReader;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 import com.orhanobut.logger.Logger;
 
@@ -49,7 +50,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import io.objectbox.Box;
@@ -58,6 +61,9 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
@@ -244,7 +250,17 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                     public void onSuccess(Preprocess preprocess) {
                         Logger.e(preprocess.toString());
                         if (preprocess.getSavedPath().equals("")) {
-                            Logger.e("have");
+                            long chunkSize = preprocess.getChunkSize();
+                            String uploadBaseName = preprocess.getUploadBaseName();
+                            String subDir = preprocess.getSubDir();
+
+                            try {
+                                uploadChunk(f, chunkSize, uploadBaseName, subDir);
+                            } catch (IOException e) {
+                                mDriveView.showMessage("上传文件失败");
+                                e.printStackTrace();
+                                return;
+                            }
                         } else {
                             mDriveView.updateUploadProgress(100);
                         }
@@ -257,16 +273,31 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                 });
     }
 
-    private void chunkResource(){
-//        FileInputStream inputStream = new FileInputStream(f);
-//        File outFile = new File(f, "c1.css");
-//        FileOutputStream fileOutputStream = new FileOutputStream(outFile);
-    }
-
     /**
      * 上传文件分块
      */
-    private void uploadChunk() {
+    private void uploadChunk(File f, long chunkSize, String uploadBaseName, String subDir) throws IOException {
+        String filepath = f.getAbsolutePath();
+        String filename = f.getName();
+        long fileSize = f.length();
+        double chunkCount = Math.ceil(fileSize / chunkSize);
+        String uploadExt = filename.substring(filename.lastIndexOf("."), filename.length());
 
+        StreamFileReader reader = new StreamFileReader(filepath, (int) chunkSize);
+        while (true) {
+            String r = reader.read();
+            if (r == null) break;
+
+            Map<String, String> partMap = new HashMap<>();
+
+            Multipart
+
+            // 设置Content-Type:application/octet-stream
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), r);
+
+            // 设置Content-Disposition:form-data; name="photo"; filename="demo.png"
+            MultipartBody.Part photo = MultipartBody.Part.createFormData("filename", filename, requestBody);
+        }
+        reader.close();
     }
 }
