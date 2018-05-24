@@ -34,6 +34,7 @@ import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.model.Preprocess;
 import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.data.model.Resource_;
+import com.mrdaisite.android.data.model.Uploading;
 import com.mrdaisite.android.data.model.User;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.ui.CommonPresenter;
@@ -280,7 +281,8 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
         String filepath = f.getAbsolutePath();
         String filename = f.getName();
         long fileSize = f.length();
-        double chunkCount = Math.ceil(fileSize / chunkSize);
+        double chunkTotal = Math.ceil(fileSize / chunkSize);
+        int chunkIndex = 0;
         String uploadExt = filename.substring(filename.lastIndexOf("."), filename.length());
 
         StreamFileReader reader = new StreamFileReader(filepath, (int) chunkSize);
@@ -289,14 +291,42 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
             if (r == null) break;
 
             Map<String, String> partMap = new HashMap<>();
-
-            Multipart
+            partMap.put("filename", filename);
+            partMap.put("file_size", Long.toString(fileSize));
+            partMap.put("upload_ext", uploadExt);
+            partMap.put("chunk_total", Double.toString(chunkTotal));
+            partMap.put("chunk_index", Integer.toString(chunkIndex++));
+            partMap.put("upload_basename", uploadBaseName);
+            partMap.put("sub_dir", subDir);
+            partMap.put("group", "file");
+            partMap.put("locale", "zh");
+            partMap.put("path", DriveFragment.path);
 
             // 设置Content-Type:application/octet-stream
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), r);
 
             // 设置Content-Disposition:form-data; name="photo"; filename="demo.png"
-            MultipartBody.Part photo = MultipartBody.Part.createFormData("filename", filename, requestBody);
+            MultipartBody.Part file = MultipartBody.Part.createFormData("filename", filename, requestBody);
+
+            mApiService.uploading(file, partMap)
+                    .subscribeOn(mSchedulerProvider.io())
+                    .observeOn(mSchedulerProvider.ui())
+                    .subscribe(new HttpCallBackWrapper<Uploading>() {
+                        @Override
+                        public void onBegin(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Uploading uploading) {
+                            Logger.e(uploading.toString());
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
         }
         reader.close();
     }

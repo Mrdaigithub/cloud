@@ -165,5 +165,7 @@ public interface ApiService {
      */
     @Multipart
     @POST("/aetherupload/uploading")
-    Observable<Uploading> uploading(@Part MultipartBody.Part file, @PartMap Map<String, RequestBody> partMap);
+    Observable<Uploading> uploading(
+            @Part MultipartBody.Part file,
+            @PartMap Map<String, String> partMap);
 }
