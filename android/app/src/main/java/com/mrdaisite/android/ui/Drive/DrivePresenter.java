@@ -249,7 +249,7 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                 .subscribe(new HttpCallBackWrapper<Preprocess>() {
                     @Override
                     public void onBegin(Disposable d) {
-                        mDriveView.showUploadProgressDialog();
+//                        mDriveView.showUploadProgressDialog();
                     }
 
                     @Override
@@ -258,10 +258,11 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                         if (preprocess.getSavedPath().equals("")) {
                             long chunkSize = preprocess.getChunkSize();
                             String uploadBaseName = preprocess.getUploadBaseName();
+                            String uploadExt = preprocess.getUploadExt();
                             String subDir = preprocess.getSubDir();
 
                             try {
-                                uploadChunk(f, chunkSize, uploadBaseName, subDir);
+                                uploadChunk(f, chunkSize, uploadBaseName, uploadExt, subDir);
                             } catch (IOException e) {
                                 mDriveView.showMessage("上传文件失败");
                                 e.printStackTrace();
@@ -282,39 +283,35 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
     /**
      * 上传文件分块
      */
-    private void uploadChunk(File f, long chunkSize, String uploadBaseName, String subDir) throws IOException {
+    private void uploadChunk(File f, long chunkSize, String uploadBaseName, String uploadExt, String subDir) throws IOException {
         String filepath = f.getAbsolutePath();
         String filename = f.getName();
         long fileSize = f.length();
         double chunkTotal = Math.ceil(fileSize / chunkSize);
         int chunkIndex = 0;
-        String uploadExt = filename.substring(filename.lastIndexOf("."), filename.length());
 
         StreamFileReader reader = new StreamFileReader(filepath, (int) chunkSize);
         while (true) {
             String r = reader.read();
             if (r == null) break;
 
-//            Map<String, String> partMap = new HashMap<>();
-//            partMap.put("filename", filename);
-//            partMap.put("file_size", Long.toString(fileSize));
-//            partMap.put("upload_ext", uploadExt);
-//            partMap.put("chunk_total", Double.toString(chunkTotal));
-//            partMap.put("chunk_index", Integer.toString(chunkIndex++));
-//            partMap.put("upload_basename", uploadBaseName);
-//            partMap.put("sub_dir", subDir);
-//            partMap.put("group", "file");
-//            partMap.put("locale", "zh");
-//            partMap.put("path", DriveFragment.path);
-//
-            MediaType mimeType = MediaType.parse(DriveFragment.context.getContentResolver().getType(DriveFragment.fileUri));
-            // 设置Content-Type:application/octet-stream
-            RequestBody requestFile = RequestBody.create(mimeType, f);
+            Map<String, RequestBody> partMap = new HashMap<>();
+            partMap.put("filename", RequestBody.create(okhttp3.MultipartBody.FORM, filename));
+            partMap.put("file_size", RequestBody.create(okhttp3.MultipartBody.FORM, Long.toString(fileSize)));
+            partMap.put("upload_ext", RequestBody.create(okhttp3.MultipartBody.FORM, uploadExt));
+            partMap.put("chunk_total", RequestBody.create(okhttp3.MultipartBody.FORM, Double.toString(chunkTotal)));
+            partMap.put("chunk_index", RequestBody.create(okhttp3.MultipartBody.FORM, Integer.toString(chunkIndex++)));
+            partMap.put("upload_basename", RequestBody.create(okhttp3.MultipartBody.FORM, uploadBaseName));
+            partMap.put("sub_dir", RequestBody.create(okhttp3.MultipartBody.FORM, subDir));
+            partMap.put("group", RequestBody.create(okhttp3.MultipartBody.FORM, "file"));
+            partMap.put("locale", RequestBody.create(okhttp3.MultipartBody.FORM, "zh"));
+            partMap.put("path", RequestBody.create(okhttp3.MultipartBody.FORM, DriveFragment.path));
 
-            // 设置Content-Disposition:form-data; name="photo"; filename="demo.png"
+            MediaType mimeType = MediaType.parse("application/octet-stream");
+            RequestBody requestFile = RequestBody.create(mimeType, r);
             MultipartBody.Part body = MultipartBody.Part.createFormData("file", "blob", requestFile);
-//
-            mApiService.uploading(body)
+
+            mApiService.uploading(body, partMap)
                     .subscribeOn(mSchedulerProvider.io())
                     .observeOn(mSchedulerProvider.ui())
                     .subscribe(new HttpCallBackWrapper<Uploading>() {
