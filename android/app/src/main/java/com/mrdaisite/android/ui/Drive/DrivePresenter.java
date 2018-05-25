@@ -25,7 +25,9 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
@@ -46,11 +48,14 @@ import com.orhanobut.logger.Logger;
 
 import org.greenrobot.essentials.io.FileUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -290,25 +295,26 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
             String r = reader.read();
             if (r == null) break;
 
-            Map<String, String> partMap = new HashMap<>();
-            partMap.put("filename", filename);
-            partMap.put("file_size", Long.toString(fileSize));
-            partMap.put("upload_ext", uploadExt);
-            partMap.put("chunk_total", Double.toString(chunkTotal));
-            partMap.put("chunk_index", Integer.toString(chunkIndex++));
-            partMap.put("upload_basename", uploadBaseName);
-            partMap.put("sub_dir", subDir);
-            partMap.put("group", "file");
-            partMap.put("locale", "zh");
-            partMap.put("path", DriveFragment.path);
-
+//            Map<String, String> partMap = new HashMap<>();
+//            partMap.put("filename", filename);
+//            partMap.put("file_size", Long.toString(fileSize));
+//            partMap.put("upload_ext", uploadExt);
+//            partMap.put("chunk_total", Double.toString(chunkTotal));
+//            partMap.put("chunk_index", Integer.toString(chunkIndex++));
+//            partMap.put("upload_basename", uploadBaseName);
+//            partMap.put("sub_dir", subDir);
+//            partMap.put("group", "file");
+//            partMap.put("locale", "zh");
+//            partMap.put("path", DriveFragment.path);
+//
+            MediaType mimeType = MediaType.parse(DriveFragment.context.getContentResolver().getType(DriveFragment.fileUri));
             // 设置Content-Type:application/octet-stream
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/octet-stream"), r);
+            RequestBody requestFile = RequestBody.create(mimeType, f);
 
             // 设置Content-Disposition:form-data; name="photo"; filename="demo.png"
-            MultipartBody.Part file = MultipartBody.Part.createFormData("filename", filename, requestBody);
-
-            mApiService.uploading(file, partMap)
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", "blob", requestFile);
+//
+            mApiService.uploading(body)
                     .subscribeOn(mSchedulerProvider.io())
                     .observeOn(mSchedulerProvider.ui())
                     .subscribe(new HttpCallBackWrapper<Uploading>() {

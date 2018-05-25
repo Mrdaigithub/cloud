@@ -28,6 +28,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -115,8 +116,11 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private List<Integer> selectedList = new ArrayList<>();
     private List<Long> moveIdList = new ArrayList<>();
 
+    public static Uri fileUri = null;
+    public static Context context = null;
 
-    // Setup
+
+// Setup
 
     public static DriveFragment newInstance() {
 
@@ -140,6 +144,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         super.onCreate(savedInstanceState);
         mValidator = new Validator(this);
         mValidator.setValidationListener(this);
+        context = getContext();
     }
 
     @Override
@@ -298,6 +303,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (data == null) return;
         switch (requestCode) {
             case Constants.REQUEST_CODE_UPLOAD_START:
+                Logger.e(String.valueOf(data.getData()));
+                fileUri = data.getData();
                 mPresenter.handleUpload(ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData()));
                 break;
 
