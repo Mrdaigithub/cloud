@@ -55,8 +55,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -254,7 +256,6 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
 
                     @Override
                     public void onSuccess(Preprocess preprocess) {
-                        Logger.e(preprocess.toString());
                         if (preprocess.getSavedPath().equals("")) {
                             long chunkSize = preprocess.getChunkSize();
                             String uploadBaseName = preprocess.getUploadBaseName();
@@ -284,53 +285,65 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
      * 上传文件分块
      */
     private void uploadChunk(File f, long chunkSize, String uploadBaseName, String uploadExt, String subDir) throws IOException {
+
         String filepath = f.getAbsolutePath();
         String filename = f.getName();
         long fileSize = f.length();
-        double chunkTotal = Math.ceil(fileSize / chunkSize);
-        int chunkIndex = 0;
+        int chunkTotal = (int) Math.ceil((double) fileSize / (double) chunkSize);
+        Integer[] chunkArray = new Integer[chunkTotal];
+        for (int i = 0; i < chunkTotal; i++) {
+            chunkArray[i] = i + 1;
+        }
 
         StreamFileReader reader = new StreamFileReader(filepath, (int) chunkSize);
-        while (true) {
-            String r = reader.read();
-            if (r == null) break;
 
-            Map<String, RequestBody> partMap = new HashMap<>();
-            partMap.put("filename", RequestBody.create(okhttp3.MultipartBody.FORM, filename));
-            partMap.put("file_size", RequestBody.create(okhttp3.MultipartBody.FORM, Long.toString(fileSize)));
-            partMap.put("upload_ext", RequestBody.create(okhttp3.MultipartBody.FORM, uploadExt));
-            partMap.put("chunk_total", RequestBody.create(okhttp3.MultipartBody.FORM, Double.toString(chunkTotal)));
-            partMap.put("chunk_index", RequestBody.create(okhttp3.MultipartBody.FORM, Integer.toString(chunkIndex++)));
-            partMap.put("upload_basename", RequestBody.create(okhttp3.MultipartBody.FORM, uploadBaseName));
-            partMap.put("sub_dir", RequestBody.create(okhttp3.MultipartBody.FORM, subDir));
-            partMap.put("group", RequestBody.create(okhttp3.MultipartBody.FORM, "file"));
-            partMap.put("locale", RequestBody.create(okhttp3.MultipartBody.FORM, "zh"));
-            partMap.put("path", RequestBody.create(okhttp3.MultipartBody.FORM, DriveFragment.path));
+        Observable observable = Observable.fromArray(chunkArray)
+                .subscribeOn(mSchedulerProvider.io())
+                .flatMap((Function<Integer, ObservableSource<?>>) chunkIndex -> {
+                    RequestBody requestFile = RequestBody.create(
+                            MediaType.parse("application/octet-stream"),
+                            reader.read().getBytes());
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("file", "blob", requestFile);
 
-            MediaType mimeType = MediaType.parse("application/octet-stream");
-            RequestBody requestFile = RequestBody.create(mimeType, r);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", "blob", requestFile);
+                    Map<String, RequestBody> partMap = new HashMap<>();
+                    partMap.put("filename", RequestBody.create(okhttp3.MultipartBody.FORM, filename));
+                    partMap.put("file_size", RequestBody.create(okhttp3.MultipartBody.FORM, Long.toString(fileSize)));
+                    partMap.put("upload_ext", RequestBody.create(okhttp3.MultipartBody.FORM, uploadExt));
+                    partMap.put("chunk_total", RequestBody.create(okhttp3.MultipartBody.FORM, Integer.toString(chunkTotal)));
+                    partMap.put("chunk_index", RequestBody.create(okhttp3.MultipartBody.FORM, Integer.toString(chunkIndex)));
+                    partMap.put("upload_basename", RequestBody.create(okhttp3.MultipartBody.FORM, uploadBaseName));
+                    partMap.put("sub_dir", RequestBody.create(okhttp3.MultipartBody.FORM, subDir));
+                    partMap.put("group", RequestBody.create(okhttp3.MultipartBody.FORM, "file"));
+                    partMap.put("locale", RequestBody.create(okhttp3.MultipartBody.FORM, "zh"));
+                    partMap.put("path", RequestBody.create(okhttp3.MultipartBody.FORM, DriveFragment.path));
 
-            mApiService.uploading(body, partMap)
-                    .subscribeOn(mSchedulerProvider.io())
-                    .observeOn(mSchedulerProvider.ui())
-                    .subscribe(new HttpCallBackWrapper<Uploading>() {
-                        @Override
-                        public void onBegin(Disposable d) {
+                    return mApiService.uploading(body, partMap);
+                })
+                .observeOn(mSchedulerProvider.ui());
+        observable.subscribe(new Observer<Uploading>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
-                        }
+            }
 
-                        @Override
-                        public void onSuccess(Uploading uploading) {
-                            Logger.e(uploading.toString());
-                        }
+            @Override
+            public void onNext(Uploading uploading) {
+                Logger.e(uploading.toString());
+            }
 
-                        @Override
-                        public void onError(String msg) {
+            @Override
+            public void onError(Throwable e) {
 
-                        }
-                    });
-        }
-        reader.close();
+            }
+
+            @Override
+            public void onComplete() {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

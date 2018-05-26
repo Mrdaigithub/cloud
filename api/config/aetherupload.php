@@ -3,7 +3,7 @@
 return [
 
     "ENABLE_EXAMPLE_PAGE" => false, # 启用示例页面，访问域名/aetherupload，生产环境下请将该选项设置为false
-    "CHUNK_SIZE"          => 1 * 1000 * 1000, # 上传时的分块大小（B），默认为1M，越大传输越快，需要小于web服务器和php.ini中设置的上传限值
+    "CHUNK_SIZE"          => env("CHUNK_SIZE"), # 上传时的分块大小（B），默认为1M，越大传输越快，需要小于web服务器和php.ini中设置的上传限值
     "UPLOAD_PATH"         => storage_path() . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . "aetherupload", # 上传目录的本地物理路径
     "HEAD_DIR"            => "_head", # 指针头文件目录的名称，建议保持默认
     "FILE_SUB_DIR"        => "md5_files", #资源文件目录的子目录生成规则，变量或常量均可
