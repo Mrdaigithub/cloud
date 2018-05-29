@@ -300,9 +300,11 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
         Observable observable = Observable.fromArray(chunkArray)
                 .subscribeOn(mSchedulerProvider.io())
                 .flatMap((Function<Integer, ObservableSource<?>>) chunkIndex -> {
+                    reader.read();
+
                     RequestBody requestFile = RequestBody.create(
                             MediaType.parse("application/octet-stream"),
-                            reader.read().getBytes());
+                            reader.getArray());
                     MultipartBody.Part body = MultipartBody.Part.createFormData("file", "blob", requestFile);
 
                     Map<String, RequestBody> partMap = new HashMap<>();
