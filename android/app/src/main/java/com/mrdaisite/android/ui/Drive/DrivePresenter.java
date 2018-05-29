@@ -25,9 +25,7 @@
 package com.mrdaisite.android.ui.Drive;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
@@ -44,21 +42,12 @@ import com.mrdaisite.android.util.CallbackUnit;
 import com.mrdaisite.android.util.HttpCallBackWrapper;
 import com.mrdaisite.android.util.StreamFileReader;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.essentials.io.FileUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -84,6 +73,7 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
     private ApiService mApiService = MyApplication.getInstance().getApiService();
     private Box<User> mUserBox = MyApplication.getInstance().getBoxStore().boxFor(User.class);
     private Box<Resource> mResourceBeanBox = MyApplication.getInstance().getBoxStore().boxFor(Resource.class);
+    private int progressVal;
 
     @NonNull
     private final DriveContract.View mDriveView;
@@ -251,7 +241,7 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                 .subscribe(new HttpCallBackWrapper<Preprocess>() {
                     @Override
                     public void onBegin(Disposable d) {
-//                        mDriveView.showUploadProgressDialog();
+                        mDriveView.showUploadProgressDialog();
                     }
 
                     @Override
@@ -283,6 +273,13 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
 
     /**
      * 上传文件分块
+     *
+     * @param f
+     * @param chunkSize
+     * @param uploadBaseName
+     * @param uploadExt
+     * @param subDir
+     * @throws IOException
      */
     private void uploadChunk(File f, long chunkSize, String uploadBaseName, String uploadExt, String subDir) throws IOException {
 
@@ -325,17 +322,19 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
         observable.subscribe(new Observer<Uploading>() {
             @Override
             public void onSubscribe(Disposable d) {
-
+                progressVal = 0;
+                mDriveView.showUploadProgressDialog();
             }
 
             @Override
             public void onNext(Uploading uploading) {
-                Logger.e(uploading.toString());
+                mDriveView.updateUploadProgress((++progressVal) * 100 / chunkTotal);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mDriveView.closeUploadProgressDialog();
+                mDriveView.showMessage("文件上传失败");
             }
 
             @Override
@@ -344,6 +343,7 @@ public class DrivePresenter extends CommonPresenter implements DriveContract.Pre
                     reader.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    mDriveView.showMessage("文件上传失败");
                 }
             }
         });

@@ -42,6 +42,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -62,27 +63,17 @@ import com.mrdaisite.android.ui.Move.MoveActivity;
 import com.mrdaisite.android.util.Constants;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
-import com.orhanobut.logger.Logger;
-
-
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -98,7 +89,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private View uploadProgressDialogView;
     @NotEmpty
     private EditText dialogTextView;
-    private AlertDialog UploadProgressDialog;
+    private AlertDialog uploadProgressDialog;
 
     public static String path = "0";
     private static DriveContract.Presenter mPresenter;
@@ -106,8 +97,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private Unbinder unbinder;
     private Validator mValidator;
     private Resource mResource;
-    private Disposable mDisposable;
+    private Disposable mDisposable = null;
     private final BaseSchedulerProvider mSchedulerProvider = Injection.provideSchedulerProvider();
+    private NumberProgressBar uploadProgress;
+    private int uploadProgressVal = 0;
 
     private List<Integer> removeResourcePositionList = new ArrayList<>();
     private List<Integer> moveResourcePositionList = new ArrayList<>();
@@ -175,6 +168,8 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         View profileView = navigationView.getHeaderView(0);
         mProfileUsernameView = profileView.findViewById(R.id.profileUsernameView);
         mProfileEmailView = profileView.findViewById(R.id.profileEmailView);
+        uploadProgressDialogView = inflater.inflate(R.layout.upload_loading_view, null);
+        uploadProgress = uploadProgressDialogView.findViewById(R.id.uploadProcessBar);
 
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -303,7 +298,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
         if (data == null) return;
         switch (requestCode) {
             case Constants.REQUEST_CODE_UPLOAD_START:
-                Logger.e(String.valueOf(data.getData()));
                 fileUri = data.getData();
                 mPresenter.handleUpload(ResourceUtil.getINSTANCE().getFilePathByUri(getActivity(), data.getData()));
                 break;
@@ -428,24 +422,23 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     private AlertDialog createUploadProgressDialog() {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
-        uploadProgressDialogView = inflater.inflate(R.layout.upload_loading_view, null);
-        if (UploadProgressDialog == null) {
-            UploadProgressDialog = new AlertDialog.Builder(getActivity())
+        if (uploadProgressDialog == null) {
+            uploadProgressDialog = new AlertDialog.Builder(getActivity())
                     .setView(uploadProgressDialogView)
                     .setMessage("上传期间请勿关闭app")
                     .setCancelable(false)
                     .create();
         }
-        return UploadProgressDialog;
+        return uploadProgressDialog;
     }
 
     public void showUploadProgressDialog() {
         createUploadProgressDialog().show();
+        uploadProgress.setProgress(0);
     }
 
     public void closeUploadProgressDialog() {
-        createUploadProgressDialog().dismiss();
-        UploadProgressDialog = null;
+        uploadProgressDialog.dismiss();
     }
 
 
@@ -491,23 +484,24 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     }
 
     public void updateUploadProgress(int val) {
-        NumberProgressBar uploadProgress = uploadProgressDialogView.findViewById(R.id.uploadProcessBar);
-        mDisposable = Observable.interval(1000, 40, TimeUnit.MILLISECONDS)
-                .subscribeOn(mSchedulerProvider.io())
-                .observeOn(mSchedulerProvider.ui())
-                .subscribe(v -> uploadProgress.incrementProgressBy(1));
-        uploadProgress.setOnProgressBarListener((current, max) -> {
-            if (current == val) {
-                mDisposable.dispose();
-                uploadProgress.setProgress(val);
-            }
-            if (current == max) {
-                mDisposable.dispose();
-                closeUploadProgressDialog();
-                uploadProgress.setProgress(0);
-                resourceViewRefresh(true, true);
-            }
-        });
+        uploadProgressVal = val;
+
+        if (mDisposable == null) {
+            mDisposable = Observable.interval(0, 40, TimeUnit.MILLISECONDS)
+                    .subscribeOn(mSchedulerProvider.io())
+                    .observeOn(mSchedulerProvider.ui())
+                    .subscribe(v -> {
+                        if (uploadProgress.getProgress() >= uploadProgress.getMax()) {
+                            mDisposable.dispose();
+                            mDisposable = null;
+                            closeUploadProgressDialog();
+                            showMessage("上传完成");
+                            resourceViewRefresh(true, true);
+                        } else if (uploadProgress.getProgress() < uploadProgressVal) {
+                            uploadProgress.incrementProgressBy(1);
+                        }
+                    });
+        }
     }
 
 

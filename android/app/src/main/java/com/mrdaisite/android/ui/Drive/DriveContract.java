@@ -51,6 +51,8 @@ public interface DriveContract {
 
         void showUploadProgressDialog();
 
+        void closeUploadProgressDialog();
+
         /**
          * 退出选择模式
          *
