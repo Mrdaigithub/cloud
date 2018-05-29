@@ -169,4 +169,14 @@ public interface ApiService {
     Observable<Uploading> uploading(
             @Part MultipartBody.Part file,
             @PartMap Map<String, RequestBody> partMap);
+
+
+    /**
+     * 获取资源下载的secret
+     *
+     * @param resourceId
+     * @return
+     */
+    @GET("/resources/secret/{id}")
+    Observable<String> getDownload(@Path("id") long resourceId);
 }

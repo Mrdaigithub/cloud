@@ -113,7 +113,7 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
     public static Context context = null;
 
 
-// Setup
+    // Setup
 
     public static DriveFragment newInstance() {
 
@@ -272,7 +272,10 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         moveIntent.putExtra("moveIdArray", Longs.toArray(moveIdList));
                         startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                         break;
-                    case R.id.fragmentMenuResourceDetail:
+                    case R.id.resourceDownload:
+                        
+                        break;
+                    case R.id.resourceDetail:
                         showResourceDetailDialog(resourceAdapter.getItem(position));
                         break;
                 }
