@@ -41,6 +41,7 @@ import android.view.MenuItem;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
+import com.mrdaisite.android.ui.Download.DownloadActivity;
 import com.mrdaisite.android.ui.Trash.TrashActivity;
 import com.mrdaisite.android.util.ActivityUtils;
 import com.orhanobut.logger.Logger;
@@ -97,6 +98,9 @@ public class DriveActivity extends BaseActivity {
                     switch (menuItem.getItemId()) {
                         case R.id.trash_navigation_menu_item:
                             startActivity(new Intent(this, TrashActivity.class));
+                            break;
+                        case R.id.download_manager_navigation_menu_item:
+                            startActivity(new Intent(this, DownloadActivity.class));
                             break;
                         case R.id.settings_navigation_menu_item:
                             break;

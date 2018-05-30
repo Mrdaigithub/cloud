@@ -31,6 +31,10 @@
             android:id="@+id/trash_navigation_menu_item"
             android:icon="@drawable/ic_menu_trash"
             android:title="回收站" />
+        <item
+            android:id="@+id/download_manager_navigation_menu_item"
+            android:icon="@drawable/ic_menu_download"
+            android:title="下载管理器" />
     </group>
 
     <group

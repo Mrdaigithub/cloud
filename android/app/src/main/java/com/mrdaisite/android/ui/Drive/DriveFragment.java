@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -51,6 +52,13 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.common.primitives.Longs;
+import com.liulishuo.okdownload.DownloadContext;
+import com.liulishuo.okdownload.DownloadListener;
+import com.liulishuo.okdownload.DownloadTask;
+import com.liulishuo.okdownload.StatusUtil;
+import com.liulishuo.okdownload.core.breakpoint.BreakpointInfo;
+import com.liulishuo.okdownload.core.cause.EndCause;
+import com.liulishuo.okdownload.core.cause.ResumeFailedCause;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -61,13 +69,17 @@ import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
 import com.mrdaisite.android.util.Constants;
+import com.mrdaisite.android.util.DownloadManagerUtil;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -273,7 +285,28 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                         startActivityForResult(moveIntent, Constants.REQUEST_CODE_MOVE_START);
                         break;
                     case R.id.resourceDownload:
-                        
+                        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                            String downloadDirPath = Environment.getExternalStorageDirectory().toString() + "/Download";
+                            File downloadDir = new File(downloadDirPath);
+                            if (!downloadDir.exists()) downloadDir.mkdir();
+
+                            final String filename = "single-test";
+                            final String url = "https://cdn.llscdn.com/yy/files/xs8qmxn8-lls-LLS-5.8-800-20171207-111607.apk";
+                            final File parentFile = DownloadManagerUtil.getParentFile();
+                            DownloadTask task = new DownloadTask.Builder(url, parentFile)
+                                    .setFilename(filename)
+                                    // the minimal interval millisecond for callback progress
+                                    .setMinIntervalMillisCallbackProcess(16)
+                                    // do re-download even if the task has already been completed in the past.
+                                    .setPassIfAlreadyCompleted(false)
+                                    .build();
+
+                            final StatusUtil.Status status = StatusUtil.getStatus(task);
+                            if (status == StatusUtil.Status.COMPLETED){
+                                com.orhanobut.logger.Logger.e("progressBar get max");
+                            }
+
+                        }
                         break;
                     case R.id.resourceDetail:
                         showResourceDetailDialog(resourceAdapter.getItem(position));

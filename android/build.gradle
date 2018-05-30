@@ -47,4 +47,6 @@ ext {
     baseRecyclerViewAdapterHelper = '2.9.38'
     stetho = '1.5.0'
     stethoOkhttp3 = '1.5.0'
+    easypermissions = '1.2.0'
+    okdownload = '1.0.3'
 }

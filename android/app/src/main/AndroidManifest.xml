@@ -36,6 +36,9 @@
             android:name=".ui.Trash.TrashActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".ui.Download.DownloadActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.Move.MoveActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
