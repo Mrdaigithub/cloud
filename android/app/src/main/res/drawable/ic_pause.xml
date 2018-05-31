@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ MIT License
   ~
   ~ Copyright (c) 2017 Mrdai
@@ -22,20 +22,8 @@
   ~ SOFTWARE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <include
-        layout="@layout/app_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <FrameLayout
-        android:id="@+id/contentFrame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
-</LinearLayout>
+<vector android:autoMirrored="true" android:height="24dp"
+    android:tint="#999999" android:viewportHeight="24.0"
+    android:viewportWidth="24.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M6,19h4L10,5L6,5v14zM14,5v14h4L18,5h-4z"/>
+</vector>

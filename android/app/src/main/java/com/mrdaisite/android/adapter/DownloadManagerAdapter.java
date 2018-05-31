@@ -22,24 +22,27 @@
  * SOFTWARE.
  */
 
-package com.mrdaisite.android.util;
+package com.mrdaisite.android.adapter;
 
-import android.os.Environment;
-import android.widget.ProgressBar;
+import android.support.annotation.Nullable;
 
-import java.io.File;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.mrdaisite.android.R;
+import com.mrdaisite.android.data.model.Resource;
 
-public class DownloadManagerUtil {
-    public static final String URL = "https://cdn.llscdn.com/yy/files/tkzpx40x-lls-LLS-5.7-785-20171108-111118.apk";
+import java.util.List;
 
-    public static void calcProgressToView(ProgressBar progressBar, long offset, long total) {
-        final float percent = (float) offset / total;
-        progressBar.setProgress((int) (percent * progressBar.getMax()));
+public class DownloadManagerAdapter extends BaseQuickAdapter<Resource, BaseViewHolder> {
+
+    public DownloadManagerAdapter(int layoutResId, @Nullable List<Resource> data) {
+        super(layoutResId, data);
     }
 
-    public static File getParentFile() {
-        final File externalSaveDir = new File(Environment.getExternalStorageDirectory() + "/Download");
-        if (!externalSaveDir.exists()) externalSaveDir.mkdir();
-        return externalSaveDir;
+    @Override
+    protected void convert(BaseViewHolder helper, Resource item) {
+
+        // 设置resource item的title,时间,icon
+        helper = helper.setText(R.id.resourceTitle, item.getResourceName());
     }
 }
