@@ -91,8 +91,7 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.trash_frag, container, false);
 
         RecyclerView mRecyclerView = root.findViewById(R.id.resourceRecyclerView);
@@ -146,11 +145,6 @@ public class TrashFragment extends BaseFragment implements TrashContract.View {
 
 
     // Show Dialog
-
-    @Override
-    public void showMessage(String msg) {
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
 
     public void showRestoreDialog(int position) {
         new AlertDialog.Builder(getActivity())

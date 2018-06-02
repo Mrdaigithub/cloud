@@ -26,27 +26,49 @@ package com.mrdaisite.android.ui.Download;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.design.widget.TabLayout;
 
 import com.mrdaisite.android.R;
+import com.mrdaisite.android.adapter.DownloadManagerAdapter;
+import com.mrdaisite.android.adapter.DownloadManagerViewPagerAdapter;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
 import com.mrdaisite.android.util.ActivityUtils;
 
 public class DownloadActivity extends BaseActivity {
+
+    private DownloadingFragment mDownloadingFragment;
+    private DownloadedFragment mDownloadedFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download_act);
         setupToolbar();
-        DownloadFragment downloadFragment = findOrCreateViewFragment();
+
+        TabLayout tableLayout = findViewById(R.id.downloadManagerTabs);
+        ViewPager viewPager = findViewById(R.id.contentFrame);
+        tableLayout.setupWithViewPager(viewPager);
+
+        mDownloadingFragment = new DownloadingFragment();
+        mDownloadedFragment = new DownloadedFragment();
+
+        setupViewPager(viewPager);
 
         // Create the presenter
-        new DownloadPresenter(
-                downloadFragment,
+
+        new DownloadingPresenter(
+                mDownloadingFragment,
+                Injection.provideSchedulerProvider()
+        );
+
+        new DownloadedPresenter(
+                mDownloadedFragment,
                 Injection.provideSchedulerProvider()
         );
     }
@@ -71,15 +93,10 @@ public class DownloadActivity extends BaseActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    public DownloadFragment findOrCreateViewFragment() {
-        DownloadFragment downloadFragment =
-                (DownloadFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (downloadFragment == null) {
-            // Create the fragment
-            downloadFragment = DownloadFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(
-                    getSupportFragmentManager(), downloadFragment, R.id.contentFrame);
-        }
-        return downloadFragment;
+    private void setupViewPager(ViewPager viewPager) {
+        DownloadManagerViewPagerAdapter adapter = new DownloadManagerViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(mDownloadingFragment, "下载中");
+        adapter.addFragment(mDownloadedFragment, "已完成");
+        viewPager.setAdapter(adapter);
     }
 }
