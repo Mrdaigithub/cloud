@@ -57,12 +57,10 @@ public class DownloadingPresenter extends CommonPresenter implements Downloading
 
     @Override
     public void subscribe() {
-        com.orhanobut.logger.Logger.e("downloading subscribe");
     }
 
     @Override
     public void unsubscribe() {
-        com.orhanobut.logger.Logger.e("downloading unsubscribe");
     }
 
     @Override

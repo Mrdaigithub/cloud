@@ -85,6 +85,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
 
 
     // UI operate
+
     @Override
     public void resourceViewRefresh(Boolean openAnimation, Boolean remote) {
 

@@ -55,8 +55,8 @@ public class DownloadActivity extends BaseActivity {
         ViewPager viewPager = findViewById(R.id.contentFrame);
         tableLayout.setupWithViewPager(viewPager);
 
-        mDownloadingFragment = new DownloadingFragment();
-        mDownloadedFragment = new DownloadedFragment();
+        mDownloadingFragment = DownloadingFragment.newInstance();
+        mDownloadedFragment = DownloadedFragment.newInstance();
 
         setupViewPager(viewPager);
 
@@ -95,8 +95,8 @@ public class DownloadActivity extends BaseActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         DownloadManagerViewPagerAdapter adapter = new DownloadManagerViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(mDownloadedFragment, "已下载");
         adapter.addFragment(mDownloadingFragment, "下载中");
-        adapter.addFragment(mDownloadedFragment, "已完成");
         viewPager.setAdapter(adapter);
     }
 }
