@@ -38,6 +38,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.liulishuo.filedownloader.FileDownloadMonitor;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;

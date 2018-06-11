@@ -31,6 +31,9 @@ import android.content.SharedPreferences;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.helper.loadviewhelper.load.LoadViewHelper;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
+import com.liulishuo.filedownloader.util.FileDownloadLog;
 import com.mrdaisite.android.data.model.MyObjectBox;
 import com.mrdaisite.android.data.sources.remote.ApiService;
 import com.mrdaisite.android.util.Constants;
@@ -70,6 +73,7 @@ public class MyApplication extends Application {
         initRetrofit();
         initLoadingHelper();
         initBoxStore();
+        initFileDownloader();
     }
 
     public static MyApplication getInstance() {
@@ -168,5 +172,16 @@ public class MyApplication extends Application {
 
     private void initStetho() {
         Stetho.initializeWithDefaults(this);
+    }
+
+    private void initFileDownloader() {
+        FileDownloadLog.NEED_LOG = BuildConfig.DEBUG;
+        FileDownloader.setupOnApplicationOnCreate(this)
+                .connectionCreator(new FileDownloadUrlConnection
+                        .Creator(new FileDownloadUrlConnection.Configuration()
+                        .connectTimeout(15_000) // set connection timeout.
+                        .readTimeout(15_000) // set read timeout.
+                ))
+                .commit();
     }
 }

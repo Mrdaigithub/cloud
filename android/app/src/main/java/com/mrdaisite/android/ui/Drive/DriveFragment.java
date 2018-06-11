@@ -52,17 +52,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.common.primitives.Longs;
-import com.liulishuo.okdownload.DownloadContext;
-import com.liulishuo.okdownload.DownloadListener;
-import com.liulishuo.okdownload.DownloadTask;
-import com.liulishuo.okdownload.SpeedCalculator;
-import com.liulishuo.okdownload.StatusUtil;
-import com.liulishuo.okdownload.core.breakpoint.BlockInfo;
-import com.liulishuo.okdownload.core.breakpoint.BreakpointInfo;
-import com.liulishuo.okdownload.core.cause.EndCause;
-import com.liulishuo.okdownload.core.cause.ResumeFailedCause;
-import com.liulishuo.okdownload.core.listener.DownloadListener4WithSpeed;
-import com.liulishuo.okdownload.core.listener.assist.Listener4SpeedAssistExtend;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloadSampleListener;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
@@ -296,52 +290,42 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                             com.orhanobut.logger.Logger.e("download");
 
                             final String url = "https://cdn.llscdn.com/yy/files/xs8qmxn8-lls-LLS-5.8-800-20171207-111607.apk";
-                            final File parentFile = DownloadManagerUtil.getParentFile();
-                            DownloadTask task = new DownloadTask.Builder(url, parentFile)
-                                    .setMinIntervalMillisCallbackProcess(16)
-                                    .setPassIfAlreadyCompleted(false)
-                                    .build();
-                            task.enqueue(new DownloadListener4WithSpeed() {
-                                @Override
-                                public void taskStart(@NonNull DownloadTask task) {
+                            FileDownloadUtils.setDefaultSaveRootPath(downloadDirPath);
+                            String llsApkFilePath = FileDownloadUtils.getDefaultSaveRootPath() + File.separator + "tmpdir1" + File.separator + "test.apk";
+                            FileDownloader.getImpl().create(url)
+                                    .setPath(llsApkFilePath)
+                                    .setCallbackProgressMinInterval(300)
+                                    .setListener(new FileDownloadListener() {
+                                        @Override
+                                        protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                                            com.orhanobut.logger.Logger.e("pending");
+                                        }
 
-                                }
+                                        @Override
+                                        protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                                            com.orhanobut.logger.Logger.e("progress");
+                                        }
 
-                                @Override
-                                public void connectStart(@NonNull DownloadTask task, int blockIndex, @NonNull Map<String, List<String>> requestHeaderFields) {
+                                        @Override
+                                        protected void completed(BaseDownloadTask task) {
+                                            com.orhanobut.logger.Logger.e("completed");
+                                        }
 
-                                }
+                                        @Override
+                                        protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                                            com.orhanobut.logger.Logger.e("paused");
+                                        }
 
-                                @Override
-                                public void connectEnd(@NonNull DownloadTask task, int blockIndex, int responseCode, @NonNull Map<String, List<String>> responseHeaderFields) {
+                                        @Override
+                                        protected void error(BaseDownloadTask task, Throwable e) {
+                                            com.orhanobut.logger.Logger.e("error");
+                                        }
 
-                                }
-
-                                @Override
-                                public void infoReady(@NonNull DownloadTask task, @NonNull BreakpointInfo info, boolean fromBreakpoint, @NonNull Listener4SpeedAssistExtend.Listener4SpeedModel model) {
-
-                                }
-
-                                @Override
-                                public void progressBlock(@NonNull DownloadTask task, int blockIndex, long currentBlockOffset, @NonNull SpeedCalculator blockSpeed) {
-
-                                }
-
-                                @Override
-                                public void progress(@NonNull DownloadTask task, long currentOffset, @NonNull SpeedCalculator taskSpeed) {
-
-                                }
-
-                                @Override
-                                public void blockEnd(@NonNull DownloadTask task, int blockIndex, BlockInfo info, @NonNull SpeedCalculator blockSpeed) {
-
-                                }
-
-                                @Override
-                                public void taskEnd(@NonNull DownloadTask task, @NonNull EndCause cause, @Nullable Exception realCause, @NonNull SpeedCalculator taskSpeed) {
-
-                                }
-                            });
+                                        @Override
+                                        protected void warn(BaseDownloadTask task) {
+                                            com.orhanobut.logger.Logger.e("warn");
+                                        }
+                                    }).start();
                         }
                         break;
                     case R.id.resourceDetail:
