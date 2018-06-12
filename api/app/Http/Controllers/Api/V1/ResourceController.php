@@ -1,17 +1,41 @@
 <?php
+/**
+ * MIT License
+ *
+ * Copyright (c) 2017 Mrdai
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 namespace App\Http\Controllers\Api\V1;
 
-use Defuse\Crypto\File;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\ApiController;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\ApiController;
 use App\Http\Resources\PathResourceCollection;
 use App\Http\Resources\ResourceResource;
+use App\Http\Requests\UpdateResourceRequest;
+use App\Http\Requests\StoreResourceRequest;
 use App\Models\Resource;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 
 class ResourceController extends ApiController
@@ -21,6 +45,7 @@ class ResourceController extends ApiController
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return PathResourceCollection
      */
     public function index(Request $request)
@@ -31,10 +56,11 @@ class ResourceController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\StoreResourceRequest $request
-     * @return ResourceResource|mixed
+     * @param StoreResourceRequest $request
+     *
+     * @return ResourceResource
      */
-    public function store(\App\Http\Requests\StoreResourceRequest $request)
+    public function store(StoreResourceRequest $request)
     {
         $resource = new resource();
         $user = $request->user();
@@ -42,13 +68,20 @@ class ResourceController extends ApiController
             ->where('resource_name', $request->get('resource_name'))
             ->where('path', $request->get('path'))
             ->where('trashed', false)->count()) {
-            return $this->failed(400006);
+            throw ValidationException::withMessages([
+                "resource" => ["400006"],
+            ])->status(400);
         }
         $resource->resource_name = $request->get('resource_name');
         $resource->file = false;
         $resource->path = $request->get('path');
-        if (!$resource->save()) return $this->failed(500001, 500);
+        if (!$resource->save()) {
+            throw ValidationException::withMessages([
+                "resource" => ["500001"],
+            ])->status(500);
+        }
         $user->resources()->attach($resource->id);
+
         return new ResourceResource(Resource::find($resource->id));
     }
 
@@ -56,6 +89,7 @@ class ResourceController extends ApiController
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,6 +102,7 @@ class ResourceController extends ApiController
      *
      * @param \App\Http\Requests\ShowPathResourceRequest $request
      * @param $path
+     *
      * @return PathResourceCollection
      */
     public function show_with_path(\App\Http\Requests\ShowPathResourceRequest $request, $path)
@@ -89,6 +124,7 @@ class ResourceController extends ApiController
         $file = $file[key($file)];
         $image_info = getimagesize("$storage_path/$file");
         $img_data = file_get_contents("$storage_path/$file");
+
         return "data:" . $image_info['mime'] . ";base64," . base64_encode($img_data);
     }
 
@@ -96,11 +132,13 @@ class ResourceController extends ApiController
      * Search the resource
      *
      * @param \App\Http\Requests\SearchResourceRequest $request
+     *
      * @return mixed
      */
     public function search(\App\Http\Requests\SearchResourceRequest $request)
     {
         $query = $request->input('q');
+
         return DB::select("SELECT id, resource_name, file, path, created_at, updated_at
               FROM resources
               LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -114,21 +152,24 @@ class ResourceController extends ApiController
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed|string
      */
     public function get_download_secret(Request $request, $id)
     {
-	    if (!count($request->user()->resources()->find($id))) {
-		    return $this->failed(400006);
-	    }
-	    $secret = Crypt::encryptString($id);
-	    return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
+        if (!count($request->user()->resources()->find($id))) {
+            return $this->failed(400006);
+        }
+        $secret = Crypt::encryptString($id);
+
+        return "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret";
     }
 
     /**
      * Download the resource by secret url
      *
      * @param $secret
+     *
      * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function download($secret)
@@ -143,6 +184,7 @@ class ResourceController extends ApiController
             return $this->failed(409001);
         }
         $download_file = $download_file[key($download_file)];
+
         return response()->download("$storage_path/$download_file", $resource->resource_name);
     }
 
@@ -151,13 +193,13 @@ class ResourceController extends ApiController
      *
      * @param \App\Http\Requests\MoveResourceRequest $request
      * @param $id
+     *
      * @return mixed
      */
     public function move(\App\Http\Requests\MoveResourceRequest $request, $id)
     {
         $user = $request->user();
         $resource = Resource::find($id);
-        $r = new Resource();
         $base_path = $resource->path;
         $new_path = $request->get('path');
         $old_path = "$base_path.$id";
@@ -178,33 +220,36 @@ class ResourceController extends ApiController
         foreach ($move_id_list as $move_id) {
             $resource = Resource::find($move_id);
             $resource->path = preg_replace("/($base_path)/", $new_path, $resource->path);
-            if (!$resource->save()) return $this->failed(500001, 500);
+            if (!$resource->save()) {
+                return $this->failed(500001, 500);
+            }
         }
-        return $resource;
+
+        return new ResourceResource($resource);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateResourceRequest $request
      * @param $id
+     *
      * @return mixed
      */
-    public function update(\App\Http\Requests\UpdateResourceRequest $request, $id)
+    public function update(UpdateResourceRequest $request, $id)
     {
         $user = $request->user();
         $resource = Resource::find($id);
         if ($request->has('resource_name')) {
-            if ($user->resources
-                ->where('path', $resource->path)
-                ->where('resource_name', $request->get('resource_name'))
-                ->count()) {
-                return $this->failed(400006);
-            }
             $resource->resource_name = $request->get('resource_name');
         }
-        if (!$resource->save()) return $this->failed(500001, 500);
-        return $resource;
+        if (!$resource->save()) {
+            throw ValidationException::withMessages([
+                "resource" => ["500001"],
+            ])->status(500);
+        }
+
+        return new ResourceResource($resource);
     }
 
     /**
@@ -212,6 +257,7 @@ class ResourceController extends ApiController
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
     public function trash_resource(Request $request, $id)
@@ -222,7 +268,12 @@ class ResourceController extends ApiController
         $path = $resource->path . ".$id";
         if ($resource->file) {
             $resource->trashed = true;
-            if (!$resource->save()) return $this->failed(500001, 500);
+            if (!$resource->save()) {
+                throw ValidationException::withMessages([
+                    "resource" => ["500001"],
+                ])->status(500);
+            }
+
             return $resource;
         }
         $trash_id_list = DB::select("SELECT id FROM resources
@@ -238,9 +289,14 @@ class ResourceController extends ApiController
             $resource = Resource::find($trash_id);
             $resource->trashed = true;
             $resource->trash_path = preg_replace("/($base_path)/", '0', $resource->path);
-            if (!$resource->save()) return $this->failed(500001, 500);
+            if (!$resource->save()) {
+                throw ValidationException::withMessages([
+                    "resource" => ["500001"],
+                ])->status(500);
+            }
         }
-        return $resource;
+
+        return new ResourceResource($resource);
     }
 
     /**
@@ -248,17 +304,25 @@ class ResourceController extends ApiController
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
     public function restore(Request $request, $id)
     {
         $user = $request->user();
         $resource = Resource::find($id);
+        if (!$resource) {
+            throw ValidationException::withMessages([
+                "resource" => ["409001"],
+            ])->status(409);
+        }
         if ($user->resources
                 ->where('path', $resource->path)
                 ->where('resource_name', $resource->resource_name)
                 ->count() > 1) {
-            return $this->failed(400006);
+            throw ValidationException::withMessages([
+                "resource" => ["400006"],
+            ])->status(400);
         }
         $restore_id_list = DB::select("SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -273,9 +337,14 @@ class ResourceController extends ApiController
             $resource = Resource::find($restore_id);
             $resource->trashed = false;
             $resource->trash_path = '0';
-            if (!$resource->save()) return $this->failed(500001, 500);
+            if (!$resource->save()) {
+                throw ValidationException::withMessages([
+                    "resource" => ["500001"],
+                ])->status(500);
+            }
         }
-        return $resource;
+
+        return new ResourceResource($resource);
     }
 
     /**
@@ -283,10 +352,16 @@ class ResourceController extends ApiController
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
     public function destroy(Request $request, $id)
     {
+        if (!Resource::find($id)) {
+            throw ValidationException::withMessages([
+                "resource" => ["409001"],
+            ])->status(409);
+        }
         $user = $request->user();
         $base_path = Resource::find($id)->path;
         $path = Resource::find($id)->path . '.' . $id;
@@ -305,7 +380,11 @@ class ResourceController extends ApiController
             foreach ($old_child_id_list as $child_id) {
                 $resource = Resource::find($child_id->id);
                 $resource->path = preg_replace("/($path)/", $base_path, $resource->path);
-                if (!$resource->save()) return $this->failed(500001);
+                if (!$resource->save()) {
+                    throw ValidationException::withMessages([
+                        "resource" => ["500001"],
+                    ])->status(500);
+                }
             }
         }
         $request->user()->resources()->detach($id);

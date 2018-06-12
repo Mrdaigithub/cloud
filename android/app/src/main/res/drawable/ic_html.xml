@@ -1,0 +1,29 @@
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 Mrdai
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<vector android:autoMirrored="true" android:height="48dp"
+    android:viewportHeight="1024" android:viewportWidth="1024"
+    android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M325.12,652.8l-133.12,-107.52 133.12,-107.52c10.24,-10.24 10.24,-25.6 0,-35.84 -10.24,-10.24 -25.6,-10.24 -35.84,0l-153.6,122.88c-5.12,5.12 -7.68,12.8 -7.68,20.48 0,7.68 2.56,12.8 7.68,17.92l153.6,122.88c10.24,10.24 25.6,10.24 35.84,0 10.24,-7.68 10.24,-23.04 0,-33.28zM888.32,524.8l-153.6,-122.88c-10.24,-10.24 -25.6,-10.24 -35.84,0 -10.24,10.24 -10.24,25.6 0,35.84l133.12,107.52 -133.12,107.52c-10.24,10.24 -10.24,25.6 0,35.84 10.24,10.24 25.6,10.24 35.84,0l153.6,-122.88c5.12,-5.12 7.68,-12.8 7.68,-17.92 0,-10.24 -2.56,-17.92 -7.68,-23.04zM691.2,207.36c-12.8,-7.68 -28.16,-2.56 -35.84,10.24L335.36,834.56c-7.68,12.8 -5.12,30.72 10.24,33.28 15.36,5.12 28.16,2.56 35.84,-10.24l317.44,-614.4c7.68,-12.8 2.56,-28.16 -7.68,-35.84z"/>
+</vector>

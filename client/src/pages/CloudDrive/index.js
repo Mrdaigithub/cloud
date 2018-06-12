@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2017 Mrdai
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
@@ -91,7 +115,7 @@ class CloudDrive extends Component {
     async componentDidMount() {
         const { routing } = this.props;
         if (!this.props.resources) {
-            this.props.fetchResources((resources) => {
+            this.props.fetchResources(() => {
                 this.getResourceList(url2path(routing.location.pathname));
             });
         } else {
@@ -109,11 +133,19 @@ class CloudDrive extends Component {
     async getResourceList(path = '0', moveMode = false) {
         if (moveMode) {
             this.setState({
-                moveResourceList: this.props.resources[path] ? this.props.resources[path].filter(r => !r.file && !r.trashed) : [],
+                moveResourceList: this.props.resources ?
+                    this.props.resources
+                        .filter(r => r.path === path)
+                        .filter(r => !r.file && !r.trashed) :
+                    [],
             });
         } else {
             this.setState({
-                resourceList: this.props.resources[path] ? this.props.resources[path].filter(r => !r.trashed) : [],
+                resourceList: this.props.resources ?
+                    this.props.resources
+                        .filter(r => r.path === path)
+                        .filter(r => !r.trashed)
+                    : [],
                 selected: [],
             });
         }
@@ -169,9 +201,10 @@ class CloudDrive extends Component {
             resource_name: model.newDir,
             path: url2path(routing.location.pathname),
         }));
-        const resourceListWithPath = await requester.get(`resources/${path}`);
-        this.props.changeResourceListWithPath(Object.keys(resourceListWithPath)[0], resourceListWithPath[Object.keys(resourceListWithPath)[0]]);
-        this.getResourceList(url2path(routing.location.pathname));
+        await requester.get(`resources/${path}`);
+        this.props.fetchResources(() => {
+            this.getResourceList(url2path(routing.location.pathname));
+        });
     };
 
 
@@ -342,17 +375,15 @@ class CloudDrive extends Component {
 
 
     /**  删除资源 **/
-
     handleRemoveResource = () => async () => {
         const { resources, routing } = this.props;
-        const resourcePath = url2path(routing.location.pathname);
         const { selected } = this.state;
         if (selected.length) {
             const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
             await Promise.all(deleteList);
-            const resourceListWithPath = resources[resourcePath].map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
-            this.props.changeResourceListWithPath(resourcePath, resourceListWithPath);
-            this.getResourceList(resourcePath);
+            const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
+            this.props.changeResourceListWithPath(resourceListWithPath);
+            this.getResourceList(url2path(routing.location.pathname));
         }
     };
 
@@ -405,7 +436,6 @@ class CloudDrive extends Component {
 
     handleDownload = resourceID => async () => {
         const downloadUrl = await requester.get(`resources/secret/${resourceID}`);
-        console.log(downloadUrl);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;

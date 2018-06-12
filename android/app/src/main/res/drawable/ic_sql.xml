@@ -1,0 +1,34 @@
+<!--
+  ~ MIT License
+  ~
+  ~ Copyright (c) 2017 Mrdai
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<vector android:autoMirrored="true" android:height="48dp"
+    android:viewportHeight="1024" android:viewportWidth="1024"
+    android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#EEBFD9" android:pathData="M112,16h736v992H112z"/>
+    <path android:fillColor="#AEDAF5" android:pathData="M336,592v240c0,35.34 64.46,64 144,64s144,-28.66 144,-64V592H336z"/>
+    <path android:fillColor="#DFF3FD" android:pathData="M336,592a144,64 0,1 0,288 0,144 64,0 1,0 -288,0Z"/>
+    <path android:fillColor="#2B3139" android:pathData="M480,912c88.35,0 160,-35.81 160,-80L640,592c0,-44.19 -71.65,-80 -160,-80s-160,35.81 -160,80v240c0,44.19 71.65,80 160,80zM480,544c70.69,0 128,21.49 128,48s-57.31,48 -128,48 -128,-21.49 -128,-48 57.31,-48 128,-48zM352,639.86C381.18,659.34 427.58,672 480,672s98.82,-12.66 128,-32.14L608,672c0,26.51 -57.31,48 -128,48s-128,-21.49 -128,-48v-32.14zM352,719.86C381.18,739.34 427.58,752 480,752s98.82,-12.66 128,-32.14L608,752c0,26.51 -57.31,48 -128,48s-128,-21.49 -128,-48v-32.14zM352,799.86C381.18,819.34 427.58,832 480,832s98.82,-12.66 128,-32.14L608,832c0,26.51 -57.31,48 -128,48s-128,-21.49 -128,-48v-32.14zM896,128h-32L864,32a32,32 0,0 0,-32 -32L128,0a32,32 0,0 0,-32 32v960a32,32 0,0 0,32 32h704a32,32 0,0 0,32 -32L864,416h32a32,32 0,0 0,32 -32L928,160a32,32 0,0 0,-32 -32zM832,128L448,128a32,32 0,0 0,-32 32v224a32,32 0,0 0,32 32h384v576L128,992L128,32h704v96z"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M448,160h448v224H448z"/>
+    <path android:fillColor="#2B3139" android:pathData="M536.34,289.63c0,2.88 0.48,5.44 1.28,7.52 2.56,6.88 10.24,8.32 16.8,8.32 5.74,0 14.54,-1.92 14.54,-10.38 0,-5.92 -4.96,-7.52 -24.62,-13.12 -18.06,-5.1 -38.7,-10.06 -38.7,-33.09 0,-26.38 22.54,-37.73 46.06,-37.73 24.78,0 46.69,9.42 47.66,37.25h-33.28c0.64,-4.32 -1.28,-7.18 -4.16,-9.1 -2.88,-2.08 -6.88,-2.88 -10.38,-2.88 -4.8,0 -12.64,1.28 -12.64,7.66 0.64,8.16 16.96,9.9 33.1,14.38s32.14,12 32.14,32.94c0,29.74 -27.34,39.34 -52.78,39.34 -12.96,0 -49.89,-4.64 -50.21,-41.09h35.18zM711.97,340.46l-15.34,-15.82c-6.4,4 -16.46,6.08 -27.02,6.08 -34.7,0 -57.89,-24.96 -57.89,-59.81s23.18,-59.79 57.89,-59.79 57.89,24.94 57.89,59.79c0,15.84 -4.8,29.6 -13.26,39.98l13.6,13.9 -15.86,15.66zM680.46,276.34l9.6,9.76c1.44,-4 2.26,-8.98 2.26,-15.2 0,-25.42 -13.76,-31.34 -22.72,-31.34s-22.7,5.92 -22.7,31.34c0,25.44 13.74,31.34 22.7,31.34 1.44,0 2.88,-0.16 4.64,-0.64l-9.6,-9.9 15.82,-15.36zM742.42,213.82L777.6,213.82v84.91h50.53L828.13,328h-85.71v-114.18z"/>
+</vector>
