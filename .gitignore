@@ -1,3 +1,5 @@
 .idea/
 api/storage/logs
 *.log
+android/.gradle
+android/app/build
