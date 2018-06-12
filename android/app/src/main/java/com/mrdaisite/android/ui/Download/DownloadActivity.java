@@ -25,34 +25,46 @@
 package com.mrdaisite.android.ui.Download;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.support.design.widget.TabLayout;
 
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.mrdaisite.android.R;
-import com.mrdaisite.android.adapter.DownloadManagerAdapter;
 import com.mrdaisite.android.adapter.DownloadManagerViewPagerAdapter;
 import com.mrdaisite.android.data.Injection;
 import com.mrdaisite.android.ui.BaseActivity;
-import com.mrdaisite.android.util.ActivityUtils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DownloadActivity extends BaseActivity {
 
+    @BindView(R.id.contentFrame)
+    ViewPager viewPager;
+    @BindView(R.id.downloadManagerTabs)
+    TabLayout tableLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private DownloadingFragment mDownloadingFragment;
     private DownloadedFragment mDownloadedFragment;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download_act);
+        ButterKnife.bind(this);
+
         setupToolbar();
 
-        TabLayout tableLayout = findViewById(R.id.downloadManagerTabs);
-        ViewPager viewPager = findViewById(R.id.contentFrame);
         tableLayout.setupWithViewPager(viewPager);
 
         mDownloadingFragment = DownloadingFragment.newInstance();
@@ -85,7 +97,6 @@ public class DownloadActivity extends BaseActivity {
 
     // Set up the toolbar.
     public void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar ab = getSupportActionBar();
         toolbar.setTitle(R.string.download_manager);

@@ -26,6 +26,7 @@ package com.mrdaisite.android.ui.Download;
 
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,11 +35,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.mrdaisite.android.R;
 import com.mrdaisite.android.adapter.DownloadManagerAdapter;
 import com.mrdaisite.android.adapter.ResourceAdapter;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Trash.TrashPresenter;
+import com.mrdaisite.android.util.Constants;
+import com.orhanobut.logger.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -70,6 +77,48 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FileDownloadUtils.setDefaultSaveRootPath(Environment.getExternalStorageDirectory().toString() + "/Download");
+
+        final FileDownloadListener queueTarget = new FileDownloadListener() {
+            @Override
+            protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+            }
+
+            @Override
+            protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+            }
+
+            @Override
+            protected void completed(BaseDownloadTask task) {
+            }
+
+            @Override
+            protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+            }
+
+            @Override
+            protected void error(BaseDownloadTask task, Throwable e) {
+
+            }
+
+            @Override
+            protected void warn(BaseDownloadTask task) {
+
+            }
+        };
+//        for (String url : Constants.URLS) {
+//            Logger.e(url);
+//            FileDownloader.getImpl().create(url)
+//                    .setPath(FileDownloadUtils.getDefaultSaveRootPath())
+//                    .setCallbackProgressTimes(0) // 由于是队列任务, 这里是我们假设了现在不需要每个任务都回调`FileDownloadListener#progress`, 我们只关系每个任务是否完成, 所以这里这样设置可以很有效的减少ipc.
+//                    .setListener(queueTarget)
+//                    .asInQueueTask()
+//                    .enqueue();
+//        }
+//        FileDownloader.getImpl().start(queueTarget, false);
     }
 
     @Nullable

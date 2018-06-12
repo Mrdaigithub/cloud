@@ -43,7 +43,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -52,10 +51,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.common.primitives.Longs;
-import com.liulishuo.filedownloader.BaseDownloadTask;
-import com.liulishuo.filedownloader.FileDownloadListener;
-import com.liulishuo.filedownloader.FileDownloadSampleListener;
-import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.util.FileDownloadUtils;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -67,17 +62,14 @@ import com.mrdaisite.android.data.model.Resource;
 import com.mrdaisite.android.ui.BaseFragment;
 import com.mrdaisite.android.ui.Move.MoveActivity;
 import com.mrdaisite.android.util.Constants;
-import com.mrdaisite.android.util.DownloadManagerUtil;
 import com.mrdaisite.android.util.ResourceUtil;
 import com.mrdaisite.android.util.schedulers.BaseSchedulerProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -292,40 +284,6 @@ public class DriveFragment extends BaseFragment implements DriveContract.View, V
                             final String url = "https://cdn.llscdn.com/yy/files/xs8qmxn8-lls-LLS-5.8-800-20171207-111607.apk";
                             FileDownloadUtils.setDefaultSaveRootPath(downloadDirPath);
                             String llsApkFilePath = FileDownloadUtils.getDefaultSaveRootPath() + File.separator + "tmpdir1" + File.separator + "test.apk";
-                            FileDownloader.getImpl().create(url)
-                                    .setPath(llsApkFilePath)
-                                    .setCallbackProgressMinInterval(300)
-                                    .setListener(new FileDownloadListener() {
-                                        @Override
-                                        protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                                            com.orhanobut.logger.Logger.e("pending");
-                                        }
-
-                                        @Override
-                                        protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                                            com.orhanobut.logger.Logger.e("progress");
-                                        }
-
-                                        @Override
-                                        protected void completed(BaseDownloadTask task) {
-                                            com.orhanobut.logger.Logger.e("completed");
-                                        }
-
-                                        @Override
-                                        protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                                            com.orhanobut.logger.Logger.e("paused");
-                                        }
-
-                                        @Override
-                                        protected void error(BaseDownloadTask task, Throwable e) {
-                                            com.orhanobut.logger.Logger.e("error");
-                                        }
-
-                                        @Override
-                                        protected void warn(BaseDownloadTask task) {
-                                            com.orhanobut.logger.Logger.e("warn");
-                                        }
-                                    }).start();
                         }
                         break;
                     case R.id.resourceDetail:

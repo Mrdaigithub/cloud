@@ -29,17 +29,8 @@ import android.widget.ProgressBar;
 
 import java.io.File;
 
-public class DownloadManagerUtil {
-    public static final String URL = "https://cdn.llscdn.com/yy/files/tkzpx40x-lls-LLS-5.7-785-20171108-111118.apk";
+public class DownloadManager {
+    private DownloadManager() {
 
-    public static void calcProgressToView(ProgressBar progressBar, long offset, long total) {
-        final float percent = (float) offset / total;
-        progressBar.setProgress((int) (percent * progressBar.getMax()));
-    }
-
-    public static File getParentFile() {
-        final File externalSaveDir = new File(Environment.getExternalStorageDirectory() + "/Download");
-        if (!externalSaveDir.exists()) externalSaveDir.mkdir();
-        return externalSaveDir;
     }
 }
