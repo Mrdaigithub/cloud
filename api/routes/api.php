@@ -46,7 +46,7 @@
 		     Route::get( "resources/download/{secret}", "ResourceController@download" );
 		     Route::middleware( [ "api.auth", "auth:api" ] )->group( function () {
 			     Route::prefix( "resources" )->group( function () {
-				     Route::get( "secret/{id}", "ResourceController@get_download_secret" );
+				     Route::get( "link/{id}", "ResourceController@get_download_link" );
 				     Route::get( "search", "ResourceController@search" );
 				     Route::get( "{path}", "ResourceController@show_with_path" );
 				     Route::get( "preview/{id}", "ResourceController@preview" );
