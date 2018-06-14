@@ -36,8 +36,8 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { fetchOneself } from '../../store/modules/oneself';
-import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
+import { fetchOneself } from '../../store/reducers/oneselfReducer';
+import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
 
 
 class Trash extends Component {

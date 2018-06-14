@@ -48,7 +48,7 @@ import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
-import { alert } from '../../store/modules/assist';
+import { alert } from '../../store/reducers/assistReducer';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
@@ -58,8 +58,8 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
-import { fetchOneself } from '../../store/modules/oneself';
-import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
+import { fetchOneself } from '../../store/reducers/oneselfReducer';
+import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
 
 
 /**

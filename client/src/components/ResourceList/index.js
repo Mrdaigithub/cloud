@@ -38,7 +38,7 @@ import Divider from '@material-ui/core/Divider';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
-import { clearSelectedResource, getSelectedResource } from '../../store/modules/resource';
+import { clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
 
 
 class ResourceList extends Component {

@@ -23,39 +23,39 @@
  */
 
 import React from 'react';
-import { Route, Switch } from 'react-router';
-import Home from '../components/Home';
-import Hello from '../components/Hello';
-import Counter from '../components/Counter';
-import NoMatch from '../components/NoMatch';
-import NavBar from '../components/NavBar';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const Routes = (
+const HelloChild = ({ pathname, search, hash }) => (
     <div>
-        <NavBar/>
-        <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/hello" component={Hello}/>
-            <Route path="/counter" component={Counter}/>
-            <Route component={NoMatch}/>
-        </Switch>
+        Hello-Child
+        <ul>
+            <li><Link to="/hello?color=Blue&size=40">with query string</Link></li>
+            <li><Link to="/hello#lovelove">with hash</Link></li>
+        </ul>
+        <div>
+            pathname: {pathname}
+        </div>
+        <div>
+            search: {search}
+        </div>
+        <div>
+            hash: {hash}
+        </div>
     </div>
 );
 
-export default Routes;
+HelloChild.propTypes = {
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+    hash: PropTypes.string,
+};
 
+const mapStateToProps = state => ({
+    pathname: state.router.location.pathname,
+    search: state.router.location.search,
+    hash: state.router.location.hash,
+});
 
-// import React from 'react';
-// import { Route, Switch } from 'react-router-dom';
-// import Welcome from '../pages/Welcome';
-// import Login from '../pages/Login';
-// // import PrivateRoute from './PrivateRoute';
-//
-// const Routes = props => (
-//     <Switch>
-//         <Route exact path="/" component={Welcome}/>
-//         <Route exact path="/login" component={Login}/>
-//     </Switch>
-// );
-//
-// export default Routes;
+export default connect(mapStateToProps)(HelloChild);

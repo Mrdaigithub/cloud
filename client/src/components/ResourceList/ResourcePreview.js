@@ -53,7 +53,7 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { fetchResources, getSelectedResource } from '../../store/modules/resource';
+import { fetchResources, getSelectedResource } from '../../store/reducers/resourceReducer';
 
 
 class ResourcePreview extends Component {

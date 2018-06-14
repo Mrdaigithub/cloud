@@ -39,7 +39,7 @@ import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { getPreview, path2url } from '../../utils/assist';
-import { getSelectedResource, clearSelectedResource } from '../../store/modules/resource';
+import { getSelectedResource, clearSelectedResource } from '../../store/reducers/resourceReducer';
 import styles from './styles';
 import requester from '../../utils/requester';
 

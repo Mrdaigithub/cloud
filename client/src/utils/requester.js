@@ -24,7 +24,7 @@
 
 import axios from 'axios';
 import store from '../store';
-import { toggleLoading, alert } from '../store/modules/assist';
+import { toggleLoading, alert } from '../store/reducers/assistReducer';
 
 const errors = {
     400000: '请求参数缺失',

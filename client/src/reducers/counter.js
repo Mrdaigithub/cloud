@@ -22,15 +22,15 @@
  * SOFTWARE.
  */
 
-import { combineReducers } from 'redux';
-import assist from './assist';
-import resource from './resource';
-import user from './user';
-import oneself from './oneself';
+const counterReducer = (state = 0, action) => {
+    switch (action.type) {
+        case 'INCREMENT':
+            return state + 1;
+        case 'DECREMENT':
+            return state - 1;
+        default:
+            return state;
+    }
+};
 
-export default combineReducers({
-    oneself,
-    assist,
-    resource,
-    user,
-});
+export default counterReducer;

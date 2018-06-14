@@ -23,34 +23,11 @@
  */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
 import { ConnectedRouter, replace } from 'connected-react-router';
-import brown from '@material-ui/core/colors/brown';
-import grey from '@material-ui/core/colors/grey';
-import Snackbar from '@material-ui/core/Snackbar';
-import CircularLoading from '../components/CircularLoading';
-import withRoot from '../components/withRoot';
-import Routes from '../routes';
-import { decrement, increment } from '../actions/counter';
-
-const theme = createMuiTheme({
-    palette: {
-        type: 'light',
-        primary: brown,
-        secondary: grey,
-    },
-});
-
-const styles = theme => ({
-    root: {
-        position: 'relative',
-        height: '100vh',
-        overflowX: 'hidden',
-    },
-});
-
+import Routes from './routes';
+import { decrement, increment } from './actions/counter';
+import { connect } from 'react-redux';
 
 class App extends Component {
     constructor(props) {
@@ -61,7 +38,6 @@ class App extends Component {
             msgText: '',
         };
     }
-
 
     componentDidMount() {
         const { store } = this.props;
@@ -83,33 +59,21 @@ class App extends Component {
                 action={history.action}
                 location={history.location}
                 onLocationChanged={null}>
-                <Routes/>
+                {Routes}
             </ConnectedRouter>
         );
     }
 }
 
 App.propTypes = {
-    store: PropTypes.any.isRequired,
+    history: PropTypes.object,
+    store: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
-    // loading: state.assist.loading,
-    // msgShow: state.assist.msgShow,
-    // msgText: state.assist.msgText,
 });
 
-// export default connect(
-//     mapStateToProps,
-//     undefined,
-//     undefined,
-//     { pure: false },
-// )(withRoot(withStyles(styles)(App)));
-
 const mapDispatchToProps = dispatch => ({
-    increment: () => dispatch(increment()),
-    decrement: () => dispatch(decrement()),
-    changePage: () => dispatch(replace('/')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

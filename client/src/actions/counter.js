@@ -22,40 +22,10 @@
  * SOFTWARE.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import Home from '../components/Home';
-import Hello from '../components/Hello';
-import Counter from '../components/Counter';
-import NoMatch from '../components/NoMatch';
-import NavBar from '../components/NavBar';
+export const increment = () => ({
+    type: 'INCREMENT',
+});
 
-const Routes = (
-    <div>
-        <NavBar/>
-        <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/hello" component={Hello}/>
-            <Route path="/counter" component={Counter}/>
-            <Route component={NoMatch}/>
-        </Switch>
-    </div>
-);
-
-export default Routes;
-
-
-// import React from 'react';
-// import { Route, Switch } from 'react-router-dom';
-// import Welcome from '../pages/Welcome';
-// import Login from '../pages/Login';
-// // import PrivateRoute from './PrivateRoute';
-//
-// const Routes = props => (
-//     <Switch>
-//         <Route exact path="/" component={Welcome}/>
-//         <Route exact path="/login" component={Login}/>
-//     </Switch>
-// );
-//
-// export default Routes;
+export const decrement = () => ({
+    type: 'DECREMENT',
+});

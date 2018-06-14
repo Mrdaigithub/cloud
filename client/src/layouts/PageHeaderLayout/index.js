@@ -50,7 +50,7 @@ import LightIcon from '../../components/LightIcon/index';
 import SearchIcon from '../../components/SearchIcon/index';
 import Setting from '../../pages/Setting';
 import styles from './styles';
-import { fetchOneself } from '../../store/modules/oneself';
+import { fetchOneself } from '../../store/reducers/oneselfReducer';
 
 
 class PageHeaderLayout extends Component {

@@ -58,7 +58,7 @@ import qs from 'qs';
 import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
-import { fetchUsers, addUser, removeUsers } from '../../../store/modules/user';
+import { fetchUsers, addUser, removeUsers } from '../../../store/reducers/userReducer';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../../utils/requester';

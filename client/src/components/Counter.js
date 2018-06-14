@@ -22,40 +22,39 @@
  * SOFTWARE.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import Home from '../components/Home';
-import Hello from '../components/Hello';
-import Counter from '../components/Counter';
-import NoMatch from '../components/NoMatch';
-import NavBar from '../components/NavBar';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { replace } from 'connected-react-router';
+import { increment, decrement } from '../actions/counter';
 
-const Routes = (
-    <div>
-        <NavBar/>
-        <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/hello" component={Hello}/>
-            <Route path="/counter" component={Counter}/>
-            <Route component={NoMatch}/>
-        </Switch>
-    </div>
-);
+class Counter extends Component {
+    render() {
+        return (
+            <div>
+                Counter: {this.props.count}
+                <button onClick={this.props.increment}>+</button>
+                <button onClick={this.props.decrement}>-</button>
+                <button onClick={this.props.changePage}>change</button>
+            </div>
+        );
+    }
+}
 
-export default Routes;
+Counter.propTypes = {
+    count: PropTypes.number,
+    increment: PropTypes.func.isRequired,
+    decrement: PropTypes.func.isRequired,
+};
 
+const mapStateToProps = state => ({
+    count: state.count,
+});
 
-// import React from 'react';
-// import { Route, Switch } from 'react-router-dom';
-// import Welcome from '../pages/Welcome';
-// import Login from '../pages/Login';
-// // import PrivateRoute from './PrivateRoute';
-//
-// const Routes = props => (
-//     <Switch>
-//         <Route exact path="/" component={Welcome}/>
-//         <Route exact path="/login" component={Login}/>
-//     </Switch>
-// );
-//
-// export default Routes;
+const mapDispatchToProps = dispatch => ({
+    increment: () => dispatch(increment()),
+    decrement: () => dispatch(decrement()),
+    changePage: () => dispatch(replace('/')),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);

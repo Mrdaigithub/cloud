@@ -22,22 +22,9 @@
  * SOFTWARE.
  */
 
-import { createStore, applyMiddleware, compose } from 'redux';
-import { createBrowserHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
-import rootReducer from './modules';
+import { combineReducers } from 'redux';
+import assistReducer from './assistReducer';
 
-const initialState = {};
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const history = createBrowserHistory();
-const middleware = applyMiddleware(routerMiddleware(history));
-
-const composedEnhancers = composeEnhancer(middleware);
-
-const store = createStore(
-    rootReducer,
-    initialState,
-    composedEnhancers,
-);
-
-export default store;
+export default combineReducers({
+    assist: assistReducer,
+});
