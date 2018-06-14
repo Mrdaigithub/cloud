@@ -25,13 +25,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import brown from 'material-ui/colors/brown';
-import grey from 'material-ui/colors/grey';
-import Snackbar from 'material-ui/Snackbar';
-import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
+import { Route, Switch } from 'react-router';
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
+import { ConnectedRouter } from 'connected-react-router';
+import brown from '@material-ui/core/colors/brown';
+import grey from '@material-ui/core/colors/grey';
+import Snackbar from '@material-ui/core/Snackbar';
+import CircularLoading from '../components/CircularLoading';
 import withRoot from '../components/withRoot';
 import Routes from '../routes';
-import CircularLoading from '../components/CircularLoading';
 
 const theme = createMuiTheme({
     palette: {
@@ -49,6 +51,7 @@ const styles = theme => ({
     },
 });
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -58,6 +61,7 @@ class App extends Component {
             msgText: '',
         };
     }
+
 
     componentDidMount() {
         const { store } = this.props;
@@ -72,27 +76,23 @@ class App extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, history } = this.props;
         return (
-            <main>
-                <MuiThemeProvider theme={theme}>
-                    <div className={classes.root}>
-                        <Snackbar
-                            className={classes.secondary}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                            open={this.state.msgShow}
-                            message={this.state.msgText}/>
-                        <CircularLoading show={this.state.loading}/>
-                        <Routes/>
-                    </div>
-                </MuiThemeProvider>
-            </main>
+            <ConnectedRouter
+                history={history}>
+                <div>
+                    <Switch>
+                        <Route exact path="/" render={() => (<div>Match</div>)}/>
+                        <Route render={() => (<div>Miss</div>)}/>
+                    </Switch>
+                </div>
+            </ConnectedRouter>
         );
     }
 }
 
 App.propTypes = {
-    classes: PropTypes.object.isRequired,
+    store: PropTypes.any.isRequired,
 };
 
 const mapStateToProps = state => ({

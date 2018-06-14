@@ -25,12 +25,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withStyles } from 'material-ui/styles';
 import mime from 'mime-types';
-import IconButton from 'material-ui/IconButton';
-import Undo from 'material-ui-icons/Undo';
-import DeleteIcon from 'material-ui-icons/Delete';
-import Checkbox from 'material-ui/Checkbox';
+import { withStyles } from '@material-ui/core/styles';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import Undo from '@material-ui/icons/Undo';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ResourceList from '../../components/ResourceList';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';

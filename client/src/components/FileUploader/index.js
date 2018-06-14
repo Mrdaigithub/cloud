@@ -23,10 +23,11 @@
  */
 
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import { LinearProgress } from 'material-ui/Progress';
-import Grid from 'material-ui/Grid';
-import Dialog, { DialogContent } from 'material-ui/Dialog';
+import { withStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContentText';
 import { FileIcon } from '../../components/file-type-icon';
 import styles from './styles';
 

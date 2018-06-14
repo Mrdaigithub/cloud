@@ -23,31 +23,31 @@
  */
 
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import qs from 'qs';
-import Grid from 'material-ui/Grid';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { ListItemIcon, ListItemText } from '@material-ui/core/List';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import FileDownload from '@material-ui/icons/FileDownload';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import Info from '@material-ui/icons/Info';
 import Formsy from 'formsy-react';
-import Menu, { MenuItem } from 'material-ui/Menu';
-import { ListItemIcon, ListItemText } from 'material-ui/List';
-import Button from 'material-ui/Button';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from 'material-ui/Dialog';
-import MoreVertIcon from 'material-ui-icons/MoreVert';
-import FileDownload from 'material-ui-icons/FileDownload';
-import Delete from 'material-ui-icons/Delete';
-import Edit from 'material-ui-icons/Edit';
-import Info from 'material-ui-icons/Info';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { FormsyText } from '../../components/FormsyMaterialUi';

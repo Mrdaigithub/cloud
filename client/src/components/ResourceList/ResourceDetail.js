@@ -23,13 +23,15 @@
  */
 
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
-import Typography from 'material-ui/Typography';
-import Card, { CardHeader, CardContent } from 'material-ui/Card';
-import Drawer from 'material-ui/Drawer';
-import Divider from 'material-ui/Divider';
-import Grid from 'material-ui/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import { FolderIcon } from '../../components/file-type-icon';
 import styles from './styles';

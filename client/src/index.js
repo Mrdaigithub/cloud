@@ -25,17 +25,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import store, { history } from './store';
-import App from './pages/index';
+import { createBrowserHistory } from 'history';
+import store from './store';
+import App from './pages';
 
-const target = document.querySelector('#root');
+const history = createBrowserHistory();
 
 render(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App store={store}/>
-        </ConnectedRouter>
+        <App history={history} store={store}/>
     </Provider>,
-    target,
+    document.querySelector('#root'),
 );

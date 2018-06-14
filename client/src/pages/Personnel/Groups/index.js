@@ -25,37 +25,35 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
-import Grid from 'material-ui/Grid';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
-import Table, {
-    TableBody,
-    TableCell,
-    TableFooter,
-    TablePagination,
-    TableRow,
-} from 'material-ui/Table';
-import { InputAdornment } from 'material-ui/Input';
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from 'material-ui/Dialog';
-import Visibility from 'material-ui-icons/Visibility';
-import VisibilityOff from 'material-ui-icons/VisibilityOff';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Checkbox from 'material-ui/Checkbox';
-import Tooltip from 'material-ui/Tooltip';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete';
-import PersonAdd from 'material-ui-icons/PersonAdd';
-import Edit from 'material-ui-icons/Edit';
-import FilterListIcon from 'material-ui-icons/FilterList';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import PersonAdd from '@material-ui/icons/PersonAdd';
+import Edit from '@material-ui/icons/Edit';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import { bindActionCreators } from 'redux';
-import { withStyles } from 'material-ui/styles';
 import qs from 'qs';
 import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';

@@ -23,7 +23,7 @@
  */
 
 import React from 'react';
-import Slide from 'material-ui/transitions/Slide';
+import Slide from '@material-ui/core/Slide';
 
 
 const Transition = props => (

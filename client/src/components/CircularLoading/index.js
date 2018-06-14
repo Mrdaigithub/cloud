@@ -23,9 +23,9 @@
  */
 
 import React from 'react';
-import Grid from 'material-ui/Grid';
-import { CircularProgress } from 'material-ui/Progress';
-import { withStyles } from 'material-ui/styles';
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 
 const hideStyles = {

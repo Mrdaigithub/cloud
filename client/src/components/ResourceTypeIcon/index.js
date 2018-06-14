@@ -23,12 +23,12 @@
  */
 
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import {
     Movie,
     MusicNote,
     Panorama,
-} from 'material-ui-icons';
+} from '@material-ui/icons';
 import styles from './styles';
 import {
     FileIcon,

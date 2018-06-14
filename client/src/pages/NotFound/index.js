@@ -25,10 +25,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
-import { withStyles } from 'material-ui/styles';
-import Grid from 'material-ui/Grid';
-import Button from 'material-ui/Button';
+import { push } from 'connected-react-router';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import styles from './styles';
 
 class NotFound extends Component {

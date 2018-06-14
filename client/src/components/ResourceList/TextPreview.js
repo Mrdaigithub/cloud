@@ -24,7 +24,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import requester from '../../utils/requester';
 import styles from './styles';
 

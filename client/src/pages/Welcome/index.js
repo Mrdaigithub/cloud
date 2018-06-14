@@ -23,12 +23,12 @@
  */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Grid from 'material-ui/Grid';
-import { LinearProgress } from 'material-ui/Progress';
 import { bindActionCreators } from 'redux';
-import { replace } from 'react-router-redux';
-import { withStyles } from 'material-ui/styles';
+import { connect } from 'react-redux';
+import { replace } from 'connected-react-router';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import styles from './styles';
 import logo from '../../static/logo.svg';
 

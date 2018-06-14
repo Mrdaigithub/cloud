@@ -26,22 +26,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
-import { withStyles } from 'material-ui/styles';
+import { push } from 'connected-react-router';
 import mime from 'mime-types';
 import Formsy from 'formsy-react';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Dialog, { DialogActions, DialogContent } from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import Checkbox from 'material-ui/Checkbox';
-import CloseIcon from 'material-ui-icons/Close';
-import CreateNewFolder from 'material-ui-icons/CreateNewFolder';
-import CompareArrows from 'material-ui-icons/CompareArrows';
-import FileUpload from 'material-ui-icons/FileUpload';
-import DeleteIcon from 'material-ui-icons/Delete';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Checkbox from '@material-ui/core/Checkbox';
+import CloseIcon from '@material-ui/icons/Close';
+import CreateNewFolder from '@material-ui/icons/CreateNewFolder';
+import CompareArrows from '@material-ui/icons/CompareArrows';
+import FileUpload from '@material-ui/icons/FileUpload';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
 import { alert } from '../../store/modules/assist';
 import { FormsyText } from '../../components/FormsyMaterialUi';
@@ -447,6 +452,13 @@ class CloudDrive extends Component {
             .removeChild(downloadDom);
     };
 
+
+    /** 分享资源 **/
+
+    handleShare = () => async () => {
+        console.log('share');
+    };
+
     render() {
         const { classes, selectedResource } = this.props;
         const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
@@ -502,6 +514,18 @@ class CloudDrive extends Component {
                                 className={classes.SpeedDialItemButton}
                                 component="span">
                                 <DeleteIcon/>
+                            </IconButton>
+                        </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <label htmlFor="icon-button-share">
+                            <IconButton
+                                onClick={this.handleShare()}
+                                disabled={!selected.length}
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
+                                <ShareIcon/>
                             </IconButton>
                         </label>
                     </SpeedDialItem>
@@ -573,6 +597,31 @@ class CloudDrive extends Component {
                             onBack={this.handleBackMovePath}
                             onClickResource={this.handleClickMoveDir()}/>
                     </div>
+                </Dialog>
+                <Dialog
+                    open={true}
+                    // TransitionComponent={Transition}
+                    keepMounted
+                    // onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description">
+                    <DialogTitle id="alert-dialog-slide-title">
+                        {'Use Google\'s location service?'}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Let Google help apps determine location. This means sending anonymous location data to
+                            Google, even when no apps are running.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                            Disagree
+                        </Button>
+                        <Button onClick={this.handleClose} color="primary">
+                            Agree
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </div>
         );

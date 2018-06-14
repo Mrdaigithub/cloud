@@ -23,14 +23,18 @@
  */
 
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mime from 'mime-types';
-import List, { ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
-import IconButton from 'material-ui/IconButton';
-import Undo from 'material-ui-icons/Undo';
-import Divider from 'material-ui/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import Undo from '@material-ui/icons/Undo';
+import Divider from '@material-ui/core/Divider';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
