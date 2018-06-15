@@ -23,26 +23,14 @@
  */
 
 import { AppContainer } from 'react-hot-loader';
-import { applyMiddleware, compose, createStore } from 'redux';
-import { createBrowserHistory } from 'history';
-import { routerMiddleware, connectRouter } from 'connected-react-router';
+import { connectRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import history from './utils/history';
+import store from './store';
+import App from './pages';
 import rootReducer from './store/reducers';
-
-const history = createBrowserHistory();
-
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-    connectRouter(history)(rootReducer),
-    composeEnhancer(
-        applyMiddleware(
-            routerMiddleware(history),
-        ),
-    ),
-);
 
 const render = () => {
     ReactDOM.render(
@@ -60,12 +48,12 @@ render();
 // Hot reloading
 if (module.hot) {
     // Reload components
-    module.hot.accept('./App', () => {
+    module.hot.accept('./pages', () => {
         render();
     });
 
     // Reload reducers
-    module.hot.accept('./reducers', () => {
+    module.hot.accept('./store/reducers', () => {
         store.replaceReducer(connectRouter(history)(rootReducer));
     });
 }

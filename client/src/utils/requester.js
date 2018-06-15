@@ -24,22 +24,27 @@
 
 import axios from 'axios';
 import store from '../store';
-import { toggleLoading, alert } from '../store/reducers/assistReducer';
+import { toggleLoading, alert } from '../store/actions/assistActions';
 
-const errors = {
-    400000: '请求参数缺失',
-    400001: '请求参数存在非法字符',
-    400002: '请求参数格式错误',
-    400003: '用户不存在',
-    400004: '用户已存在',
-    401000: '密码错误',
-    401001: '用户未携带有效的access token',
-    401002: '未授权',
-    403000: '权限不足',
-    409000: '上传的资源已存在于服务器',
-    409001: '此用户的存储容量不足',
-    500000: '网络错误',
-    500001: '保存失败',
+// 全局错误状态码
+const errorCodes = {
+    '400000': '参数缺失',
+    '400001': '参数字符过短',
+    '400002': '参数字符过长',
+    '400003': '请求参数存在非法字符',
+    '400004': '请求参数格式错误',
+    '400005': '请求参数不存在于数据库',
+    '400006': '请求参数已存在于数据库',
+    '401000': '密码错误',
+    '401001': '无效的的access_token',
+    '401002': '无效的的refresh_token',
+    '403000': '权限不足',
+    '409000': '上传的资源已存在于服务器',
+    '409001': '请求的资源不存在',
+    '409002': '此用户的存储容量不足',
+    '500000': '服务器错误',
+    '500001': '服务器资源保存失败',
+    '504000': '资源下载链接失效',
 };
 
 const requester = axios.create({
@@ -76,9 +81,9 @@ requester.interceptors.response.use(
             return Promise.reject(error);
         }
         const data = error.response.data;
-        if (data.status === 'error') {
-            const errorCode = data.message;
-            alert(errors[errorCode], 1500)(store.dispatch);
+        if (data.errors) {
+            const errorCode = data.errors[Object.keys(data.errors)[0]][0];
+            alert(errorCodes[errorCode], 1500)(store.dispatch);
         } else {
             alert('远端服务器超时', 1500)(store.dispatch);
         }

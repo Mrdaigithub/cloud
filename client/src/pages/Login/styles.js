@@ -28,6 +28,7 @@ const styles = theme => ({
     },
     logoImg: {
         width: '100%',
+        marginBottom: '20px',
     },
 
     logoTitle: {

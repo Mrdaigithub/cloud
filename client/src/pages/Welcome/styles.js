@@ -27,6 +27,10 @@ const styles = theme => ({
         textAlign: 'center',
         height: '100vh',
     },
+    logo: {
+        maxWidth: '400px',
+        width: '80%',
+    },
 });
 
-export default styles
+export default styles;

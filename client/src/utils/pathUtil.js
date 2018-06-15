@@ -22,11 +22,34 @@
  * SOFTWARE.
  */
 
-import { combineReducers } from 'redux';
-import assistReducer from './assistReducer';
-import oneselfReducer from './oneselfReducer';
-
-export default combineReducers({
-    assist: assistReducer,
-    oneself: oneselfReducer,
-});
+/**
+ * 回退url /cloud-drive/0/1/2/3 => /cloud-drive/0/1/2
+ *
+ * @param url
+ * @returns {string}
+ */
+export const movePath = {
+    go: (url, path) => {
+        const newMoveUrl = url.toString()
+            .split('/')
+            .filter(item => !!item);
+        if (newMoveUrl[0] !== '0') {
+            newMoveUrl.unshift('0');
+        }
+        newMoveUrl.push(path.toString()
+            .trim());
+        return newMoveUrl.join('/');
+    },
+    back: (url) => {
+        const newMoveUrl = url.toString()
+            .split('/')
+            .filter(item => !!item);
+        if (newMoveUrl[0] !== '0') {
+            newMoveUrl.unshift('0');
+        }
+        if (newMoveUrl.length > 1) {
+            newMoveUrl.pop();
+        }
+        return newMoveUrl.join('/');
+    },
+};

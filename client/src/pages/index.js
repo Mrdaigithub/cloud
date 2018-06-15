@@ -23,31 +23,35 @@
  */
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles';
-import { ConnectedRouter, replace } from 'connected-react-router';
-import brown from '@material-ui/core/colors/brown';
-import grey from '@material-ui/core/colors/grey';
+import { ConnectedRouter } from 'connected-react-router';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularLoading from '../components/CircularLoading';
 import withRoot from '../components/withRoot';
 import Routes from '../routes';
-import { decrement, increment } from '../actions/counter';
 
 const theme = createMuiTheme({
     palette: {
-        type: 'light',
-        primary: brown,
-        secondary: grey,
+        primary: {
+            main: '#DE5145',
+        },
+        secondary: {
+            light: '#D4443B',
+            main: '#af4138',
+            contrastText: '#111111',
+        },
     },
 });
 
-const styles = theme => ({
+const styles = () => ({
     root: {
         position: 'relative',
+        width: '100vw',
         height: '100vh',
         overflowX: 'hidden',
+        overflowY: 'hidden',
     },
 });
 
@@ -64,12 +68,11 @@ class App extends Component {
 
 
     componentDidMount() {
-        const { store } = this.props;
-        store.subscribe(() => {
+        this.props.store.subscribe(() => {
                 this.setState({
-                    loading: store.getState().assist.loading,
-                    msgShow: store.getState().assist.msgShow,
-                    msgText: store.getState().assist.msgText,
+                    loading: this.props.store.getState().assist.loading,
+                    msgShow: this.props.store.getState().assist.msgShow,
+                    msgText: this.props.store.getState().assist.msgText,
                 });
             },
         );
@@ -83,33 +86,36 @@ class App extends Component {
                 action={history.action}
                 location={history.location}
                 onLocationChanged={null}>
-                <Routes/>
+                <MuiThemeProvider theme={theme}>
+                    <div className={classes.root}>
+                        <Snackbar
+                            className={classes.secondary}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                            open={this.state.msgShow}
+                            message={this.state.msgText}/>
+                        <CircularLoading show={this.state.loading}/>
+                        {Routes}
+                    </div>
+                </MuiThemeProvider>
             </ConnectedRouter>
         );
     }
 }
 
 App.propTypes = {
-    store: PropTypes.any.isRequired,
+    history: PropTypes.object,
+    store: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
-    // loading: state.assist.loading,
-    // msgShow: state.assist.msgShow,
-    // msgText: state.assist.msgText,
+    loading: state.assist.loading,
+    msgShow: state.assist.msgShow,
+    msgText: state.assist.msgText,
 });
 
-// export default connect(
-//     mapStateToProps,
-//     undefined,
-//     undefined,
-//     { pure: false },
-// )(withRoot(withStyles(styles)(App)));
-
-const mapDispatchToProps = dispatch => ({
-    increment: () => dispatch(increment()),
-    decrement: () => dispatch(decrement()),
-    changePage: () => dispatch(replace('/')),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+    mapStateToProps,
+    undefined,
+    undefined,
+    { pure: false },
+)(withRoot(withStyles(styles)(App)));

@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 
-import { combineReducers } from 'redux';
-import assistReducer from './assistReducer';
-import oneselfReducer from './oneselfReducer';
+import { createBrowserHistory } from 'history';
 
-export default combineReducers({
-    assist: assistReducer,
-    oneself: oneselfReducer,
-});
+window.h = window.h ? window.h : createBrowserHistory();
+
+export default window.h;

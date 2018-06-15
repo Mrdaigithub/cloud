@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 
-export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
-export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
-export const CHANGE_MSG = 'assist/CHANGE_MSG';
+import { CHANGE_MSG, TOGGLE_LOADING, TOGGLE_MSG } from '../actions/assistActions';
 
 const initialState = {
     loading: false,
@@ -53,41 +51,4 @@ export default (state = initialState, action) => {
         default:
             return state;
     }
-};
-
-export const toggleLoading = (loading) => {
-    return (dispatch) => {
-        return dispatch({
-            type: TOGGLE_LOADING,
-            payload: {
-                loading,
-            },
-        });
-    };
-};
-
-export const alert = (msgText = '', time = 3000) => {
-    return (dispatch) => {
-        dispatch({
-            type: TOGGLE_MSG,
-        });
-        dispatch({
-            type: CHANGE_MSG,
-            payload: {
-                msgText,
-            },
-        });
-
-        return setTimeout(() => {
-            dispatch({
-                type: TOGGLE_MSG,
-            });
-            dispatch({
-                type: CHANGE_MSG,
-                payload: {
-                    msgText: '',
-                },
-            });
-        }, time);
-    };
 };

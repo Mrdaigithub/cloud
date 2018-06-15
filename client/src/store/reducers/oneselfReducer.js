@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-import qs from 'qs';
-import request from '../../utils/requester';
-
-export const FETCH_ONESELF = 'oneself/FETCH_ONESELF';
-export const CLEAR_ONESELF = 'oneself/CLEAR_ONESELF';
+import {
+    FETCH_ONESELF,
+    CLEAR_ONESELF,
+} from '../actions/oneselfActions';
 
 const initialState = {
     id: null,
@@ -59,52 +58,7 @@ export default (state = initialState, action) => {
                 capacity: 0,
                 used: 0,
             };
-
         default:
             return state;
     }
-};
-
-export const login = (username, password, cb) => {
-    return async () => {
-        const { access_token, refresh_token } = await request.post('/login/password', qs.stringify({
-            username,
-            password,
-        }));
-        sessionStorage.accessToken = access_token;
-        sessionStorage.refreshToken = refresh_token;
-        return cb();
-    };
-};
-
-export const logout = () => {
-    return (dispatch) => {
-        dispatch({
-            type: CLEAR_ONESELF,
-        });
-    };
-};
-
-export const fetchOneself = () => {
-    return async (dispatch) => {
-        const { id, username, email, is_admin, capacity, used } = await request.get('/users/0');
-        return dispatch({
-            type: FETCH_ONESELF,
-            payload: {
-                id,
-                username,
-                email,
-                isAdmin: is_admin,
-                capacity,
-                used,
-            },
-        });
-    };
-};
-
-export const clearToken = () => {
-    return () => {
-        delete sessionStorage.accessToken;
-        delete sessionStorage.refreshToken;
-    };
 };

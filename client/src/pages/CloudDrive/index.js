@@ -26,7 +26,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
 import { bindActionCreators } from 'redux';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
 import mime from 'mime-types';
 import Formsy from 'formsy-react';
 import { withStyles } from '@material-ui/core/styles';
@@ -48,7 +48,7 @@ import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
-import { alert } from '../../store/reducers/assistReducer';
+import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
@@ -58,42 +58,9 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
-import { fetchOneself } from '../../store/reducers/oneselfReducer';
+import { fetchOneself } from '../../store/actions/oneselfActions';
 import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
-
-
-/**
- * 回退url /cloud-drive/0/1/2/3 => /cloud-drive/0/1/2
- *
- * @param url
- * @returns {string}
- */
-const movePath = {
-    go: (url, path) => {
-        const newMoveUrl = url.toString()
-            .split('/')
-            .filter(item => !!item);
-        if (newMoveUrl[0] !== '0') {
-            newMoveUrl.unshift('0');
-        }
-        newMoveUrl.push(path.toString()
-            .trim());
-        return newMoveUrl.join('/');
-    },
-    back: (url) => {
-        const newMoveUrl = url.toString()
-            .split('/')
-            .filter(item => !!item);
-        if (newMoveUrl[0] !== '0') {
-            newMoveUrl.unshift('0');
-        }
-        if (newMoveUrl.length > 1) {
-            newMoveUrl.pop();
-        }
-        return newMoveUrl.join('/');
-    },
-};
-
+import { movePath } from '../../utils/pathUtil';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -599,7 +566,7 @@ class CloudDrive extends Component {
                     </div>
                 </Dialog>
                 <Dialog
-                    open={true}
+                    open
                     // TransitionComponent={Transition}
                     keepMounted
                     // onClose={this.handleClose}
@@ -636,15 +603,15 @@ const mapStateToProps = (state, routing) => ({
     selectedResource: state.resource.selectedResource,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
-    alert,
+const mapDispatchToProps = dispatch => ({
     fetchOneself,
     fetchResources,
     changeResourceListWithPath,
     getSelectedResource,
     clearSelectedResource,
-}, dispatch);
+    alert: (msgText, time) => alert(msgText, time)(dispatch),
+    changePage: url => dispatch(replace(url)),
+});
 
 export default connect(
     mapStateToProps,

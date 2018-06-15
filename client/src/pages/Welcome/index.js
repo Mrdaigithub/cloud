@@ -23,21 +23,20 @@
  */
 
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import styles from './styles';
-import logo from '../../static/logo.svg';
+import logo from '../../static/logo.png';
 
 class Welcome extends Component {
     constructor(props) {
         super(props);
         this.state = {
             completed: 0,
-            time: 3,
+            time: 1,
         };
     }
 
@@ -54,7 +53,7 @@ class Welcome extends Component {
         if (completed <= 100) {
             this.setState({ completed: completed + (100 / (time / 0.5)) });
         } else {
-            this.props.changePage('/login');
+            this.props.changePage('login');
         }
     };
 
@@ -65,9 +64,7 @@ class Welcome extends Component {
                 <LinearProgress mode="determinate" value={this.state.completed}/>
                 <Grid container alignItems={'center'} justify={'center'} className={classes.normal}>
                     <Grid item xs={12}>
-                        <img src={logo} alt="logo"/>
-                        <h1>Cloud</h1>
-                        <p>A simple cloud project</p>
+                        <img src={logo} alt="logo" className={classes.logo}/>
                     </Grid>
                 </Grid>
             </div>
@@ -77,9 +74,9 @@ class Welcome extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => replace(url),
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+    changePage: url => dispatch(replace(url)),
+});
 
 export default connect(
     mapStateToProps,

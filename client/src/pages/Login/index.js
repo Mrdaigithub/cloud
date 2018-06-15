@@ -24,68 +24,107 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { replace } from 'connected-react-router';
 import Formsy from 'formsy-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { InputAdornment } from '@material-ui/core/InputAdornment';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { login, clearToken } from '../../store/reducers/oneselfReducer';
-import { alert } from '../../store/reducers/assistReducer';
+import { login, clearToken } from '../../store/actions/oneselfActions';
+import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
-import logo from '../../static/logo.svg';
-
+import logo from '../../static/logo.png';
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             showPassword: false,
+            v: 'root',
+            p: 'root',
         };
     }
 
-    async componentWillMount() {
-        // this.props.clearToken();
+    componentWillMount() {
+        this.props.clearToken();
     }
 
-    handleClickShowPasssword() {
+    handleClickShowPassword() {
         this.setState({ showPassword: !this.state.showPassword });
     }
 
     login(model) {
         const { username, password } = model;
         this.props.login(username, password, () => {
-            this.props.alert('登录成功', 1000);
+            console.log(this.props.alert);
+            this.props.alert('登录成功');
             setTimeout(() => {
                 this.props.changePage('/cloud-drive/0');
             }, 1300);
-        });
+        })();
     }
 
     render() {
         const { classes } = this.props;
         return (
-            <div>
-                ok
-            </div>
+            <BasicLayout>
+                <Grid className={classes.normal} container direction={'row'} justify={'center'} alignItems={'center'}>
+                    <Grid item xs={7} sm={5} md={3}>
+                        <Grid container alignItems={'center'} justify={'center'}>
+                            <Grid item xs={10}><img className={classes.logoImg} src={logo} alt="logo"/></Grid>
+                        </Grid>
+                        <Formsy onValidSubmit={this.login.bind(this)}>
+                            <FormsyText
+                                title="用户名"
+                                name="username"
+                                value={this.state.v}
+                                validations={{ matchRegexp: /(\w|\d){4,}/ }}
+                                validationError="用户名不合法"
+                                required
+                                fullWidth
+                                autoFocus/>
+                            <FormsyText
+                                title="密码"
+                                name="password"
+                                value={this.state.p}
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                required
+                                fullWidth
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={this.handleClickShowPassword.bind(this)}>
+                                            {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }/>
+                            <Button
+                                type="submit"
+                                color="primary"
+                                variant="contained"
+                                className={classes.loginButton}>登录</Button>
+                        </Formsy>
+                    </Grid>
+                </Grid>
+            </BasicLayout>
         );
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    count: state.count,
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
+const mapDispatchToProps = dispatch => ({
     login,
     clearToken,
-    alert,
-    changePage: url => replace(url),
-}, dispatch);
+    alert: (msgText, time) => alert(msgText, time)(dispatch),
+    changePage: url => dispatch(replace(url)),
+});
 
 export default connect(
     mapStateToProps,

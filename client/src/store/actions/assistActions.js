@@ -22,11 +22,43 @@
  * SOFTWARE.
  */
 
-import { combineReducers } from 'redux';
-import assistReducer from './assistReducer';
-import oneselfReducer from './oneselfReducer';
+export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
+export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
+export const CHANGE_MSG = 'assist/CHANGE_MSG';
 
-export default combineReducers({
-    assist: assistReducer,
-    oneself: oneselfReducer,
-});
+export const toggleLoading = (loading) => {
+    return (dispatch) => {
+        return dispatch({
+            type: TOGGLE_LOADING,
+            payload: {
+                loading,
+            },
+        });
+    };
+};
+
+export const alert = (msgText = '', time = 3000) => {
+    return (dispatch) => {
+        dispatch({
+            type: TOGGLE_MSG,
+        });
+        dispatch({
+            type: CHANGE_MSG,
+            payload: {
+                msgText,
+            },
+        });
+
+        return setTimeout(() => {
+            dispatch({
+                type: TOGGLE_MSG,
+            });
+            dispatch({
+                type: CHANGE_MSG,
+                payload: {
+                    msgText: '',
+                },
+            });
+        }, time);
+    };
+};
