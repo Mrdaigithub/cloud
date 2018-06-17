@@ -41,10 +41,8 @@ export const login = (username, password, cb) => {
 };
 
 export const logout = () => {
-    return (dispatch) => {
-        dispatch({
-            type: CLEAR_ONESELF,
-        });
+    return {
+        type: CLEAR_ONESELF,
     };
 };
 

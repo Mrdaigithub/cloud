@@ -53,7 +53,7 @@ class SpeedDial extends Component {
                         {this.props.children}
                     </ul>
                     <Button
-                        fab
+                        variant="fab"
                         color="primary"
                         onClick={this.handleToggle.bind(this)}
                         className={classes.floatButton}

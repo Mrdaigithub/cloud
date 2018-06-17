@@ -206,9 +206,14 @@
 			$new_path  = $request->get( 'path' );
 			$old_path  = "$base_path.$id";
 			if ( DB::select( "SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;" )[0]->is_child ) {
-				return $this->failed( 500000, 500 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "500000" ],
+				] )->status( 500 );
+				
 			} elseif ( Resource::where( 'path', $new_path )->where( 'resource_name', $resource->resource_name )->exists() ) {
-				return $this->failed( 400006 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "400006" ],
+				] )->status( 400 );
 			}
 			$move_id_list = DB::select( "SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
@@ -223,7 +228,9 @@
 				$resource       = Resource::find( $move_id );
 				$resource->path = preg_replace( "/($base_path)/", $new_path, $resource->path );
 				if ( ! $resource->save() ) {
-					return $this->failed( 500001, 500 );
+					throw ValidationException::withMessages( [
+						"resource" => [ "500001" ],
+					] )->status( 500 );
 				}
 			}
 			

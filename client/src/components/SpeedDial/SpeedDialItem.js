@@ -30,7 +30,7 @@ import styles from './styles';
 
 const SpeedDialItem = props => (
     <li>
-        <Button fab mini>
+        <Button variant="fab" mini>
             {props.children}
         </Button>
     </li>

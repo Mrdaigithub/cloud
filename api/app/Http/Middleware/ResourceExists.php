@@ -28,6 +28,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Helpers\Api\ApiResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 
 class ResourceExists
@@ -65,9 +66,11 @@ class ResourceExists
         if (DB::select("SELECT count(id)
               FROM resources
               LEFT JOIN resource_user ON resources.id = resource_user.resource_id
-              WHERE user_id=? AND path ~ ? AND resource_name=?",
+              WHERE trashed=false AND user_id=? AND path ~ ? AND resource_name=?",
                 [$uid, $path, $resource_name])[0]->count != 0) {
-            return $this->failed(409000);
+	        throw ValidationException::withMessages( [
+		        "resource" => [ "409000" ],
+	        ] )->status( 409 );
         }
         return $next($request);
     }

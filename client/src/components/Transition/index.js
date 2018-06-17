@@ -27,7 +27,7 @@ import Slide from '@material-ui/core/Slide';
 
 
 const Transition = props => (
-    <Slide direction={props.direction || 'up'} {...props}/>
+    <Slide direction="up" {...props}/>
 );
 
 export default Transition;

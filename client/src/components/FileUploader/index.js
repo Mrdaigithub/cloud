@@ -25,10 +25,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContentText';
-import { FileIcon } from '../../components/file-type-icon';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import styles from './styles';
 
 
@@ -36,21 +35,9 @@ const FileUploader = props => (
     <Dialog
         fullWidth
         open={props.uploadState}>
-        <DialogContent className={props.classes.dialog}>
-            <Grid container spacing={16}>
-                <Grid item xs={12}>
-                    <div className={props.classes.media}>
-                        <FileIcon/>
-                        <span><i>{props.uploadFilename}</i></span>
-                    </div>
-                </Grid>
-                <Grid item xs={12}>
-                    <LinearProgress mode="determinate" value={props.uploadValue || 0}/>
-                </Grid>
-                <Grid item xs={12}>
-                    {props.done ? '文件上传成功' : '上传过程中请不要关闭程序'}
-                </Grid>
-            </Grid>
+        <DialogTitle className={props.classes.dialogTitle}>{props.done ? '文件上传成功' : '上传期间请勿关闭页面'}</DialogTitle>
+        <DialogContent>
+            <LinearProgress variant="determinate" color="primary" value={props.uploadValue || 0}/>
         </DialogContent>
     </Dialog>
 );

@@ -22,43 +22,52 @@
  * SOFTWARE.
  */
 
-export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
-export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
-export const CHANGE_MSG = 'assist/CHANGE_MSG';
+import requester from '../../utils/requester';
 
-export const toggleLoading = (loading) => {
-    return (dispatch) => {
-        return dispatch({
-            type: TOGGLE_LOADING,
+export const GET_RESOURCES = 'resource/GET_RESOURCES';
+export const GET_SELECTED_RESOURCE = 'resource/GET_SELECTED_RESOURCE';
+export const CLEAR_SELECTED_RESOURCE = 'resource/CLEAR_SELECTED_RESOURCE';
+
+export const fetchResources = (cb) => {
+    return async (dispatch) => {
+        const resources = await requester.get('resources');
+        dispatch({
+            type: GET_RESOURCES,
             payload: {
-                loading,
+                resources,
             },
         });
+        return cb(resources);
     };
 };
 
-export const alert = (msgText = '', time = 2000) => {
-    return (dispatch) => {
-        dispatch({
-            type: TOGGLE_MSG,
-        });
-        dispatch({
-            type: CHANGE_MSG,
-            payload: {
-                msgText,
+export const getSelectedResource = ({ resourceID, resourceName, resourceMime, resourcePath, resourceCreatedAt, resourceUpdatedAt }) => {
+    return {
+        type: GET_SELECTED_RESOURCE,
+        payload: {
+            selectedResource: {
+                resourceID,
+                resourceName,
+                resourceMime,
+                resourcePath,
+                resourceCreatedAt,
+                resourceUpdatedAt,
             },
-        });
+        },
+    };
+};
 
-        return setTimeout(() => {
-            dispatch({
-                type: TOGGLE_MSG,
-            });
-            dispatch({
-                type: CHANGE_MSG,
-                payload: {
-                    msgText: '',
-                },
-            });
-        }, time);
+export const clearSelectedResource = () => {
+    return {
+        type: CLEAR_SELECTED_RESOURCE,
+    };
+};
+
+export const changeResourceListWithPath = (resources) => {
+    return {
+        type: GET_RESOURCES,
+        payload: {
+            resources,
+        },
     };
 };

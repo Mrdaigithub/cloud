@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import qs from 'qs';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -53,15 +54,13 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import Edit from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { bindActionCreators } from 'redux';
-import qs from 'qs';
+import { fetchUsers, addUser, removeUsers } from '../../../store/actions/userActions';
+import requester from '../../../utils/requester';
+import styles from './styles';
 import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
-import { fetchUsers, addUser, removeUsers } from '../../../store/reducers/userReducer';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
-import styles from './styles';
-import requester from '../../../utils/requester';
 
 const columnData = [
     { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
@@ -70,7 +69,6 @@ const columnData = [
     { id: 'capacity', numeric: false, disablePadding: false, label: '容量' },
     { id: 'created_at', numeric: false, disablePadding: false, label: '创建时间' },
 ];
-
 
 class Oneself extends Component {
     constructor(props, context) {
@@ -367,7 +365,7 @@ class Oneself extends Component {
                 </SpeedDial>
                 <Dialog
                     open={this.state.DialogOpen}
-                    transition={Transition}
+                    TransitionComponent={Transition}
                     aria-labelledby="form-dialog-title">
                     <Formsy onValidSubmit={this.handleAddUser}>
                         <DialogTitle
@@ -441,11 +439,11 @@ const mapStateToProps = state => ({
     users: state.user.users,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchUsers,
-    addUser,
-    removeUsers,
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+    fetchUsers: cb => fetchUsers(cb)(dispatch),
+    addUser: (userData, cb) => addUser(userData, cb)(dispatch),
+    removeUsers: (idList, cb) => removeUsers(idList, cb)(dispatch),
+});
 
 export default connect(
     mapStateToProps,

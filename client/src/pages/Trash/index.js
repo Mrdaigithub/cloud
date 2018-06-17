@@ -24,7 +24,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import mime from 'mime-types';
 import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -36,8 +35,8 @@ import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { fetchOneself } from '../../store/reducers/oneselfReducer';
-import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
+import { fetchOneself } from '../../store/actions/oneselfActions';
+import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
 
 
 class Trash extends Component {
@@ -60,7 +59,6 @@ class Trash extends Component {
         }
     }
 
-
     /**
      * 获取当前回收站的资源列表
      */
@@ -73,7 +71,14 @@ class Trash extends Component {
     }
 
     handleClickResource = ({ id, name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
+        this.props.getSelectedResource({
+            resourceID: id,
+            resourceName: name,
+            resourceMime: mime.lookup(name),
+            resourcePath: path,
+            resourceCreatedAt: createdAt,
+            resourceUpdatedAt: updatedAt,
+        });
         this.setState({ ResourceDetailOpen: true });
     };
 
@@ -176,12 +181,12 @@ const mapStateToProps = state => ({
     selectedResource: state.resource.selectedResource,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    fetchOneself,
-    fetchResources,
-    getSelectedResource,
-    clearSelectedResource,
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+    fetchOneself: () => fetchOneself()(dispatch),
+    fetchResources: cb => fetchResources(cb)(dispatch),
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
+    clearSelectedResource: () => dispatch(clearSelectedResource()),
+});
 
 export default connect(
     mapStateToProps,

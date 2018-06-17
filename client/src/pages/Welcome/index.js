@@ -61,7 +61,7 @@ class Welcome extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <LinearProgress mode="determinate" value={this.state.completed}/>
+                <LinearProgress variant="determinate" color="primary" value={this.state.completed}/>
                 <Grid container alignItems={'center'} justify={'center'} className={classes.normal}>
                     <Grid item xs={12}>
                         <img src={logo} alt="logo" className={classes.logo}/>

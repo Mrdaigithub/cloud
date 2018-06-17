@@ -26,7 +26,7 @@ import notFoundImg from '../../static/404.svg';
 
 const styles = theme => ({
     normal: {
-        paddingTop: '65px',
+        paddingTop: '0px',
         height: '100vh',
         boxSizing: 'border-box',
     },
@@ -38,6 +38,7 @@ const styles = theme => ({
         textIndent: '-99999px',
     },
     right: {
+        paddingBottom: '100px',
         textAlign: 'center',
         '& h3': {
             color: '#434e59',

@@ -25,18 +25,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
-import { bindActionCreators } from 'redux';
-import { push, replace } from 'connected-react-router';
+import { push } from 'connected-react-router';
 import mime from 'mime-types';
 import Formsy from 'formsy-react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -59,7 +56,7 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
 import { fetchOneself } from '../../store/actions/oneselfActions';
-import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
+import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
 import { movePath } from '../../utils/pathUtil';
 
 class CloudDrive extends Component {
@@ -102,7 +99,7 @@ class CloudDrive extends Component {
      * @param moveMode
      * @returns {Promise<void>}
      */
-    async getResourceList(path = '0', moveMode = false) {
+    getResourceList(path = '0', moveMode = false) {
         if (moveMode) {
             this.setState({
                 moveResourceList: this.props.resources ?
@@ -126,7 +123,14 @@ class CloudDrive extends Component {
     handleClickResource = ({ id, name, path, file, createdAt, updatedAt }) => {
         if (file) {
             this.setState({ ResourcePreviewOpen: true });
-            this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
+            this.props.getSelectedResource({
+                resourceID: id,
+                resourceName: name,
+                resourceMime: mime.lookup(name),
+                resourcePath: path,
+                resourceCreatedAt: createdAt,
+                resourceUpdatedAt: updatedAt,
+            });
         } else {
             const { changePage, routing } = this.props;
             changePage(`${routing.location.pathname}/${id}`);
@@ -347,16 +351,18 @@ class CloudDrive extends Component {
 
 
     /**  删除资源 **/
-    handleRemoveResource = () => async () => {
-        const { resources, routing } = this.props;
-        const { selected } = this.state;
-        if (selected.length) {
-            const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
-            await Promise.all(deleteList);
-            const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
-            this.props.changeResourceListWithPath(resourceListWithPath);
-            this.getResourceList(url2path(routing.location.pathname));
-        }
+    handleRemoveResource = () => {
+        return async () => {
+            const { resources, routing } = this.props;
+            const { selected } = this.state;
+            if (selected.length) {
+                const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
+                await Promise.all(deleteList);
+                const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
+                this.props.changeResourceListWithPath(resourceListWithPath);
+                this.getResourceList(url2path(routing.location.pathname));
+            }
+        };
     };
 
 
@@ -548,7 +554,7 @@ class CloudDrive extends Component {
                 <Dialog
                     fullScreen
                     open={this.state.moveResourceDialogOpen}
-                    transition={Transition}>
+                    TransitionComponent={Transition}>
                     <AppBar className={classes.moveDirTopBar}>
                         <Toolbar>
                             <IconButton color="inherit" onClick={this.handleToggleMoveResourceDialog()} aria-label="Close">
@@ -565,31 +571,6 @@ class CloudDrive extends Component {
                             onClickResource={this.handleClickMoveDir()}/>
                     </div>
                 </Dialog>
-                <Dialog
-                    open
-                    // TransitionComponent={Transition}
-                    keepMounted
-                    // onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-slide-title"
-                    aria-describedby="alert-dialog-slide-description">
-                    <DialogTitle id="alert-dialog-slide-title">
-                        {'Use Google\'s location service?'}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                            Let Google help apps determine location. This means sending anonymous location data to
-                            Google, even when no apps are running.
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color="primary">
-                            Disagree
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary">
-                            Agree
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         );
     }
@@ -604,13 +585,13 @@ const mapStateToProps = (state, routing) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetchOneself,
-    fetchResources,
-    changeResourceListWithPath,
-    getSelectedResource,
-    clearSelectedResource,
+    fetchOneself: () => fetchOneself()(dispatch),
+    fetchResources: cb => fetchResources(cb)(dispatch),
+    changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
+    clearSelectedResource: () => dispatch(clearSelectedResource()),
     alert: (msgText, time) => alert(msgText, time)(dispatch),
-    changePage: url => dispatch(replace(url)),
+    changePage: url => dispatch(push(url)),
 });
 
 export default connect(

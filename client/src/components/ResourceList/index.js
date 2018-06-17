@@ -38,8 +38,7 @@ import Divider from '@material-ui/core/Divider';
 import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
-import { clearSelectedResource, getSelectedResource } from '../../store/reducers/resourceReducer';
-
+import { clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
 
 class ResourceList extends Component {
     constructor(props) {
@@ -140,8 +139,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    getSelectedResource,
-    clearSelectedResource,
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
+    clearSelectedResource: () => dispatch(clearSelectedResource()),
 }, dispatch);
 
 export default connect(

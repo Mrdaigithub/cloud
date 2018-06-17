@@ -22,43 +22,51 @@
  * SOFTWARE.
  */
 
-export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
-export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
-export const CHANGE_MSG = 'assist/CHANGE_MSG';
+import qs from 'qs';
+import requester from '../../utils/requester';
 
-export const toggleLoading = (loading) => {
-    return (dispatch) => {
-        return dispatch({
-            type: TOGGLE_LOADING,
+export const GET_USERS = 'user/GET_USERS';
+export const ADD_USER = 'user/ADD_USER';
+export const REMOVE_USER = 'user/REMOVE_USER';
+
+export const fetchUsers = (cb) => {
+    return async (dispatch) => {
+        const users = await requester.get('users');
+        dispatch({
+            type: GET_USERS,
             payload: {
-                loading,
+                users,
             },
         });
+        return cb(users);
     };
 };
 
-export const alert = (msgText = '', time = 2000) => {
-    return (dispatch) => {
+export const addUser = (userData, cb) => {
+    return async (dispatch) => {
+        const user = await requester.post('/users', qs.stringify(userData));
         dispatch({
-            type: TOGGLE_MSG,
-        });
-        dispatch({
-            type: CHANGE_MSG,
+            type: ADD_USER,
             payload: {
-                msgText,
+                user,
             },
         });
+        return cb(user);
+    };
+};
 
-        return setTimeout(() => {
+export const removeUsers = (idList, cb) => {
+    return async (dispatch) => {
+        const deleteList = idList.map(id => requester.delete(`users/${id}`));
+        await Promise.all(deleteList);
+        idList.forEach(id => (
             dispatch({
-                type: TOGGLE_MSG,
-            });
-            dispatch({
-                type: CHANGE_MSG,
+                type: REMOVE_USER,
                 payload: {
-                    msgText: '',
+                    id,
                 },
-            });
-        }, time);
+            })
+        ));
+        return cb(idList);
     };
 };

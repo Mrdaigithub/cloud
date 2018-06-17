@@ -29,7 +29,8 @@ import { withStyles } from '@material-ui/core/styles';
 import mime from 'mime-types';
 import { replace, goBack } from 'connected-react-router';
 import Dialog from '@material-ui/core/Dialog';
-import Input, { InputAdornment } from '@material-ui/core/Input';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -39,7 +40,7 @@ import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { getPreview, path2url } from '../../utils/assist';
-import { getSelectedResource, clearSelectedResource } from '../../store/reducers/resourceReducer';
+import { getSelectedResource, clearSelectedResource } from '../../store/actions/resourceActions';
 import styles from './styles';
 import requester from '../../utils/requester';
 
@@ -71,7 +72,7 @@ class Search extends Component {
         if (!file) {
             this.props.changePage(`/cloud-drive/${path2url(path)}`);
         } else {
-            this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
+            this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
             this.setState({ ResourcePreviewOpen: true });
         }
         this.setState({ result: [] });
@@ -83,7 +84,7 @@ class Search extends Component {
     };
 
     handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource(id, name, mime.lookup(name), path, createdAt, updatedAt);
+        this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
         this.setState({
             ResourceDetailOpen: true,
         });
@@ -180,8 +181,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (replace(url)),
     goBackPage: () => (goBack()),
-    getSelectedResource,
-    clearSelectedResource,
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
+    clearSelectedResource: () => dispatch(clearSelectedResource()),
 }, dispatch);
 
 export default connect(

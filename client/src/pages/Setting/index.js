@@ -24,7 +24,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { replace } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -56,7 +55,7 @@ class Setting extends Component {
             <Dialog
                 fullScreen
                 open={open}
-                transition={Transition}>
+                TransitionComponent={Transition}>
                 <AppBar className={classes.settingTopBar}>
                     <Toolbar>
                         <IconButton color="inherit" onClick={onClose} aria-label="Close">
@@ -98,10 +97,10 @@ const mapStateToProps = state => ({
     email: state.oneself.email,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (replace(url)),
-    clearOneself: () => (logout()),
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+    clearOneself: () => dispatch(logout()),
+    changePage: url => dispatch(replace(url)),
+});
 
 export default connect(
     mapStateToProps,

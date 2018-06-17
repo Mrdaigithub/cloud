@@ -22,11 +22,7 @@
  * SOFTWARE.
  */
 
-import request from '../../utils/requester';
-
-export const GET_RESOURCES = 'resource/GET_RESOURCES';
-export const GET_SELECTED_RESOURCE = 'resource/GET_SELECTED_RESOURCE';
-export const CLEAR_SELECTED_RESOURCE = 'resource/CLEAR_SELECTED_RESOURCE';
+import { GET_RESOURCES, GET_SELECTED_RESOURCE, CLEAR_SELECTED_RESOURCE } from '../actions/resourceActions';
 
 const initialState = {
     resources: null,
@@ -68,54 +64,4 @@ export default (state = initialState, action) => {
         default:
             return state;
     }
-};
-
-export const fetchResources = (cb) => {
-    return async (dispatch) => {
-        const resources = await request.get('resources');
-        dispatch({
-            type: GET_RESOURCES,
-            payload: {
-                resources,
-            },
-        });
-        return cb(resources);
-    };
-};
-
-export const getSelectedResource = (resourceID, resourceName, resourceMime, resourcePath, resourceCreatedAt, resourceUpdatedAt) => {
-    return async (dispatch) => {
-        return dispatch({
-            type: GET_SELECTED_RESOURCE,
-            payload: {
-                selectedResource: {
-                    resourceID,
-                    resourceName,
-                    resourceMime,
-                    resourcePath,
-                    resourceCreatedAt,
-                    resourceUpdatedAt,
-                },
-            },
-        });
-    };
-};
-
-export const clearSelectedResource = () => {
-    return async (dispatch) => {
-        return dispatch({
-            type: CLEAR_SELECTED_RESOURCE,
-        });
-    };
-};
-
-export const changeResourceListWithPath = (resources) => {
-    return async (dispatch) => {
-        return dispatch({
-            type: GET_RESOURCES,
-            payload: {
-                resources,
-            },
-        });
-    };
 };

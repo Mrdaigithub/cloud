@@ -23,10 +23,11 @@
  */
 
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import qs from 'qs';
+import Formsy from 'formsy-react';
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -36,7 +37,8 @@ import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { ListItemIcon, ListItemText } from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -47,14 +49,12 @@ import FileDownload from '@material-ui/icons/FileDownload';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Info from '@material-ui/icons/Info';
-import Formsy from 'formsy-react';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { fetchResources, getSelectedResource } from '../../store/reducers/resourceReducer';
-
+import { fetchResources, getSelectedResource } from '../../store/actions/resourceActions';
 
 class ResourcePreview extends Component {
     constructor(props) {
@@ -240,7 +240,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     fetchResources,
-    getSelectedResource,
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
 }, dispatch);
 
 export default connect(

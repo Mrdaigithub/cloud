@@ -45,8 +45,6 @@ class Login extends Component {
         super(props);
         this.state = {
             showPassword: false,
-            v: 'root',
-            p: 'root',
         };
     }
 
@@ -61,7 +59,6 @@ class Login extends Component {
     login(model) {
         const { username, password } = model;
         this.props.login(username, password, () => {
-            console.log(this.props.alert);
             this.props.alert('登录成功');
             setTimeout(() => {
                 this.props.changePage('/cloud-drive/0');
@@ -82,7 +79,6 @@ class Login extends Component {
                             <FormsyText
                                 title="用户名"
                                 name="username"
-                                value={this.state.v}
                                 validations={{ matchRegexp: /(\w|\d){4,}/ }}
                                 validationError="用户名不合法"
                                 required
@@ -91,7 +87,6 @@ class Login extends Component {
                             <FormsyText
                                 title="密码"
                                 name="password"
-                                value={this.state.p}
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 required
                                 fullWidth

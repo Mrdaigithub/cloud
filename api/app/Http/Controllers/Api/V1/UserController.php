@@ -57,7 +57,9 @@ namespace App\Http\Controllers\Api\V1;
 			$user->email    = $request->get( 'email' );
 			$request->has( 'capacity' ) ? $user->capacity = $request->get( 'capacity' ) : null;
 			if ( ! $user->save() ) {
-				return $this->failed( 500001, 500 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "500001" ],
+				] )->status( 500 );
 			}
 			
 			return new UserResource( User::find( $user->id ) );
@@ -94,7 +96,9 @@ namespace App\Http\Controllers\Api\V1;
 			$request->has( 'email' ) ? $user->email = $request->get( 'email' ) : null;
 			$request->has( 'capacity' ) ? $user->capacity = $request->get( 'capacity' ) : null;
 			if ( ! $user->save() ) {
-				return $this->failed( 500001, 500 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "500001" ],
+				] )->status( 500 );
 			}
 			
 			return new UserResource( User::find( $id ) );
