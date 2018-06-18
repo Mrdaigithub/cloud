@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-import logo from '../../static/logo.svg';
+import logo from '../../static/logo_200dp.png';
 
 const styles = theme => ({
     normal: {
         background: `url(${logo}) no-repeat center #eeeeef`,
-        backgroundSize: '80px',
         height: '100vh',
     },
     nowrap: {

@@ -24,7 +24,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import mime from 'mime-types';
 import { replace, goBack } from 'connected-react-router';
@@ -43,7 +42,6 @@ import { getPreview, path2url } from '../../utils/assist';
 import { getSelectedResource, clearSelectedResource } from '../../store/actions/resourceActions';
 import styles from './styles';
 import requester from '../../utils/requester';
-
 
 class Search extends Component {
     constructor(props) {
@@ -118,7 +116,7 @@ class Search extends Component {
     };
 
     render() {
-        const { classes, goBackPage, selectedResource } = this.props;
+        const { classes, selectedResource } = this.props;
         const { query, result } = this.state;
         return (
             <div>
@@ -145,7 +143,7 @@ class Search extends Component {
                             }
                             startAdornment={
                                 <InputAdornment position="start">
-                                    <IconButton onClick={goBackPage}>
+                                    <IconButton onClick={this.props.goBackPage}>
                                         <ArrowBack/>
                                     </IconButton>
                                 </InputAdornment>
@@ -178,12 +176,12 @@ const mapStateToProps = state => ({
     selectedResource: state.resource.selectedResource,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (replace(url)),
-    goBackPage: () => (goBack()),
+const mapDispatchToProps = dispatch => ({
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
-}, dispatch);
+    changePage: url => dispatch(replace(url)),
+    goBackPage: () => dispatch(goBack()),
+});
 
 export default connect(
     mapStateToProps,
