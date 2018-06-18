@@ -68,7 +68,7 @@ import {
 
 
 const ResourceTypeIcon = ({ style, classes, ext }) => (
-    <div className={classes.normal}>
+    <span className={classes.normal}>
         {(() => {
             switch (ext) {
                 /**  文本 **/
@@ -189,7 +189,7 @@ const ResourceTypeIcon = ({ style, classes, ext }) => (
                     return <FileIcon style={style}/>;
             }
         })()}
-    </div>
+    </span>
 );
 
 export default withStyles(styles)(ResourceTypeIcon);

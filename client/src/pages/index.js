@@ -66,7 +66,7 @@ class App extends Component {
     }
 
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.store.subscribe(() => {
                 this.setState({
                     loading: this.props.store.getState().assist.loading,

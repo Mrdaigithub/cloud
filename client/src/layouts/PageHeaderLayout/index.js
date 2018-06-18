@@ -144,10 +144,10 @@ class PageHeaderLayout extends Component {
                         <Divider/>
                         <List>
                             <ListItem>
-                                <p>
+                                <div>
                                     已用{(used / (1024 ** 3)).toFixed(3)}GB，
                                     {capacity ? `共${(capacity / (1024 ** 3)).toFixed(3)}GB` : '无限制'}
-                                </p>
+                                </div>
                             </ListItem>
                         </List>
                     </div>

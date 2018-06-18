@@ -73,7 +73,7 @@ class CloudDrive extends Component {
             uploadState: false,
             uploadValue: 0,
             uploadDone: false,
-            chunkSize: 2097152,
+            chunkSize: 1024 * 1024,
             file: null,
             fileHash: '',
             group: 'file',
@@ -218,12 +218,13 @@ class CloudDrive extends Component {
 
         fileReader.onload = (e) => {
             spark.append(e.target.result);
+            console.log(e.target.result);
             currentChunk += 1;
             if (currentChunk < chunks) {
                 loadNext();
             } else {
-                this.setState({ fileHash: spark.end() });
-                this.preprocess();
+                // this.setState({ fileHash: spark.end() });
+                // this.preprocess();
             }
         };
 
@@ -236,7 +237,8 @@ class CloudDrive extends Component {
         const loadNext = () => {
             const start = currentChunk * chunkSize;
             const end = start + chunkSize >= file.size ? file.size : start + chunkSize;
-            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+            console.log(start, end)
+            // fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
         };
 
         loadNext();
