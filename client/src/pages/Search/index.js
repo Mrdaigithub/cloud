@@ -36,9 +36,8 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import SearchIcon from '@material-ui/icons/Search';
 import Info from '@material-ui/icons/Info';
 import ResourceList from '../../components/ResourceList';
-import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
-import { getPreview, path2url } from '../../utils/assist';
+import { path2url } from '../../utils/assist';
 import { getSelectedResource, clearSelectedResource } from '../../store/actions/resourceActions';
 import styles from './styles';
 import requester from '../../utils/requester';
@@ -47,7 +46,6 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ResourcePreviewOpen: false,
             ResourceDetailOpen: false,
             query: '',
             result: [],
@@ -66,19 +64,9 @@ class Search extends Component {
         });
     };
 
-    handleOpenResourcePreview = ({ id, name, path, file, createdAt, updatedAt }) => {
-        if (!file) {
-            this.props.changePage(`/cloud-drive/${path2url(path)}`);
-        } else {
-            this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
-            this.setState({ ResourcePreviewOpen: true });
-        }
+    handleClickResource = ({ path }) => {
         this.setState({ result: [] });
-    };
-
-    handleCloseResourcePreview = () => {
-        this.setState({ ResourcePreviewOpen: false });
-        this.props.clearSelectedResource();
+        this.props.changePage(`/cloud-drive/${path2url(path)}`);
     };
 
     handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
@@ -96,27 +84,8 @@ class Search extends Component {
         this.setState({ result });
     }
 
-    /**
-     * 下载资源
-     *
-     * @param resourceID
-     * @returns {Promise.<void>}
-     */
-    handleDownload = resourceID => async () => {
-        const downloadUrl = await requester.get(`resources/link/${resourceID}`);
-        const downloadDom = document.createElement('a');
-        downloadDom.id = 'downloadUrl';
-        downloadDom.download = true;
-        downloadDom.href = downloadUrl.url;
-        document.querySelector('body')
-            .appendChild(downloadDom);
-        downloadDom.click();
-        document.querySelector('body')
-            .removeChild(downloadDom);
-    };
-
     render() {
-        const { classes, selectedResource } = this.props;
+        const { classes } = this.props;
         const { query, result } = this.state;
         return (
             <div>
@@ -154,14 +123,8 @@ class Search extends Component {
                             className={classes.searchList}
                             resourceList={result}
                             ItemIcon={Info}
-                            onClickResource={this.handleOpenResourcePreview}
+                            onClickResource={this.handleClickResource}
                             onClickAction={this.handleOpenResourceDetail}/>
-                        <ResourcePreview
-                            open={this.state.ResourcePreviewOpen}
-                            onDownload={this.handleDownload(this.props.selectedResource.resourceID)}
-                            onClose={this.handleCloseResourcePreview}>
-                            {getPreview(selectedResource.resourceName)}
-                        </ResourcePreview>
                     </div>
                 </Dialog>
                 <ResourceDetail
