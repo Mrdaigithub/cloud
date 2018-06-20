@@ -49,6 +49,7 @@ import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
+import ShareStepper from '../../components/ShareStepper';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
@@ -78,6 +79,7 @@ class CloudDrive extends Component {
             fileHash: '',
             group: 'file',
             locale: 'zh',
+            shareResourceDialogOpen: true,
         };
     }
 
@@ -448,12 +450,21 @@ class CloudDrive extends Component {
     /** 分享资源 **/
 
     handleShare = () => async () => {
+        const { selected } = this.state;
+        if (!selected.length) return;
         console.log('share');
     };
 
     render() {
         const { classes, selectedResource } = this.props;
-        const { resourceList, moveResourceList, selected, uploadState, uploadTitle, uploadValue } = this.state;
+        const {
+            resourceList,
+            moveResourceList,
+            selected,
+            uploadState,
+            uploadTitle,
+            uploadValue,
+        } = this.state;
         return (
             <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
                 <SpeedDial>
@@ -589,6 +600,7 @@ class CloudDrive extends Component {
                             onClickResource={this.handleClickMoveDir()}/>
                     </div>
                 </Dialog>
+                <ShareStepper open={true}/>
             </div>
         );
     }

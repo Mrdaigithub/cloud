@@ -79,6 +79,7 @@ class Login extends Component {
                             <FormsyText
                                 title="用户名"
                                 name="username"
+                                value="root"
                                 validations={{ matchRegexp: /(\w|\d){4,}/ }}
                                 validationError="用户名不合法"
                                 required
@@ -87,6 +88,7 @@ class Login extends Component {
                             <FormsyText
                                 title="密码"
                                 name="password"
+                                value="root"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 required
                                 fullWidth
