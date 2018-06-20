@@ -72,8 +72,8 @@ class CloudDrive extends Component {
             ResourcePreviewOpen: false,
             uploadState: false,
             uploadValue: 0,
-            uploadDone: false,
-            chunkSize: 1024 * 1024,
+            uploadTitle: '',
+            calculateHashChunkSize: 20 * 1024 * 1024,
             file: null,
             fileHash: '',
             group: 'file',
@@ -209,36 +209,39 @@ class CloudDrive extends Component {
      * @param file
      */
     calculateHash(file) {
+        console.log(new Date());
+        this.setState({ uploadTitle: '计算文件HASH...' });
         const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
-        const { chunkSize } = this.state;
-        const chunks = Math.ceil(file.size / chunkSize);
+        const { calculateHashChunkSize } = this.state;
+        const chunks = Math.ceil(file.size / calculateHashChunkSize);
         const spark = new SparkMD5.ArrayBuffer();
         const fileReader = new FileReader();
         let currentChunk = 0;
 
         fileReader.onload = (e) => {
             spark.append(e.target.result);
-            console.log(e.target.result);
             currentChunk += 1;
             if (currentChunk < chunks) {
                 loadNext();
             } else {
-                // this.setState({ fileHash: spark.end() });
-                // this.preprocess();
+                console.log(new Date());
+                this.setState({ fileHash: spark.end() });
+                this.preprocess();
             }
         };
 
         fileReader.onerror = () => {
-            this.resetUploadProcess();
-            console.error('文件Hash计算失败');
+            this.setState({ uploadTitle: '文件Hash计算失败' });
+            setTimeout(() => {
+                this.resetUploadProcess();
+            }, 2000);
             return false;
         };
 
         const loadNext = () => {
-            const start = currentChunk * chunkSize;
-            const end = start + chunkSize >= file.size ? file.size : start + chunkSize;
-            console.log(start, end)
-            // fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+            const start = currentChunk * calculateHashChunkSize;
+            const end = start + calculateHashChunkSize >= file.size ? file.size : start + calculateHashChunkSize;
+            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
         };
 
         loadNext();
@@ -249,6 +252,7 @@ class CloudDrive extends Component {
      * @returns {Promise.<boolean>}
      */
     async preprocess() {
+        this.setState({ uploadTitle: '文件上传中...' });
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
         const { routing } = this.props;
@@ -268,27 +272,28 @@ class CloudDrive extends Component {
             path: url2path(this.props.routing.location.pathname),
         }));
         if (error) {
-            this.resetUploadProcess();
-            return this.props.alert('文件上传失败, 暂不支持无后缀名与空文件');
+            this.setState({ uploadTitle: '文件上传失败, 暂不支持无后缀名与空文件' });
+            setTimeout(() => {
+                this.resetUploadProcess();
+            }, 2000);
+            return false;
         }
         const chunkCount = Math.ceil(size / chunkSize);
-        if (savedPath.length === 0) {
+        if (savedPath === '') {
             this.setState({
                 uploadValue: 0,
-                uploadDone: false,
             });
             this.uploadChunk([...Array(chunkCount)
                 .keys()], chunkSize, chunkCount, uploadExt, uploadBaseName, subDir);
         } else {
             this.setState({
                 uploadValue: 100,
-                uploadDone: true,
+                uploadState: true,
             });
             setTimeout(() => {
                 this.resetUploadProcess();
                 this.props.fetchResources(() => {
                     this.getResourceList(url2path(routing.location.pathname));
-                    this.props.fetchOneself();
                 });
             }, 1500);
         }
@@ -311,7 +316,7 @@ class CloudDrive extends Component {
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
-            const end = Math.min(size, start + chunkSize);
+            const end = Math.min(size, start + Number(chunkSize));
             form.append('file', file.slice(start, end));
             form.append('filename', name);
             form.append('file_size', file.size);
@@ -323,7 +328,20 @@ class CloudDrive extends Component {
             form.append('group', this.state.group);
             form.append('locale', this.state.locale);
             form.append('path', url2path(this.props.routing.location.pathname));
-            await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
+            try {
+                await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
+            } catch (e) {
+                this.setState({
+                    uploadTitle: '文件上传失败',
+                });
+                setTimeout(() => {
+                    this.resetUploadProcess();
+                    this.props.fetchResources(() => {
+                        this.getResourceList(url2path(routing.location.pathname));
+                    });
+                }, 2000);
+                return;
+            }
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
         }
         this.setState({
@@ -333,7 +351,6 @@ class CloudDrive extends Component {
             this.resetUploadProcess();
             this.props.fetchResources(() => {
                 this.getResourceList(url2path(routing.location.pathname));
-                this.props.fetchOneself();
             });
         }, 2000);
     }
@@ -436,7 +453,7 @@ class CloudDrive extends Component {
 
     render() {
         const { classes, selectedResource } = this.props;
-        const { resourceList, moveResourceList, selected, uploadState, uploadValue, file, uploadDone } = this.state;
+        const { resourceList, moveResourceList, selected, uploadState, uploadTitle, uploadValue } = this.state;
         return (
             <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
                 <SpeedDial>
@@ -521,10 +538,9 @@ class CloudDrive extends Component {
                     </ResourcePreview>
                 </div>
                 <FileUploader
+                    uploadTitle={uploadTitle}
                     uploadState={uploadState}
-                    uploadValue={uploadValue}
-                    uploadFilename={file ? file.name : ''}
-                    done={uploadDone}/>
+                    uploadValue={uploadValue}/>
                 <Dialog open={this.state.createDirDialogOpen}>
                     <Formsy onValidSubmit={this.handleCreateDir()}>
                         <DialogContent>

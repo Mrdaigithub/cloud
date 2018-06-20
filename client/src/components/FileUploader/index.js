@@ -35,7 +35,7 @@ const FileUploader = props => (
     <Dialog
         fullWidth
         open={props.uploadState}>
-        <DialogTitle className={props.classes.dialogTitle}>{props.done ? '文件上传成功' : '上传期间请勿关闭页面'}</DialogTitle>
+        <DialogTitle className={props.classes.dialogTitle}>{props.uploadTitle ? props.uploadTitle : ''}</DialogTitle>
         <DialogContent>
             <LinearProgress variant="determinate" color="primary" value={props.uploadValue || 0}/>
         </DialogContent>
