@@ -27,11 +27,13 @@ import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import Transition from '../Transition';
 
 class ShareStepper extends Component {
@@ -66,12 +68,49 @@ class ShareStepper extends Component {
                         <Step>
                             <StepLabel>选择分享模式</StepLabel>
                             <StepContent>
-                                <Grid container spacing={16} justify="space-around" alignItems="center">
-                                    <Grid item xs={6}>
-                                        <Button variant="contained" color="primary">创建公开链接</Button>
+                                <Grid container spacing={24} justify="space-around" alignItems="center">
+                                    <Grid item xs={12} sm={6}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleNext}>
+                                            公开链接
+                                        </Button>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        <Button variant="contained" color="primary">创建私有链接</Button>
+                                    <Grid item xs={12} sm={6}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleNext}>
+                                            私有链接
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </StepContent>
+                        </Step>
+                        <Step>
+                            <StepLabel>复制资源链接</StepLabel>
+                            <StepContent>
+                                <Grid container spacing={16} justify="space-around" alignItems="center">
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            id="name"
+                                            label="资源链接"
+                                            value="https://www.google.com.hk/sssssssssssssssssssss"/>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            id="name"
+                                            label="提取密码"
+                                            value="pass"/>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={this.handleNext}>
+                                            复制链接及密码
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </StepContent>
@@ -79,14 +118,10 @@ class ShareStepper extends Component {
                         <Step>
                             <StepLabel>成功创建资源链接</StepLabel>
                             <StepContent>
-                                <Grid container spacing={16} justify="space-around" alignItems="center">
-                                    <Grid item xs={6}>
-                                        <Button variant="contained" color="primary">创建公开链接</Button>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Button variant="contained" color="primary">创建私有链接</Button>
-                                    </Grid>
-                                </Grid>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleReset}>完成</Button>
                             </StepContent>
                         </Step>
                     </Stepper>
