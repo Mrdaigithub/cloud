@@ -35,6 +35,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Transition from '../Transition';
+import requester from '../../utils/requester';
 
 const hideStyles = {
     zIndex: '-999',
@@ -53,14 +54,18 @@ class ShareStepper extends Component {
         this.state = {
             activeStep: 0,
             mode: 'public',
+            secret: '',
+            password: '',
         };
     }
 
-    changeMode = (mode = 'public') => {
-        console.log(mode);
+    changeMode = (mode = 'public') => async () => {
+        const { secret, password } = await requester.get(`resources/share/${mode}/${this.props.resourceID}`);
         this.setState(() => ({
             mode: mode === 'private' ? mode : 'public',
             activeStep: this.state.activeStep + 1,
+            secret,
+            password,
         }));
     };
 
@@ -92,7 +97,7 @@ class ShareStepper extends Component {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={this.changeMode.bind(this, 'public')}>
+                                            onClick={this.changeMode()}>
                                             公开链接
                                         </Button>
                                     </Grid>
@@ -100,7 +105,7 @@ class ShareStepper extends Component {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={this.changeMode.bind(this, 'private')}>
+                                            onClick={this.changeMode('private')}>
                                             私有链接
                                         </Button>
                                     </Grid>
@@ -115,7 +120,7 @@ class ShareStepper extends Component {
                                         <TextField
                                             id="name"
                                             label="资源链接"
-                                            value="https://www.google.com.hk/sssssssssssssssssssss"/>
+                                            value={`//${window.location.origin}/${this.state.secret}`}/>
                                     </Grid>
                                     <Grid
                                         item
@@ -125,7 +130,7 @@ class ShareStepper extends Component {
                                         <TextField
                                             id="name"
                                             label="提取密码"
-                                            value="pass"/>
+                                            value={this.state.password}/>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button
@@ -145,6 +150,7 @@ class ShareStepper extends Component {
 
 ShareStepper.propTypes = {
     open: PropTypes.bool.isRequired,
+    resourceID: PropTypes.number.isRequired,
     onComplete: PropTypes.func.isRequired,
 };
 

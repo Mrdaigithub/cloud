@@ -606,6 +606,7 @@ class CloudDrive extends Component {
                 </Dialog>
                 <ShareStepper
                     open={this.state.ShareStepperOpen}
+                    resourceID={this.state.selected[0] || null}
                     onComplete={this.closeShareStepper}/>
             </div>
         );

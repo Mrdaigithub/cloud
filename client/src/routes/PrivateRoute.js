@@ -30,7 +30,6 @@ import Trash from '../pages/Trash';
 import Search from '../pages/Search';
 import CloudDrive from '../pages/CloudDrive';
 import Groups from '../pages/Personnel/Groups';
-import Share from '../pages/Share';
 import NotFound from '../pages/NotFound';
 
 const PrivateRoute = () => (
