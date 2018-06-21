@@ -79,7 +79,7 @@ class CloudDrive extends Component {
             fileHash: '',
             group: 'file',
             locale: 'zh',
-            shareResourceDialogOpen: true,
+            ShareStepperOpen: false,
         };
     }
 
@@ -452,7 +452,11 @@ class CloudDrive extends Component {
     handleShare = () => async () => {
         const { selected } = this.state;
         if (!selected.length) return;
-        console.log('share');
+        this.setState({ ShareStepperOpen: true });
+    };
+
+    closeShareStepper = () => {
+        this.setState({ ShareStepperOpen: false });
     };
 
     render() {
@@ -600,7 +604,9 @@ class CloudDrive extends Component {
                             onClickResource={this.handleClickMoveDir()}/>
                     </div>
                 </Dialog>
-                <ShareStepper open={true}/>
+                <ShareStepper
+                    open={this.state.ShareStepperOpen}
+                    onComplete={this.closeShareStepper}/>
             </div>
         );
     }
