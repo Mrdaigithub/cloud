@@ -47,6 +47,7 @@
 		     Route::middleware( [ "api.auth", "auth:api" ] )->group( function () {
 			     Route::prefix( "resources" )->group( function () {
 				     Route::get( "link/{id}", "ResourceController@get_download_link" );
+				     Route::get( "share/{visibility}/{id}", "ResourceController@get_share_secret" );
 				     Route::get( "search", "ResourceController@search" );
 				     Route::get( "{path}", "ResourceController@show_with_path" );
 				     Route::get( "preview/{id}", "ResourceController@preview" );

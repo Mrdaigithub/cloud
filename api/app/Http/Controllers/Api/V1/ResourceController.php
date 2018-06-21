@@ -63,16 +63,16 @@
 			$resource = new resource();
 			$user     = $request->user();
 			if ( ! ! $user->resources
-				->where( 'resource_name', $request->get( 'resource_name' ) )
-				->where( 'path', $request->get( 'path' ) )
-				->where( 'trashed', false )->count() ) {
+				->where( "resource_name", $request->get( "resource_name" ) )
+				->where( "path", $request->get( "path" ) )
+				->where( "trashed", false )->count() ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "400006" ],
 				] )->status( 400 );
 			}
-			$resource->resource_name = $request->get( 'resource_name' );
+			$resource->resource_name = $request->get( "resource_name" );
 			$resource->file          = false;
-			$resource->path          = $request->get( 'path' );
+			$resource->path          = $request->get( "path" );
 			if ( ! $resource->save() ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "500001" ],
@@ -103,11 +103,11 @@
 		 * @return PathResourceCollection
 		 */
 		public function show_with_path( \App\Http\Requests\ShowPathResourceRequest $request, $path ) {
-			return new PathResourceCollection( $request->user()->resources()->where( 'path', $path )->get() );
+			return new PathResourceCollection( $request->user()->resources()->where( "path", $path )->get() );
 		}
 		
 		public function preview( $id ) {
-			$storage_path = storage_path( 'app/aetherupload/file/md5_files' );
+			$storage_path = storage_path( "app/aetherupload/file/md5_files" );
 			$resource     = Resource::find( $id );
 			$files        = Storage::files();
 			$file         = array_filter( $files, function ( $file ) use ( $resource ) {
@@ -120,7 +120,7 @@
 			$image_info = getimagesize( "$storage_path/$file" );
 			$img_data   = file_get_contents( "$storage_path/$file" );
 			
-			return "data:" . $image_info['mime'] . ";base64," . base64_encode( $img_data );
+			return "data:" . $image_info["mime"] . ";base64," . base64_encode( $img_data );
 		}
 		
 		/**
@@ -131,7 +131,7 @@
 		 * @return mixed
 		 */
 		public function search( \App\Http\Requests\SearchResourceRequest $request ) {
-			$query = $request->input( 'q' );
+			$query = $request->input( "q" );
 			
 			return DB::select( "SELECT id, resource_name, file, path, created_at, updated_at
               FROM resources
@@ -157,7 +157,32 @@
 			}
 			$secret = encrypt( "id=$id&t=" . time() );
 			
-			return [ "url" => "//" . $_SERVER['SERVER_NAME'] . "/api/v1/resources/download/$secret" ];
+			return [ "url" => "//" . $_SERVER["SERVER_NAME"] . "/api/v1/resources/download/$secret" ];
+		}
+		
+		/**
+		 * 获取分享资源的secret和分享密码
+		 *
+		 * @param Request $request
+		 * @param $id
+		 *
+		 * @return mixed|string
+		 */
+		public function get_share_secret( Request $request, $visibility, $id ) {
+			if ( ! count( $request->user()->resources()->find( $id ) ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "409001" ],
+				] )->status( 409 );
+			}
+			$res = [
+				"secret" => encrypt( "id=$id&t=" . time() ),
+			];
+			if ( $visibility == "private" ) {
+				$pass            = str_split( encrypt( $res["secret"] ) );
+				$res["password"] = implode( "", array_splice( $pass, 100, 4 ) );
+			}
+			
+			return $res;
 		}
 		
 		/**
@@ -175,7 +200,7 @@
 				] )->status( 504 );
 			}
 			
-			$storage_path  = storage_path( 'app/aetherupload/file/md5_files' );
+			$storage_path  = storage_path( "app/aetherupload/file/md5_files" );
 			$resource      = Resource::find( parse_query( decrypt( $secret ) )["id"] );
 			$files         = Storage::files();
 			$download_file = array_filter( $files, function ( $file ) use ( $resource ) {
@@ -187,7 +212,7 @@
 				] )->status( 409 );
 			}
 			$download_file = $download_file[ key( $download_file ) ];
-
+			
 			return response()->download( "$storage_path/$download_file", $resource->resource_name );
 		}
 		
@@ -203,14 +228,14 @@
 			$user      = $request->user();
 			$resource  = Resource::find( $id );
 			$base_path = $resource->path;
-			$new_path  = $request->get( 'path' );
+			$new_path  = $request->get( "path" );
 			$old_path  = "$base_path.$id";
 			if ( DB::select( "SELECT text2ltree('$new_path') <@ text2ltree('$old_path') is_child;" )[0]->is_child ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "500000" ],
 				] )->status( 500 );
 				
-			} elseif ( Resource::where( 'path', $new_path )->where( 'resource_name', $resource->resource_name )->exists() ) {
+			} elseif ( Resource::where( "path", $new_path )->where( "resource_name", $resource->resource_name )->exists() ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "400006" ],
 				] )->status( 400 );
@@ -248,8 +273,8 @@
 		public function update( UpdateResourceRequest $request, $id ) {
 			$user     = $request->user();
 			$resource = Resource::find( $id );
-			if ( $request->has( 'resource_name' ) ) {
-				$resource->resource_name = $request->get( 'resource_name' );
+			if ( $request->has( "resource_name" ) ) {
+				$resource->resource_name = $request->get( "resource_name" );
 			}
 			if ( ! $resource->save() ) {
 				throw ValidationException::withMessages( [
@@ -295,7 +320,7 @@
 			foreach ( $trash_id_list as $trash_id ) {
 				$resource             = Resource::find( $trash_id );
 				$resource->trashed    = true;
-				$resource->trash_path = preg_replace( "/($base_path)/", '0', $resource->path );
+				$resource->trash_path = preg_replace( "/($base_path)/", "0", $resource->path );
 				if ( ! $resource->save() ) {
 					throw ValidationException::withMessages( [
 						"resource" => [ "500001" ],
@@ -323,8 +348,8 @@
 				] )->status( 409 );
 			}
 			if ( $user->resources
-				     ->where( 'path', $resource->path )
-				     ->where( 'resource_name', $resource->resource_name )
+				     ->where( "path", $resource->path )
+				     ->where( "resource_name", $resource->resource_name )
 				     ->count() > 1 ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "400006" ],
@@ -342,7 +367,7 @@
 			foreach ( $restore_id_list as $restore_id ) {
 				$resource             = Resource::find( $restore_id );
 				$resource->trashed    = false;
-				$resource->trash_path = '0';
+				$resource->trash_path = "0";
 				if ( ! $resource->save() ) {
 					throw ValidationException::withMessages( [
 						"resource" => [ "500001" ],
@@ -369,8 +394,8 @@
 			}
 			$user              = $request->user();
 			$base_path         = Resource::find( $id )->path;
-			$path              = Resource::find( $id )->path . '.' . $id;
-			$trash_path        = Resource::find( $id )->trash_path . '.' . $id;
+			$path              = Resource::find( $id )->path . "." . $id;
+			$trash_path        = Resource::find( $id )->trash_path . "." . $id;
 			$remove_id_list    = DB::select( "SELECT id FROM resources
                           LEFT JOIN resource_user ON resources.id = resource_user.resource_id
                           WHERE user_id=? AND trash_path <@ ? AND trashed=?
