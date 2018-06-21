@@ -22,22 +22,7 @@
  * SOFTWARE.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import Welcome from '../pages/Welcome';
-import Login from '../pages/Login';
-import PrivateRoute from './PrivateRoute';
-import Share from '../pages/Share';
+const styles = theme => ({
+});
 
-const Routes = (
-    <div>
-        <Switch>
-            <Route exact path="/" component={Welcome}/>
-            <Route exact path="/login" component={Login}/>
-            <Route exact path="/share/:secret" component={Share}/>
-            <PrivateRoute/>
-        </Switch>
-    </div>
-);
-
-export default Routes;
+export default styles;
