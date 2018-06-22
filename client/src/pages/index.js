@@ -63,18 +63,13 @@ class App extends Component {
             msgShow: false,
             msgText: '',
         };
-    }
-
-
-    componentWillMount() {
         this.props.store.subscribe(() => {
-                this.setState({
-                    loading: this.props.store.getState().assist.loading,
-                    msgShow: this.props.store.getState().assist.msgShow,
-                    msgText: this.props.store.getState().assist.msgText,
-                });
-            },
-        );
+            this.setState({
+                loading: this.props.store.getState().assist.loading,
+                msgShow: this.props.store.getState().assist.msgShow,
+                msgText: this.props.store.getState().assist.msgText,
+            });
+        });
     }
 
     render() {

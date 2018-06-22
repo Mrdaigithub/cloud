@@ -179,7 +179,7 @@
 			];
 			if ( $visibility == "private" ) {
 				$pass            = str_split( encrypt( $res["secret"] ) );
-				$res["password"] = implode( "", array_splice( $pass, 100, 4 ) );
+				$res["extract_code"] = implode( "", array_splice( $pass, 100, 4 ) );
 			}
 			
 			return $res;
