@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-05-04T07:57:33.820Z",
+	"__export_date": "2018-06-22T06:35:26.704Z",
 	"__export_source": "insomnia.desktop.app:v5.16.1",
 	"resources": [
 		{
@@ -26,46 +26,9 @@
 		},
 		{
 			"_id": "jar_10719cb2f3894b5d8745de9cf83e8ab0",
-			"cookies": [
-				{
-					"creation": "2018-01-16T08:10:41.121Z",
-					"domain": "api.mrdaisite.com",
-					"expires": "2018-01-16T10:58:08.000Z",
-					"hostOnly": true,
-					"id": "8090965793434701",
-					"key": "XSRF-TOKEN",
-					"lastAccessed": "2018-01-16T08:58:06.175Z",
-					"maxAge": 7200,
-					"path": "/",
-					"value": "eyJpdiI6IndPSXJwTzAzRlwvdXA4emJOWktERE5BPT0iLCJ2YWx1ZSI6IlZ6VjNEYVpneU10OWRZRldvVEE4ZEZnaHA3b01BR3RXQ0hQeHhnS2E1UTF1Yll6cGhiQTgxZlQxdEJ3b3FsVDltMlwvdmFaNlVyc2FKa3dDc0dKTStDQT09IiwibWFjIjoiNjk5NGJmYjU2MTI0MWJkNTJkMTVlZTQ5ZDhjNGEzODYyMTg5NmZmZmRkY2IyMzkyMDU5ZDRjZDNkZWZhMDVlMyJ9"
-				},
-				{
-					"creation": "2018-01-16T08:10:41.122Z",
-					"domain": "api.mrdaisite.com",
-					"expires": "2018-01-16T10:58:08.000Z",
-					"hostOnly": true,
-					"httpOnly": true,
-					"id": "7920485458905948",
-					"key": "laravel_session",
-					"lastAccessed": "2018-01-16T08:58:06.176Z",
-					"maxAge": 7200,
-					"path": "/",
-					"value": "eyJpdiI6IlVIQlE3bHBcL1dSKzNoQk9ZSHhzYTJRPT0iLCJ2YWx1ZSI6IlNyOStCVDUyb0szWGJDRXp5cWxId2hDaXhJdGhHa1VmNFhEM0FkTWNhNWZ0anhnRUsra243cnJlQmV3Z1UrS2Ria3k1Q0RNNU41dkxoV1YyWlwvcVBUZz09IiwibWFjIjoiY2VlYjgxNDBkYzFmZTk2MWEwNzBkZjBjZWIzMzk2ZDRhMmI4ZTAyMGRkNTE4ZTM3ZDYzOTM1MWJhYjg1NTY0OCJ9"
-				},
-				{
-					"creation": "2018-04-19T04:43:38.459Z",
-					"domain": "www.0553122.com",
-					"hostOnly": true,
-					"httpOnly": true,
-					"id": "5333812754256018",
-					"key": "JSESSIONID",
-					"lastAccessed": "2018-04-24T03:43:27.954Z",
-					"path": "/axwh/",
-					"value": "94DF03A506B9598AA3E6F46F8111E2C5"
-				}
-			],
+			"cookies": [],
 			"created": 1511922037690,
-			"modified": 1524541407957,
+			"modified": 1528852620073,
 			"name": "Default Jar",
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
 			"_type": "cookie_jar"
@@ -119,35 +82,36 @@
 			"authentication": {},
 			"body": {
 				"mimeType": "application/x-www-form-urlencoded",
-				"params": [
-					{
-						"id": "pair_ad76431e0be241008075c739d40ddf17",
-						"name": "token",
-						"value": "ytcx2ff5b63b4a49bdce6d30a01f60f00aee"
-					}
-				]
+				"params": []
 			},
 			"created": 1523371602231,
-			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 409000 | 上传的资源已存在于服务器     |\n| 409001 | 请求的资源不存在             |\n| 409002 | 此用户的存储容量不足         |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败           |",
+			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
 			"headers": [
 				{
+					"id": "pair_cf52cbad05cb4f16ab48daf8905365f7",
 					"name": "Content-Type",
 					"value": "application/x-www-form-urlencoded"
 				}
 			],
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
-			"method": "POST",
-			"modified": 1524113069257,
+			"method": "GET",
+			"modified": 1528855498955,
 			"name": "全局错误状态码",
-			"parameters": [],
+			"parameters": [
+				{
+					"id": "pair_56bd0f4f5eba4ff79e43b1bea927473b",
+					"name": "s",
+					"value": "f8057c474fa798f359af0b5393d2cb6f19d34d9393c94716163fbeb50ae8f904"
+				}
+			],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
 			"settingDisableRenderRequestBody": false,
 			"settingEncodeUrl": true,
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://www.0553122.com/axwh/jtfw/book/line/myBookJk",
+			"url": "",
 			"_type": "request"
 		},
 		{
@@ -339,37 +303,6 @@
 			"_type": "request"
 		},
 		{
-			"_id": "req_a85a465d27d74f1286e6318919e6729c",
-			"authentication": {},
-			"body": {
-				"mimeType": "multipart/form-data",
-				"params": []
-			},
-			"created": 1512964846264,
-			"description": "",
-			"headers": [
-				{
-					"id": "pair_bc79b93c773744bd8e163f1ed150a7ab",
-					"name": "Content-Type",
-					"value": "multipart/form-data"
-				}
-			],
-			"isPrivate": false,
-			"metaSortKey": -1512964846264,
-			"method": "POST",
-			"modified": 1512965073655,
-			"name": "upload",
-			"parameters": [],
-			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
-			"settingDisableRenderRequestBody": false,
-			"settingEncodeUrl": true,
-			"settingRebuildPath": true,
-			"settingSendCookies": true,
-			"settingStoreCookies": true,
-			"url": "http://api.mrdaisite.com/api/v1/file/upload",
-			"_type": "request"
-		},
-		{
 			"_id": "req_b280953c297a4b049dcba8014704ccc5",
 			"authentication": {},
 			"body": {
@@ -407,8 +340,8 @@
 			"isPrivate": false,
 			"metaSortKey": -1514191282898,
 			"method": "POST",
-			"modified": 1514191514815,
-			"name": "uploader",
+			"modified": 1528852168169,
+			"name": "资源上传",
 			"parameters": [],
 			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
 			"settingDisableRenderRequestBody": false,
@@ -417,6 +350,79 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/aetherupload/preprocess",
+			"_type": "request"
+		},
+		{
+			"_id": "req_057e1b78dc2343b9887f8d027847ece9",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU4ZDVjZTc4ZmJhZTdiMTY5MzIwOWU1YzBmNGZkMzIzYmY0YTMyNTNkMDBlYWM3MmFmZDIxM2FjNjJmNWFlMmE0Yzc3MzJiZDUxMzViMmYzIn0.eyJhdWQiOiIxIiwianRpIjoiZThkNWNlNzhmYmFlN2IxNjkzMjA5ZTVjMGY0ZmQzMjNiZjRhMzI1M2QwMGVhYzcyYWZkMjEzYWM2MmY1YWUyYTRjNzczMmJkNTEzNWIyZjMiLCJpYXQiOjE1Mjg4NTIyMzQsIm5iZiI6MTUyODg1MjIzNCwiZXhwIjoxNTI5MDMyMjM0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.PXYqzHAocq1FOpm-JLho-IoYWWCoD_et4E6YFNpBxYXJ6lXZLq1SHtQg5DjI-1WdMUZbr_O-hmmqdMeF3opikNAVi3uBmBbIzya9z-fD_53Pf_NpZv3gsUDgGDkT6M3hBwZT2EADjqrfBcievNQpEwjB0M-8aLvT7jZgqMwO5lhZ1SOJgHM7WpQC28vJPJMB_vQunqqDjoMgMArKdgUQq3fW-YP6IlvxkocznTR6a0rho-ncFT7K6mTe1J7hbEqaPCSFVMP0eYYk9uZP1Elg3PMBGbgUzAcyxIx5t_O8rR0OpVcMR6CCAQmK4i902G4XjHh48rSDW2WAuRraGfRzIM58uK1Ay3gcYEBpirhicN-_LeODhyjZOz5Q2f81nKIwmdez25mexirQOmfHNYmZtIqpBAMrdX6qnzKyjmFOgCQowNizHUe3hWGF8Uay2xhVqmuLDuuNRXijthflIy19eRJuj4yjKuae7xB5mVCfClJl9dNfPHzL3i8pgpxbh6kmp7kv_BVI8W_6VU92864Tt1P1v9q5o3br_f9C0ot0zHjQLUWQw_-l1GnZD4oTSZyfknAgl3SVAGux1tgYvqZFrzb9qSVJSZ5HadIUaiTV1fEnqr5ujli9g1FV7PMKveBmHU4T7w7SeFd78SGALpxkm4f3LntHvWK9tDMZdJNaT-w",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1528852156483,
+			"description": "### 简要描述 :\n\n- 获取资源下载链接\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/link/{id}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n    \"url\": //api.mrdaisite.com/api/v1/resources/download/{secret}\n}\n```\n\n### 返回参数说明 :\n\n| 参数名 | 类型     | 说明     |\n| --- | ------ | ------ |\n| url | String | 资源下载链接 |\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1514191282848,
+			"method": "GET",
+			"modified": 1528856202914,
+			"name": "获取资源下载链接",
+			"parameters": [],
+			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/link/281",
+			"_type": "request"
+		},
+		{
+			"_id": "req_79637f663e4145e8ba0121889016d611",
+			"authentication": {},
+			"body": {},
+			"created": 1528854742064,
+			"description": "### 简要描述 :\n\n- 下载资源接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/download/{secret}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n    \"url\": //api.mrdaisite.com/api/v1/resources/download/{secret}\n}\n```\n\n### 返回参数说明 :\n\n| 参数名  | 类型     | 说明      |\n| ---- | ------ | ------- |\n| null | Binary | 二进制资源文件 |\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1514191282798,
+			"method": "GET",
+			"modified": 1528858539165,
+			"name": "下载资源",
+			"parameters": [],
+			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/download/eyJpdiI6ImN5SlBHejV1cTVoVXozdWRaM2hrNHc9PSIsInZhbHVlIjoiUktscldsM3pzczRpQ3owc09tYmdlQ1JkcFZoTlBpT0xJakxOWUJ6blZwUT0iLCJtYWMiOiIxNTBhZjkyN2Y1ZDc0MjM2ZmFlZTk0MDRjYzhlYjJiYzIwZWJiNmU5ZDA0Y2Q5NWYxNWJkOWQ3NTI5NWYzODE5In0",
+			"_type": "request"
+		},
+		{
+			"_id": "req_a33d1c961b4f4d759e0f5ed6ada2e88d",
+			"authentication": {
+				"disabled": false,
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRiZjFmYjE1YzNhM2NkY2NmMTAxMzY4ZGQ3ZjU4ODMwOTY3Mjg2ZmRhYmM1OWU2MDUzYmI2Yzk5M2NmNTZlNzU4Yzg0ZWM3MWZkMDIyYzZkIn0.eyJhdWQiOiIxIiwianRpIjoiNGJmMWZiMTVjM2EzY2RjY2YxMDEzNjhkZDdmNTg4MzA5NjcyODZmZGFiYzU5ZTYwNTNiYjZjOTkzY2Y1NmU3NThjODRlYzcxZmQwMjJjNmQiLCJpYXQiOjE1Mjk1NjI1NTEsIm5iZiI6MTUyOTU2MjU1MSwiZXhwIjoxNTI5NzQyNTUwLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.iZa93MEvQVgmeeKUOH6HT6gwdoEAApvQbnLR-1P64Lbw3EUdpdf8B1ht9ZihTxH66nEN1Ddqi9-Vlexaw26fJsBz-o1kQ9qPR_WTyDAGdsDbvbGUBjCf4hwMu0KVtmGBm2lzg6suy5ujYMrwWhgiSLfSmtrqeqyiA9hB4WRZMQx4x1_oeMMfn2bc0iJXGT607wOYquFV35jiIQZqjKx3p9OXQS32O28eNnMrSYf22DJ50ZrtlTm84NrYQ43sB5Hh0YtgDUFjkmQcHUir9aLT4OQLhf-Pn7495_6pMGpNQ8wuru0s8Yit1IQCsGf-oEZt3CmkEFmOEExaFIOREw6p8gUyTW28_p54lySvV9IPjQICj0wQLFSAk6dQdjpfY_l9LTAWWNU9r5ozqHjnCh4DJ2j1CUP5xMEVnWl4Sgm2vlAQcsuyCACEk9jgRifE7hXvp9Flo_GE_so7gcFC-u21ev1iY-ugRgEisPSKmS53aoVbJvlWzVfiBboPp5nIYyVNz0dGeXwpGLJ53syADpP-O2bquHD-YAn4VB22TYNso8w7VJ_r-9gy9H-Z_ZX0dcALugl09GQXXk0n-0lchKB-i4nu_7ouY7ieD6rMi07sAtfs1R-CFuNvz0Qk8x0Fc6kyvJFww7LQV8eRTebeiUsuKJ1QvIZRdywQuxpFyxFPnSc",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1529562516849,
+			"description": "### 简要描述 :\n\n- 获取分享链接和提取码接口\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/share/secret/{visibility}/{id}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n{\n\t\"secret\": \"eyJpdiI6IjBOWXplUU9BdVlYaEYxaj\",\n\t\"extract_code\": \"c3lj\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名          | 类型     | 说明         |\n| ------------ | ------ | ---------- |\n| secret       | String | 资源下载的密钥    |\n| extract_code | String | 下载私有资源的提取码 |\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1514191282748,
+			"method": "GET",
+			"modified": 1529649277053,
+			"name": "获取分享链接和提取码",
+			"parameters": [],
+			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/share/secret/private/344",
 			"_type": "request"
 		},
 		{
@@ -558,7 +564,7 @@
 		{
 			"_id": "req_eb07353198804ae080f4d83a0cbfcacb",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImNjZTlkOTI3OTdlMDg3MzI1OTcxOGFhYmExNDY3MGMzM2NhOGY2MWE3MTc2NDZmNjM1NTBlNDQyMmJiZTE1MmY2NWYyMmY2ZGNmODJiODZlIn0.eyJhdWQiOiIxIiwianRpIjoiY2NlOWQ5Mjc5N2UwODczMjU5NzE4YWFiYTE0NjcwYzMzY2E4ZjYxYTcxNzY0NmY2MzU1MGU0NDIyYmJlMTUyZjY1ZjIyZjZkY2Y4MmI4NmUiLCJpYXQiOjE1MjUzNTg5NjgsIm5iZiI6MTUyNTM1ODk2OCwiZXhwIjoxNTI1NTM4OTY4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z3G7ud6uN6iCNekVDNW6x7s6pdgymE6OYlzWwQz02k5zE7se_V4wwyelo9gLHNZ9E8nKM4vEptCJ0u2T0_EhI6Nj14eO-zW7jOezuFI62hfNf8x5_7EdJdQs_OyVD4UtvHGjQyWXFTuGyth3XMVi6KFBefli9MsqdXH763UlCZo-3ZRY7QkiRKX6RcAX73HwkYZWwxKPQaH4zr4mNwJbSTy3Z_BCb_sA7SOpCDbLxfFo2pnLweBomSdgdud-XozCBFazhhpllFH2qhKVEgEzHM8uCJVni8bTsaUJPkxiGJ3p3OUVhccdPeKTLj70b-YW9Cw4CffxtmhG_AZ8s1LycVPhnU8NyF0fHZbg8cAM4iMTFn5nM6z4QZhGsOJEUcx6_Gq0GX6GesmdiZ9ds7_ewJx7k6uBzwY7hsppKdcpfjVBbKWp7KCoYee6rIKm8pvPkirT4wTTFtrr3cXbfu5BQsrT1eeyxnyh9R9fR1WD-IrGp9F__XVouw1mRzHP9i4JvjzRfbXNbdR9zgtbRXvueKM8E-n2neAIR1fGUC7CufRQAXzF1GkkkpJIOJP387HbVxH1wxsz05r2sqiXUKn5bOtfEZNgP9wx6i5AGjUgw4JTaaaM5-ecy3WM_EdJcnYjTq5SBXBNX9hrKCLa2C8DQxIAdcAwzISw4QlBbnIGr7E",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjhkODkwNjg0YmYwOGIzNDQzYTM4NGNkNGUzYTRhNThmODQ0Y2NlZTMxMjcwOTRhZTg2ZjNkN2I5NDE1MTNjMmNhMjc2YjM4ZDE5OWE4YjYxIn0.eyJhdWQiOiIxIiwianRpIjoiOGQ4OTA2ODRiZjA4YjM0NDNhMzg0Y2Q0ZTNhNGE1OGY4NDRjY2VlMzEyNzA5NGFlODZmM2Q3Yjk0MTUxM2MyY2EyNzZiMzhkMTk5YThiNjEiLCJpYXQiOjE1MjYwODg4NjIsIm5iZiI6MTUyNjA4ODg2MiwiZXhwIjoxNTI2MjY4ODYyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.CjdzXrB1g5FWdZqfBdUiziF1ucnb_TIi7WRH8k5xReIQLIrOs-LHYx5j8eCTgK57NPOZXdoiMktq5ndPd7k9HWr05yH0PXKg8xaIaTHXSKNmIjl6kxd22q6wP2lA3_WobYTmcoliYyEHajlsfp6OD4b-zlUiLw-p4bIkPFvavHI-G_QwYDXwhhk6MVxkm3zxNo1SXHZP4CxnanEw0lMetevPLr718GmvJHKMvrQWCRp3p0XAOuCfjA3uaeJEqK9AjtyI4LxN0tkm1ODn0sfiX_4siZS3UWiL9_mSN4OVmhZlOtvQwg0iOZ52MeXg-ThrSCE8y3Bn19bBfXc452qWyfS9WfsMYUBGIT6gj1UPaDNNOi28g13tKMKjfZuPgh1A4vdbQ0vVUI-xEeSLrNGGP49J3jZdqfzEfvCy9oP9UnjWF32VOdE7mK0QhPvzg2jL6snm4uW818sZC_POh29CBCAfWIxjgcljXwe8nqaJkKxJW7Xy4VgnCGaXhr-lZYBcuxDqSUIoLUL19g1qepecGISehNl-MMwbbnB-POkkU5cm1qVZNfu_5K-xx_YoZBekRUPDlfsgj7GXYKwhGosI5ZSE1g2UVosd5W_UYNWU1Y_gZnVCAT_6cPK2HSmz5VgpDo9NltlccmRbZjwCWy-A11YXMNogJaUb4zzWN7F-Ig0",
 				"type": "bearer"
 			},
 			"body": {},
@@ -568,7 +574,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523763967653,
 			"method": "GET",
-			"modified": 1525420626061,
+			"modified": 1526088879894,
 			"name": "获取资源列表",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
@@ -577,7 +583,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "http://api.mrdaisite.com/api/v1/resources",
+			"url": "http://api.mrdaisite.com/api/v1/resources/0",
 			"_type": "request"
 		},
 		{
