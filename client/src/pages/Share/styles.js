@@ -30,7 +30,7 @@ const styles = theme => ({
         width: '100%',
         marginBottom: '30px',
     },
-    loginButton: {
+    downloadButton: {
         width: '100%',
         margin: '3vh 0 1vh 0',
     },

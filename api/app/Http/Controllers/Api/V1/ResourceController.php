@@ -155,13 +155,14 @@
 					"resource" => [ "409001" ],
 				] )->status( 409 );
 			}
-			$secret = encrypt( "id=$id&t=" . time() );
+			$source = "id=$id&creater=" . $request->user()->id . "&v=public&t=" . time();
+			$secret = encrypt(encrypt( $source ));
 			
 			return [ "url" => "//" . $_SERVER["SERVER_NAME"] . "/api/v1/resources/download/$secret" ];
 		}
 		
 		/**
-		 * 获取分享资源的secret和分享密码
+		 * 获取分享资源的secret和提取码
 		 *
 		 * @param Request $request
 		 * @param $id
@@ -174,15 +175,70 @@
 					"resource" => [ "409001" ],
 				] )->status( 409 );
 			}
+			
+			/**
+			 * 先一次加密提取第100位字符的后4位字符作为提取码
+			 * 将之前的密文二次加密作为资源的secret发送至客户端
+			 */
+			$source           = "id=$id&creater=" . $request->user()->id . "&v=$visibility&t=" . time();
+			$once_encrypt     = encrypt( $source );
+			$twice_encrypt    = encrypt( $once_encrypt );
+			$once_encrypt_arr = str_split( $once_encrypt );
+			$extract_code     = implode( "", array_splice( $once_encrypt_arr, 100, 4 ) );
+			
 			$res = [
-				"secret" => encrypt( "id=$id&t=" . time() ),
+				"secret" => $twice_encrypt,
 			];
 			if ( $visibility == "private" ) {
-				$pass            = str_split( encrypt( $res["secret"] ) );
-				$res["extract_code"] = implode( "", array_splice( $pass, 100, 4 ) );
+				$res["extract_code"] = $extract_code;
 			}
 			
 			return $res;
+		}
+		
+		/**
+		 * 验证下载分享资源的提取码
+		 *
+		 * @param Request $request
+		 * @param $id
+		 *
+		 * @return mixed|string
+		 */
+		public function verify_share_extract_code( Request $request, $secret ) {
+			$onece_decrypt     = decrypt( $secret );
+			$onece_decrypt_arr = str_split( $onece_decrypt );
+			$source            = decrypt( $onece_decrypt );
+			$visibility        = parse_query( $source )['v'];
+			$time              = parse_query( $source )['t'];
+			$extract_code      = $request->extract_code;
+			
+			if ( ( time() - $time ) > env( "DOWNLOAD_LINK_TIMEOUT" ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "504000" ],
+				] )->status( 504 );
+			}
+			
+			if ( $visibility == 'private'
+			     && $extract_code != implode( "", array_splice( $onece_decrypt_arr, 100, 4 ) ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "403001" ],
+				] )->status( 403 );
+			}
+			
+			$storage_path  = storage_path( "app/aetherupload/file/md5_files" );
+			$resource      = Resource::find( parse_query( decrypt( $onece_decrypt ) )["id"] );
+			$files         = Storage::files();
+			$download_file = array_filter( $files, function ( $file ) use ( $resource ) {
+				return str_contains( $file, $resource->hash );
+			} );
+			if ( ! count( $download_file ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "409001" ],
+				] )->status( 409 );
+			}
+			$download_file = $download_file[ key( $download_file ) ];
+			
+			return response()->download( "$storage_path/$download_file", $resource->resource_name );
 		}
 		
 		/**

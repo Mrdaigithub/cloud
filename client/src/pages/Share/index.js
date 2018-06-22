@@ -32,21 +32,31 @@ import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import logo from '../../static/logo.png';
+import requester from '../../utils/requester';
 
 
 class Share extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            downloadButtonDisabled: false,
+        };
     }
 
-    extract(model) {
+    async extract(model) {
+        const { secret } = this.props.match.params;
         const { extractCode } = model;
+        const requestUrl = extractCode ? `resources/share/verify/${secret}?extract_code=${extractCode}`
+            : `resources/share/verify/${secret}`;
+        await requester.get(requestUrl);
+        this.setState({
+            downloadButtonDisabled: true,
+        });
     }
 
     render() {
         const { classes } = this.props;
-        const { visibility, secret } = this.props.match.params;
+        const { visibility } = this.props.match.params;
 
         return (
             <BasicLayout>
@@ -72,7 +82,8 @@ class Share extends Component {
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        className={classes.loginButton}>提取文件</Button>
+                                        disabled={this.state.downloadButtonDisabled}
+                                        className={classes.downloadButton}>提取文件</Button>
                                 </Formsy>
                             </Grid>
                         </Grid>
