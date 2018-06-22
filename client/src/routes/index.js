@@ -34,7 +34,7 @@ const Routes = (
         <Switch>
             <Route exact path="/" component={Welcome}/>
             <Route exact path="/login" component={Login}/>
-            <Route exact path="/share/:secret" component={Share}/>
+            <Route exact path="/share/:visibility/:secret" component={Share}/>
             <PrivateRoute/>
         </Switch>
     </div>

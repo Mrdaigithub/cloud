@@ -23,6 +23,17 @@
  */
 
 const styles = theme => ({
+    normal: {
+        height: '100vh',
+    },
+    logoImg: {
+        width: '100%',
+        marginBottom: '30px',
+    },
+    loginButton: {
+        width: '100%',
+        margin: '3vh 0 1vh 0',
+    },
 });
 
 export default styles;

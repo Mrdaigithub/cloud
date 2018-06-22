@@ -53,19 +53,20 @@ class ShareStepper extends Component {
         super(props);
         this.state = {
             activeStep: 0,
-            mode: 'public',
+            visibility: 'public',
             secret: '',
-            password: '',
+            extractCode: '',
         };
     }
 
-    changeMode = (mode = 'public') => async () => {
-        const { secret, password } = await requester.get(`resources/share/${mode}/${this.props.resourceID}`);
+    changeVisibility = (visibility = 'public') => async () => {
+        if (!this.props.resourceID) return false;
+        const { secret, extract_code } = await requester.get(`resources/share/secret/${visibility}/${this.props.resourceID}`);
         this.setState(() => ({
-            mode: mode === 'private' ? mode : 'public',
+            visibility: visibility === 'private' ? visibility : 'public',
             activeStep: this.state.activeStep + 1,
             secret,
-            password,
+            extractCode: extract_code,
         }));
     };
 
@@ -97,7 +98,7 @@ class ShareStepper extends Component {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={this.changeMode()}>
+                                            onClick={this.changeVisibility()}>
                                             公开链接
                                         </Button>
                                     </Grid>
@@ -105,7 +106,7 @@ class ShareStepper extends Component {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={this.changeMode('private')}>
+                                            onClick={this.changeVisibility('private')}>
                                             私有链接
                                         </Button>
                                     </Grid>
@@ -113,24 +114,24 @@ class ShareStepper extends Component {
                             </StepContent>
                         </Step>
                         <Step>
-                            <StepLabel>复制资源链接{this.state.mode === 'public' ? '' : '及密码'}</StepLabel>
+                            <StepLabel>复制资源链接{this.state.visibility === 'public' ? '' : '及密码'}</StepLabel>
                             <StepContent>
                                 <Grid container spacing={16} alignItems="center">
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             id="name"
                                             label="资源链接"
-                                            value={`//${window.location.origin}/${this.state.secret}`}/>
+                                            value={`${window.location.origin}/share/${this.state.visibility}/${this.state.secret}`}/>
                                     </Grid>
                                     <Grid
                                         item
                                         xs={12}
                                         sm={6}
-                                        style={this.state.mode === 'public' ? hideStyles : showStyles}>
+                                        style={this.state.visibility === 'public' ? hideStyles : showStyles}>
                                         <TextField
                                             id="name"
                                             label="提取密码"
-                                            value={this.state.password}/>
+                                            value={this.state.extractCode}/>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button
@@ -150,7 +151,7 @@ class ShareStepper extends Component {
 
 ShareStepper.propTypes = {
     open: PropTypes.bool.isRequired,
-    resourceID: PropTypes.number.isRequired,
+    resourceID: PropTypes.any,
     onComplete: PropTypes.func.isRequired,
 };
 
