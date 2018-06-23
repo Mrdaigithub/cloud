@@ -115,6 +115,9 @@
 			} );
 			if ( ! count( $file ) ) {
 				return $this->failed( 400005 );
+				throw ValidationException::withMessages( [
+					"resource" => [ "400005" ],
+				] )->status( 400 );
 			}
 			$file       = $file[ key( $file ) ];
 			$image_info = getimagesize( "$storage_path/$file" );
@@ -156,7 +159,7 @@
 				] )->status( 409 );
 			}
 			$source = "id=$id&creater=" . $request->user()->id . "&v=public&t=" . time();
-			$secret = encrypt(encrypt( $source ));
+			$secret = encrypt( encrypt( $source ) );
 			
 			return [ "url" => "//" . $_SERVER["SERVER_NAME"] . "/api/v1/resources/download/$secret" ];
 		}
@@ -208,9 +211,17 @@
 			$onece_decrypt     = decrypt( $secret );
 			$onece_decrypt_arr = str_split( $onece_decrypt );
 			$source            = decrypt( $onece_decrypt );
+			$resource_id       = parse_query( $source )['id'];
+			$creater           = parse_query( $source )['creater'];
 			$visibility        = parse_query( $source )['v'];
 			$time              = parse_query( $source )['t'];
 			$extract_code      = $request->extract_code;
+			
+			if ( ! Resource::find( $resource_id ) ) {
+				throw ValidationException::withMessages( [
+					"resource" => [ "409001" ],
+				] )->status( 409 );
+			}
 			
 			if ( ( time() - $time ) > env( "DOWNLOAD_LINK_TIMEOUT" ) ) {
 				throw ValidationException::withMessages( [
@@ -225,20 +236,10 @@
 				] )->status( 403 );
 			}
 			
-			$storage_path  = storage_path( "app/aetherupload/file/md5_files" );
-			$resource      = Resource::find( parse_query( decrypt( $onece_decrypt ) )["id"] );
-			$files         = Storage::files();
-			$download_file = array_filter( $files, function ( $file ) use ( $resource ) {
-				return str_contains( $file, $resource->hash );
-			} );
-			if ( ! count( $download_file ) ) {
-				throw ValidationException::withMessages( [
-					"resource" => [ "409001" ],
-				] )->status( 409 );
-			}
-			$download_file = $download_file[ key( $download_file ) ];
+			$source = "id=$resource_id&creater=$creater&v=$visibility&t=" . time();
+			$secret = encrypt( encrypt( $source ) );
 			
-			return response()->download( "$storage_path/$download_file", $resource->resource_name );
+			return [ "url" => "//" . $_SERVER["SERVER_NAME"] . "/api/v1/resources/download/$secret" ];
 		}
 		
 		/**
@@ -249,7 +250,9 @@
 		 * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
 		 */
 		public function download( $secret ) {
-			$t = parse_query( decrypt( $secret ) )["t"];
+			$onece_decrypt = decrypt( $secret );
+			$source        = decrypt( $onece_decrypt );
+			$t             = parse_query( $source )["t"];
 			if ( ( time() - $t ) > env( "DOWNLOAD_LINK_TIMEOUT" ) ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "504000" ],
@@ -257,7 +260,7 @@
 			}
 			
 			$storage_path  = storage_path( "app/aetherupload/file/md5_files" );
-			$resource      = Resource::find( parse_query( decrypt( $secret ) )["id"] );
+			$resource      = Resource::find( parse_query( $source )["id"] );
 			$files         = Storage::files();
 			$download_file = array_filter( $files, function ( $file ) use ( $resource ) {
 				return str_contains( $file, $resource->hash );

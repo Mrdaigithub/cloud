@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-06-22T06:35:26.704Z",
+	"__export_date": "2018-06-23T08:44:32.487Z",
 	"__export_source": "insomnia.desktop.app:v5.16.1",
 	"resources": [
 		{
@@ -85,7 +85,7 @@
 				"params": []
 			},
 			"created": 1523371602231,
-			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
+			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 403001 | 提取码不正确                 |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
 			"headers": [
 				{
 					"id": "pair_cf52cbad05cb4f16ab48daf8905365f7",
@@ -96,13 +96,228 @@
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
 			"method": "GET",
-			"modified": 1528855498955,
+			"modified": 1529657085493,
 			"name": "全局错误状态码",
 			"parameters": [
 				{
 					"id": "pair_56bd0f4f5eba4ff79e43b1bea927473b",
 					"name": "s",
 					"value": "f8057c474fa798f359af0b5393d2cb6f19d34d9393c94716163fbeb50ae8f904"
+				},
+				{
+					"id": "pair_161eb55ea8b4420e8254a900a61c4b37",
+					"name": "bkt",
+					"value": "p3-00006691047794976a053b111f01c439ffb6"
+				},
+				{
+					"id": "pair_198533eb19ae4e899ae5f6af8355fa4b",
+					"name": "xcode",
+					"value": "6af17a5a391df7f355eec69bdf1d06e0e4997e9746b731a830b983cff156c31655dfa3e0c32b0fda94a642d3e62638e89717ec4418c70769"
+				},
+				{
+					"id": "pair_fdc3d708d4b64d729019d648fc7ef29b",
+					"name": "fid",
+					"value": "3154945568-250528-3589109580"
+				},
+				{
+					"id": "pair_03ccd59aca1442b9b2cb4cca47bff425",
+					"name": "time",
+					"value": "1529650967"
+				},
+				{
+					"id": "pair_bb5ec0f2f2354ac5945c2789b3da0344",
+					"name": "sign",
+					"value": "FDTAXGERLQBHSKa-DCb740ccc5511e5e8fedcff06b081203-wPTjo9nHay1O4Ur6oHQi6q6rSLE="
+				},
+				{
+					"id": "pair_2dc3b3f60f89485da3ffaef7922af6d3",
+					"name": "to",
+					"value": "d11"
+				},
+				{
+					"id": "pair_3eaf256167834adfb596c299323c7b80",
+					"name": "size",
+					"value": "947954334"
+				},
+				{
+					"id": "pair_5c98bcef51dd485da62a486b4572d8fc",
+					"name": "sta_dx",
+					"value": "947954334"
+				},
+				{
+					"id": "pair_a51f36b010624d29a6f893b36cefb1ca",
+					"name": "sta_cs",
+					"value": "13965"
+				},
+				{
+					"id": "pair_4ff8ebd1163543f097f14d5d5e903827",
+					"name": "sta_ft",
+					"value": "rar"
+				},
+				{
+					"id": "pair_13d6bb56ddd34111b87ab27e0915726a",
+					"name": "sta_ct",
+					"value": "7"
+				},
+				{
+					"id": "pair_54f489bc46b745ebad39b192dd8edc7d",
+					"name": "sta_mt",
+					"value": "7"
+				},
+				{
+					"id": "pair_dda8d1849bc9427b843d2645bdad5040",
+					"name": "fm2",
+					"value": "MH,Nanjing02,Anywhere,,zhejiang,ct"
+				},
+				{
+					"id": "pair_4ea6dc5309054ddfa3a3cd93247828a9",
+					"name": "vuk",
+					"value": "2677370174"
+				},
+				{
+					"id": "pair_9b48015fb21f4a46bb5560e771b40e9d",
+					"name": "iv",
+					"value": "-2"
+				},
+				{
+					"id": "pair_667c6cc5089e42d0b833edac91c8e9a6",
+					"name": "newver",
+					"value": "1"
+				},
+				{
+					"id": "pair_767f22c2ea5142c4959d9ef255bec8c0",
+					"name": "newfm",
+					"value": "1"
+				},
+				{
+					"id": "pair_2e32bea6037041068300a7521827e56d",
+					"name": "secfm",
+					"value": "1"
+				},
+				{
+					"id": "pair_e089d63126664336bb5705fb1da6d060",
+					"name": "flow_ver",
+					"value": "3"
+				},
+				{
+					"id": "pair_459f828f074649d4b29fdb80980c317c",
+					"name": "pkey",
+					"value": "00006691047794976a053b111f01c439ffb6"
+				},
+				{
+					"id": "pair_23e1a16601c54eb3ac9d2b07c4d93040",
+					"name": "sl",
+					"value": "82640974"
+				},
+				{
+					"id": "pair_17b05e76dd0547d6b6746037efadd993",
+					"name": "expires",
+					"value": "1529669481"
+				},
+				{
+					"id": "pair_4f084384f08b4979bda206a7bcb785ef",
+					"name": "rt",
+					"value": "sh"
+				},
+				{
+					"id": "pair_343d52e5b32a4335b6bb26487c7b94de",
+					"name": "r",
+					"value": "713777896"
+				},
+				{
+					"id": "pair_c8c148b01ba0481db963fb8bc0fb36b5",
+					"name": "sh",
+					"value": "1"
+				},
+				{
+					"id": "pair_07558ae121fd486286c9aa93cccc3420",
+					"name": "mlogid",
+					"value": "4003706072071798814"
+				},
+				{
+					"id": "pair_220ef8ecf5544202a32a698075a78061",
+					"name": "vbdid",
+					"value": "3743340181"
+				},
+				{
+					"id": "pair_848287924e5a485da7d19e2b518eb763",
+					"name": "fin",
+					"value": "16世纪北半球V1.01整合正式版.rar"
+				},
+				{
+					"id": "pair_c797b3ab9edc4396b56f750235085dca",
+					"name": "rtype",
+					"value": "1"
+				},
+				{
+					"id": "pair_c6c117f710ff4830bcfa40767fd82ea9",
+					"name": "dp-logid",
+					"value": "4003706072071798814"
+				},
+				{
+					"id": "pair_95fbede2158c499b83f58d438c89d52e",
+					"name": "dp-callid",
+					"value": "0.1.1"
+				},
+				{
+					"id": "pair_0c7bf7be199748e4857c09223632be84",
+					"name": "hps",
+					"value": "1"
+				},
+				{
+					"id": "pair_9cc11276f15f498ca318f493b1b1eaa3",
+					"name": "tsl",
+					"value": "50"
+				},
+				{
+					"id": "pair_ec03c10eb5794b98a4f63b557721dee4",
+					"name": "csl",
+					"value": "78"
+				},
+				{
+					"id": "pair_c1bdc50e9efd4275aaa22b4a2a31bac9",
+					"name": "csign",
+					"value": "mBaXKGlc6uCy5Od/xRJsTbIIRis="
+				},
+				{
+					"id": "pair_d1c894b04c47471cacc9627390994c7b",
+					"name": "so",
+					"value": "0"
+				},
+				{
+					"id": "pair_0efecbb52a9d4127aa7b49908ad5a8ee",
+					"name": "ut",
+					"value": "8"
+				},
+				{
+					"id": "pair_17f0f6f15f184935a1d45db15905eff7",
+					"name": "uter",
+					"value": "4"
+				},
+				{
+					"id": "pair_320dc54bb80c45e3a30437d6430c60e3",
+					"name": "serv",
+					"value": "0"
+				},
+				{
+					"id": "pair_ecb470a27a624a61ba6c65340ae96685",
+					"name": "uc",
+					"value": "3252418905"
+				},
+				{
+					"id": "pair_d79035184d4946bc9861581efae4833b",
+					"name": "ic",
+					"value": "2729368933"
+				},
+				{
+					"id": "pair_a7ee2e7d985a480ab661d0c0f6fd15e7",
+					"name": "ti",
+					"value": "26fa64dbec288224734d0014df049948a7e508a7e9f70999305a5e1275657320"
+				},
+				{
+					"id": "pair_3d1c99ff80ce4cc58774223e67d65f13",
+					"name": "by",
+					"value": "themis"
 				}
 			],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
@@ -111,7 +326,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "",
+			"url": "https://d11.baidupcs.com/file/db56d2a3b695eab2f35e35908104bbaa?",
 			"_type": "request"
 		},
 		{
@@ -413,8 +628,8 @@
 			"isPrivate": false,
 			"metaSortKey": -1514191282748,
 			"method": "GET",
-			"modified": 1529649277053,
-			"name": "获取分享链接和提取码",
+			"modified": 1529740531076,
+			"name": "获取分享链接的密钥和提取码",
 			"parameters": [],
 			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
 			"settingDisableRenderRequestBody": false,
@@ -423,6 +638,43 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "http://api.mrdaisite.com/api/v1/resources/share/secret/private/344",
+			"_type": "request"
+		},
+		{
+			"_id": "req_34352cbdb30b48eb8676943f7c62fa6c",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": []
+			},
+			"created": 1529651193152,
+			"description": "### 简要描述 :\n\n- 验证下载分享资源的提取码\n\n### 请求URL :\n\n- http://api.mrdaisite.com/api/v1/resources/share/verify/${secret}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名          | 必选  | 类型     | 说明  |\n| ------------ | --- | ------ | --- |\n| extract_code | 是   | String | 提取码 |\n\n### 返回示例 :\n\n```json\n{\n  \"url\":\"//api.mrdaisite.com/api/v1/resources/download/eyJpdiI6Ikh5VHAyVUVXa1k0c1Banc\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名    | 类型     | 说明      |\n| ------ | ------ | ------- |\n| secret | String | 资源下载的链接 |\n",
+			"headers": [
+				{
+					"id": "pair_37ca9ce872df44e3b1705137af2e785d",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1514191282698,
+			"method": "GET",
+			"modified": 1529743416008,
+			"name": "验证下载分享资源的提取码",
+			"parameters": [
+				{
+					"id": "pair_6eee8d5c65c0484caadffe479141dad1",
+					"name": "extract_code",
+					"value": "czRo"
+				}
+			],
+			"parentId": "fld_ea59a6db8dc74385a5bbcd3841829083",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "http://api.mrdaisite.com/api/v1/resources/share/verify/eyJpdiI6IlI5bHR2cVVLRVlwdEFqUlwvUzFtRjFBPT0iLCJ2YWx1ZSI6ImF1ZEw4ZDFSMWpseTFOVnA5Y0xtZVdiK3VXSVFiTnBFSEgzOVppd3ZmREEwVzcrWGZ4QTM1QVRKOXk5Nk0zajdiV3F3b0hRTWJReHRtcmE5Um01a3hTRFBsY3U1U3RCS1ZNR3ZSSEJzU09waUtSZWkrUmE1aDZlZnhTbUZ3WnBpVUs1TVlUVDM0b1IxdFFaaERaQXdueUNBSEJiUXo1a05KaEZkUlwvWjlBZ1YzTm9KTUNGV29ENXIzaVgwakU1QjZCSEl6QTV4YmhBZ1ZYWUVnNDIzVEZXVis0OWF3VHhNMVpSaEVrcDljQTZJQ1AwbEpnNlhEZ1pvUDNHRkNtWDJORzRQcW5Vd2hOdXE0VUJNNG9VdXFTbU5GVHM5eXZUYXJDRm02VFdwT3FQZ05lMEtCUk1vMFdLbkNkSjh2cGF1M1JjSEMyNGtBRitZWU9vaUlVKzJIYkE9PSIsIm1hYyI6ImFhMTJiMzE5N2M0NmVkNDBjODM0ODVkYTU2ZjVmMTk0ODVjZmE2ZDZjZTk4YjViOWQyNTdjMjZlNjI3NDA5NTkifQ==",
 			"_type": "request"
 		},
 		{
