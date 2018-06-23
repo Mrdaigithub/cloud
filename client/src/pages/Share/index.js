@@ -49,11 +49,24 @@ class Share extends Component {
         const { extractCode } = model;
         const requestUrl = extractCode ? `resources/share/verify/${secret}?extract_code=${extractCode}`
             : `resources/share/verify/${secret}`;
-        await requester.get(requestUrl);
+        const downloadUrl = await requester.get(requestUrl);
+        this.handleDownload(downloadUrl);
         this.setState({
             downloadButtonDisabled: true,
         });
     }
+
+    handleDownload = (downloadUrl) => {
+        const downloadDom = document.createElement('a');
+        downloadDom.id = 'downloadUrl';
+        downloadDom.download = true;
+        downloadDom.href = downloadUrl.url;
+        document.querySelector('body')
+            .appendChild(downloadDom);
+        downloadDom.click();
+        document.querySelector('body')
+            .removeChild(downloadDom);
+    };
 
     render() {
         const { classes } = this.props;
