@@ -34,12 +34,12 @@ import styles from './styles';
 class VideoPreview extends Component {
 
     async componentWillMount() {
-        const videoUrl = await requester.get(`resources/secret/${this.props.selectedResource.resourceID}`);
+        const videoUrl = await requester.get(`resources/link/${this.props.selectedResource.resourceID}`);
         this.setState({ videoUrl });
         new DPlayer({
             element: document.querySelector('#playerContainer'),
             video: {
-                url: videoUrl,
+                url: videoUrl.url,
             },
         });
     }
