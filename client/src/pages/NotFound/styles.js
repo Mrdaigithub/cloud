@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import notFoundImg from '../../static/404.svg';
+import notFoundImg from '../../res/static/404.svg';
 
 const styles = theme => ({
     normal: {

@@ -55,6 +55,7 @@ import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchResources, getSelectedResource } from '../../store/actions/resourceActions';
+import { _close, _detail, _nameInvalid, _ok, _remove, _rename, _resource, _unnamed } from '../../res/values/string';
 
 class ResourcePreview extends Component {
     constructor(props) {
@@ -153,7 +154,7 @@ class ResourcePreview extends Component {
                                         style={{ width: ':30px', height: '30px', verticalAlign: 'middle', marginRight: '10px' }}
                                         className={classes.modalHeaderFileIcon}
                                         ext={selectedResource.resourceMime}/>
-                                    {selectedResource.resourceName || '未命名'}
+                                    {selectedResource.resourceName || _unnamed}
                                 </Typography>
                                 <IconButton color="inherit" onClick={onDownload}>
                                     <FileDownload/>
@@ -177,19 +178,19 @@ class ResourcePreview extends Component {
                                         <ListItemIcon>
                                             <Edit/>
                                         </ListItemIcon>
-                                        <ListItemText inset primary="重命名"/>
+                                        <ListItemText inset primary={_rename}/>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleRemove}>
                                         <ListItemIcon>
                                             <Delete/>
                                         </ListItemIcon>
-                                        <ListItemText inset primary="删除"/>
+                                        <ListItemText inset primary={_remove}/>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleToggleResourceDetail(true)}>
                                         <ListItemIcon>
                                             <Info/>
                                         </ListItemIcon>
-                                        <ListItemText inset primary="详细信息"/>
+                                        <ListItemText inset primary={_detail}/>
                                     </MenuItem>
                                 </Menu>
                             </Toolbar>
@@ -212,20 +213,20 @@ class ResourcePreview extends Component {
                 <Dialog
                     open={RenameDialogOpen}>
                     <Formsy onValidSubmit={this.handleRename}>
-                        <DialogTitle>重命名资源</DialogTitle>
+                        <DialogTitle>{_rename}{_resource}</DialogTitle>
                         <DialogContent>
                             <FormsyText
                                 name="newName"
                                 value={newName}
                                 validations={{ matchRegexp: /(\w|\d){1,50}/ }}
-                                validationError="名称不合法"
+                                validationError={_nameInvalid}
                                 required
                                 fullWidth
                                 autoFocus/>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.handleToggleRenameDialog()} color="primary">关闭</Button>
-                            <Button type="submit" color="primary">确认</Button>
+                            <Button onClick={this.handleToggleRenameDialog()} color="primary">{_close}</Button>
+                            <Button type="submit" color="primary">{_ok}</Button>
                         </DialogActions>
                     </Formsy>
                 </Dialog>

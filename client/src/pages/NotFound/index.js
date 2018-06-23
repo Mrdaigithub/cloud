@@ -30,6 +30,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import styles from './styles';
+import { _back, _pageNotFound } from '../../res/values/string';
 
 class NotFound extends Component {
     constructor(props) {
@@ -44,8 +45,8 @@ class NotFound extends Component {
                 <Grid item sm={7} xs={12} className={classes.left}/>
                 <Grid item sm={5} xs={12} className={classes.right}>
                     <h3>404</h3>
-                    <p>页面不存在</p>
-                    <Button variant="outlined" color="primary" onClick={changePage.bind(this, '/cloud-drive/0')}>返回</Button>
+                    <p>{_pageNotFound}</p>
+                    <Button variant="outlined" color="primary" onClick={changePage.bind(this, '/cloud-drive/0')}>{_back}</Button>
                 </Grid>
             </Grid>
         );

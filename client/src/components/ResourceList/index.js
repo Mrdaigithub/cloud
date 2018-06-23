@@ -39,6 +39,7 @@ import { FolderIcon } from '../../components/file-type-icon';
 import ResourceTypeIcon from '../../components/ResourceTypeIcon';
 import styles from './styles';
 import { clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
+import { _back } from '../../res/values/string';
 
 class ResourceList extends Component {
     constructor(props) {
@@ -87,7 +88,7 @@ class ResourceList extends Component {
                                         button
                                         onClick={onBack()}>
                                         <ListItemIcon className={classes.resourceListIcon}><Undo/></ListItemIcon>
-                                        <ListItemText primary="返回上一级"/>
+                                        <ListItemText primary={_back}/>
                                     </ListItem>
                                     <Divider/>
                                 </div>

@@ -29,7 +29,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import styles from './styles';
-import logo from '../../static/logo.png';
+import logo from '../../res/static/logo.png';
 
 class Welcome extends Component {
     constructor(props) {

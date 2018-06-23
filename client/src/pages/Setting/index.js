@@ -40,6 +40,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Transition from '../../components/Transition';
 import { logout } from '../../store/actions/oneselfActions';
 import styles from './styles';
+import { _about, _accountInfo, _email, _findBug, _logout, _setting, _version } from '../../res/values/string';
+import { VERSION_CODE } from '../../constants';
 
 
 class Setting extends Component {
@@ -61,28 +63,28 @@ class Setting extends Component {
                         <IconButton color="inherit" onClick={onClose} aria-label="Close">
                             <CloseIcon/>
                         </IconButton>
-                        <Typography type="title" color="inherit">设置</Typography>
+                        <Typography type="title" color="inherit">{_setting}</Typography>
                     </Toolbar>
                 </AppBar>
                 <List subheader={<div/>}>
                     <div className={classes.listSection}>
-                        <ListSubheader>账户信息</ListSubheader>
+                        <ListSubheader>{_accountInfo}</ListSubheader>
                         <ListItem button disabled>
-                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>邮箱地址</h4><p>{email}</p></div>}/>
+                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>{_email}</h4><p>{email}</p></div>}/>
                         </ListItem>
                         <ListItem button onClick={this.logout.bind(this)}>
-                            <ListItemText primary="登出"/>
+                            <ListItemText primary={_logout}/>
                         </ListItem>
                         <Divider/>
-                        <ListSubheader>关于</ListSubheader>
+                        <ListSubheader>{_about}</ListSubheader>
                         <ListItem button disabled>
-                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>版本</h4><p>0.0.1</p></div>}/>
+                            <ListItemText primary={<div className={classes.listItemTextChild}><h4>{_version}</h4><p>{VERSION_CODE}</p></div>}/>
                         </ListItem>
                         <ListItem button>
                             <ListItemText
                                 primary={
                                     <div className={classes.listItemTextChild}>
-                                        <a href="https://github.com/Mrdaigithub/cloud/issues/new">发现bug</a>
+                                        <a href="https://github.com/Mrdaigithub/cloud/issues/new">{_findBug}</a>
                                     </div>
                                 }/>
                         </ListItem>

@@ -38,7 +38,16 @@ import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
-import logo from '../../static/logo.png';
+import logo from '../../res/static/logo.png';
+import { DELAY_TIME } from '../../constants';
+import {
+    _username,
+    _password,
+    _usernameInvalid,
+    _login,
+    _loginSuccess,
+} from '../../res/values/string';
+
 
 class Login extends Component {
     constructor(props) {
@@ -59,10 +68,10 @@ class Login extends Component {
     login(model) {
         const { username, password } = model;
         this.props.login(username, password, () => {
-            this.props.alert('登录成功');
+            this.props.alert(_loginSuccess);
             setTimeout(() => {
                 this.props.changePage('/cloud-drive/0');
-            }, 1300);
+            }, DELAY_TIME);
         })();
     }
 
@@ -77,18 +86,16 @@ class Login extends Component {
                         </Grid>
                         <Formsy onValidSubmit={this.login.bind(this)}>
                             <FormsyText
-                                title="用户名"
+                                title={_username}
                                 name="username"
-                                value="root"
                                 validations={{ matchRegexp: /(\w|\d){4,}/ }}
-                                validationError="用户名不合法"
+                                validationError={_usernameInvalid}
                                 required
                                 fullWidth
                                 autoFocus/>
                             <FormsyText
-                                title="密码"
+                                title={_password}
                                 name="password"
-                                value="root"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 required
                                 fullWidth
@@ -103,7 +110,7 @@ class Login extends Component {
                                 type="submit"
                                 color="primary"
                                 variant="contained"
-                                className={classes.loginButton}>登录</Button>
+                                className={classes.loginButton}>{_login}</Button>
                         </Formsy>
                     </Grid>
                 </Grid>
@@ -112,9 +119,7 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    count: state.count,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
     login,

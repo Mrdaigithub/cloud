@@ -36,6 +36,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Transition from '../Transition';
 import requester from '../../utils/requester';
+import { _andExtractCode, _chooseSharingMode, _completed, _copyResourceLinks, _ExtractCode, _privateLinks, _publicLinks, _resourceLinks, _shareResourceLinks } from '../../res/values/string';
 
 const hideStyles = {
     zIndex: '-999',
@@ -87,11 +88,11 @@ class ShareStepper extends Component {
                 open={this.props.open}
                 TransitionComponent={Transition}
                 onClose={this.handleComplete}>
-                <DialogTitle>分享你的资源链接</DialogTitle>
+                <DialogTitle>{_shareResourceLinks}</DialogTitle>
                 <DialogContent>
                     <Stepper activeStep={this.state.activeStep} orientation="vertical">
                         <Step>
-                            <StepLabel>选择分享模式</StepLabel>
+                            <StepLabel>{_chooseSharingMode}</StepLabel>
                             <StepContent>
                                 <Grid container spacing={24} justify="space-around" alignItems="center">
                                     <Grid item xs={12} sm={6}>
@@ -99,7 +100,7 @@ class ShareStepper extends Component {
                                             variant="contained"
                                             color="primary"
                                             onClick={this.changeVisibility()}>
-                                            公开链接
+                                            {_publicLinks}
                                         </Button>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -107,20 +108,20 @@ class ShareStepper extends Component {
                                             variant="contained"
                                             color="primary"
                                             onClick={this.changeVisibility('private')}>
-                                            私有链接
+                                            {_privateLinks}
                                         </Button>
                                     </Grid>
                                 </Grid>
                             </StepContent>
                         </Step>
                         <Step>
-                            <StepLabel>复制资源链接{this.state.visibility === 'public' ? '' : '及密码'}</StepLabel>
+                            <StepLabel>{_copyResourceLinks}{this.state.visibility === 'public' ? '' : _andExtractCode}</StepLabel>
                             <StepContent>
                                 <Grid container spacing={16} alignItems="center">
                                     <Grid item xs={12} sm={6}>
                                         <TextField
                                             id="name"
-                                            label="资源链接"
+                                            label={_resourceLinks}
                                             value={`${window.location.origin}/share/${this.state.visibility}/${this.state.secret}`}/>
                                     </Grid>
                                     <Grid
@@ -130,14 +131,14 @@ class ShareStepper extends Component {
                                         style={this.state.visibility === 'public' ? hideStyles : showStyles}>
                                         <TextField
                                             id="name"
-                                            label="提取密码"
+                                            label={_ExtractCode}
                                             value={this.state.extractCode}/>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={this.handleComplete}>完成</Button>
+                                            onClick={this.handleComplete}>{_completed}</Button>
                                     </Grid>
                                 </Grid>
                             </StepContent>

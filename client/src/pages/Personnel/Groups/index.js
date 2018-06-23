@@ -61,13 +61,20 @@ import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
+import {
+    _capacity, _capacityOnlyBePositiveInteger, _close, _confirmPassword, _create,
+    _createdAt, _differentInputs, _edit,
+    _email, _emailInvalid,
+    _id, _password, _personnelManagement, _remove, _submit, _user,
+    _username, _usernameInvalid,
+} from '../../../res/values/string';
 
 const columnData = [
-    { id: 'id', numeric: false, disablePadding: false, label: 'ID' },
-    { id: 'username', numeric: false, disablePadding: false, label: '用户名' },
-    { id: 'email', numeric: false, disablePadding: false, label: '邮箱号码' },
-    { id: 'capacity', numeric: false, disablePadding: false, label: '容量' },
-    { id: 'created_at', numeric: false, disablePadding: false, label: '创建时间' },
+    { id: 'id', numeric: false, disablePadding: false, label: _id },
+    { id: 'username', numeric: false, disablePadding: false, label: _username },
+    { id: 'email', numeric: false, disablePadding: false, label: _email },
+    { id: 'capacity', numeric: false, disablePadding: false, label: _capacity },
+    { id: 'created_at', numeric: false, disablePadding: false, label: _createdAt },
 ];
 
 class Oneself extends Component {
@@ -264,13 +271,13 @@ class Oneself extends Component {
                                     {selected.length > 0 ? (
                                         <Typography type="subheading">{selected.length} selected</Typography>
                                     ) : (
-                                        <Typography type="title">人员管理</Typography>
+                                        <Typography type="title">{_personnelManagement}</Typography>
                                     )}
                                 </div>
                                 <div className={classes.spacer}/>
                                 <div className={classes.actions}>
                                     {selected.length > 0 ? (
-                                        <Tooltip title="删除">
+                                        <Tooltip title={_remove}>
                                             <IconButton aria-label="Delete" onClick={this.handleDeleteUser}>
                                                 <DeleteIcon/>
                                             </IconButton>
@@ -369,19 +376,19 @@ class Oneself extends Component {
                     aria-labelledby="form-dialog-title">
                     <Formsy onValidSubmit={this.handleAddUser}>
                         <DialogTitle
-                            id="form-dialog-title">{this.state.createMode ? '创建用户' : `编辑用户 --- ${this.state.editUser.username}`}</DialogTitle>
+                            id="form-dialog-title">{this.state.createMode ? `${_create}${_user}` : `${_edit}${_user} --- ${this.state.editUser.username}`}</DialogTitle>
                         <DialogContent>
                             <FormsyText
-                                title="用户名"
+                                title={_username}
                                 name="username"
                                 validations={{ matchRegexp: /(\w|\d){4,}/ }}
-                                validationError="用户名不合法"
+                                validationError={_usernameInvalid}
                                 required
                                 value={this.state.createMode ? '' : this.state.editUser.username}
                                 fullWidth
                                 autoFocus/>
                             <FormsyText
-                                title="密码"
+                                title={_password}
                                 name="password"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 required={this.state.createMode}
@@ -394,35 +401,35 @@ class Oneself extends Component {
                                     </InputAdornment>
                                 }/>
                             <FormsyText
-                                title="确认密码"
+                                title={_confirmPassword}
                                 name="repeatedPassword"
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 validations="equalsField:password"
-                                validationError="两次输入不相同"
+                                validationError={_differentInputs}
                                 required={this.state.createMode}
                                 fullWidth/>
                             <FormsyText
-                                title="邮箱"
+                                title={_email}
                                 name="email"
                                 value={this.state.createMode ? '' : this.state.editUser.email}
                                 validations="isEmail"
-                                validationError="邮箱格式不正确"
+                                validationError={_emailInvalid}
                                 required
                                 fullWidth/>
                             <FormsyText
-                                title="容量"
+                                title={_capacity}
                                 name="capacity"
                                 type="number"
                                 disabled={!this.state.createMode && !this.state.editUser.capacity}
                                 value={this.state.createMode ? '' : this.state.editUser.capacity / (1024 ** 3)}
                                 validations="isInt"
-                                validationError="容量只能为正整数"
+                                validationError={_capacityOnlyBePositiveInteger}
                                 fullWidth
                                 endAdornment={<InputAdornment position="end">GB</InputAdornment>}/>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.handleCloseDialog} color="primary">关闭</Button>
-                            <Button type="submit" color="primary">提交</Button>
+                            <Button onClick={this.handleCloseDialog} color="primary">{_close}</Button>
+                            <Button type="submit" color="primary">{_submit}</Button>
                         </DialogActions>
                     </Formsy>
                 </Dialog>

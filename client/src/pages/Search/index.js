@@ -41,6 +41,7 @@ import { path2url } from '../../utils/assist';
 import { getSelectedResource, clearSelectedResource } from '../../store/actions/resourceActions';
 import styles from './styles';
 import requester from '../../utils/requester';
+import { _searchPlaceholder } from '../../res/values/string';
 
 class Search extends Component {
     constructor(props) {
@@ -98,7 +99,7 @@ class Search extends Component {
                             id="query"
                             type="text"
                             autoFocus
-                            placeholder="搜索所有内容"
+                            placeholder={_searchPlaceholder}
                             fullWidth
                             value={query}
                             className={classes.searchInput}

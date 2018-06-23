@@ -50,6 +50,7 @@ import SearchIcon from '../../components/SearchIcon/index';
 import Setting from '../../pages/Setting';
 import styles from './styles';
 import { fetchOneself } from '../../store/actions/oneselfActions';
+import { _myCloudDisk, _sum, _trashCan, _unlimited, _used } from '../../res/values/string';
 
 
 class PageHeaderLayout extends Component {
@@ -112,7 +113,7 @@ class PageHeaderLayout extends Component {
                                     <ListItemIcon>
                                         <Storage/>
                                     </ListItemIcon>
-                                    <ListItemText primary="我的云端硬盘"/>
+                                    <ListItemText primary={_myCloudDisk}/>
                                 </Link>
                             </ListItem>
                             <ListItem button>
@@ -120,7 +121,7 @@ class PageHeaderLayout extends Component {
                                     <ListItemIcon>
                                         <Delete/>
                                     </ListItemIcon>
-                                    <ListItemText primary="回收站"/>
+                                    <ListItemText primary={_trashCan}/>
                                 </Link>
                             </ListItem>
                         </List>
@@ -145,8 +146,8 @@ class PageHeaderLayout extends Component {
                         <List>
                             <ListItem>
                                 <div>
-                                    已用{(used / (1024 ** 3)).toFixed(3)}GB，
-                                    {capacity ? `共${(capacity / (1024 ** 3)).toFixed(3)}GB` : '无限制'}
+                                    {_used}{(used / (1024 ** 3)).toFixed(3)}GB，
+                                    {capacity ? `${_sum}${(capacity / (1024 ** 3)).toFixed(3)}GB` : _unlimited}
                                 </div>
                             </ListItem>
                         </List>

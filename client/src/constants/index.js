@@ -22,29 +22,5 @@
  * SOFTWARE.
  */
 
-import logo from '../../res/static/logo_200dp.png';
-
-const styles = theme => ({
-    normal: {
-        background: `url(${logo}) no-repeat center #eeeeef`,
-        height: '100vh',
-    },
-    nowrap: {
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        verticalAlign: 'middle',
-    },
-    iconColor: {
-        color: 'rgba(0, 0, 0, 0.54)',
-    },
-    searchInput: {
-        alignItems: 'center',
-        borderBottom: '1px solid #c1c1c1',
-    },
-    searchItem: {
-        backgroundColor: '#fff',
-    },
-});
-
-export default styles;
+export const VERSION_CODE = 'V1.5';
+export const DELAY_TIME = 1500;

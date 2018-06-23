@@ -24,34 +24,15 @@
 
 import axios from 'axios';
 import store from '../store';
+import ERROR_CODES from '../constants/errorCodes';
+import { BASE_URL, NETWORK_TIMEOUT, HEADERS } from '../constants/requesterConfig';
 import { toggleLoading, alert } from '../store/actions/assistActions';
 
-// 全局错误状态码
-const errorCodes = {
-    400000: '参数缺失',
-    400001: '参数字符过短',
-    400002: '参数字符过长',
-    400003: '请求参数存在非法字符',
-    400004: '请求参数格式错误',
-    400005: '请求参数不存在于数据库',
-    400006: '请求参数已存在于数据库',
-    401000: '密码错误',
-    401001: '无效的的access_token',
-    401002: '无效的的refresh_token',
-    403000: '权限不足',
-    403001: '提取码不正确',
-    409000: '上传的资源已存在于服务器',
-    409001: '请求的资源不存在',
-    409002: '此用户的存储容量不足',
-    500000: '服务器错误',
-    500001: '服务器资源保存失败',
-    504000: '资源下载链接失效',
-};
 
 const requester = axios.create({
-    baseURL: '//api.mrdaisite.com/api/v1/',
-    timeout: 60000,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    baseURL: BASE_URL,
+    timeout: NETWORK_TIMEOUT,
+    headers: HEADERS,
 });
 
 requester.interceptors.request.use(
@@ -65,7 +46,7 @@ requester.interceptors.request.use(
     },
     (err) => {
         toggleLoading(false)(store.dispatch);
-        alert('本地请求超时', 1500)(store.dispatch);
+        alert('本地请求超时')(store.dispatch);
         return Promise.reject(err);
     });
 
@@ -78,15 +59,15 @@ requester.interceptors.response.use(
         toggleLoading()(store.dispatch);
         if (!error.response) {
             toggleLoading(false)(store.dispatch);
-            alert('本地请求超时', 1500)(store.dispatch);
+            alert('本地请求超时')(store.dispatch);
             return Promise.reject(error);
         }
         const data = error.response.data;
         if (data.errors) {
             const errorCode = data.errors[Object.keys(data.errors)[0]][0];
-            alert(errorCodes[errorCode], 1500)(store.dispatch);
+            alert(ERROR_CODES[errorCode])(store.dispatch);
         } else {
-            alert('远端服务器超时', 1500)(store.dispatch);
+            alert('远端服务器超时')(store.dispatch);
         }
         return Promise.reject(data);
     });

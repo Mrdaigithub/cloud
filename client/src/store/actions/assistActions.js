@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import { DELAY_TIME } from '../../constants';
+
 export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
 export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
 export const CHANGE_MSG = 'assist/CHANGE_MSG';
@@ -37,7 +39,7 @@ export const toggleLoading = (loading) => {
     };
 };
 
-export const alert = (msgText = '', time = 2000) => {
+export const alert = (msgText = '', time = DELAY_TIME) => {
     return (dispatch) => {
         dispatch({
             type: TOGGLE_MSG,

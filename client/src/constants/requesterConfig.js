@@ -22,29 +22,6 @@
  * SOFTWARE.
  */
 
-import logo from '../../res/static/logo_200dp.png';
-
-const styles = theme => ({
-    normal: {
-        background: `url(${logo}) no-repeat center #eeeeef`,
-        height: '100vh',
-    },
-    nowrap: {
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        verticalAlign: 'middle',
-    },
-    iconColor: {
-        color: 'rgba(0, 0, 0, 0.54)',
-    },
-    searchInput: {
-        alignItems: 'center',
-        borderBottom: '1px solid #c1c1c1',
-    },
-    searchItem: {
-        backgroundColor: '#fff',
-    },
-});
-
-export default styles;
+export const BASE_URL = '//api.mrdaisite.com/api/v1/';
+export const NETWORK_TIMEOUT = 60000;
+export const HEADERS = { 'Content-Type': 'application/x-www-form-urlencoded' };

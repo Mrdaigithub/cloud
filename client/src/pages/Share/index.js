@@ -31,8 +31,9 @@ import Button from '@material-ui/core/Button';
 import styles from './styles';
 import BasicLayout from '../../layouts/BasicLayout';
 import { FormsyText } from '../../components/FormsyMaterialUi';
-import logo from '../../static/logo.png';
+import logo from '../../res/static/logo.png';
 import requester from '../../utils/requester';
+import { _ExtractCodeInvalid, _ExtractingFiles, _pleaseEnterTheExtractCode } from '../../res/values/string';
 
 
 class Share extends Component {
@@ -69,10 +70,10 @@ class Share extends Component {
                                     {
                                         visibility === 'private' ?
                                             <FormsyText
-                                                title="请输入提取码："
+                                                title={_pleaseEnterTheExtractCode}
                                                 name="extractCode"
                                                 validations={{ matchRegexp: /^(\w|\d){4}$/ }}
-                                                validationError="提取码格式不正确"
+                                                validationError={_ExtractCodeInvalid}
                                                 required
                                                 fullWidth
                                                 autoFocus/> :
@@ -83,7 +84,7 @@ class Share extends Component {
                                         variant="contained"
                                         color="primary"
                                         disabled={this.state.downloadButtonDisabled}
-                                        className={classes.downloadButton}>提取文件</Button>
+                                        className={classes.downloadButton}>{_ExtractingFiles}</Button>
                                 </Formsy>
                             </Grid>
                         </Grid>

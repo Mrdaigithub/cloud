@@ -59,6 +59,14 @@ import { url2path, getPreview } from '../../utils/assist';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
 import { movePath } from '../../utils/pathUtil';
+import { CALCULATE_HASH_CHUNK_SIZE } from '../../constants/uploaderConfig';
+import { DELAY_TIME } from '../../constants';
+import {
+    _capacityDeficiency, _sameNameFileInTheCurrentDirectory, _calculatingFileHash,
+    _fileHashCalculationFailed, _fileUploading, _notSupportSuffixNameAndEmptyFile,
+    _fileUploadFailed, _directoryName, _illegalCharacters, _folderAlreadyExists,
+    _close, _create, _ok, _moveTo,
+} from '../../res/values/string';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -74,7 +82,7 @@ class CloudDrive extends Component {
             uploadState: false,
             uploadValue: 0,
             uploadTitle: '',
-            calculateHashChunkSize: 20 * 1024 * 1024,
+            calculateHashChunkSize: CALCULATE_HASH_CHUNK_SIZE,
             file: null,
             fileHash: '',
             group: 'file',
@@ -193,10 +201,10 @@ class CloudDrive extends Component {
         const file = document.querySelector('#icon-button-file').files[0];
         if (!file) return false;
         if (this.state.resourceList.filter(item => item.file && item.resource_name === file.name).length) {
-            return this.props.alert('在当前目录下已有同名文件');
+            return this.props.alert(_sameNameFileInTheCurrentDirectory);
         }
         if (!!capacity && file.size + parseInt(used, 10) > capacity) {
-            return this.props.alert('存储容量不足');
+            return this.props.alert(_capacityDeficiency);
         }
         this.setState({
             file,
@@ -212,7 +220,7 @@ class CloudDrive extends Component {
      */
     calculateHash(file) {
         console.log(new Date());
-        this.setState({ uploadTitle: '计算文件HASH...' });
+        this.setState({ uploadTitle: _calculatingFileHash });
         const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
         const { calculateHashChunkSize } = this.state;
         const chunks = Math.ceil(file.size / calculateHashChunkSize);
@@ -233,10 +241,10 @@ class CloudDrive extends Component {
         };
 
         fileReader.onerror = () => {
-            this.setState({ uploadTitle: '文件Hash计算失败' });
+            this.setState({ uploadTitle: _fileHashCalculationFailed });
             setTimeout(() => {
                 this.resetUploadProcess();
-            }, 2000);
+            }, DELAY_TIME);
             return false;
         };
 
@@ -254,7 +262,7 @@ class CloudDrive extends Component {
      * @returns {Promise.<boolean>}
      */
     async preprocess() {
-        this.setState({ uploadTitle: '文件上传中...' });
+        this.setState({ uploadTitle: _fileUploading });
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
         const { routing } = this.props;
@@ -274,10 +282,10 @@ class CloudDrive extends Component {
             path: url2path(this.props.routing.location.pathname),
         }));
         if (error) {
-            this.setState({ uploadTitle: '文件上传失败, 暂不支持无后缀名与空文件' });
+            this.setState({ uploadTitle: _notSupportSuffixNameAndEmptyFile });
             setTimeout(() => {
                 this.resetUploadProcess();
-            }, 2000);
+            }, DELAY_TIME);
             return false;
         }
         const chunkCount = Math.ceil(size / chunkSize);
@@ -297,7 +305,7 @@ class CloudDrive extends Component {
                 this.props.fetchResources(() => {
                     this.getResourceList(url2path(routing.location.pathname));
                 });
-            }, 1500);
+            }, DELAY_TIME);
         }
     }
 
@@ -334,14 +342,14 @@ class CloudDrive extends Component {
                 await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
             } catch (e) {
                 this.setState({
-                    uploadTitle: '文件上传失败',
+                    uploadTitle: _fileUploadFailed,
                 });
                 setTimeout(() => {
                     this.resetUploadProcess();
                     this.props.fetchResources(() => {
                         this.getResourceList(url2path(routing.location.pathname));
                     });
-                }, 2000);
+                }, DELAY_TIME);
                 return;
             }
             this.setState({ uploadValue: ((i + 1) * 100) / chunkCount });
@@ -354,7 +362,7 @@ class CloudDrive extends Component {
             this.props.fetchResources(() => {
                 this.getResourceList(url2path(routing.location.pathname));
             });
-        }, 2000);
+        }, DELAY_TIME);
     }
 
     /**
@@ -560,7 +568,7 @@ class CloudDrive extends Component {
                     <Formsy onValidSubmit={this.handleCreateDir()}>
                         <DialogContent>
                             <FormsyText
-                                title="文件夹名称"
+                                title={_directoryName}
                                 name="newDir"
                                 validations={{
                                     isAlphanumeric: true,
@@ -571,16 +579,16 @@ class CloudDrive extends Component {
                                     },
                                 }}
                                 validationErrors={{
-                                    isAlphanumeric: '存在非法字符',
-                                    dirExists: '文件夹已存在',
+                                    isAlphanumeric: _illegalCharacters,
+                                    dirExists: _folderAlreadyExists,
                                 }}
                                 required
                                 fullWidth
                                 autoFocus/>
                         </DialogContent>
                         <DialogActions>
-                            <Button color="primary" onClick={this.handleToggleCreateDirDialog()}>关闭</Button>
-                            <Button type="submit" color="primary">创建</Button>
+                            <Button color="primary" onClick={this.handleToggleCreateDirDialog()}>{_close}</Button>
+                            <Button type="submit" color="primary">{_create}</Button>
                         </DialogActions>
                     </Formsy>
                 </Dialog>
@@ -593,8 +601,8 @@ class CloudDrive extends Component {
                             <IconButton color="inherit" onClick={this.handleToggleMoveResourceDialog()} aria-label="Close">
                                 <CloseIcon/>
                             </IconButton>
-                            <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">移动至...</Typography>
-                            <Button color="inherit" onClick={this.handleMoveResource()}>确认</Button>
+                            <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">{_moveTo}</Typography>
+                            <Button color="inherit" onClick={this.handleMoveResource()}>{_ok}</Button>
                         </Toolbar>
                     </AppBar>
                     <div className={classes.resourceList}>

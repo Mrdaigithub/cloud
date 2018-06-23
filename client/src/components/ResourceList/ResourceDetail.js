@@ -35,6 +35,7 @@ import Grid from '@material-ui/core/Grid';
 import ResourceTypeIcon from '../ResourceTypeIcon/index';
 import { FolderIcon } from '../../components/file-type-icon';
 import styles from './styles';
+import { _directory } from '../../res/values/string';
 
 
 const ResourceDetail = props => (
@@ -48,7 +49,7 @@ const ResourceDetail = props => (
                 tabIndex={0}
                 role="button">
                 <CardHeader
-                    avatar={props.selectedResource.resourceMime === '文件夹' ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceMime}/>}
+                    avatar={props.selectedResource.resourceMime === _directory ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceMime}/>}
                     title={
                         <Grid item xs={12}>
                             <h2 className={props.classes.ResourceDetailCardTitle}>{props.selectedResource.resourceName}</h2>
