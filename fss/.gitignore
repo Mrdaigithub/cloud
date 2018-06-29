@@ -1,4 +1,0 @@
-pkg
-bin
-*.log
-fss/src/storage/*
