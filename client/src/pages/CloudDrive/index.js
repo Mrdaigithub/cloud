@@ -45,6 +45,7 @@ import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
+import Aria2 from 'aria2';
 import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
@@ -100,6 +101,18 @@ class CloudDrive extends Component {
         } else {
             this.getResourceList(url2path(routing.location.pathname));
         }
+        const aria2 = new Aria2({
+            host: '47.52.241.241',
+            port: 6800,
+            secure: false,
+            secret: 'cloud',
+            path: '/jsonrpc',
+        });
+        await aria2.open();
+        const url = 'https://sgp-ping.vultr.com/vultr.com.100MB.bin';
+        const [guid] = await aria2.call('addUri', [url]);
+        console.log(guid);
+        await aria2.close();
     }
 
     /**
