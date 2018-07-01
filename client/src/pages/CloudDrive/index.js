@@ -101,18 +101,18 @@ class CloudDrive extends Component {
         } else {
             this.getResourceList(url2path(routing.location.pathname));
         }
-        const aria2 = new Aria2({
-            host: '47.52.241.241',
-            port: 6800,
-            secure: false,
-            secret: 'cloud',
-            path: '/jsonrpc',
-        });
-        await aria2.open();
-        const url = 'https://sgp-ping.vultr.com/vultr.com.100MB.bin';
-        const [guid] = await aria2.call('addUri', [url]);
-        console.log(guid);
-        await aria2.close();
+        // const aria2 = new Aria2({
+        //     host: '47.52.241.241',
+        //     port: 6800,
+        //     secure: false,
+        //     secret: 'cloud',
+        //     path: '/jsonrpc',
+        // });
+        // await aria2.open();
+        // const url = 'https://sgp-ping.vultr.com/vultr.com.100MB.bin';
+        // const [guid] = await aria2.call('addUri', [url]);
+        // console.log(guid);
+        // await aria2.close();
     }
 
     /**
@@ -286,7 +286,7 @@ class CloudDrive extends Component {
             subDir,
             uploadBaseName,
             uploadExt,
-        } = await requester.post('//api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
+        } = await requester.post('https://api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
             file_name: name,
             file_size: size,
             file_hash: fileHash,
@@ -352,7 +352,7 @@ class CloudDrive extends Component {
             form.append('locale', this.state.locale);
             form.append('path', url2path(this.props.routing.location.pathname));
             try {
-                await requester.post('//api.mrdaisite.com/aetherupload/uploading', form);
+                await requester.post('https://api.mrdaisite.com/aetherupload/uploading', form);
             } catch (e) {
                 this.setState({
                     uploadTitle: _fileUploadFailed,

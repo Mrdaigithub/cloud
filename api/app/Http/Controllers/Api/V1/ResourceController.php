@@ -114,7 +114,6 @@
 				return str_contains( $file, $resource->hash );
 			} );
 			if ( ! count( $file ) ) {
-				return $this->failed( 400005 );
 				throw ValidationException::withMessages( [
 					"resource" => [ "400005" ],
 				] )->status( 400 );
@@ -153,7 +152,7 @@
 		 * @return mixed|string
 		 */
 		public function get_download_link( Request $request, $id ) {
-			if ( ! count( $request->user()->resources()->find( $id ) ) ) {
+			if ( ! $request->user()->resources()->find( $id ) ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "409001" ],
 				] )->status( 409 );
@@ -161,7 +160,7 @@
 			$source = "id=$id&creater=" . $request->user()->id . "&v=public&t=" . time();
 			$secret = encrypt( encrypt( $source ) );
 			
-			return [ "url" => "//" . $_SERVER["SERVER_NAME"] . "/api/v1/resources/download/$secret" ];
+			return [ "url" => $_SERVER["API_DOMAIN"] . "api/v1/resources/download/$secret" ];
 		}
 		
 		/**
@@ -173,7 +172,7 @@
 		 * @return mixed|string
 		 */
 		public function get_share_secret( Request $request, $visibility, $id ) {
-			if ( ! count( $request->user()->resources()->find( $id ) ) ) {
+			if ( ! $request->user()->resources()->find( $id ) ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "409001" ],
 				] )->status( 409 );
@@ -484,5 +483,7 @@
 					Resource::destroy( $remove_id->id );
 				}
 			}
+			
+			return;
 		}
 	}

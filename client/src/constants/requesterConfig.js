@@ -22,6 +22,6 @@
  * SOFTWARE.
  */
 
-export const BASE_URL = '//api.mrdaisite.com/api/v1/';
+export const BASE_URL = 'https://api.mrdaisite.com/api/v1/';
 export const NETWORK_TIMEOUT = 60000;
 export const HEADERS = { 'Content-Type': 'application/x-www-form-urlencoded' };

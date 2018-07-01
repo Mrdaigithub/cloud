@@ -39,7 +39,7 @@ class TextPreview extends Component {
 
     async componentWillMount() {
         const docUrl = await requester.get(`resources/link/${this.props.selectedResource.resourceID}`);
-        this.setState({ docUrl: `https://docs.google.com/viewer?embedded=true&url=http:${docUrl.url}` });
+        this.setState({ docUrl: `https://docs.google.com/viewer?embedded=true&url=${docUrl.url}` });
     }
 
     render() {
