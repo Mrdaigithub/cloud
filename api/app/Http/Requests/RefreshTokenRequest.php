@@ -48,14 +48,14 @@ namespace App\Http\Requests;
 		 */
 		public function rules() {
 			return [
-				"refreshToken" => "required|string"
+				"refresh_token" => "required|string"
 			];
 		}
 		
 		public function messages() {
 			return [
-				'refreshToken.required' => '400000',
-				'refreshToken.string'   => '400003',
+				'refresh_token.required' => '400000',
+				'refresh_token.string'   => '400003',
 			];
 		}
 	}

@@ -56,7 +56,6 @@ namespace App\Http\Controllers\Api\V1;
 					"password" => [ "401000" ],
 				] )->status( 401 );
 			}
-			
 			return $this->httpClient->post(
 				env( "API_DOMAIN" ) . "oauth/token", [
 					"form_params" => [
