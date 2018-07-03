@@ -49,7 +49,7 @@ import FileDownload from '@material-ui/icons/FileDownload';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import Info from '@material-ui/icons/Info';
-import ResourceTypeIcon from '../ResourceTypeIcon/index';
+import ResourceTypeIcon from '../ResourceTypeIconSwitcher/index';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';

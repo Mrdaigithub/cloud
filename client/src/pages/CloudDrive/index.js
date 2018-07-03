@@ -54,6 +54,7 @@ import ShareStepper from '../../components/ShareStepper';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
+import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
@@ -101,18 +102,6 @@ class CloudDrive extends Component {
         } else {
             this.getResourceList(url2path(routing.location.pathname));
         }
-        // const aria2 = new Aria2({
-        //     host: '47.52.241.241',
-        //     port: 6800,
-        //     secure: false,
-        //     secret: 'cloud',
-        //     path: '/jsonrpc',
-        // });
-        // await aria2.open();
-        // const url = 'https://sgp-ping.vultr.com/vultr.com.100MB.bin';
-        // const [guid] = await aria2.call('addUri', [url]);
-        // console.log(guid);
-        // await aria2.close();
     }
 
     /**
@@ -480,6 +469,13 @@ class CloudDrive extends Component {
         this.setState({ ShareStepperOpen: false });
     };
 
+
+    /** 离线下载 **/
+
+    handleOfflineDownload = () => async () => {
+        console.log('offline download');
+    };
+
     render() {
         const { classes, selectedResource } = this.props;
         const {
@@ -518,6 +514,17 @@ class CloudDrive extends Component {
                                 component="span"
                                 onClick={this.handleToggleCreateDirDialog(true)}>
                                 <CreateNewFolder/>
+                            </IconButton>
+                        </label>
+                    </SpeedDialItem>
+                    <SpeedDialItem>
+                        <label htmlFor="icon-button-offline-download">
+                            <IconButton
+                                onClick={this.handleOfflineDownload()}
+                                color="primary"
+                                className={classes.SpeedDialItemButton}
+                                component="span">
+                                <OfflineDownloadIcon/>
                             </IconButton>
                         </label>
                     </SpeedDialItem>

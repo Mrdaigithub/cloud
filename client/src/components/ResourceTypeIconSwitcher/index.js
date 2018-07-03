@@ -64,7 +64,7 @@ import {
     DocIcon,
     ExcelIcon,
     PptIcon,
-} from '../../components/file-type-icon';
+} from '../Icons';
 
 
 const ResourceTypeIcon = ({ style, classes, ext }) => (

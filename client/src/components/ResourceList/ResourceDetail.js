@@ -32,8 +32,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import ResourceTypeIcon from '../ResourceTypeIcon/index';
-import { FolderIcon } from '../../components/file-type-icon';
+import ResourceTypeIcon from '../ResourceTypeIconSwitcher/index';
+import { FolderIcon } from '../Icons';
 import styles from './styles';
 import { _directory } from '../../res/values/string';
 

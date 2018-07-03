@@ -22,6 +22,10 @@
  * SOFTWARE.
  */
 
+export { default as GithubIcon } from './GithubIcon';
+export { default as LightIcon } from './LightIcon';
+export { default as OfflineDownloadIcon } from './OfflineDownloadIcon';
+
 export { default as FileIcon } from './FileIcon';
 export { default as FolderIcon } from './FolderIcon';
 export { default as PdfIcon } from './PdfIcon';
@@ -56,4 +60,3 @@ export { default as FontIcon } from './FontIcon';
 export { default as DocIcon } from './DocIcon';
 export { default as ExcelIcon } from './ExcelIcon';
 export { default as PptIcon } from './PptIcon';
-
