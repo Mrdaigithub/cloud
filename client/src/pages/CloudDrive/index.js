@@ -45,12 +45,12 @@ import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
-import Aria2 from 'aria2';
 import { alert } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import ShareStepper from '../../components/ShareStepper';
+import OfflineDownloader from '../../components/OfflineDownloader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
@@ -90,6 +90,7 @@ class CloudDrive extends Component {
             group: 'file',
             locale: 'zh',
             ShareStepperOpen: false,
+            OfflineDownloaderOpen: false,
         };
     }
 
@@ -472,8 +473,16 @@ class CloudDrive extends Component {
 
     /** 离线下载 **/
 
-    handleOfflineDownload = () => async () => {
-        console.log('offline download');
+    handleOpenOfflineDownload = () => {
+        this.setState({
+            OfflineDownloaderOpen: true,
+        });
+    };
+
+    handleCloseOfflineDownload = () => {
+        this.setState({
+            OfflineDownloaderOpen: false,
+        });
     };
 
     render() {
@@ -520,7 +529,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-offline-download">
                             <IconButton
-                                onClick={this.handleOfflineDownload()}
+                                onClick={this.handleOpenOfflineDownload}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
                                 component="span">
@@ -636,6 +645,9 @@ class CloudDrive extends Component {
                     open={this.state.ShareStepperOpen}
                     resourceID={this.state.selected[0] || null}
                     onComplete={this.closeShareStepper}/>
+                <OfflineDownloader
+                    open={this.state.OfflineDownloaderOpen}
+                    onClose={this.handleCloseOfflineDownload}/>
             </div>
         );
     }

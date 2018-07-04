@@ -22,14 +22,37 @@
  * SOFTWARE.
  */
 
-import React from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { push } from 'connected-react-router';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import styles from './styles';
+import { _back, _pageNotFound } from '../../res/values/string';
 
-const OfflineDownloadIcon = props => (
-    <SvgIcon {...props} viewBox="0 0 1024 1024">
-        <path d="M512 576 768 320 576 320 576 64 448 64 448 320 256 320zM744.736 471.264 672.992 543.008 933.056 640 512 797.024 90.944 640 351.008 543.008 279.264 471.264 0 576 0 832 512 1024 1024 832 1024 576z"/>
-    </SvgIcon>
-);
+class OfflineDownload extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
 
-export default OfflineDownloadIcon;
+    render() {
+        const { classes, changePage } = this.props;
+        return (
+            <div>offline download</div>
+        );
+    }
+}
 
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    changePage: url => (push(url)),
+}, dispatch);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(withStyles(styles)(OfflineDownload));

@@ -22,4 +22,77 @@
  * SOFTWARE.
  */
 
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Divider from '@material-ui/core/Divider';
+import LinkIcon from '@material-ui/icons/Link';
+import { TorrentIcon } from '../Icons';
+import Transition from '../Transition';
+import { _createLinkTask, _offlineDownload, _createBtTask, _cancel } from '../../res/values/string';
+import styles from '../OfflineDownloader/styles';
 
+class OfflineDownloader extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    render() {
+        const { classes } = this.props;
+
+        return (
+            <Dialog
+                open={this.props.open}
+                TransitionComponent={Transition}>
+                <DialogTitle className={classes.textCenter}>{_offlineDownload}</DialogTitle>
+                <Divider/>
+                <DialogContent>
+                    <Grid container spacing={24} justify="space-around" alignItems="flex-start">
+                        <Grid item xs={12}>
+                            <List>
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <LinkIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText inset primary={_createLinkTask}/>
+                                </ListItem>
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <TorrentIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText inset primary={_createBtTask}/>
+                                </ListItem>
+                            </List>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={this.props.onClose}>
+                                {_cancel}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+            </Dialog>
+        );
+    }
+}
+
+OfflineDownloader.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+};
+
+export default withStyles(styles)(OfflineDownloader);

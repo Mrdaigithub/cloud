@@ -22,14 +22,9 @@
  * SOFTWARE.
  */
 
-import React from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
+const styles = theme => ({
+    normal: {
+    },
+});
 
-const OfflineDownloadIcon = props => (
-    <SvgIcon {...props} viewBox="0 0 1024 1024">
-        <path d="M512 576 768 320 576 320 576 64 448 64 448 320 256 320zM744.736 471.264 672.992 543.008 933.056 640 512 797.024 90.944 640 351.008 543.008 279.264 471.264 0 576 0 832 512 1024 1024 832 1024 576z"/>
-    </SvgIcon>
-);
-
-export default OfflineDownloadIcon;
-
+export default styles;
