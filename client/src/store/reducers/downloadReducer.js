@@ -22,37 +22,25 @@
  * SOFTWARE.
  */
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import styles from './styles';
-import { _back, _pageNotFound } from '../../res/values/string';
+import { ADD_READY_DOWNLOAD_LINK, REMOVE_READY_DOWNLOAD_LINK } from '../actions/downloadActions';
 
-class OfflineDownload extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
+const initialState = {
+    readyDownloadLink: null,
+};
+
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case ADD_READY_DOWNLOAD_LINK:
+            return {
+                ...state,
+                readyDownloadLink: action.payload.readyDownloadLink,
+            };
+        case REMOVE_READY_DOWNLOAD_LINK:
+            return {
+                ...state,
+                readyDownloadLink: null,
+            };
+        default:
+            return state;
     }
-
-    render() {
-        const { classes, changePage } = this.props;
-        return (
-            <div>offline download</div>
-        );
-    }
-}
-
-const mapStateToProps = state => ({});
-
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
-}, dispatch);
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(withStyles(styles)(OfflineDownload));
+};

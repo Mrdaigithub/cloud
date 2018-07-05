@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-const styles = theme => ({
-    normal: {
-    },
-});
-
-export default styles;
+export const HOST = '47.52.241.241';
+export const PORT = '6800';
+export const SECURE = false;
+export const SECRET = 'cloud';
+export const PATH = '/jsonrpc';

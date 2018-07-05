@@ -30,7 +30,8 @@ import Trash from '../pages/Trash';
 import Search from '../pages/Search';
 import CloudDrive from '../pages/CloudDrive';
 import Groups from '../pages/Personnel/Groups';
-import OfflineDownload from '../pages/OfflineDownload';
+import CreateLinkOfflineDownload from '../pages/CreateLinkOfflineDownload';
+import OfflineDownloadManager from '../pages/OfflineDownloadManager';
 import NotFound from '../pages/NotFound';
 
 const PrivateRoute = () => (
@@ -55,7 +56,8 @@ const PrivateRoute = () => (
                                                 component={CloudDrive}/>
                                             <Route exact path="/trash" component={Trash}/>
                                             <Route exact path="/personnel/groups" component={Groups}/>
-                                            <Route exact path="/download/offline" component={OfflineDownload}/>
+                                            <Route exact path="/download/offline/create" component={CreateLinkOfflineDownload}/>
+                                            <Route exact path="/download/offline/manager" component={OfflineDownloadManager}/>
                                             <Route component={NotFound}/>
                                         </Switch>
                                     </CSSTransition>

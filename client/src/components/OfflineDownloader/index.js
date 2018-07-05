@@ -24,6 +24,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
@@ -47,6 +49,11 @@ class OfflineDownloader extends Component {
         this.state = {};
     }
 
+    handleCreateLinkTask = () => {
+        this.props.onClose();
+        this.props.changePage('/download/offline/create');
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -60,7 +67,7 @@ class OfflineDownloader extends Component {
                     <Grid container spacing={24} justify="space-around" alignItems="flex-start">
                         <Grid item xs={12}>
                             <List>
-                                <ListItem button>
+                                <ListItem button onClick={this.handleCreateLinkTask}>
                                     <ListItemIcon>
                                         <LinkIcon/>
                                     </ListItemIcon>
@@ -95,4 +102,13 @@ OfflineDownloader.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(OfflineDownloader);
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+    changePage: url => dispatch(push(url)),
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(withStyles(styles)(OfflineDownloader));

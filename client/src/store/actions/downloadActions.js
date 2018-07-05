@@ -22,15 +22,24 @@
  * SOFTWARE.
  */
 
-const counterReducer = (state = 0, action) => {
-    switch (action.type) {
-        case 'INCREMENT':
-            return state + 1;
-        case 'DECREMENT':
-            return state - 1;
-        default:
-            return state;
-    }
+export const ADD_READY_DOWNLOAD_LINK = 'download/ADD_READY_DOWNLOAD_LINK';
+export const REMOVE_READY_DOWNLOAD_LINK = 'download/REMOVE_READY_DOWNLOAD_LINK';
+
+export const addReadyDownloadLink = (readyDownloadLink) => {
+    return (dispatch) => {
+        return dispatch({
+            type: ADD_READY_DOWNLOAD_LINK,
+            payload: {
+                readyDownloadLink,
+            },
+        });
+    };
 };
 
-export default counterReducer;
+export const removeReadyDownloadLink = () => {
+    return (dispatch) => {
+        return dispatch({
+            type: REMOVE_READY_DOWNLOAD_LINK,
+        });
+    };
+};

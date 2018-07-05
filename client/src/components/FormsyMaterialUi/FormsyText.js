@@ -47,6 +47,7 @@ class FormsyText extends Component {
             fullWidth,
             title,
             type,
+            placeholder,
             getValue,
             endAdornment,
             startAdornment,
@@ -61,6 +62,7 @@ class FormsyText extends Component {
                     id={title}
                     type={type || 'text'}
                     value={getValue() || ''}
+                    placeholder={placeholder || ''}
                     disabled={disabled || false}
                     autoComplete="off"
                     endAdornment={endAdornment}

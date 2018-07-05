@@ -28,6 +28,7 @@ import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import Divider from '@material-ui/core/Divider';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -89,6 +90,7 @@ class ShareStepper extends Component {
                 TransitionComponent={Transition}
                 onClose={this.handleComplete}>
                 <DialogTitle>{_shareResourceLinks}</DialogTitle>
+                <Divider/>
                 <DialogContent>
                     <Stepper activeStep={this.state.activeStep} orientation="vertical">
                         <Step>

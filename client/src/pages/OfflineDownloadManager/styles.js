@@ -22,17 +22,12 @@
  * SOFTWARE.
  */
 
-import { combineReducers } from 'redux';
-import assistReducer from './assistReducer';
-import oneselfReducer from './oneselfReducer';
-import userReducer from './userReducer';
-import resourceReducer from './resourceReducer';
-import downloadReducer from './downloadReducer';
-
-export default combineReducers({
-    assist: assistReducer,
-    oneself: oneselfReducer,
-    user: userReducer,
-    resource: resourceReducer,
-    download: downloadReducer,
+const styles = theme => ({
+    normal: {
+    },
+    downloadItemAction: {
+        transform: 'translateY(-75%)',
+    },
 });
+
+export default styles;
