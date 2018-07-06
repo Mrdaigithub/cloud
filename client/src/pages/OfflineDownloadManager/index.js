@@ -67,9 +67,13 @@ class OfflineDownloadManager extends Component {
 
     async handleStartAria2Task() {
         await this.aria2.open();
-        const [guid] = await this.aria2.call('addUri', [this.state.readyDownloadLink], { dir: '/tmp' });
-        console.log(guid);
-        await this.aria2.close();
+        // const guid = await this.aria2.call('addUri', [this.state.readyDownloadLink]);
+        setInterval(async () => {
+            await this.aria2.multicall([
+                ['aria2.getVersion'],
+            ]);
+        }, 1000);
+        // await this.aria2.close();
     }
 
     handleClick = (event) => {
