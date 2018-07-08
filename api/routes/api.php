@@ -56,6 +56,9 @@
 				     Route::patch( "{id}/trash", "ResourceController@trash_resource" );
 				     Route::patch( "{id}/restore", "ResourceController@restore" );
 			     } );
+			     Route::prefix( "aria2" )->group( function () {
+				     Route::post( "adduri", "Aria2Controller@add_uri" );
+			     } );
 			     Route::resource( "resources", "ResourceController" );
 			     Route::resource( "users", "UserController" );
 		     } );
