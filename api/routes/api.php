@@ -58,6 +58,7 @@
 			     } );
 			     Route::prefix( "aria2" )->group( function () {
 				     Route::post( "adduri", "Aria2Controller@add_uri" );
+				     Route::get( "state", "Aria2Controller@get_task_state" );
 			     } );
 			     Route::resource( "resources", "ResourceController" );
 			     Route::resource( "users", "UserController" );

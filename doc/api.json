@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-07-10T08:55:26.742Z",
+	"__export_date": "2018-07-10T09:12:06.341Z",
 	"__export_source": "insomnia.desktop.app:v5.16.6",
 	"resources": [
 		{
@@ -871,13 +871,13 @@
 			},
 			"body": {},
 			"created": 1531184523097,
-			"description": "",
+			"description": "### 简要描述 :\n\n- 查询当前用户的aria2下载任务状态\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/state\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n[\n\t{\n\t\t\"id\": 1,\n\t\t\"jsonrpc\": \"2.0\",\n\t\t\"result\": {\n\t\t\t\"bitfield\": \"fffffffffffffffffffffffff0\",\n\t\t\t\"completedLength\": \"104857600\",\n\t\t\t\"connections\": \"0\",\n\t\t\t\"dir\": \"\\/data\\/_dl\",\n\t\t\t\"downloadSpeed\": \"0\",\n\t\t\t\"errorCode\": \"0\",\n\t\t\t\"errorMessage\": \"\",\n\t\t\t\"files\": [\n\t\t\t\t{\n\t\t\t\t\t\"completedLength\": \"104857600\",\n\t\t\t\t\t\"index\": \"1\",\n\t\t\t\t\t\"length\": \"104857600\",\n\t\t\t\t\t\"path\": \"\\/data\\/_dl\\/vultr.com.100MB.bin\",\n\t\t\t\t\t\"selected\": \"true\",\n\t\t\t\t\t\"uris\": [\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"used\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"status\": \"waiting\",\n\t\t\t\t\t\t\t\"uri\": \"https:\\/\\/fra-de-ping.vultr.com\\/vultr.com.100MB.bin\"\n\t\t\t\t\t\t}\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"gid\": \"2ee6948ea540c842\",\n\t\t\t\"numPieces\": \"100\",\n\t\t\t\"pieceLength\": \"1048576\",\n\t\t\t\"status\": \"complete\",\n\t\t\t\"totalLength\": \"104857600\",\n\t\t\t\"uploadLength\": \"0\",\n\t\t\t\"uploadSpeed\": \"0\"\n\t\t}\n\t}\n]\n```\n\n### 返回参数说明 :\n\n与Aria2 aria2.tellStatus 方法返回数据相同, 具体请查询Aria2文档\n- https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStatus\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1531018024012,
 			"method": "GET",
-			"modified": 1531205957998,
-			"name": "获取当前用户的aria2下载任务状态",
+			"modified": 1531213877393,
+			"name": "查询当前用户的aria2下载任务状态",
 			"parameters": [],
 			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
 			"settingDisableRenderRequestBody": false,
