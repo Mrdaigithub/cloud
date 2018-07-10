@@ -73,11 +73,7 @@
 			$resource->resource_name = $request->get( "resource_name" );
 			$resource->file          = false;
 			$resource->path          = $request->get( "path" );
-			if ( ! $resource->save() ) {
-				throw ValidationException::withMessages( [
-					"resource" => [ "500001" ],
-				] )->status( 500 );
-			}
+			$this->save_model( $resource );
 			$user->resources()->attach( $resource->id );
 			
 			return new ResourceResource( Resource::find( $resource->id ) );
@@ -310,11 +306,7 @@
 			foreach ( $move_id_list as $move_id ) {
 				$resource       = Resource::find( $move_id );
 				$resource->path = preg_replace( "/($base_path)/", $new_path, $resource->path );
-				if ( ! $resource->save() ) {
-					throw ValidationException::withMessages( [
-						"resource" => [ "500001" ],
-					] )->status( 500 );
-				}
+				$this->save_model( $resource );
 			}
 			
 			return new ResourceResource( $resource );
@@ -334,11 +326,7 @@
 			if ( $request->has( "resource_name" ) ) {
 				$resource->resource_name = $request->get( "resource_name" );
 			}
-			if ( ! $resource->save() ) {
-				throw ValidationException::withMessages( [
-					"resource" => [ "500001" ],
-				] )->status( 500 );
-			}
+			$this->save_model( $resource );
 			
 			return new ResourceResource( $resource );
 		}
@@ -358,11 +346,7 @@
 			$path      = $resource->path . ".$id";
 			if ( $resource->file ) {
 				$resource->trashed = true;
-				if ( ! $resource->save() ) {
-					throw ValidationException::withMessages( [
-						"resource" => [ "500001" ],
-					] )->status( 500 );
-				}
+				$this->save_model( $resource );
 				
 				return $resource;
 			}
@@ -379,11 +363,7 @@
 				$resource             = Resource::find( $trash_id );
 				$resource->trashed    = true;
 				$resource->trash_path = preg_replace( "/($base_path)/", "0", $resource->path );
-				if ( ! $resource->save() ) {
-					throw ValidationException::withMessages( [
-						"resource" => [ "500001" ],
-					] )->status( 500 );
-				}
+				$this->save_model( $resource );
 			}
 			
 			return new ResourceResource( $resource );
@@ -426,11 +406,7 @@
 				$resource             = Resource::find( $restore_id );
 				$resource->trashed    = false;
 				$resource->trash_path = "0";
-				if ( ! $resource->save() ) {
-					throw ValidationException::withMessages( [
-						"resource" => [ "500001" ],
-					] )->status( 500 );
-				}
+				$this->save_model( $resource );
 			}
 			
 			return new ResourceResource( $resource );
@@ -468,11 +444,7 @@
 				foreach ( $old_child_id_list as $child_id ) {
 					$resource       = Resource::find( $child_id->id );
 					$resource->path = preg_replace( "/($path)/", $base_path, $resource->path );
-					if ( ! $resource->save() ) {
-						throw ValidationException::withMessages( [
-							"resource" => [ "500001" ],
-						] )->status( 500 );
-					}
+					$this->save_model( $resource );
 				}
 			}
 			$request->user()->resources()->detach( $id );

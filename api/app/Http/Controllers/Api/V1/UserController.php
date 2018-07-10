@@ -57,11 +57,7 @@
 			$user->password = bcrypt( $request->get( 'password' ) );
 			$user->email    = $request->get( 'email' );
 			$request->has( 'capacity' ) ? $user->capacity = $request->get( 'capacity' ) : null;
-			if ( ! $user->save() ) {
-				throw ValidationException::withMessages( [
-					"resource" => [ "500001" ],
-				] )->status( 500 );
-			}
+			$this->save_model( $user );
 			
 			return new UserResource( User::find( $user->id ) );
 		}
@@ -102,11 +98,7 @@
 			$request->has( 'password' ) ? $user->password = bcrypt( $request->get( 'password' ) ) : null;
 			$request->has( 'email' ) ? $user->email = $request->get( 'email' ) : null;
 			$request->has( 'capacity' ) ? $user->capacity = $request->get( 'capacity' ) : null;
-			if ( ! $user->save() ) {
-				throw ValidationException::withMessages( [
-					"resource" => [ "500001" ],
-				] )->status( 500 );
-			}
+			$this->save_model( $user );
 			
 			return new UserResource( User::find( $id ) );
 		}
