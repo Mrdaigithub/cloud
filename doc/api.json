@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-07-01T03:49:15.674Z",
+	"__export_date": "2018-07-10T08:55:26.742Z",
 	"__export_source": "insomnia.desktop.app:v5.16.6",
 	"resources": [
 		{
@@ -126,34 +126,71 @@
 			"_type": "request_group"
 		},
 		{
+			"_id": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"created": 1531018004470,
+			"description": "",
+			"environment": {},
+			"metaSortKey": -1512964839840,
+			"modified": 1531018008746,
+			"name": "Aria2",
+			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
+			"_type": "request_group"
+		},
+		{
 			"_id": "req_9ea8e2bbf59f41a285fa42bb8f01fdc3",
-			"authentication": {},
+			"authentication": {
+				"disabled": true,
+				"prefix": "cloud",
+				"token": "token",
+				"type": "bearer"
+			},
 			"body": {
-				"mimeType": "application/x-www-form-urlencoded",
-				"params": []
+				"mimeType": "application/json",
+				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"system.multicall\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"f4c749ffd7dd6679\"\n\t]\n}"
 			},
 			"created": 1523371602231,
 			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 403001 | 提取码不正确                 |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
 			"headers": [
 				{
-					"id": "pair_cf52cbad05cb4f16ab48daf8905365f7",
+					"id": "pair_d261c62fa5f7403d84ae98f76d3b6a93",
 					"name": "Content-Type",
-					"value": "application/x-www-form-urlencoded"
+					"value": "application/json"
 				}
 			],
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
-			"method": "GET",
-			"modified": 1530347318810,
+			"method": "POST",
+			"modified": 1531189852516,
 			"name": "全局错误状态码",
-			"parameters": [],
+			"parameters": [
+				{
+					"id": "pair_feb32452f10742069b47cab39f0601f6",
+					"name": "token",
+					"value": "cloud"
+				},
+				{
+					"id": "pair_d4249bf7a8664b5183e7a5d858cd7065",
+					"name": "jsonrpc",
+					"value": "2.0"
+				},
+				{
+					"id": "pair_6de8f88adc86410f97adc7f2f41c64f3",
+					"name": "id",
+					"value": "qwer"
+				},
+				{
+					"id": "pair_ab3197e479a64ebaae5ab19e7e2543d2",
+					"name": "method",
+					"value": "aria2.getVersion"
+				}
+			],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
 			"settingDisableRenderRequestBody": false,
 			"settingEncodeUrl": true,
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "https://mrdaisite.com/",
+			"url": "http://47.52.241.241:6800/jsonrpc",
 			"_type": "request"
 		},
 		{
@@ -783,6 +820,72 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "https://api.mrdaisite.com/api/v1/resources/83",
+			"_type": "request"
+		},
+		{
+			"_id": "req_f5714ae7ee5246e6a27675f338a50616",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ3NzZjNzk1MzFjNGJkMjhhMjI4YTE1NTQ4YjM1YjQyNDBmZGFjOGYyNjBjYWIzNzg3NmQ5YmM0OGMxOTE3Zjc4OTNjMThlYmQ2NzBiNTc4In0.eyJhdWQiOiIxIiwianRpIjoiZDc3NmM3OTUzMWM0YmQyOGEyMjhhMTU1NDhiMzViNDI0MGZkYWM4ZjI2MGNhYjM3ODc2ZDliYzQ4YzE5MTdmNzg5M2MxOGViZDY3MGI1NzgiLCJpYXQiOjE1MzExODkxNTgsIm5iZiI6MTUzMTE4OTE1OCwiZXhwIjoxNTMxMzY5MTU4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.FSaEsfgCkqa6m8Y2PhGpKPeKQzm6BZC5Rkw2_0ArSXvR-2nx9cN2gXGdtYYvVxnJKjw89V3Yt3mHRL2rXnvM357Y-Ja7dInHRC-9NOQQrBU_BDvjGvRNmK6_AOomEyytVS6Y4UbpT9WEj_GD9RNlhgmjMPqlbljhqNv1799SJ9nOs3vrtNwl70vTDhjmNQmlXSfkYp6cIcTqB2mWKjGj63GSBdB-S8Jdd_BcHf5tA4h_WQaIje7yPJD49lgDAOJJilHSH3vEAhPLIyAq1AaTNyazFY97INPbFqIZ005yBJ6sJtTH0sHBC2h80XuSwEY5LkJVw-FnJ2dSPXRBR2BzFkCK1Z0dawUAXfBfVHw87ofMiCLuCNo_uqEpkOksG_c7Uec32bZMOzYNMizXiWRWubWlxYtGMOyvAFeUSMw7aZL9vzQjXBEnpIO9L5NkxLOOE1cqOxZMC7LabkOPIxjYmbPprElDZ0oF9ZGmNUDn4rPMP51qw4xy96qn-GReBxIx_h9F2QpnHa6lo5gmS50imk0ufy3GZho2txWQJ7DsDLwVd_aqIkQsfyZILb3hAYIziaNILvlpva5FrXgzUiuVWl9TibrFz_ZDtgM0MFXOiMHEZJI-NMKwTRbk7A3-uollB0G6CwxopR9YfOCWLk_JX_G8ItdmEMHlxOKfJ2AWM1k",
+				"type": "bearer"
+			},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": [
+					{
+						"disabled": false,
+						"id": "pair_7035b85b8dc747019a8aefba59e6704a",
+						"name": "uri",
+						"value": "https://fra-de-ping.vultr.com/vultr.com.100MB.bin"
+					}
+				]
+			},
+			"created": 1531018024061,
+			"description": "### 简要描述 :\n\n- 添加Aria2下载任务\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/adduri\n\n### 请求方式 :\n\n- POST\n\n### 参数 :\n\n| 参数名 | 必选  | 类型     | 说明       |\n| --- | --- | ------ | -------- |\n| uri | 是   | String | 下载资源的uri |\n\n### 返回示例 :\n\n```json\n{\n\t\"gid\": \"5486458ce39566fd\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名     | 类型      | 说明        |\n| ------- | ------- | --------- |\n| gid  | String  | 下载任务的GID  |\n",
+			"headers": [
+				{
+					"id": "pair_1cd10ebd8e9c4570965592a8842a9b41",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1531018024062,
+			"method": "POST",
+			"modified": 1531212883440,
+			"name": "添加Aria2下载任务",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/adduri",
+			"_type": "request"
+		},
+		{
+			"_id": "req_8464cf5cd7d048589209c6496613f489",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjczNWM4NTVkYjE0Yzk0ZjI4ZGFlZmRhYTg0NGFmN2ZjMGJlYTcyOGQ5ZjA3MTE0ZDdlMTJkMzY0YzU3NjQ3ZWU1N2ZmZGU4ODE3ZTk5YTkxIn0.eyJhdWQiOiIxIiwianRpIjoiNzM1Yzg1NWRiMTRjOTRmMjhkYWVmZGFhODQ0YWY3ZmMwYmVhNzI4ZDlmMDcxMTRkN2UxMmQzNjRjNTc2NDdlZTU3ZmZkZTg4MTdlOTlhOTEiLCJpYXQiOjE1MzEyMDU5NTEsIm5iZiI6MTUzMTIwNTk1MSwiZXhwIjoxNTMxMzg1OTUxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z8ur_PEKlgi42DxEeOsozpL5v2iZY2IBZfmBgmKQeXJBALNSguv4fYT7KdLYvuWLD37QcwVxUXBFLQaPzVg7CTRP9IrWrv3KXrGkNtptwvgiCe7usxwz2gpLxOMgZvtXcEd3ksak5R1u8_jLU5IGWvuXzTKcyxoqD2nwM5Z6PEUfkhslTu4C3NCBC_nfIhkRROUv3UC4vGr6zbpN4jZahBZex0wNtYwxrcx09CO9z01Kyg_kMQdiXm07D_xDLAviUQfYNj4yOf_Aq0wg6KADkdkRVXCKAj_GX5a61UKiC3D5kpI_8V8FjlabGmJG2GELjCJsbYfmZ4RHtqQ0lkC344TDJAoWg_TAPNoqUbboBpHxdEdWhDpAeNF6ziAOU59W8lYG209HI1s7huBHIu6vCl_t90PX2WxRWOompgB9z20t--DHeGKln4qetkqQCG3U4kf9kp6Voezs0p3ZSbevee1SnDaY22_OSzxARTYxPfYP3uF7Q7ORzEa9GCu2rRO3NYCypz8_AX7T8igvb1ID5s9AwOifkemWbN3Fwt31zraucb5o6VymdS8DkPYw9cgMJvaOoniLyzEQeLVz_-gnz68s-1m8MXgGmppYlHO7E11euym_o8ivxE0Qagfx9KEymOlXFJ5zIwP2TgWo54NLruG3Vy8rjxqOMbZs0eoGCjk",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1531184523097,
+			"description": "",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1531018024012,
+			"method": "GET",
+			"modified": 1531205957998,
+			"name": "获取当前用户的aria2下载任务状态",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/state",
 			"_type": "request"
 		}
 	]

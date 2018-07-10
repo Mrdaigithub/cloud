@@ -27,7 +27,7 @@
 		 *
 		 * @param AddUriRequest $request
 		 *
-		 * @return \Psr\Http\Message\StreamInterface
+		 * @return array
 		 */
 		public function add_uri( AddUriRequest $request ) {
 			$this->id     = $request->user()->id;
@@ -53,7 +53,7 @@
 			}
 			$this->save_model( $user );
 			
-			return $user;
+			return [ "gid" => $gid ];
 		}
 		
 		/**
