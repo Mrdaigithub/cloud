@@ -23,8 +23,8 @@
  */
 
 import React, { Component } from 'react';
+import qs from 'qs';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -35,6 +35,7 @@ import styles from './styles';
 import { _linkInvalid, _offlineDownloadInputPlaceholder, _ok, _pleaseInputDownloadFileLink } from '../../res/values/string';
 import { addReadyDownloadLink } from '../../store/actions/downloadActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
+import requester from '../../utils/requester';
 
 class CreateLinkOfflineDownload extends Component {
     constructor(props) {
@@ -43,8 +44,13 @@ class CreateLinkOfflineDownload extends Component {
     }
 
     handleCreateLinkOfflineDownloadTask = (model) => {
-        this.props.addReadyDownloadLink(model.link);
-        this.props.changePage('/download/offline/manager');
+        const { props } = this;
+        (async function () {
+            await requester.post('https://api.mrdaisite.com/api/v1/aria2/adduri', qs.stringify({
+                uri: model.link,
+            }));
+            props.changePage('/download/offline/manager');
+        }());
     };
 
     render() {
@@ -61,7 +67,7 @@ class CreateLinkOfflineDownload extends Component {
                             placeholder={_offlineDownloadInputPlaceholder}
                             validations={{ matchRegexp: /^(((https?)|(ftp)):\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*)|(magnet:\?xt=urn:btih:.*)$/i }}
                             validationError={_linkInvalid}
-                            value="https://fra-de-ping.vultr.com/vultr.com.1000MB.bin"
+                            value="https://fra-de-ping.vultr.com/vultr.com.100MB.bin"
                             required
                             fullWidth
                             autoFocus/>
@@ -78,10 +84,10 @@ class CreateLinkOfflineDownload extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
+const mapDispatchToProps = dispatch => ({
+    changePage: url => dispatch(push(url)),
     addReadyDownloadLink: readyDownloadLink => addReadyDownloadLink(readyDownloadLink)(dispatch),
-}, dispatch);
+});
 
 export default connect(
     mapStateToProps,

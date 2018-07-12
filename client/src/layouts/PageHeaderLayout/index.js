@@ -45,11 +45,11 @@ import Delete from '@material-ui/icons/Delete';
 import SupervisorAccount from '@material-ui/icons/SupervisorAccount';
 import Settings from '@material-ui/icons/Settings';
 import SearchIcon from '@material-ui/icons/Search';
-import { GithubIcon, LightIcon } from '../../components/Icons';
+import { GithubIcon, LightIcon, OfflineDownloadIcon } from '../../components/Icons';
 import Setting from '../../pages/Setting';
 import styles from './styles';
 import { fetchOneself } from '../../store/actions/oneselfActions';
-import { _myCloudDisk, _sum, _trashCan, _unlimited, _used } from '../../res/values/string';
+import { _myCloudDisk, _offlineDownloadManager, _sum, _trashCan, _unlimited, _used } from '../../res/values/string';
 
 
 class PageHeaderLayout extends Component {
@@ -121,6 +121,14 @@ class PageHeaderLayout extends Component {
                                         <Delete/>
                                     </ListItemIcon>
                                     <ListItemText primary={_trashCan}/>
+                                </Link>
+                            </ListItem>
+                            <ListItem button>
+                                <Link to="/download/offline/manager" className={classes.sidebarLink}>
+                                    <ListItemIcon>
+                                        <OfflineDownloadIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText primary={_offlineDownloadManager}/>
                                 </Link>
                             </ListItem>
                         </List>

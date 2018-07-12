@@ -41,11 +41,11 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import StopIcon from '@material-ui/icons/Stop';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
-import Aria2 from 'aria2';
 import { HOST, PORT, SECURE, SECRET, PATH } from '../../constants/aria2Config';
 import styles from '../OfflineDownloadManager/styles';
 import { _remove, _stop } from '../../res/values/string';
 import { removeReadyDownloadLink } from '../../store/actions/downloadActions';
+import requester from '../../utils/requester';
 
 class OfflineDownloadManager extends Component {
     constructor(props) {
@@ -54,26 +54,11 @@ class OfflineDownloadManager extends Component {
             anchorEl: null,
             readyDownloadLink: this.props.readyDownloadLink || 'https://fra-de-ping.vultr.com/vultr.com.1000MB.bin',
         };
-        this.props.removeReadyDownloadLink();
-        this.aria2 = new Aria2({
-            host: HOST,
-            port: PORT,
-            secure: SECURE,
-            secret: SECRET,
-            path: PATH,
-        });
-        this.handleStartAria2Task();
+        this.handleFetchAria2Task();
     }
 
-    async handleStartAria2Task() {
-        await this.aria2.open();
-        // const guid = await this.aria2.call('addUri', [this.state.readyDownloadLink]);
-        setInterval(async () => {
-            await this.aria2.multicall([
-                ['aria2.getVersion'],
-            ]);
-        }, 1000);
-        // await this.aria2.close();
+    async handleFetchAria2Task() {
+        await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
     }
 
     handleClick = (event) => {
