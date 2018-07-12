@@ -13,21 +13,21 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('username')->unique();
-            $table->string('email')->unique()->nullable();
-            $table->string('password')->nullable();
-            $table->string('origin')->default('local');
-            $table->boolean('is_admin')->default(false);
-            $table->unsignedBigInteger('capacity')->default(5368709120)->nullable()->comment('byte');
-	        $table->string('gids')->nullable();
+        Schema::create("users", function (Blueprint $table) {
+            $table->increments("id")->unsigned();
+            $table->string("username")->unique();
+            $table->string("email")->unique()->nullable();
+            $table->string("password")->nullable();
+            $table->string("origin")->default("local");
+            $table->boolean("is_admin")->default(false);
+            $table->unsignedBigInteger("capacity")->default(5368709120)->nullable()->comment("byte");
+	        $table->string("gids")->default("");
             $table->timestamps();
         });
 
-        Schema::create('resource_user', function (Blueprint $table) {
-            $table->integer('user_id');
-            $table->increments('resource_id')->unsigned();
+        Schema::create("resource_user", function (Blueprint $table) {
+            $table->integer("user_id");
+            $table->increments("resource_id")->unsigned();
         });
     }
 
@@ -38,7 +38,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('resource_user');
+        Schema::dropIfExists("users");
+        Schema::dropIfExists("resource_user");
     }
 }
