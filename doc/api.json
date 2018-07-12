@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-07-10T09:12:06.341Z",
+	"__export_date": "2018-07-12T06:32:45.979Z",
 	"__export_source": "insomnia.desktop.app:v5.16.6",
 	"resources": [
 		{
@@ -146,7 +146,7 @@
 			},
 			"body": {
 				"mimeType": "application/json",
-				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"system.multicall\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"f4c749ffd7dd6679\"\n\t]\n}"
+				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"system.listNotifications\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"2ee6948ea540c842\"\n\t]\n}"
 			},
 			"created": 1523371602231,
 			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 403001 | 提取码不正确                 |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
@@ -160,30 +160,9 @@
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
 			"method": "POST",
-			"modified": 1531189852516,
+			"modified": 1531362306364,
 			"name": "全局错误状态码",
-			"parameters": [
-				{
-					"id": "pair_feb32452f10742069b47cab39f0601f6",
-					"name": "token",
-					"value": "cloud"
-				},
-				{
-					"id": "pair_d4249bf7a8664b5183e7a5d858cd7065",
-					"name": "jsonrpc",
-					"value": "2.0"
-				},
-				{
-					"id": "pair_6de8f88adc86410f97adc7f2f41c64f3",
-					"name": "id",
-					"value": "qwer"
-				},
-				{
-					"id": "pair_ab3197e479a64ebaae5ab19e7e2543d2",
-					"name": "method",
-					"value": "aria2.getVersion"
-				}
-			],
+			"parameters": [],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
 			"settingDisableRenderRequestBody": false,
 			"settingEncodeUrl": true,
@@ -886,6 +865,31 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "https://api.mrdaisite.com/api/v1/aria2/state",
+			"_type": "request"
+		},
+		{
+			"_id": "req_42e0de6236014882afa36675d8547bca",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjczNWM4NTVkYjE0Yzk0ZjI4ZGFlZmRhYTg0NGFmN2ZjMGJlYTcyOGQ5ZjA3MTE0ZDdlMTJkMzY0YzU3NjQ3ZWU1N2ZmZGU4ODE3ZTk5YTkxIn0.eyJhdWQiOiIxIiwianRpIjoiNzM1Yzg1NWRiMTRjOTRmMjhkYWVmZGFhODQ0YWY3ZmMwYmVhNzI4ZDlmMDcxMTRkN2UxMmQzNjRjNTc2NDdlZTU3ZmZkZTg4MTdlOTlhOTEiLCJpYXQiOjE1MzEyMDU5NTEsIm5iZiI6MTUzMTIwNTk1MSwiZXhwIjoxNTMxMzg1OTUxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z8ur_PEKlgi42DxEeOsozpL5v2iZY2IBZfmBgmKQeXJBALNSguv4fYT7KdLYvuWLD37QcwVxUXBFLQaPzVg7CTRP9IrWrv3KXrGkNtptwvgiCe7usxwz2gpLxOMgZvtXcEd3ksak5R1u8_jLU5IGWvuXzTKcyxoqD2nwM5Z6PEUfkhslTu4C3NCBC_nfIhkRROUv3UC4vGr6zbpN4jZahBZex0wNtYwxrcx09CO9z01Kyg_kMQdiXm07D_xDLAviUQfYNj4yOf_Aq0wg6KADkdkRVXCKAj_GX5a61UKiC3D5kpI_8V8FjlabGmJG2GELjCJsbYfmZ4RHtqQ0lkC344TDJAoWg_TAPNoqUbboBpHxdEdWhDpAeNF6ziAOU59W8lYG209HI1s7huBHIu6vCl_t90PX2WxRWOompgB9z20t--DHeGKln4qetkqQCG3U4kf9kp6Voezs0p3ZSbevee1SnDaY22_OSzxARTYxPfYP3uF7Q7ORzEa9GCu2rRO3NYCypz8_AX7T8igvb1ID5s9AwOifkemWbN3Fwt31zraucb5o6VymdS8DkPYw9cgMJvaOoniLyzEQeLVz_-gnz68s-1m8MXgGmppYlHO7E11euym_o8ivxE0Qagfx9KEymOlXFJ5zIwP2TgWo54NLruG3Vy8rjxqOMbZs0eoGCjk",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1531214352251,
+			"description": "### 简要描述 :\n\n- 删除Aria2任务\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/{gid}\n\n### 请求方式 :\n\n- DELETE\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n\n```\n\n### 返回参数说明 :\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1531018023962,
+			"method": "DELETE",
+			"modified": 1531360134689,
+			"name": "删除Aria2任务",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/123",
 			"_type": "request"
 		}
 	]

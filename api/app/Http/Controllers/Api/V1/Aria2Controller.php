@@ -8,7 +8,6 @@
 	use Exception;
 	use GuzzleHttp\Client as httpClient;
 	use Illuminate\Http\Request;
-	use Illuminate\Validation\ValidationException;
 	
 	class Aria2Controller extends ApiController {
 		private $httpClient;
