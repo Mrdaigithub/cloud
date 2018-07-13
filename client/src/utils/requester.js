@@ -34,11 +34,19 @@ const requester = axios.create({
     timeout: NETWORK_TIMEOUT,
     headers: HEADERS,
 });
+requester.animate = true;
+
+requester.setAnimate = (bool = true) => {
+    requester.animate = bool;
+};
 
 requester.interceptors.request.use(
     (config) => {
         const configs = config;
-        toggleLoading(true)(store.dispatch);
+        // noinspection JSAnnotator
+        if (requester.animate) {
+            toggleLoading(true)(store.dispatch);
+        }
         if (sessionStorage.accessToken) {
             configs.headers.common.Authorization = `Bearer ${sessionStorage.accessToken}`;
         }

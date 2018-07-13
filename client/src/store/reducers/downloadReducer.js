@@ -22,23 +22,18 @@
  * SOFTWARE.
  */
 
-import { ADD_READY_DOWNLOAD_LINK, REMOVE_READY_DOWNLOAD_LINK } from '../actions/downloadActions';
+import { SAVE_DOWNLOAD_LIST } from '../actions/downloadActions';
 
 const initialState = {
-    readyDownloadLink: null,
+    downloadList: [],
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case ADD_READY_DOWNLOAD_LINK:
+        case SAVE_DOWNLOAD_LIST:
             return {
                 ...state,
-                readyDownloadLink: action.payload.readyDownloadLink,
-            };
-        case REMOVE_READY_DOWNLOAD_LINK:
-            return {
-                ...state,
-                readyDownloadLink: null,
+                downloadList: action.payload.downloadList,
             };
         default:
             return state;

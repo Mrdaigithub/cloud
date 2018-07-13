@@ -42,6 +42,11 @@ const theme = createMuiTheme({
             main: '#af4138',
             contrastText: '#111111',
         },
+        success: {
+            light: '#D4443B',
+            main: '#af4138',
+            contrastText: '#111111',
+        },
     },
 });
 

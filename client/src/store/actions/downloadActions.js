@@ -22,24 +22,15 @@
  * SOFTWARE.
  */
 
-export const ADD_READY_DOWNLOAD_LINK = 'download/ADD_READY_DOWNLOAD_LINK';
-export const REMOVE_READY_DOWNLOAD_LINK = 'download/REMOVE_READY_DOWNLOAD_LINK';
+export const SAVE_DOWNLOAD_LIST = 'download/SAVE_DOWNLOAD_LIST';
 
-export const addReadyDownloadLink = (readyDownloadLink) => {
+export const saveDownloadList = (downloadList) => {
     return (dispatch) => {
         return dispatch({
-            type: ADD_READY_DOWNLOAD_LINK,
+            type: SAVE_DOWNLOAD_LIST,
             payload: {
-                readyDownloadLink,
+                downloadList,
             },
-        });
-    };
-};
-
-export const removeReadyDownloadLink = () => {
-    return (dispatch) => {
-        return dispatch({
-            type: REMOVE_READY_DOWNLOAD_LINK,
         });
     };
 };

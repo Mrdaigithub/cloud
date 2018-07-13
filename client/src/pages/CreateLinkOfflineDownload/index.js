@@ -33,7 +33,6 @@ import Formsy from 'formsy-react';
 import Button from '@material-ui/core/Button';
 import styles from './styles';
 import { _linkInvalid, _offlineDownloadInputPlaceholder, _ok, _pleaseInputDownloadFileLink } from '../../res/values/string';
-import { addReadyDownloadLink } from '../../store/actions/downloadActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import requester from '../../utils/requester';
 
@@ -86,7 +85,6 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
     changePage: url => dispatch(push(url)),
-    addReadyDownloadLink: readyDownloadLink => addReadyDownloadLink(readyDownloadLink)(dispatch),
 });
 
 export default connect(

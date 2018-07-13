@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
+import green from '@material-ui/core/colors/green';
 import Grid from '@material-ui/core/Grid';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -41,25 +42,33 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import StopIcon from '@material-ui/icons/Stop';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
-import { HOST, PORT, SECURE, SECRET, PATH } from '../../constants/aria2Config';
 import styles from '../OfflineDownloadManager/styles';
 import { _remove, _stop } from '../../res/values/string';
-import { removeReadyDownloadLink } from '../../store/actions/downloadActions';
+import { saveDownloadList } from '../../store/actions/downloadActions';
 import requester from '../../utils/requester';
+
 
 class OfflineDownloadManager extends Component {
     constructor(props) {
         super(props);
         this.state = {
             anchorEl: null,
-            readyDownloadLink: this.props.readyDownloadLink || 'https://fra-de-ping.vultr.com/vultr.com.1000MB.bin',
         };
+        this.timer = null;
+        requester.setAnimate(false);
         this.handleFetchAria2Task();
     }
 
-    async handleFetchAria2Task() {
-        await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
+
+    handleFetchAria2Task = () => {
+        this.timer = setInterval(async () => {
+            const downloadList = await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
+            this.props.saveDownloadList(downloadList);
+        }, 1000);
+    };
 
     handleClick = (event) => {
         this.setState({ anchorEl: event.currentTarget });
@@ -76,54 +85,39 @@ class OfflineDownloadManager extends Component {
         return (
             <div className={classes.normal}>
                 <List>
-                    <ListItem>
-                        <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
-                            <Grid item xs={12}>
-                                <ListItemText primary="Photos"/><br/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <LinearProgress variant="determinate" color="primary" value={50}/>
-                            </Grid>
-                        </Grid>
-                        <ListItemSecondaryAction className={classes.downloadItemAction}>
-                            <IconButton onClick={this.handleClick}>
-                                <MoreVertIcon/>
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem>
-                        <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
-                            <Grid item xs={12}>
-                                <ListItemText primary="Photos"/><br/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <LinearProgress variant="determinate" color="primary" value={50}/>
-                            </Grid>
-                        </Grid>
-                        <ListItemSecondaryAction className={classes.downloadItemAction}>
-                            <IconButton onClick={this.handleClick}>
-                                <MoreVertIcon/>
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem>
-                        <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
-                            <Grid item xs={12}>
-                                <ListItemText primary="Photos"/><br/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <LinearProgress variant="determinate" color="primary" value={50}/>
-                            </Grid>
-                        </Grid>
-                        <ListItemSecondaryAction className={classes.downloadItemAction}>
-                            <IconButton onClick={this.handleClick}>
-                                <MoreVertIcon/>
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider/>
+                    {
+                        this.props.downloadList.map(downloadItem => (
+                            <div key={downloadItem.result.gid}>
+                                <ListItem>
+                                    <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
+                                        <Grid item xs={12}>
+                                            <ListItemText
+                                                primary={downloadItem.result.files[0].path.split('/')
+                                                    .pop()}/><br/>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                <Grid item xs={1}>123</Grid>
+                                                <Grid item xs={1}>123</Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <LinearProgress
+                                                variant="determinate"
+                                                style={{ color: green }}
+                                                value={(downloadItem.result.completedLength / downloadItem.result.totalLength) * 100}/>
+                                        </Grid>
+                                    </Grid>
+                                    <ListItemSecondaryAction className={classes.downloadItemAction}>
+                                        <IconButton onClick={this.handleClick}>
+                                            <MoreVertIcon/>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider/>
+                            </div>
+                        ))
+                    }
                 </List>
                 <Menu
                     id="long-menu"
@@ -143,19 +137,18 @@ class OfflineDownloadManager extends Component {
                         <ListItemText inset primary={_remove}/>
                     </MenuItem>
                 </Menu>
-                {this.state.readyDownloadLink}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    readyDownloadLink: state.download.readyDownloadLink,
+    downloadList: state.download.downloadList,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     changePage: url => (push(url)),
-    removeReadyDownloadLink: () => removeReadyDownloadLink()(dispatch),
+    saveDownloadList: downloadList => saveDownloadList(downloadList)(dispatch),
 }, dispatch);
 
 export default connect(

@@ -4,6 +4,8 @@
 	
 	use App\Http\Controllers\Api\ApiController;
 	use App\Http\Requests\Aria2Requests\AddUriRequest;
+	use App\Http\Requests\Aria2Requests\RelatedResourceRequest;
+	use App\Models\Resource;
 	use App\Models\User;
 	use Exception;
 	use GuzzleHttp\Client as httpClient;
@@ -119,8 +121,23 @@
 						]
 					]
 				] );
-			} catch ( Exception $exception ) {}
+			} catch ( Exception $exception ) {
+			}
 			
 			return;
+		}
+		
+		/**
+		 * 关联Aria2下载文件与resource
+		 * Aria2 下载完成时将文件名,md5,size 录入resources表
+		 */
+		public function related_resource( RelatedResourceRequest $request ) {
+			$resource = new Resource();
+			$resource->resource_name = $request->resource_name;
+			$resource->hash = $request->hash;
+			$resource->size = $request->size;
+			$resource->file = true;
+			$this->save_model($resource);
+			return $resource;
 		}
 	}
