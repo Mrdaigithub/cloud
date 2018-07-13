@@ -66,7 +66,7 @@ class CreateLinkOfflineDownload extends Component {
                             placeholder={_offlineDownloadInputPlaceholder}
                             validations={{ matchRegexp: /^(((https?)|(ftp)):\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*)|(magnet:\?xt=urn:btih:.*)$/i }}
                             validationError={_linkInvalid}
-                            value="https://fra-de-ping.vultr.com/vultr.com.100MB.bin"
+                            value=""
                             required
                             fullWidth
                             autoFocus/>

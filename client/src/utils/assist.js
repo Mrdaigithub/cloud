@@ -90,3 +90,24 @@ export const path2url = (path) => {
         .filter(item => item)
         .join('/');
 };
+
+/**
+ * 将文件容量单位转换之合适的单位
+ *
+ * @param fileByte
+ * @returns {string}
+ */
+export const conversionCapacityUtil = (fileByte) => {
+    const fileSizeByte = fileByte;
+    let fileSizeMsg = '';
+    if (fileSizeByte < 1048576) {
+        fileSizeMsg = `${(fileSizeByte / 1024).toFixed(2)}KB`;
+    } else if (fileSizeByte >= 1048576 && fileSizeByte < 1073741824) {
+        fileSizeMsg = `${(fileSizeByte / (1024 ** 2)).toFixed(2)}MB`;
+    } else if (fileSizeByte >= 1073741824 && fileSizeByte < 1099511627776) {
+        fileSizeMsg = `${(fileSizeByte / (1024 * 3)).toFixed(2)}GB`;
+    } else {
+        fileSizeMsg = `${(fileSizeByte / (1024 * 4)).toFixed(2)}TB`;
+    }
+    return fileSizeMsg;
+};

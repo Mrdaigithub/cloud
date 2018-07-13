@@ -25,6 +25,7 @@
 export { default as GithubIcon } from './GithubIcon';
 export { default as LightIcon } from './LightIcon';
 export { default as OfflineDownloadIcon } from './OfflineDownloadIcon';
+export { default as DownloadIcon } from './DownloadIcon';
 export { default as TorrentIcon } from './TorrentIcon';
 
 export { default as FileIcon } from './FileIcon';

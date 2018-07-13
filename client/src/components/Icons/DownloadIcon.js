@@ -22,28 +22,14 @@
  * SOFTWARE.
  */
 
-const styles = theme => ({
-    normal: {},
-    downloadItemTitle: {
-        '&>span': {
-            fontSize: '1.2rem',
-            color: '#333',
-        },
-    },
-    downloadItemAction: {
-        transform: 'translateY(-75%)',
-    },
-    downloadItemState: {
-        color: '#333',
-        fontSize: '0.9rem',
-    },
-    downloadItemSpeed: {
-        color: '#333',
-        fontSize: '0.9rem',
-    },
-    textRight: {
-        textAlign: 'right',
-    },
-});
+import React from 'react';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-export default styles;
+const DownloadIcon = props => (
+    <SvgIcon {...props} viewBox="0 0 1024 1024">
+        <path d="M213.333333 853.333333h597.333334v-85.333333H213.333333m597.333334-384h-170.666667V128H384v256H213.333333l298.666667 298.666667 298.666667-298.666667z"/>
+    </SvgIcon>
+);
+
+export default DownloadIcon;
+
