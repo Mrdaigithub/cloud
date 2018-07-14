@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-07-12T06:32:45.979Z",
+	"__export_date": "2018-07-14T06:14:35.562Z",
 	"__export_source": "insomnia.desktop.app:v5.16.6",
 	"resources": [
 		{
@@ -146,7 +146,7 @@
 			},
 			"body": {
 				"mimeType": "application/json",
-				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"system.listNotifications\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"2ee6948ea540c842\"\n\t]\n}"
+				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"aria2.pause\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"2d88d5ad259093db\"\n\t]\n}"
 			},
 			"created": 1523371602231,
 			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 403001 | 提取码不正确                 |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
@@ -160,7 +160,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
 			"method": "POST",
-			"modified": 1531362306364,
+			"modified": 1531536904304,
 			"name": "全局错误状态码",
 			"parameters": [],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
@@ -890,6 +890,104 @@
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
 			"url": "https://api.mrdaisite.com/api/v1/aria2/123",
+			"_type": "request"
+		},
+		{
+			"_id": "req_4b16074bf18e4283a440895c86f023e8",
+			"authentication": {},
+			"body": {
+				"mimeType": "application/x-www-form-urlencoded",
+				"params": [
+					{
+						"disabled": false,
+						"id": "pair_2514ff34a62f42329c963c595a58c3f1",
+						"name": "resource_name",
+						"value": "rname"
+					},
+					{
+						"id": "pair_dadea2c91f704cb59d0e8c554df56b04",
+						"name": "hash",
+						"value": "123564879"
+					},
+					{
+						"id": "pair_4d253af9f2df459895ae797a75218492",
+						"name": "size",
+						"value": "1465467"
+					}
+				]
+			},
+			"created": 1531453005099,
+			"description": "",
+			"headers": [
+				{
+					"id": "pair_d782085911fa40a2a11ccda0653286e7",
+					"name": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"isPrivate": false,
+			"metaSortKey": -1531018024037,
+			"method": "POST",
+			"modified": 1531453404050,
+			"name": "关联Aria2下载文件与resource",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/resource/related",
+			"_type": "request"
+		},
+		{
+			"_id": "req_9da375b3eef145b6b4ebeb6c14908288",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjgxN2U4NTQwMTlhOWJlZTlkOGRiZWYxYzVlNTMxZjFiZmZmYzcwYmUwNDI5YmNhMGI5MzQxZWQyZDRlMzlkNzcyZTAyZGFjYzRkYjcwNjE5In0.eyJhdWQiOiIxIiwianRpIjoiODE3ZTg1NDAxOWE5YmVlOWQ4ZGJlZjFjNWU1MzFmMWJmZmZjNzBiZTA0MjliY2EwYjkzNDFlZDJkNGUzOWQ3NzJlMDJkYWNjNGRiNzA2MTkiLCJpYXQiOjE1MzE1MzYwMzcsIm5iZiI6MTUzMTUzNjAzNywiZXhwIjoxNTMxNzE2MDM3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.PsCn4NO-BwqVnYq0nku0NYEzkhKwENxWHyhV89MjfzsBZKukq6hBxE_N8eqZH-N8i3q94mmbtPFY2-YPzdPg6N3hA__NSIOix4606JCHgIgbdKV9_xjLEB1uatAmrOzQYfVWhPFYeNCfX7fYOUcp3Ya7vVtUE47hsZmg3MM_Ls8LhjnE3753YTH5HnS4OS70kfkzfs9Xz4xo_pH8VdFJkGprWcG1OTiyHE_Cnn3etSJIQpl7AUC_908UxsHWSdSqOqPHhO_xkhL98K8F0UbmCDQ0BQXeKmzvRAiHGUFgCnM7Bq0vFvZFctM5OINQnd2Y_qfSzhQ5FJ_JWbhWmyDDQpz-tmg5gVhACF1mwXQfxsVX623UJE3KvhyyNZ2vJBgshHgI1RGWmKcosGj7wzlVx8QVSZj88mtbv30B9t4Zq-ARAD6rxNgfYNMPEdnTUmEGXWNX6vgzWpO-zk9Mo5oYyTR6HWECdFRRSCMtVlCnd6Wwq7EgEHWFisfu2p9qstNnlZo-1DhZev7gVPRk_SFRIColHIKVRzuc8ptWF_x_8fq1tYG5U31i5j0EkQo17OvzkrSV5Cpp2TlWobwAw8J8GPw5NXqNt8bUBe6-6xpukVAyAJgoSngFlPcMmdlJdQExF4hjdBkJEJCA2jz3mMdL_nJchHyWjjjjA3zekvUfCy8",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1531535718342,
+			"description": "### 简要描述 :\n\n- 暂停单个Aria2任务\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/pause/{gid}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n2d88d5ad259093db\n```\n\n### 返回参数说明 :\n\nAria2任务gid\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1531018024024.5,
+			"method": "GET",
+			"modified": 1531537191925,
+			"name": "暂停单个Aria2任务",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/pause/2d88d5ad259093db",
+			"_type": "request"
+		},
+		{
+			"_id": "req_88d684cc755a4e9196ad42dc935145b9",
+			"authentication": {
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjgxN2U4NTQwMTlhOWJlZTlkOGRiZWYxYzVlNTMxZjFiZmZmYzcwYmUwNDI5YmNhMGI5MzQxZWQyZDRlMzlkNzcyZTAyZGFjYzRkYjcwNjE5In0.eyJhdWQiOiIxIiwianRpIjoiODE3ZTg1NDAxOWE5YmVlOWQ4ZGJlZjFjNWU1MzFmMWJmZmZjNzBiZTA0MjliY2EwYjkzNDFlZDJkNGUzOWQ3NzJlMDJkYWNjNGRiNzA2MTkiLCJpYXQiOjE1MzE1MzYwMzcsIm5iZiI6MTUzMTUzNjAzNywiZXhwIjoxNTMxNzE2MDM3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.PsCn4NO-BwqVnYq0nku0NYEzkhKwENxWHyhV89MjfzsBZKukq6hBxE_N8eqZH-N8i3q94mmbtPFY2-YPzdPg6N3hA__NSIOix4606JCHgIgbdKV9_xjLEB1uatAmrOzQYfVWhPFYeNCfX7fYOUcp3Ya7vVtUE47hsZmg3MM_Ls8LhjnE3753YTH5HnS4OS70kfkzfs9Xz4xo_pH8VdFJkGprWcG1OTiyHE_Cnn3etSJIQpl7AUC_908UxsHWSdSqOqPHhO_xkhL98K8F0UbmCDQ0BQXeKmzvRAiHGUFgCnM7Bq0vFvZFctM5OINQnd2Y_qfSzhQ5FJ_JWbhWmyDDQpz-tmg5gVhACF1mwXQfxsVX623UJE3KvhyyNZ2vJBgshHgI1RGWmKcosGj7wzlVx8QVSZj88mtbv30B9t4Zq-ARAD6rxNgfYNMPEdnTUmEGXWNX6vgzWpO-zk9Mo5oYyTR6HWECdFRRSCMtVlCnd6Wwq7EgEHWFisfu2p9qstNnlZo-1DhZev7gVPRk_SFRIColHIKVRzuc8ptWF_x_8fq1tYG5U31i5j0EkQo17OvzkrSV5Cpp2TlWobwAw8J8GPw5NXqNt8bUBe6-6xpukVAyAJgoSngFlPcMmdlJdQExF4hjdBkJEJCA2jz3mMdL_nJchHyWjjjjA3zekvUfCy8",
+				"type": "bearer"
+			},
+			"body": {},
+			"created": 1531536454914,
+			"description": "### 简要描述 :\n\n- 重启暂停的Aria2任务\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/unpause/{gid}\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n2d88d5ad259093db\n```\n\n### 返回参数说明 :\n\nAria2任务gid\n",
+			"headers": [],
+			"isPrivate": false,
+			"metaSortKey": -1531018024018.25,
+			"method": "GET",
+			"modified": 1531537283798,
+			"name": "重启暂停的Aria2任务",
+			"parameters": [],
+			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
+			"settingDisableRenderRequestBody": false,
+			"settingEncodeUrl": true,
+			"settingRebuildPath": true,
+			"settingSendCookies": true,
+			"settingStoreCookies": true,
+			"url": "https://api.mrdaisite.com/api/v1/aria2/unpause/2d88d5ad259093db",
 			"_type": "request"
 		}
 	]
