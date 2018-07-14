@@ -23,7 +23,6 @@
  */
 
 const styles = theme => ({
-    normal: {},
     downloadItemTitle: {
         '&>span': {
             fontSize: '1.2rem',

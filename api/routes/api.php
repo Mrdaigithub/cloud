@@ -60,6 +60,8 @@
 			     Route::prefix( "aria2" )->group( function () {
 				     Route::post( "adduri", "Aria2Controller@add_uri" );
 				     Route::get( "state", "Aria2Controller@get_task_state" );
+				     Route::get( "pause/{gid}", "Aria2Controller@pause_task" );
+				     Route::get( "unpause/{gid}", "Aria2Controller@unpause_task" );
 				     Route::delete( "{gid}", "Aria2Controller@remove_task" );
 			     } );
 			     Route::resource( "resources", "ResourceController" );

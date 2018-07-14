@@ -26,8 +26,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { bindActionCreators } from 'redux';
+import SwipeableViews from 'react-swipeable-views';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
+import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
@@ -37,9 +38,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Divider from '@material-ui/core/Divider';
 import styles from '../OfflineDownloadManager/styles';
-import { DownloadIcon } from '../../components/Icons';
+import { DownloadCompleteIcon, DownloadIcon, DownloadingIcon } from '../../components/Icons';
 import { _downloadCompleted, _downloading } from '../../res/values/string';
 import { saveDownloadList } from '../../store/actions/downloadActions';
 import requester from '../../utils/requester';
@@ -49,7 +52,9 @@ import { conversionCapacityUtil } from '../../utils/assist';
 class OfflineDownloadManager extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            value: 1,
+        };
         this.timer = null;
         requester.setAnimate(false);
         this.handleFetchAria2Task();
@@ -75,73 +80,149 @@ class OfflineDownloadManager extends Component {
         this.props.saveDownloadList(downloadList);
     };
 
+    /**
+     *
+     * @param gid
+     * @param status   active == true, pause == false
+     * @returns {Function}
+     */
+    handleToggleTaskStatus = (gid, status = true) => async () => {
+        console.log(status);
+        return status ?
+            await requester.get(`https://api.mrdaisite.com/api/v1/aria2/pause/${gid}`) :
+            await requester.get(`https://api.mrdaisite.com/api/v1/aria2/unpause/${gid}`);
+    };
+
+    handleChange = (event, value) => {
+        this.setState({ value });
+    };
+
+    handleChangeIndex = (index) => {
+        this.setState({ value: index });
+    };
+
     render() {
         const { classes } = this.props;
 
         return (
             <div className={classes.normal}>
-                <AppBar position="static" color="default">
+                <Paper>
                     <Tabs
                         value={this.state.value}
                         onChange={this.handleChange}
                         indicatorColor="primary"
                         textColor="primary"
+                        centered
                         fullWidth>
-                        <Tab label="Item One"/>
-                        <Tab label="Item Two"/>
-                        <Tab label="Item Three"/>
+                        <Tab icon={<DownloadCompleteIcon/>} label={_downloadCompleted}/>
+                        <Tab icon={<DownloadingIcon/>} label={_downloading}/>
                     </Tabs>
-                </AppBar>
-                <List>
-                    {
-                        this.props.downloadList.map(downloadItem => (
-                            <div key={downloadItem.result.gid}>
-                                <ListItem>
-                                    <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
-                                        <Grid item xs={12}>
-                                            <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
-                                                <Grid item xs={8}>
-                                                    <ListItemText
-                                                        primary={downloadItem.result.files[0].path.split('/')
-                                                            .pop()}
-                                                        className={classes.downloadItemTitle}/>
+                </Paper>
+                <SwipeableViews
+                    index={this.state.value}
+                    onChangeIndex={this.handleChangeIndex}>
+                    <List style={{ padding: 8 }}>
+                        {
+                            this.props.downloadList.filter(downloadItem => downloadItem.result.status === 'complete')
+                                .map(downloadItem => (
+                                    <div key={downloadItem.result.gid}>
+                                        <ListItem>
+                                            <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
+                                                <Grid item xs={12}>
+                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                        <Grid item xs={8}>
+                                                            <ListItemText
+                                                                primary={downloadItem.result.files[0].path.split('/')
+                                                                    .pop()}
+                                                                className={classes.downloadItemTitle}/>
+                                                        </Grid>
+                                                        <Grid item xs={4} className={classes.textRight}>
+                                                            <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
+                                                                <DeleteIcon/>
+                                                            </IconButton>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={4} className={classes.textRight}>
-                                                    <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
-                                                        <DeleteIcon/>
-                                                    </IconButton>
+                                                <Grid item xs={12}>
+                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                        <Grid item xs={4} className={classes.downloadItemState}>
+                                                            {downloadItem.result.status === 'complete' ? _downloadCompleted : _downloading}
+                                                        </Grid>
+                                                        <Grid item xs={8} className={classes.textRight}>
+                                                            <span className={classes.downloadItemSpeed}>
+                                                                {
+                                                                    `${conversionCapacityUtil(downloadItem.result.completedLength)} / ${conversionCapacityUtil(downloadItem.result.totalLength)}`
+                                                                }
+                                                            </span>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <LinearProgress
+                                                        variant="determinate"
+                                                        value={(downloadItem.result.completedLength / downloadItem.result.totalLength) * 100}/>
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
-                                                <Grid item xs={4} className={classes.downloadItemState}>
-                                                    {downloadItem.result.status === 'complete' ? _downloadCompleted : _downloading}
+                                        </ListItem>
+                                        <Divider/>
+                                    </div>
+                                ))
+                        }
+                    </List>
+                    <List style={{ padding: 8 }}>
+                        {
+                            this.props.downloadList.filter(downloadItem => downloadItem.result.status !== 'complete')
+                                .map(downloadItem => (
+                                    <div key={downloadItem.result.gid}>
+                                        <ListItem>
+                                            <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
+                                                <Grid item xs={12}>
+                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                        <Grid item xs={8}>
+                                                            <ListItemText
+                                                                primary={downloadItem.result.files[0].path.split('/')
+                                                                    .pop()}
+                                                                className={classes.downloadItemTitle}/>
+                                                        </Grid>
+                                                        <Grid item xs={4} className={classes.textRight}>
+                                                            <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
+                                                                <DeleteIcon/>
+                                                            </IconButton>
+                                                        </Grid>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={8} className={classes.textRight}>
-                                                    <span className={classes.downloadItemSpeed}>
-                                                        {
-                                                            `${conversionCapacityUtil(downloadItem.result.completedLength)} / ${conversionCapacityUtil(downloadItem.result.totalLength)}`
-                                                        }
-                                                    </span>
-                                                    <IconButton size="small">
-                                                        <DownloadIcon/>
-                                                    </IconButton>
+                                                <Grid item xs={12}>
+                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                        <Grid item xs={4} className={classes.downloadItemState}>
+                                                            {
+                                                                downloadItem.result.status === 'active' ?
+                                                                    `${conversionCapacityUtil(downloadItem.result.downloadSpeed)}/s` :
+                                                                    `0B/s`
+                                                            }
+                                                        </Grid>
+                                                        <Grid item xs={8} className={classes.textRight}>
+                                                            <span className={classes.downloadItemSpeed}>
+                                                                {`${conversionCapacityUtil(downloadItem.result.completedLength)} / ${conversionCapacityUtil(downloadItem.result.totalLength)}`}
+                                                            </span>
+                                                            <IconButton size="small" onClick={this.handleToggleTaskStatus(downloadItem.result.gid, downloadItem.result.status === 'active')}>
+                                                                {downloadItem.result.status === 'paused' ? <PlayArrowIcon/> : <PauseIcon/>}
+                                                            </IconButton>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <LinearProgress
+                                                        variant="determinate"
+                                                        value={((downloadItem.result.completedLength / downloadItem.result.totalLength) * 100) || 0}/>
                                                 </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <LinearProgress
-                                                variant="determinate"
-                                                value={(downloadItem.result.completedLength / downloadItem.result.totalLength) * 100}/>
-                                        </Grid>
-                                    </Grid>
-                                </ListItem>
-                                <Divider/>
-                            </div>
-                        ))
-                    }
-                </List>
+                                        </ListItem>
+                                        <Divider/>
+                                    </div>
+                                ))
+                        }
+                    </List>
+                </SwipeableViews>
             </div>
         );
     }

@@ -92,6 +92,66 @@
 		}
 		
 		/**
+		 * 暂停单个Aria2任务
+		 *
+		 * @param Request $request
+		 * @param $gid
+		 *
+		 * @return mixed
+		 */
+		public function pause_task( Request $request, $gid ) {
+			$this->id     = $request->user()->id;
+			$this->method = "aria2.pause";
+			
+			try {
+				$this->httpClient->post( $this->base_rpc_url, [
+					"json" => [
+						"id"      => $this->id,
+						"jsonrpc" => $this->jsonrpc,
+						"method"  => $this->method,
+						"params"  => [
+							"token:" . env( "ARIA2_SECRET" ),
+							$gid
+						]
+					]
+				] );
+			} catch ( Exception $exception ) {
+			}
+			
+			return $gid;
+		}
+		
+		/**
+		 * 重启暂停的Aria2任务
+		 *
+		 * @param Request $request
+		 * @param $gid
+		 *
+		 * @return mixed
+		 */
+		public function unpause_task( Request $request, $gid ) {
+			$this->id     = $request->user()->id;
+			$this->method = "aria2.unpause";
+			
+			try {
+				$this->httpClient->post( $this->base_rpc_url, [
+					"json" => [
+						"id"      => $this->id,
+						"jsonrpc" => $this->jsonrpc,
+						"method"  => $this->method,
+						"params"  => [
+							"token:" . env( "ARIA2_SECRET" ),
+							$gid
+						]
+					]
+				] );
+			} catch ( Exception $exception ) {
+			}
+			
+			return $gid;
+		}
+		
+		/**
 		 * 删除此用户aria2下载任务
 		 *
 		 * @param Request $request
@@ -132,12 +192,13 @@
 		 * Aria2 下载完成时将文件名,md5,size 录入resources表
 		 */
 		public function related_resource( RelatedResourceRequest $request ) {
-			$resource = new Resource();
+			$resource                = new Resource();
 			$resource->resource_name = $request->resource_name;
-			$resource->hash = $request->hash;
-			$resource->size = $request->size;
-			$resource->file = true;
-			$this->save_model($resource);
+			$resource->hash          = $request->hash;
+			$resource->size          = $request->size;
+			$resource->file          = true;
+			$this->save_model( $resource );
+			
 			return $resource;
 		}
 	}
