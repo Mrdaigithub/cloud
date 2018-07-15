@@ -195,23 +195,26 @@ class Aria2Controller extends ApiController
      */
     public function remove_task(Request $request, $gid)
     {
-        $this->id = $request->user()->id;
-        $this->method = "aria2.removeDownloadResult";
-        $user = User::find($request->user()->id);
-        $gids_array = explode(",", trim($user->gids));
-
-        $arr = array_flip($gids_array);
-        unset($arr[$gid]);
-        $gids_array = array_flip($arr);
-        $user->gids = implode(",", $gids_array);
-        $this->save_model($user);
+        $user = $request->user();
+        $this->id = $user->id;
 
         try {
             $this->httpClient->post($this->base_rpc_url, [
                 "json" => [
                     "id" => $this->id,
                     "jsonrpc" => $this->jsonrpc,
-                    "method" => $this->method,
+                    "method" => "aria2.remove",
+                    "params" => [
+                        "token:" . env("ARIA2_SECRET"),
+                        $gid
+                    ]
+                ]
+            ]);
+            $this->httpClient->post($this->base_rpc_url, [
+                "json" => [
+                    "id" => $this->id,
+                    "jsonrpc" => $this->jsonrpc,
+                    "method" => "aria2.removeDownloadResult",
                     "params" => [
                         "token:" . env("ARIA2_SECRET"),
                         $gid
@@ -220,6 +223,13 @@ class Aria2Controller extends ApiController
             ]);
         } catch (Exception $exception) {
         }
+
+        $resource_id = $user->resources()->where("gid", $gid)->first()["id"];
+        if ($resource_id) {
+            $user->resources()->detach($resource_id);
+            Resource::destroy($resource_id);
+        }
+        Redis::HDEL(env("REDIS_GID_UID"), $gid);
 
         return;
     }
