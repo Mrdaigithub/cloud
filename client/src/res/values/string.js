@@ -95,5 +95,6 @@ export const _offlineDownloadManager = '离线下载管理器';
 export const _createLinkTask = '新建链接任务';
 export const _createBtTask = '新建BT任务';
 export const _pleaseInputDownloadFileLink = '请填写要离线下载的文件链接';
-export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP 和磁力链接';
+// export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP 和磁力链接';
+export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP';
 export const _linkInvalid = '链接无效';

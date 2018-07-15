@@ -10,6 +10,7 @@
 	use Exception;
 	use GuzzleHttp\Client as httpClient;
 	use Illuminate\Http\Request;
+	use Illuminate\Support\Facades\Redis;
 	
 	class Aria2Controller extends ApiController {
 		private $httpClient;
@@ -34,8 +35,6 @@
 		public function add_uri( AddUriRequest $request ) {
 			$this->id     = $request->user()->id;
 			$this->method = "aria2.addUri";
-			$user         = User::find( $this->id );
-			$gids_array   = explode( ",", trim( $user->gids ) );
 			
 			$gid = json_decode( $this->httpClient->post( $this->base_rpc_url, [
 				"json" => [
@@ -49,11 +48,7 @@
 				]
 			] )->getBody()->getContents() )->result;
 			
-			if ( ! in_array( $gid, $gids_array ) ) {
-				array_push( $gids_array, $gid );
-				$user->gids = $user->gids ? implode( ",", $gids_array ) : $gid;
-			}
-			$this->save_model( $user );
+			Redis::SADD( $this->id, $gid );
 			
 			return [ "gid" => $gid ];
 		}
@@ -190,6 +185,10 @@
 		/**
 		 * 关联Aria2下载文件与resource
 		 * Aria2 下载完成时将文件名,md5,size 录入resources表
+		 *
+		 * @param RelatedResourceRequest $request
+		 *
+		 * @return Resource
 		 */
 		public function related_resource( RelatedResourceRequest $request ) {
 			$resource                = new Resource();

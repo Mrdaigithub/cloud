@@ -27,6 +27,9 @@ const styles = theme => ({
         '&>span': {
             fontSize: '1.2rem',
             color: '#333',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
         },
     },
     downloadItemAction: {

@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string("origin")->default("local");
             $table->boolean("is_admin")->default(false);
             $table->unsignedBigInteger("capacity")->default(5368709120)->nullable()->comment("byte");
-	        $table->string("gids")->default("");
             $table->timestamps();
         });
 

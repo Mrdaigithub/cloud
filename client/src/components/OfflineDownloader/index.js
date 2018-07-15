@@ -73,12 +73,12 @@ class OfflineDownloader extends Component {
                                     </ListItemIcon>
                                     <ListItemText inset primary={_createLinkTask}/>
                                 </ListItem>
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <TorrentIcon/>
-                                    </ListItemIcon>
-                                    <ListItemText inset primary={_createBtTask}/>
-                                </ListItem>
+                                {/*<ListItem button>*/}
+                                    {/*<ListItemIcon>*/}
+                                        {/*<TorrentIcon/>*/}
+                                    {/*</ListItemIcon>*/}
+                                    {/*<ListItemText inset primary={_createBtTask}/>*/}
+                                {/*</ListItem>*/}
                             </List>
                         </Grid>
                         <Grid item xs={12}>

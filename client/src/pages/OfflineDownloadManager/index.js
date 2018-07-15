@@ -42,7 +42,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Divider from '@material-ui/core/Divider';
 import styles from '../OfflineDownloadManager/styles';
-import { DownloadCompleteIcon, DownloadIcon, DownloadingIcon } from '../../components/Icons';
+import { DownloadCompleteIcon, DownloadingIcon } from '../../components/Icons';
 import { _downloadCompleted, _downloading } from '../../res/values/string';
 import { saveDownloadList } from '../../store/actions/downloadActions';
 import requester from '../../utils/requester';
@@ -105,7 +105,7 @@ class OfflineDownloadManager extends Component {
         const { classes } = this.props;
 
         return (
-            <div className={classes.normal}>
+            <div>
                 <Paper>
                     <Tabs
                         value={this.state.value}
@@ -130,13 +130,13 @@ class OfflineDownloadManager extends Component {
                                             <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
                                                 <Grid item xs={12}>
                                                     <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
-                                                        <Grid item xs={8}>
+                                                        <Grid item xs={10} sm={8}>
                                                             <ListItemText
                                                                 primary={downloadItem.result.files[0].path.split('/')
                                                                     .pop()}
                                                                 className={classes.downloadItemTitle}/>
                                                         </Grid>
-                                                        <Grid item xs={4} className={classes.textRight}>
+                                                        <Grid item xs={2} sm={4} className={classes.textRight}>
                                                             <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
                                                                 <DeleteIcon/>
                                                             </IconButton>
@@ -178,13 +178,13 @@ class OfflineDownloadManager extends Component {
                                             <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
                                                 <Grid item xs={12}>
                                                     <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
-                                                        <Grid item xs={8}>
+                                                        <Grid item xs={10} sm={8}>
                                                             <ListItemText
                                                                 primary={downloadItem.result.files[0].path.split('/')
                                                                     .pop()}
                                                                 className={classes.downloadItemTitle}/>
                                                         </Grid>
-                                                        <Grid item xs={4} className={classes.textRight}>
+                                                        <Grid item xs={2} sm={4} className={classes.textRight}>
                                                             <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
                                                                 <DeleteIcon/>
                                                             </IconButton>
