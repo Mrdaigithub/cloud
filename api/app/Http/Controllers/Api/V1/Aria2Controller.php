@@ -4,7 +4,7 @@
 	
 	use App\Http\Controllers\Api\ApiController;
 	use App\Http\Requests\Aria2Requests\AddUriRequest;
-	use App\Http\Requests\Aria2Requests\RelatedResourceRequest;
+	use App\Http\Requests\Aria2Requests\DownloadCompleteRequest;
 	use App\Models\Resource;
 	use App\Models\User;
 	use Exception;
@@ -23,6 +23,16 @@
 			$this->httpClient   = new httpClient;
 			$this->jsonrpc      = env( "ARIA2_VERSION" );
 			$this->base_rpc_url = env( "ARIA2_RPC_URL" );
+		}
+		
+		private function rename( $resource, $index ) {
+			if ( Resource::where( "path", $resource->path )
+			             ->where( "resource_name", $resource->resource_name )
+			             ->count() > 1 ) {
+				rename( $resource->resource_name, $index ++ );
+			} else {
+				return $resource->resource_name . " (" . $index . ")";
+			}
 		}
 		
 		/**
@@ -48,7 +58,7 @@
 				]
 			] )->getBody()->getContents() )->result;
 			
-			Redis::SADD( $this->id, $gid );
+			Redis::HSET( env( "REDIS_GID_UID" ), $gid, $this->id );
 			
 			return [ "gid" => $gid ];
 		}
@@ -183,20 +193,28 @@
 		}
 		
 		/**
-		 * 关联Aria2下载文件与resource
-		 * Aria2 下载完成时将文件名,md5,size 录入resources表
+		 * Aria2 下载完成时将文件名, md5, size, gid 录入resources表
 		 *
-		 * @param RelatedResourceRequest $request
+		 * @param DownloadCompleteRequest $request
 		 *
 		 * @return Resource
 		 */
-		public function related_resource( RelatedResourceRequest $request ) {
-			$resource                = new Resource();
-			$resource->resource_name = $request->resource_name;
-			$resource->hash          = $request->hash;
-			$resource->size          = $request->size;
-			$resource->file          = true;
-			$this->save_model( $resource );
+		public function download_complete( DownloadCompleteRequest $request, $gid ) {
+//			$resource                = new Resource();
+//			$resource->resource_name = $request->resource_name;
+//			$resource->hash          = $request->hash;
+//			$resource->gid           = $gid;
+//			$resource->size          = $request->size;
+//			$resource->file          = true;
+//			$this->save_model( $resource );
+//
+//			$user_id = Redis::HGET( env( "REDIS_GID_UID" ), $gid );
+//			User::find( $user_id )->resources()->attach( $resource->id );
+			
+			$resource = Resource::find( 16 );
+			
+			// 如果已经有同名文件则重命名
+			return $this->rename( $resource, 0 );
 			
 			return $resource;
 		}

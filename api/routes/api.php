@@ -45,7 +45,7 @@
 		     Route::get( "/login/code/github/{code}", "AuthController@githubCodeLogin" );
 		     Route::get( "resources/download/{secret}", "ResourceController@download" );
 		     Route::get( "resources/share/verify/{secret}", "ResourceController@verify_share_extract_code" );
-		     Route::post( "aria2/resource/related", "Aria2Controller@related_resource" );
+		     Route::post( "aria2/complete/{gid}", "Aria2Controller@download_complete" );
 		     Route::middleware( [ "api.auth", "auth:api" ] )->group( function () {
 			     Route::prefix( "resources" )->group( function () {
 				     Route::get( "link/{id}", "ResourceController@get_download_link" );

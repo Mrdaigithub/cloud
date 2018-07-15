@@ -28,7 +28,7 @@
 	
 	use Illuminate\Foundation\Http\FormRequest;
 	
-	class RelatedResourceRequest extends FormRequest {
+	class DownloadCompleteRequest extends FormRequest {
 		/**
 		 * Determine if the user is authorized to make this request.
 		 *
