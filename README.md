@@ -2,10 +2,13 @@
     <img src=".\android\app\src\main\res\drawable\logo_200dp.png">
     <p align="center">
         <p>A simple cloud project</p>
-        <!-- <a href="#"> -->
-            <!-- <b>Explore Demos »</b> -->
-        <!-- </a> -->
     </p>
+    <div>
+         <img src="./static/screencapture1.png">
+         <img src="./static/screencapture2.png">
+         <img src="./static/screencapture3.png">
+         <img src="./static/screencapture4.png">
+    </div>
 </div>
 
 ## Contents
