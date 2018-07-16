@@ -50,6 +50,7 @@ import Setting from '../../pages/Setting';
 import styles from './styles';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import { _myCloudDisk, _offlineDownloadManager, _sum, _trashCan, _unlimited, _used } from '../../res/values/string';
+import { conversionCapacityUtil } from '../../utils/assist';
 
 
 class PageHeaderLayout extends Component {
@@ -153,8 +154,8 @@ class PageHeaderLayout extends Component {
                         <List>
                             <ListItem>
                                 <div>
-                                    {_used}{(used / (1024 ** 3)).toFixed(3)}GB，
-                                    {capacity ? `${_sum}${(capacity / (1024 ** 3)).toFixed(3)}GB` : _unlimited}
+                                    {_used}{conversionCapacityUtil(used)}，
+                                    {capacity ? `${_sum}${conversionCapacityUtil(capacity)}` : _unlimited}
                                 </div>
                             </ListItem>
                         </List>

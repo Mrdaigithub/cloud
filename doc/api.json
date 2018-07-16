@@ -1,7 +1,7 @@
 {
 	"_type": "export",
 	"__export_format": 3,
-	"__export_date": "2018-07-14T06:14:35.562Z",
+	"__export_date": "2018-07-16T06:16:44.160Z",
 	"__export_source": "insomnia.desktop.app:v5.16.6",
 	"resources": [
 		{
@@ -146,7 +146,7 @@
 			},
 			"body": {
 				"mimeType": "application/json",
-				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"aria2.pause\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"2d88d5ad259093db\"\n\t]\n}"
+				"text": "{\n\t\"jsonrpc\": \"2.0\",\n\t\"method\": \"aria2.tellStatus\",\n\t\"id\": 1,\n\t\"params\": [\n\t\t\"token:cloud\",\n\t\t\"2d88d5ad259093db\"\n\t]\n}"
 			},
 			"created": 1523371602231,
 			"description": "| 错误码 | 错误解释                     |\n|--------|------------------------------|\n| 400000 | 参数缺失                     |\n| 400001 | 参数字符过短                 |\n| 400002 | 参数字符过长                 |\n| 400003 | 请求参数存在非法字符          |\n| 400004 | 请求参数格式错误              |\n| 400005 | 请求参数不存在于数据库        |\n| 400006 | 请求参数已存在于数据库        |\n| 401000 | 密码错误                     |\n| 401001 | 无效的的access_token         |\n| 401002 | 无效的的refresh_token        |\n| 403000 | 权限不足                     |\n| 403001 | 提取码不正确                 |\n| 409000 | 上传的资源已存在于服务器      |\n| 409001 | 请求的资源不存在              |\n| 409002 | 此用户的存储容量不足          |\n| 500000 | 服务器错误                   |\n| 500001 | 服务器资源保存失败            |\n| 504000 | 资源下载链接失效              |",
@@ -160,7 +160,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523371602231,
 			"method": "POST",
-			"modified": 1531536904304,
+			"modified": 1531551342969,
 			"name": "全局错误状态码",
 			"parameters": [],
 			"parentId": "wrk_21acc56e4b4344609843d7b33d22fd15",
@@ -313,7 +313,7 @@
 		{
 			"_id": "req_2be2ce6e7d4446a694bd1e6cf93897b9",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImExOTIxNjIyZWNiMWYzMTdkNjk2MzE0YjZiMTk3YTI3ODhiNGEzZGRhMDZiNTFhYjVlZjhkZDQ5Mzc3NTI1MDZiOGY5ZTI1NzRkZmQyZDQzIn0.eyJhdWQiOiIxIiwianRpIjoiYTE5MjE2MjJlY2IxZjMxN2Q2OTYzMTRiNmIxOTdhMjc4OGI0YTNkZGEwNmI1MWFiNWVmOGRkNDkzNzc1MjUwNmI4ZjllMjU3NGRmZDJkNDMiLCJpYXQiOjE1MzA0MTM3MTQsIm5iZiI6MTUzMDQxMzcxNCwiZXhwIjoxNTMwNTkzNzE0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.L7syhQzpYJuplS7i4-LXZ-dvpMAw3hg_YMpRZFsnZXMmQehRFZ3rlIgk3KzdiutC8TE8dy8ogXNgK61qgNIHUEx8m5b5_2SGFUQlx9sGUdMH0uxmultwTPHqCMYv5flSd8LpXD72zejxVWq9TNid_2QjRDVe8jao0aBKyLANuFkwYYSBk7W6I5wySz8Z7-elPQwB9q2ooWTu7QgQ3-6Jv5HZoJe0w82evgPRmqchTbtVqGY5RsNAknLRezVTvdolVGb3AzzsziDZ-hMWw8bP1msGILw7lUsPOm0NGF-zUhNbFE6LHL1k40gZkifsOLLpIwX6F4oNLaGrJF2Y-eOS7Kq18LWbn0aA5kyoAaQ3Xtkw_FctJTOiREaPbO1SoEshS0eeM0B14ekwN2xDbhLNKNp4DwyIzdV1bFZAiCUHkgLmZexOLmp0gomQxT6nLw2bEJXJrghwKuv8y0gSegw5idlJdVu_DLB3bDqc6VHcOHEsnja-gMPHi5M4wyJiSqsFKEvfv_MNFrVdn7PhadaNFo8B4GAoI47J-9F07TntrUcS43N3DT2YV7tn_lXXZvoFYrLnhmBBP5xgZdra172flVBOhxlvpoIQ7eslm1-2ZYbiEuU8lp73yoBHtPAcObzPslrIg8xArwCAk45fawrrBkpSkP4mXX5OVsuL1ceDk30",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE5OWY0YmM4OTA1Nzk1ZDk4ZmUzOGQ5MzQzYmI4MzFhZTcxMTM4ODk5ZDBmZTlhYzIyMjljNWU2OTQ1Y2UxYTAyMDAwM2Q5YTVkNWE5MjcxIn0.eyJhdWQiOiIxIiwianRpIjoiYTk5ZjRiYzg5MDU3OTVkOThmZTM4ZDkzNDNiYjgzMWFlNzExMzg4OTlkMGZlOWFjMjIyOWM1ZTY5NDVjZTFhMDIwMDAzZDlhNWQ1YTkyNzEiLCJpYXQiOjE1MzE3MDk5NDQsIm5iZiI6MTUzMTcwOTk0NCwiZXhwIjoxNTMxODg5OTQ0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.qwdt_qu0tEt9VUzLlo9ns69gMz2ozKLhdit5Uuq9Paa9fJV2kfm-nrdx6-Kw_EZJe4N4PVxozt0vjfwGit0K3res0ZdUv-6hYBAXh-xXBhPWD887G9z0DTw_obVR1LsizZ_rZlP8MRPf5Lt42IiCMKfJlDoXWnlLefCaDEgzuw4cB0lLlqF6pfkB230RiwsgJlJzHXv9AXp7bIOA46ICXhXoB5Ud9pzz8ceuWQAA626QqufsrJgvPK_dEj1rTNBB1TFSQs1CT6GT5MoIhBXjfbthQY0n6erE9cYLtsMEbzbzreLuNPpILeuERBgjhJ-jSvCbt_wMKaUTzngXCXh9Rm75eWRzFJYW6qcqw0jiotEg8XwoBMXl_1u6c0Bo1NdKCjWLeNPD_eRZjSUMGHML0v-nXF5owwqHShwEhXTskD_Obkc7G5eV9zT-FcZeNQabdpzBT5kVSOnY2cMzXzg_PZSwgHpOuKlPBjVd0ltUAkSaJKLZgSoRSfrXxewPvQ7P_fZaoSLrt27oZF7u_qfmCqazMlqG0DPuPzryIkHkZ-U6OMrp2RhjueXZDyMfmMQgj2AHMUpd9FI6ICJVncx9skoZ8t3GCVSzrlu3XMDFV3l6k43ILIUViZUyQPtpDbN5hJxBsvfuGjmefVMSbG7hL0IPVPD0JNLL3B6wxujCM6g",
 				"type": "bearer"
 			},
 			"body": {},
@@ -323,7 +323,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1516327511396,
 			"method": "GET",
-			"modified": 1530413781037,
+			"modified": 1531712792485,
 			"name": "通过ID获取单个用户",
 			"parameters": [],
 			"parentId": "fld_6f02ddb89e2c4bd38bab2294c3ded78e",
@@ -552,7 +552,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1523346334787,
 			"method": "POST",
-			"modified": 1530411641514,
+			"modified": 1531644173553,
 			"name": "登录",
 			"parameters": [],
 			"parentId": "fld_5bc878e39e7844cb8dc4d4dff75759e6",
@@ -614,12 +614,12 @@
 			},
 			"body": {},
 			"created": 1523763967653,
-			"description": "### 简要描述 :\n\n- 获取资源列表接口\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n[\n\t{\n\t\t\"id\": 103,\n\t\t\"resource_name\": \"123\",\n\t\t\"size\": 0,\n\t\t\"file\": false,\n\t\t\"trashed\": false,\n\t\t\"created_at\": \"2018-05-04T15:55:00+08:00\",\n\t\t\"updated_at\": \"2018-05-04T15:56:23+08:00\",\n\t\t\"path\": \"0\",\n\t\t\"trash_path\": \"0\"\n\t}\n]\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明           |\n| ------------- | ------- | ------------ |\n| id            | long    | 资源ID         |\n| resource_name | String  | 资源名          |\n| size          | String  | 资源容量         |\n| file          | Boolean | 是否为文件        |\n| trashed       | Boolean | 是否放入回收站      |\n| path          | String  | 资源所在路径       |\n| trash_path    | String  | 被软删除的回收站资源路径 |\n| created_at    | String  | 资源创建时间       |\n| updated_at    | String  | 资源更新时间       |\n",
+			"description": "### 简要描述 :\n\n- 获取资源列表接口\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/resources\n\n### 请求方式 :\n\n- GET\n\n### 参数 :\n\n| 参数名 | 必选  | 类型  | 说明  |\n| --- | --- | --- | --- |\n|     |     |     |     |\n\n### 返回示例 :\n\n```json\n[\n\t{\n    \"id\": 57,\n    \"resource_name\": \"index(3).html\",\n    \"gid\": \"20cf9bc888835fb4\",\n    \"size\": 1465467,\n    \"file\": true,\n    \"trashed\": false,\n    \"created_at\": \"2018-07-16 11:58:19\",\n    \"updated_at\": \"2018-07-16 11:58:19\",\n    \"path\": \"0\",\n    \"trash_path\": \"0\"\n}\n]\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明              |\n| ------------- | ------- | --------------- |\n| id            | long    | 资源ID            |\n| resource_name | String  | 资源名             |\n| gid           | String  | 使用aria2下载携带的唯一码 |\n| size          | String  | 资源容量            |\n| file          | Boolean | 是否为文件           |\n| trashed       | Boolean | 是否放入回收站         |\n| path          | String  | 资源所在路径          |\n| trash_path    | String  | 被软删除的回收站资源路径    |\n| created_at    | String  | 资源创建时间          |\n| updated_at    | String  | 资源更新时间          |\n",
 			"headers": [],
 			"isPrivate": false,
 			"metaSortKey": -1523763967653,
 			"method": "GET",
-			"modified": 1530416852472,
+			"modified": 1531721649517,
 			"name": "获取资源列表",
 			"parameters": [],
 			"parentId": "fld_a8e4d9161a774f7e9a74d9c588ae46a3",
@@ -804,7 +804,7 @@
 		{
 			"_id": "req_f5714ae7ee5246e6a27675f338a50616",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ3NzZjNzk1MzFjNGJkMjhhMjI4YTE1NTQ4YjM1YjQyNDBmZGFjOGYyNjBjYWIzNzg3NmQ5YmM0OGMxOTE3Zjc4OTNjMThlYmQ2NzBiNTc4In0.eyJhdWQiOiIxIiwianRpIjoiZDc3NmM3OTUzMWM0YmQyOGEyMjhhMTU1NDhiMzViNDI0MGZkYWM4ZjI2MGNhYjM3ODc2ZDliYzQ4YzE5MTdmNzg5M2MxOGViZDY3MGI1NzgiLCJpYXQiOjE1MzExODkxNTgsIm5iZiI6MTUzMTE4OTE1OCwiZXhwIjoxNTMxMzY5MTU4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.FSaEsfgCkqa6m8Y2PhGpKPeKQzm6BZC5Rkw2_0ArSXvR-2nx9cN2gXGdtYYvVxnJKjw89V3Yt3mHRL2rXnvM357Y-Ja7dInHRC-9NOQQrBU_BDvjGvRNmK6_AOomEyytVS6Y4UbpT9WEj_GD9RNlhgmjMPqlbljhqNv1799SJ9nOs3vrtNwl70vTDhjmNQmlXSfkYp6cIcTqB2mWKjGj63GSBdB-S8Jdd_BcHf5tA4h_WQaIje7yPJD49lgDAOJJilHSH3vEAhPLIyAq1AaTNyazFY97INPbFqIZ005yBJ6sJtTH0sHBC2h80XuSwEY5LkJVw-FnJ2dSPXRBR2BzFkCK1Z0dawUAXfBfVHw87ofMiCLuCNo_uqEpkOksG_c7Uec32bZMOzYNMizXiWRWubWlxYtGMOyvAFeUSMw7aZL9vzQjXBEnpIO9L5NkxLOOE1cqOxZMC7LabkOPIxjYmbPprElDZ0oF9ZGmNUDn4rPMP51qw4xy96qn-GReBxIx_h9F2QpnHa6lo5gmS50imk0ufy3GZho2txWQJ7DsDLwVd_aqIkQsfyZILb3hAYIziaNILvlpva5FrXgzUiuVWl9TibrFz_ZDtgM0MFXOiMHEZJI-NMKwTRbk7A3-uollB0G6CwxopR9YfOCWLk_JX_G8ItdmEMHlxOKfJ2AWM1k",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBlOWJkYjU1OWEzYWM5NTY2MjVkNmQzOWUwYmEwNWUzYjA3NjcwZjIwODMwMjU2YTUyNzdmYmRjY2Y2ZDg0NTFhMjgzMjYxMjgyOGVhZTE2In0.eyJhdWQiOiIxIiwianRpIjoiMGU5YmRiNTU5YTNhYzk1NjYyNWQ2ZDM5ZTBiYTA1ZTNiMDc2NzBmMjA4MzAyNTZhNTI3N2ZiZGNjZjZkODQ1MWEyODMyNjEyODI4ZWFlMTYiLCJpYXQiOjE1MzE2NDQxNzUsIm5iZiI6MTUzMTY0NDE3NSwiZXhwIjoxNTMxODI0MTc1LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.bTBlRbal15qpxV7G1OFwhlAWtna9QGjFZZHqWki3XWewpSK9i5PAI0Jgz6Etxju9aG6Rr0Wbej5aw73Xe3XCl3LkgFGMM17RrMnS44bP4LldtfLX0jpyRcgaqClt3KCZmO9eoIpUpN2EHSzMDPn7V3Gu0USY3y0rAGwCY2s2tw782b7gwGVD6iZUrdwNyGltqq-dRnqjz1i6BuxNEeM0BkGpA5-Wd3KG9bLJ8IG8mhlx0CFu8yc-k21NTemks1D8t--fGU3WdLd8KhPp0ZixAxvgBgz7GJxaykzPNBkq0Pf0UpfSofCzZs7k2MN7N9boQ6T2i1-6qo8KiX2UyKA2D__26_sN7NqCGcQf9-_0G5Sqfd87-2lVBMhkiByUKtsb8kAURYZGCHHULJX-vB2FQL36Ti4d_9u3Ran_eTYRAdY0nOr5LNy7AbMuErPSMoAjIluhvmJjlDkptFP8audeL0U1So2_Umv2tUF2ioRYh4zFENaM7MZ0bHuG-PaRCEYAKB3pkrtUajcSImEBOOOayl-ccIlHyFV7kPlZPA0MIQgOZU8ysmneqkQ5Ke6vllUWm3OIi116U6PvJPtaXBbKhCbCqVnGuBVRcxH8NF0EY_MJwmyiDtghncxyG2N2dqfO0PWDX75q4RXNXYPdT2qJizveRQC_mDZy0fqrV02Pn7g",
 				"type": "bearer"
 			},
 			"body": {
@@ -814,7 +814,7 @@
 						"disabled": false,
 						"id": "pair_7035b85b8dc747019a8aefba59e6704a",
 						"name": "uri",
-						"value": "https://fra-de-ping.vultr.com/vultr.com.100MB.bin"
+						"value": "http://120.fc120.org/"
 					}
 				]
 			},
@@ -830,7 +830,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1531018024062,
 			"method": "POST",
-			"modified": 1531212883440,
+			"modified": 1531644858320,
 			"name": "添加Aria2下载任务",
 			"parameters": [],
 			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
@@ -845,7 +845,7 @@
 		{
 			"_id": "req_8464cf5cd7d048589209c6496613f489",
 			"authentication": {
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjczNWM4NTVkYjE0Yzk0ZjI4ZGFlZmRhYTg0NGFmN2ZjMGJlYTcyOGQ5ZjA3MTE0ZDdlMTJkMzY0YzU3NjQ3ZWU1N2ZmZGU4ODE3ZTk5YTkxIn0.eyJhdWQiOiIxIiwianRpIjoiNzM1Yzg1NWRiMTRjOTRmMjhkYWVmZGFhODQ0YWY3ZmMwYmVhNzI4ZDlmMDcxMTRkN2UxMmQzNjRjNTc2NDdlZTU3ZmZkZTg4MTdlOTlhOTEiLCJpYXQiOjE1MzEyMDU5NTEsIm5iZiI6MTUzMTIwNTk1MSwiZXhwIjoxNTMxMzg1OTUxLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Z8ur_PEKlgi42DxEeOsozpL5v2iZY2IBZfmBgmKQeXJBALNSguv4fYT7KdLYvuWLD37QcwVxUXBFLQaPzVg7CTRP9IrWrv3KXrGkNtptwvgiCe7usxwz2gpLxOMgZvtXcEd3ksak5R1u8_jLU5IGWvuXzTKcyxoqD2nwM5Z6PEUfkhslTu4C3NCBC_nfIhkRROUv3UC4vGr6zbpN4jZahBZex0wNtYwxrcx09CO9z01Kyg_kMQdiXm07D_xDLAviUQfYNj4yOf_Aq0wg6KADkdkRVXCKAj_GX5a61UKiC3D5kpI_8V8FjlabGmJG2GELjCJsbYfmZ4RHtqQ0lkC344TDJAoWg_TAPNoqUbboBpHxdEdWhDpAeNF6ziAOU59W8lYG209HI1s7huBHIu6vCl_t90PX2WxRWOompgB9z20t--DHeGKln4qetkqQCG3U4kf9kp6Voezs0p3ZSbevee1SnDaY22_OSzxARTYxPfYP3uF7Q7ORzEa9GCu2rRO3NYCypz8_AX7T8igvb1ID5s9AwOifkemWbN3Fwt31zraucb5o6VymdS8DkPYw9cgMJvaOoniLyzEQeLVz_-gnz68s-1m8MXgGmppYlHO7E11euym_o8ivxE0Qagfx9KEymOlXFJ5zIwP2TgWo54NLruG3Vy8rjxqOMbZs0eoGCjk",
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjAzOWZlNmNlZDJlMzVmMTg1MTFlMDIxYzMxOWViYmJlNWUzOTlhNGJmN2M3NzQwYWIyMGFjYTEwZGMyYTY4ZmM2YzhlYWE5YWY4ZTk2NDliIn0.eyJhdWQiOiIxIiwianRpIjoiMDM5ZmU2Y2VkMmUzNWYxODUxMWUwMjFjMzE5ZWJiYmU1ZTM5OWE0YmY3Yzc3NDBhYjIwYWNhMTBkYzJhNjhmYzZjOGVhYTlhZjhlOTY0OWIiLCJpYXQiOjE1MzE3MDMxNjIsIm5iZiI6MTUzMTcwMzE2MiwiZXhwIjoxNTMxODgzMTYyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EJPraDgFeAKgiqdRuZ8Y4sXi4ItqOnCWBAa7seb728FIcZGFUzxLb2ZhmzaLcABTdbWuWji3LR6fY3FIG6iInr7uAQbPsMsEnOl1PF-zx2ysIiJft45V3cy-nmSUXOlsYYi32QQIYkIEyHKS1QzL4WrG_aoTkXPwUavDHXLIlZFw3x5FBicKik-Ou1Gei3uObqSWaze0_GWjegIVkfo2sr7UmlARZ8EkJ8o0gQXIjDHqyv2SZfHKuhvVwIwkFU26NqOff1so5vUSVTlQNkzWH-bJEt0jG-ZNb6GWNdGTJaI67h7nvkPV09Pk6HTiPQ9ybmUUCskFlZHqQJNKBlvrVIcvxytlrlk-y0Y-h-HKMSv5kB_wk7SdGohRLauPiTOGuCEXa5WDGRCspQZBETlvIYH3ujXMNP2Df5G0S2VVtziwouWDG-1PmR-dItf5tDAfw0VdLLKG-O81tHclc-YK7exZCbA_NEFK5G43wgiungC5VzSqc35-DEHVK3rAbhlcS76-c803h8vQSW9jCUEp-3SJHgyGPSBS76msQPl_yINJflJv3M8aY_tkVbXG6Prj2LFhHGiovYZVXsM3Q4Upj4ocKDstzYWrD_ADjiGxLQ37t9JfMkPGYOZ8poe33e3gnAYfZ2jaK6og9PlzGEtS1tlVcauuW-vLIM5cVUzo1wY",
 				"type": "bearer"
 			},
 			"body": {},
@@ -855,7 +855,7 @@
 			"isPrivate": false,
 			"metaSortKey": -1531018024012,
 			"method": "GET",
-			"modified": 1531213877393,
+			"modified": 1531703187938,
 			"name": "查询当前用户的aria2下载任务状态",
 			"parameters": [],
 			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
@@ -902,7 +902,7 @@
 						"disabled": false,
 						"id": "pair_2514ff34a62f42329c963c595a58c3f1",
 						"name": "resource_name",
-						"value": "rname"
+						"value": "index.html"
 					},
 					{
 						"id": "pair_dadea2c91f704cb59d0e8c554df56b04",
@@ -917,7 +917,7 @@
 				]
 			},
 			"created": 1531453005099,
-			"description": "",
+			"description": "### 简要描述 :\n\n- Aria2下载完成录入此resource并与user关联\n\n### 请求URL :\n\n- https://api.mrdaisite.com/api/v1/aria2/complete/{gid}\n\n### 请求方式 :\n\n- POST\n\n### 参数 :\n\n| 参数名           | 必选  | 类型     | 说明     |\n| ------------- | --- | ------ | ------ |\n| resource_name | 是   | String | 资源名称   |\n| hash          | 是   | String | 资源MD5  |\n| size          | 是   | long   | 资源容量大小 |\n\n### 返回示例 :\n\n```json\n{\n    \"id\": 57,\n    \"resource_name\": \"index(3).html\",\n    \"gid\": \"20cf9bc888835fb4\",\n    \"size\": 1465467,\n    \"file\": true,\n    \"trashed\": false,\n    \"created_at\": \"2018-07-16 11:58:19\",\n    \"updated_at\": \"2018-07-16 11:58:19\",\n    \"path\": \"0\",\n    \"trash_path\": \"0\"\n}\n```\n\n### 返回参数说明 :\n\n| 参数名           | 类型      | 说明              |\n| ------------- | ------- | --------------- |\n| id            | long    | 资源ID            |\n| resource_name | String  | 资源名             |\n| gid           | String  | 使用aria2下载携带的唯一码 |\n| size          | String  | 资源容量            |\n| file          | Boolean | 是否为文件           |\n| trashed       | Boolean | 是否放入回收站         |\n| path          | String  | 资源所在路径          |\n| trash_path    | String  | 被软删除的回收站资源路径    |\n| created_at    | String  | 资源创建时间          |\n| updated_at    | String  | 资源更新时间          |\n",
 			"headers": [
 				{
 					"id": "pair_d782085911fa40a2a11ccda0653286e7",
@@ -928,8 +928,8 @@
 			"isPrivate": false,
 			"metaSortKey": -1531018024037,
 			"method": "POST",
-			"modified": 1531453404050,
-			"name": "关联Aria2下载文件与resource",
+			"modified": 1531721564093,
+			"name": "Aria2下载完成录入此resource并与user关联",
 			"parameters": [],
 			"parentId": "fld_a8f1633eb61944d8a32bfbd9f47dcc18",
 			"settingDisableRenderRequestBody": false,
@@ -937,7 +937,7 @@
 			"settingRebuildPath": true,
 			"settingSendCookies": true,
 			"settingStoreCookies": true,
-			"url": "https://api.mrdaisite.com/api/v1/aria2/resource/related",
+			"url": "https://api.mrdaisite.com/api/v1/aria2/complete/20cf9bc888835fb4",
 			"_type": "request"
 		},
 		{
