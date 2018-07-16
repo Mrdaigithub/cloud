@@ -38,9 +38,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Divider from '@material-ui/core/Divider';
 import LinkIcon from '@material-ui/icons/Link';
-import { TorrentIcon } from '../Icons';
 import Transition from '../Transition';
-import { _createLinkTask, _offlineDownload, _createBtTask, _cancel } from '../../res/values/string';
+import { _createLinkTask, _offlineDownload, _cancel } from '../../res/values/string';
 import styles from '../OfflineDownloader/styles';
 
 class OfflineDownloader extends Component {

@@ -96,13 +96,10 @@ class CloudDrive extends Component {
 
     async componentDidMount() {
         const { routing } = this.props;
-        if (!this.props.resources) {
-            this.props.fetchResources(() => {
-                this.getResourceList(url2path(routing.location.pathname));
-            });
-        } else {
+        this.props.fetchResources(() => {
             this.getResourceList(url2path(routing.location.pathname));
-        }
+            this.props.fetchOneself();
+        });
     }
 
     /**
