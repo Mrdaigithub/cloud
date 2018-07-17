@@ -98,16 +98,15 @@ export const path2url = (path) => {
  * @returns {string}
  */
 export const conversionCapacityUtil = (fileByte) => {
-    const fileSizeByte = fileByte;
+    const capacityUtilName = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
     let fileSizeMsg = '';
-    if (fileSizeByte < 1048576) {
-        fileSizeMsg = `${(fileSizeByte / 1024).toFixed(2)}KB`;
-    } else if (fileSizeByte >= 1048576 && fileSizeByte < 1073741824) {
-        fileSizeMsg = `${(fileSizeByte / (1024 ** 2)).toFixed(2)}MB`;
-    } else if (fileSizeByte >= 1073741824 && fileSizeByte < 1099511627776) {
-        fileSizeMsg = `${(fileSizeByte / (1024 * 3)).toFixed(2)}GB`;
-    } else {
-        fileSizeMsg = `${(fileSizeByte / (1024 * 4)).toFixed(2)}TB`;
+    for (let i = 0; i < capacityUtilName.length; i += 1) {
+        if (fileByte >= (1024 ** i) && fileByte < (1024 ** (i + 1))) {
+            fileSizeMsg = i === 0 ?
+                `${fileByte}${capacityUtilName[i]}` :
+                `${(fileByte / (1024 ** i)).toFixed(2)}${capacityUtilName[i]}`;
+            return fileSizeMsg;
+        }
     }
-    return fileSizeMsg;
+    return '∞';
 };
