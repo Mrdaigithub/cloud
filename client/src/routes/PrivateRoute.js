@@ -41,28 +41,26 @@ const PrivateRoute = () => (
                 {
                     (sessionStorage.accessToken && sessionStorage.refreshToken) ?
                         (
-                            <div>
-                                <TransitionGroup>
-                                    <CSSTransition
-                                        classNames="fade"
-                                        timeout={300}
-                                        key={location.key}>
-                                        <Switch location={location}>
-                                            <Route exact path="/search" component={Search}/>
-                                            <Route
-                                                location={location}
-                                                key={location.key}
-                                                path="/cloud-drive/0"
-                                                component={CloudDrive}/>
-                                            <Route exact path="/trash" component={Trash}/>
-                                            <Route exact path="/personnel/groups" component={Groups}/>
-                                            <Route exact path="/download/offline/create" component={CreateLinkOfflineDownload}/>
-                                            <Route exact path="/download/offline/manager" component={OfflineDownloadManager}/>
-                                            <Route component={NotFound}/>
-                                        </Switch>
-                                    </CSSTransition>
-                                </TransitionGroup>
-                            </div>
+                            <TransitionGroup style={{ height: '100%' }}>
+                                <CSSTransition
+                                    classNames="fade"
+                                    timeout={300}
+                                    key={location.key}>
+                                    <Switch location={location}>
+                                        <Route exact path="/search" component={Search}/>
+                                        <Route
+                                            location={location}
+                                            key={location.key}
+                                            path="/cloud-drive/0"
+                                            component={CloudDrive}/>
+                                        <Route exact path="/trash" component={Trash}/>
+                                        <Route exact path="/personnel/groups" component={Groups}/>
+                                        <Route exact path="/download/offline/create" component={CreateLinkOfflineDownload}/>
+                                        <Route exact path="/download/offline/manager" component={OfflineDownloadManager}/>
+                                        <Route component={NotFound}/>
+                                    </Switch>
+                                </CSSTransition>
+                            </TransitionGroup>
                         ) :
                         (<Redirect to="/login"/>)
                 }

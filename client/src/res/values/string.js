@@ -98,3 +98,4 @@ export const _pleaseInputDownloadFileLink = '请填写要离线下载的文件�
 // export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP 和磁力链接';
 export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP';
 export const _linkInvalid = '链接无效';
+export const _noData = '暂无数据';

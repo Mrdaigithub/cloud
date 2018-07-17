@@ -23,6 +23,9 @@
  */
 
 const styles = theme => ({
+    root: {
+        height: '100%',
+    },
     normal: {
         height: '100vh',
     },
@@ -61,9 +64,10 @@ const styles = theme => ({
         color: '#fff',
     },
     content: {
-        paddingTop: '60px',
+        paddingTop: '66px',
         boxSizing: 'border-box',
         height: '100vh',
+        overflow: 'hidden',
     },
 });
 

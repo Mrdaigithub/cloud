@@ -418,13 +418,6 @@ class CloudDrive extends Component {
         this.getResourceList(url2path(newMovePath), true);
     };
 
-    handleBackMovePath = () => () => {
-        if (this.state.movePath.length === 1 && this.state.movePath.split('/')[0] === '0') return;
-        const newMovePath = movePath.back(this.state.movePath);
-        this.setState({ movePath: newMovePath });
-        this.getResourceList(url2path(newMovePath), true);
-    };
-
     handleMoveResource = () => async () => {
         const { selected } = this.state;
         if (!selected.length) return;
@@ -493,7 +486,7 @@ class CloudDrive extends Component {
             uploadValue,
         } = this.state;
         return (
-            <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
+            <div className={classes.root}>
                 <SpeedDial>
                     <SpeedDialItem>
                         <input
@@ -571,7 +564,7 @@ class CloudDrive extends Component {
                         </label>
                     </SpeedDialItem>
                 </SpeedDial>
-                <div id="resourceContent">
+                <div id="resourceContent" className={classes.root}>
                     <ResourceList
                         resourceList={resourceList}
                         ItemIcon={Checkbox}
@@ -634,7 +627,6 @@ class CloudDrive extends Component {
                     <div className={classes.resourceList}>
                         <ResourceList
                             resourceList={moveResourceList}
-                            onBack={this.handleBackMovePath}
                             onClickResource={this.handleClickMoveDir()}/>
                     </div>
                 </Dialog>

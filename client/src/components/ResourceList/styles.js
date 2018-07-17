@@ -23,7 +23,9 @@
  */
 
 const styles = theme => ({
-    root: {},
+    root: {
+        height: '100%',
+    },
     fullScreen: {
         width: '100vw',
         height: '100vh',
@@ -34,6 +36,14 @@ const styles = theme => ({
     },
     textCenter: {
         textAlign: 'center',
+    },
+    resourceList: {
+        overflowY: 'scroll',
+        height: '100%',
+        padding: 0,
+    },
+    resourceListBlank: {
+        minHeight: '85vh',
     },
     resourceListIcon: {
         marginRight: 0,
@@ -114,8 +124,7 @@ const styles = theme => ({
         height: '85vh',
         backgroundColor: '#fafafa',
     },
-    videoPreview: {
-    },
+    videoPreview: {},
 });
 
 export default styles;

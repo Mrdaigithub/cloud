@@ -23,6 +23,12 @@
  */
 
 const styles = theme => ({
+    root: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+    },
     downloadItemTitle: {
         '&>span': {
             fontSize: '1.2rem',

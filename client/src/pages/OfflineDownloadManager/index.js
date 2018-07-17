@@ -105,7 +105,7 @@ class OfflineDownloadManager extends Component {
         const { classes } = this.props;
 
         return (
-            <div>
+            <div className={classes.root}>
                 <Paper>
                     <Tabs
                         value={this.state.value}
@@ -119,6 +119,7 @@ class OfflineDownloadManager extends Component {
                     </Tabs>
                 </Paper>
                 <SwipeableViews
+                    className={classes.swipeableViews}
                     index={this.state.value}
                     onChangeIndex={this.handleChangeIndex}>
                     <List style={{ padding: 8 }}>
