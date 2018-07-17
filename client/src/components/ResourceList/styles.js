@@ -73,10 +73,9 @@ const styles = theme => ({
         flex: 1,
     },
     ResourceDetail: {
+        maxWidth: '85vw',
         backgroundColor: '#ededed',
         height: '100vh',
-    },
-    ResourceDetailCard: {
         boxShadow: 'none',
     },
     ResourceDetailCardTitle: {
@@ -89,17 +88,10 @@ const styles = theme => ({
     },
     ResourceDetailCardContentText: {
         extend: 'nowrap',
-        width: '30vw',
         fontSize: '12px',
-        padding: '6px 0',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-
     },
     ResourceDetailCardContentRightText: {
         extend: 'ResourceDetailCardContentText',
-        paddingLeft: '50px',
         color: '#7d7d7d',
     },
     preview: {
@@ -125,6 +117,9 @@ const styles = theme => ({
         backgroundColor: '#fafafa',
     },
     videoPreview: {},
+    unablePreviewText: {
+        color: 'rgba(255,255,255,.8)',
+    },
 });
 
 export default styles;

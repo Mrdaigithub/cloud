@@ -35,7 +35,7 @@ import Grid from '@material-ui/core/Grid';
 import ResourceTypeIcon from '../ResourceTypeIconSwitcher/index';
 import { FolderIcon } from '../Icons';
 import styles from './styles';
-import { _directory } from '../../res/values/string';
+import { _directory, _fileType } from '../../res/values/string';
 
 
 const ResourceDetail = props => (
@@ -43,55 +43,66 @@ const ResourceDetail = props => (
         anchor="right"
         open={props.open}
         onClose={props.onClose}>
-        <div className={props.classes.ResourceDetail}>
-            <Card
-                className={props.classes.ResourceDetailCard}
-                tabIndex={0}
-                role="button">
-                <CardHeader
-                    avatar={props.selectedResource.resourceMime === _directory ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceMime}/>}
-                    title={
-                        <Grid item xs={12}>
-                            <h2 className={props.classes.ResourceDetailCardTitle}>{props.selectedResource.resourceName}</h2>
-                        </Grid>
-                    }/>
-                <Divider/>
-                <CardContent>
-                    <Typography
-                        component="p"
-                        className={props.classes.ResourceDetailCardContentText}>
-                        类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourceMime ? props.selectedResource.resourceMime.toUpperCase() : '未识别文件类型'}
-                        </span>
-                    </Typography>
-                    <Typography
-                        component="p"
-                        className={props.classes.ResourceDetailCardContentText}>
-                        路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourcePath}
-                        </span>
-                    </Typography>
-                    <Typography
-                        component="p"
-                        className={props.classes.ResourceDetailCardContentText}>
-                        创建时间
-                        <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourceCreatedAt}
-                        </span>
-                    </Typography>
-                    <Typography
-                        component="p"
-                        className={props.classes.ResourceDetailCardContentText}>
-                        修改时间
-                        <span className={props.classes.ResourceDetailCardContentRightText}>
-                            {props.selectedResource.resourceUpdatedAt}
-                        </span>
-                    </Typography>
-                </CardContent>
-            </Card>
-        </div>
+        <Typography
+            component="span"
+            noWrap
+            className={props.classes.ResourceDetailCardContentText}>
+        </Typography>
+        <Grid container direction={'row'} justify={'flex-start'} alignItems={'flex-start'}>
+            <Grid item md={5} sm={4} xs={3}>
+                <Typography
+                    noWrap
+                    className={props.classes.ResourceDetailCardContentText}>
+                    {_fileType}
+                </Typography>
+            </Grid>
+            <Grid item md={7} sm={8} xs={9}>
+                <Typography
+                    noWrap
+                    className={props.classes.ResourceDetailCardContentRightText}>
+                    {props.selectedResource.resourceMime ? props.selectedResource.resourceMime.toUpperCase() : '未识别文件类型'}
+                </Typography>
+            </Grid>
+        </Grid>
+        {/*<Card*/}
+            {/*className={props.classes.ResourceDetail}*/}
+            {/*tabIndex={0}*/}
+            {/*role="button">*/}
+            {/*<CardHeader*/}
+                {/*avatar={props.selectedResource.resourceMime === _directory ? <FolderIcon className={props.classes.iconColor}/> : <ResourceTypeIcon ext={props.selectedResource.resourceMime}/>}*/}
+                {/*title={*/}
+                    {/*<Grid item xs={12}>*/}
+                        {/*<h2 className={props.classes.ResourceDetailCardTitle}>{props.selectedResource.resourceName}</h2>*/}
+                    {/*</Grid>*/}
+                {/*}/>*/}
+            {/*<Divider/>*/}
+            {/*<CardContent>*/}
+                {/*/!* <Typography*!/*/}
+                {/*/!* component="p"*!/*/}
+                {/*/!* className={props.classes.ResourceDetailCardContentText}>*!/*/}
+                {/*/!* 路径&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*!/*/}
+                {/*/!* <span className={props.classes.ResourceDetailCardContentRightText}>*!/*/}
+                {/*/!* {props.selectedResource.resourcePath}*!/*/}
+                {/*/!* </span>*!/*/}
+                {/*/!* </Typography>*!/*/}
+                {/*/!* <Typography*!/*/}
+                {/*/!* component="p"*!/*/}
+                {/*/!* className={props.classes.ResourceDetailCardContentText}>*!/*/}
+                {/*/!* 创建时间*!/*/}
+                {/*/!* <span className={props.classes.ResourceDetailCardContentRightText}>*!/*/}
+                {/*/!* {props.selectedResource.resourceCreatedAt}*!/*/}
+                {/*/!* </span>*!/*/}
+                {/*/!* </Typography>*!/*/}
+                {/*/!* <Typography*!/*/}
+                {/*/!* component="p"*!/*/}
+                {/*/!* className={props.classes.ResourceDetailCardContentText}>*!/*/}
+                {/*/!* 修改时间*!/*/}
+                {/*/!* <span className={props.classes.ResourceDetailCardContentRightText}>*!/*/}
+                {/*/!* {props.selectedResource.resourceUpdatedAt}*!/*/}
+                {/*/!* </span>*!/*/}
+                {/*/!* </Typography>*!/*/}
+            {/*</CardContent>*/}
+        {/*</Card>*/}
     </Drawer>
 );
 

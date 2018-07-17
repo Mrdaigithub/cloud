@@ -99,3 +99,5 @@ export const _pleaseInputDownloadFileLink = '请填写要离线下载的文件�
 export const _offlineDownloadInputPlaceholder = '链接可以是 HTTP(S)、FTP';
 export const _linkInvalid = '链接无效';
 export const _noData = '暂无数据';
+export const _unknownFileTypeUnablePreview = '未知的文件类型暂无法预览';
+export const _fileType = '文件类型';

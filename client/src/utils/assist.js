@@ -27,7 +27,12 @@ import ImgPreview from '../components/ResourceList/ImgPreview';
 import TextPreview from '../components/ResourceList/TextPreview';
 import VideoPreview from '../components/ResourceList/VideoPreview';
 
-
+/**
+ * 获取文件对应的预览组件
+ *
+ * @param resourceMime
+ * @returns {*}
+ */
 export const getPreview = ({ resourceMime }) => {
     if (/image/.test(resourceMime)) return <ImgPreview/>;
     if (resourceMime === 'text/plain' ||
@@ -62,6 +67,7 @@ export const getPreview = ({ resourceMime }) => {
         resourceMime === 'video/x-matroska') {
         return <VideoPreview/>;
     }
+    return null;
 };
 
 /**
