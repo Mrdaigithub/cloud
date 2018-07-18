@@ -79,20 +79,16 @@ const styles = theme => ({
         boxShadow: 'none',
     },
     ResourceDetailCardTitle: {
-        extend: 'nowrap',
-        width: '30vw',
         fontSize: '20px',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
+        fontWeight: 300,
     },
     ResourceDetailCardContentText: {
-        extend: 'nowrap',
-        fontSize: '12px',
+        fontSize: '14px',
     },
     ResourceDetailCardContentRightText: {
         extend: 'ResourceDetailCardContentText',
         color: '#7d7d7d',
+        marginLeft: '20px',
     },
     preview: {
         position: 'absolute',
@@ -118,7 +114,7 @@ const styles = theme => ({
     },
     videoPreview: {},
     unablePreviewText: {
-        color: 'rgba(255,255,255,.8)',
+        color: '#fff',
     },
 });
 

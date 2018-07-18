@@ -55,7 +55,7 @@ import { FormsyText } from '../../components/FormsyMaterialUi';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchResources, getSelectedResource } from '../../store/actions/resourceActions';
-import { _close, _detail, _nameInvalid, _ok, _remove, _rename, _resource, _unknownFileTypeUnablePreview, _unnamed } from '../../res/values/string';
+import { _close, _detail, _nameInvalid, _ok, _remove, _rename, _resource, _fileTypeUnablePreview, _unnamed } from '../../res/values/string';
 
 class ResourcePreview extends Component {
     constructor(props) {
@@ -209,7 +209,7 @@ class ResourcePreview extends Component {
                                     children ?
                                         children :
                                         <Typography variant="subheading" gutterBottom className={classes.unablePreviewText}>
-                                            {_unknownFileTypeUnablePreview}
+                                            {_fileTypeUnablePreview}
                                         </Typography>
                                 }
                             </Grid>

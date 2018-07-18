@@ -53,3 +53,21 @@ export const movePath = {
         return newMoveUrl.join('/');
     },
 };
+
+/**
+ * 返回友好的资源路径  0.1.2 => /path1/path2
+ *
+ * @param path
+ * @returns {*}
+ */
+export const friendlyPath = (path) => {
+    if (!window.store) return false;
+    const resources = window.store.getState().resource.resources;
+
+    return path.toString() === '0' ?
+        '/' :
+        path.split('.').map((i) => {
+            if (i === '0') return '';
+            return resources.filter(item => item.id.toString() === i)[0].resource_name;
+        }).join('/');
+};
