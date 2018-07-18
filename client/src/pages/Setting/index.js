@@ -60,10 +60,12 @@ class Setting extends Component {
                 TransitionComponent={Transition}>
                 <AppBar className={classes.settingTopBar}>
                     <Toolbar>
-                        <IconButton color="inherit" onClick={onClose} aria-label="Close">
+                        <IconButton color="inherit" onClick={onClose} aria-label="Close" className={classes.menuButton}>
                             <CloseIcon/>
                         </IconButton>
-                        <Typography type="title" color="inherit">{_setting}</Typography>
+                        <Typography variant="title" noWrap color="inherit" className={classes.flex}>
+                            {_setting}
+                        </Typography>
                     </Toolbar>
                 </AppBar>
                 <List subheader={<div/>}>

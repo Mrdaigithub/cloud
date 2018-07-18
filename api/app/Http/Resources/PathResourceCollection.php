@@ -42,8 +42,6 @@
 				$item["updated_at"] = Resource::find( $item["id"] )->updated_at->format( "c" );
 				
 				return collect( $item )->except( [ "pivot", "hash" ] );
-			}, $this->collection->toArray() ) )
-				->sortBy( "file" )->values()
-				->sortBy( "resource_name" )->values();
+			}, $this->collection->toArray() ) );
 		}
 	}

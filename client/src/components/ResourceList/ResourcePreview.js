@@ -149,7 +149,7 @@ class ResourcePreview extends Component {
                                 <IconButton color="inherit" onClick={this.handleCloseResourcePreview} aria-label="Close">
                                     <CloseIcon/>
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={classes.modalHeaderFlex}>
+                                <Typography type="title" noWrap color="inherit" className={classes.modalHeaderFlex}>
                                     <ResourceTypeIcon
                                         style={{ width: ':30px', height: 30, verticalAlign: 'middle', marginRight: 10 }}
                                         className={classes.modalHeaderFileIcon}

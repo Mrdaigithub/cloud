@@ -27,6 +27,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mime from 'mime-types';
+import arrSort from 'arr-sort';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -79,6 +80,39 @@ class ResourceList extends Component {
 
     render() {
         const { classes, resourceList, checked, toggleCheck, ItemIcon, onClickAction } = this.props;
+
+        const array = [
+            { foo: 'bbb', num: 4, flag: 2, file: false },
+            { foo: 'aaa', num: 3, flag: 1, file: true },
+            { foo: 'ccc', num: -6, flag: 2, file: false },
+            { foo: 'ccc', num: 8, flag: 2, file: true },
+            { foo: 'bbb', num: 2, flag: 4, file: false },
+            { foo: 'aaa', num: -3, flag: 4, file: true },
+        ];
+
+        const res = arrSort(array, [{
+            attr: 'flag',
+            asc: true,
+        }, {
+            attr: 'file',
+            asc: (a, b) => {
+                return a ? -1 : 1;
+            },
+        }]);
+
+        // const res = arrSort(array, [{
+        //     attr: 'updated_at',
+        //     asc: (a, b) => {
+        //         return new Date(a) - new Date(b) ? 1 : -1;
+        //     },
+        // }, {
+        //     attr: 'file',
+        //     asc: (a, b) => {
+        //         console.log(a);
+        //         return new Date(a) - new Date(b) ? 1 : -1;
+        //     },
+        // }]);
+        console.log(res);
         return (
             <div className={classes.root}>
                 {
@@ -120,7 +154,9 @@ class ResourceList extends Component {
                                 </div>
                             ))}
                         </List> :
-                        <Grid className={classes.resourceListBlank} container direction={'row'} justify={'center'} alignItems={'center'}>
+                        <Grid
+                            className={classes.resourceListBlank} container direction={'row'} justify={'center'}
+                            alignItems={'center'}>
                             <Grid item>
                                 <Typography variant="caption" gutterBottom align="center">
                                     {_noData}
