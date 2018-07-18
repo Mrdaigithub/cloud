@@ -25,12 +25,12 @@
 const styles = theme => ({
     cover: {
         position: 'fixed',
-        bottom: '40px',
-        right: '20px',
+        bottom: 40,
+        right: 20,
         zIndex: 999,
         opacity: 1,
         transition: 'opacity 0.2s ease-in-out',
-        width: '56px',
+        width: 56,
         textAlign: 'center',
     },
     floatButton: {
@@ -59,12 +59,12 @@ const styles = theme => ({
             transform: 'rotate(135deg)',
         },
         '& $action': {
-            marginBottom: '25px',
+            marginBottom: 25,
             visibility: 'visible',
             opacity: 1,
             '& li': {
-                height: '40px',
-                marginBottom: '15px',
+                height: 40,
+                marginBottom: 15,
             },
         },
     },

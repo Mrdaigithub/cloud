@@ -32,7 +32,7 @@ const styles = theme => ({
         margin: 0,
     },
     normal: {
-        paddingTop: '5px',
+        paddingTop: 5,
     },
     textCenter: {
         textAlign: 'center',
@@ -58,7 +58,7 @@ const styles = theme => ({
         },
     },
     resourceName: {
-        fontSize: '21px',
+        fontSize: 21,
         margin: 0,
         fontWeight: 'normal',
     },
@@ -79,23 +79,24 @@ const styles = theme => ({
         boxShadow: 'none',
     },
     ResourceDetailCardTitle: {
-        fontSize: '20px',
+        fontSize: 20,
         fontWeight: 300,
     },
     ResourceDetailCardContentText: {
-        fontSize: '14px',
+        fontSize: 14,
+        marginBottom: 4,
     },
     ResourceDetailCardContentRightText: {
         extend: 'ResourceDetailCardContentText',
         color: '#7d7d7d',
-        marginLeft: '20px',
+        marginLeft: 15,
     },
     preview: {
         position: 'absolute',
         width: '90vw',
         height: '87vh',
         boxSizing: 'border-box',
-        top: '70px',
+        top: 70,
         left: '5vw',
         border: '1px solid #e5e5e5',
         backgroundColor: '#fff',

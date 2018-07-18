@@ -28,7 +28,7 @@ const styles = theme => ({
     },
     logoImg: {
         width: '100%',
-        marginBottom: '30px',
+        marginBottom: 30,
     },
     downloadButton: {
         width: '100%',

@@ -31,12 +31,12 @@ const styles = theme => ({
     },
     listItemTextChild: {
         '& h4': {
-            fontSize: '15px',
+            fontSize: 15,
             fontWeight: 'normal',
             margin: 0,
         },
         '& p': {
-            fontSize: '14px',
+            fontSize: 14,
             margin: 0,
         },
         '& a': {

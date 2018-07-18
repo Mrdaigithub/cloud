@@ -27,6 +27,7 @@ import { DELAY_TIME } from '../../constants';
 export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
 export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
 export const CHANGE_MSG = 'assist/CHANGE_MSG';
+export const SET_TITLE = 'assist/SET_TITLE';
 
 export const toggleLoading = (loading) => {
     return (dispatch) => {
@@ -62,5 +63,16 @@ export const alert = (msgText = '', time = DELAY_TIME) => {
                 },
             });
         }, time);
+    };
+};
+
+export const setPageTitle = (pageTitle) => {
+    return (dispatch) => {
+        return dispatch({
+            type: SET_TITLE,
+            payload: {
+                pageTitle,
+            },
+        });
     };
 };

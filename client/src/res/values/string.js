@@ -92,6 +92,7 @@ export const _downloading = '下载中';
 export const _andExtractCode = '及提取码';
 export const _offlineDownload = '离线下载';
 export const _offlineDownloadManager = '离线下载管理器';
+export const _createOfflineDownloadTask = '新建离线下载任务';
 export const _createLinkTask = '新建链接任务';
 export const _createBtTask = '新建BT任务';
 export const _pleaseInputDownloadFileLink = '请填写要离线下载的文件链接';

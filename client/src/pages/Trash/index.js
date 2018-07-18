@@ -36,7 +36,9 @@ import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { fetchOneself } from '../../store/actions/oneselfActions';
+import { setPageTitle } from '../../store/actions/assistActions';
 import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
+import { _trashCan } from '../../res/values/string';
 
 
 class Trash extends Component {
@@ -50,6 +52,7 @@ class Trash extends Component {
     }
 
     async componentWillMount() {
+        this.props.setPageTitle(_trashCan);
         if (!this.props.resources) {
             this.props.fetchResources(() => {
                 this.getTrashList();
@@ -135,7 +138,7 @@ class Trash extends Component {
         const { classes } = this.props;
         const { trashList, selected } = this.state;
         return (
-            <div style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
+            <div style={{ position: 'fixed', top: 60, right: 0, left: 0, bottom: 0 }}>
                 <ResourceList
                     resourceList={trashList}
                     ItemIcon={Checkbox}
@@ -182,6 +185,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),

@@ -45,7 +45,7 @@ import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
-import { alert } from '../../store/actions/assistActions';
+import { alert, setPageTitle } from '../../store/actions/assistActions';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
@@ -59,8 +59,13 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
 import { fetchOneself } from '../../store/actions/oneselfActions';
-import { fetchResources, changeResourceListWithPath, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
-import { movePath } from '../../utils/pathUtil';
+import {
+    fetchResources,
+    changeResourceListWithPath,
+    clearSelectedResource,
+    getSelectedResource,
+} from '../../store/actions/resourceActions';
+import { friendlyPath, movePath } from '../../utils/pathUtil';
 import { CALCULATE_HASH_CHUNK_SIZE } from '../../constants/uploaderConfig';
 import { DELAY_TIME } from '../../constants';
 import {
@@ -95,6 +100,7 @@ class CloudDrive extends Component {
     }
 
     async componentDidMount() {
+        this.props.setPageTitle(friendlyPath(url2path(this.props.routing.location.pathname)));
         const { routing } = this.props;
         this.props.fetchResources(() => {
             this.getResourceList(url2path(routing.location.pathname));
@@ -387,7 +393,10 @@ class CloudDrive extends Component {
             if (selected.length) {
                 const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
                 await Promise.all(deleteList);
-                const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : { ...r, trashed: true }));
+                const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : {
+                    ...r,
+                    trashed: true,
+                }));
                 this.props.changeResourceListWithPath(resourceListWithPath);
                 this.getResourceList(url2path(routing.location.pathname));
             }
@@ -617,10 +626,14 @@ class CloudDrive extends Component {
                     TransitionComponent={Transition}>
                     <AppBar className={classes.moveDirTopBar}>
                         <Toolbar>
-                            <IconButton color="inherit" onClick={this.handleToggleMoveResourceDialog()} aria-label="Close">
+                            <IconButton
+                                color="inherit" onClick={this.handleToggleMoveResourceDialog()}
+                                aria-label="Close">
                                 <CloseIcon/>
                             </IconButton>
-                            <Typography className={classes.moveDirTopBarTitle} type="title" color="inherit">{_moveTo}</Typography>
+                            <Typography
+                                className={classes.moveDirTopBarTitle} type="title"
+                                color="inherit">{_moveTo}</Typography>
                             <Button color="inherit" onClick={this.handleMoveResource()}>{_ok}</Button>
                         </Toolbar>
                     </AppBar>
@@ -651,6 +664,7 @@ const mapStateToProps = (state, routing) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
     changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),

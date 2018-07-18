@@ -49,7 +49,15 @@ import { GithubIcon, LightIcon, OfflineDownloadIcon } from '../../components/Ico
 import Setting from '../../pages/Setting';
 import styles from './styles';
 import { fetchOneself } from '../../store/actions/oneselfActions';
-import { _myCloudDisk, _offlineDownloadManager, _sum, _trashCan, _unlimited, _used } from '../../res/values/string';
+import {
+    _myCloudDisk,
+    _offlineDownloadManager,
+    _personnelManagement, _setting,
+    _sum,
+    _trashCan,
+    _unlimited,
+    _used,
+} from '../../res/values/string';
 import { conversionCapacityUtil } from '../../utils/assist';
 
 
@@ -76,6 +84,7 @@ class PageHeaderLayout extends Component {
 
     render() {
         const {
+            pageTitle,
             children,
             classes,
             username,
@@ -95,7 +104,8 @@ class PageHeaderLayout extends Component {
                             <ListItem>
                                 <Grid container direction={'row'} spacing={0}>
                                     <Grid item xs={12}>
-                                        <Avatar className={classes.avatarImg}>{username ? username[0].toUpperCase() : 'U'}</Avatar>
+                                        <Avatar
+                                            className={classes.avatarImg}>{username ? username[0].toUpperCase() : 'U'}</Avatar>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <p className={classes.avatarUsername}>{username}</p>
@@ -140,14 +150,14 @@ class PageHeaderLayout extends Component {
                                     <ListItemIcon>
                                         <SupervisorAccount/>
                                     </ListItemIcon>
-                                    <ListItemText primary="人员管理"/>
+                                    <ListItemText primary={_personnelManagement}/>
                                 </Link>
                             </ListItem>
                             <ListItem button onClick={this.handleToggleSetting}>
                                 <ListItemIcon>
                                     <Settings/>
                                 </ListItemIcon>
-                                <ListItemText primary="设置"/>
+                                <ListItemText primary={_setting}/>
                             </ListItem>
                         </List>
                         <Divider/>
@@ -163,52 +173,29 @@ class PageHeaderLayout extends Component {
                 </Drawer>
                 <AppBar position={'fixed'}>
                     <Toolbar>
-                        <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
-                            <Grid item xs={4}>
-                                <Grid container direction={'row'} justify={'flex-start'} alignItems={'center'}>
-                                    <Grid item xs={5} sm={3} md={2}>
-                                        <Typography type="title" color="inherit">
-                                            <IconButton
-                                                onClick={this.handleToggleDrawer(true)}
-                                                color="inherit"
-                                                aria-label="Menu">
-                                                <MenuIcon/>
-                                            </IconButton>
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}/>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={5} sm={3} md={2}>
-                                <Grid container direction={'row'} justify={'space-around'} alignItems={'center'}>
-                                    <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">
-                                            <IconButton className={classes.topbarBtn}>
-                                                <Link className={classes.searchLink} to="/search">
-                                                    <SearchIcon style={{ width: 30, height: 30 }}/>
-                                                </Link>
-                                            </IconButton>
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">
-                                            <IconButton className={classes.topbarBtn}>
-                                                <LightIcon style={{ width: 30, height: 30 }}/>
-                                            </IconButton>
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography type="title" color="inherit">
-                                            <IconButton
-                                                className={classes.topbarBtn}
-                                                href={'https://github.com/Mrdaigithub/cloud'}>
-                                                <GithubIcon style={{ width: 30, height: 30 }}/>
-                                            </IconButton>
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        <IconButton
+                            className={classes.menuButton}
+                            onClick={this.handleToggleDrawer(true)}
+                            color="inherit"
+                            aria-label="Menu">
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="title" noWrap color="inherit" className={classes.flex}>
+                            {pageTitle || ''}
+                        </Typography>
+                        <IconButton className={classes.topbarBtn}>
+                            <Link className={classes.searchLink} to="/search">
+                                <SearchIcon style={{ width: 30, height: 30 }}/>
+                            </Link>
+                        </IconButton>
+                        <IconButton className={classes.topbarBtn}>
+                            <LightIcon style={{ width: 30, height: 30 }}/>
+                        </IconButton>
+                        <IconButton
+                            className={classes.topbarBtn}
+                            href={'https://github.com/Mrdaigithub/cloud'}>
+                            <GithubIcon style={{ width: 30, height: 30 }}/>
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <div className={classes.content}>
@@ -221,6 +208,7 @@ class PageHeaderLayout extends Component {
 }
 
 const mapStateToProps = state => ({
+    pageTitle: state.assist.pageTitle,
     id: state.oneself.id,
     username: state.oneself.username,
     email: state.oneself.email,

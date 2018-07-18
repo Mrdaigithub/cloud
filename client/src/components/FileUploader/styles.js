@@ -25,7 +25,7 @@
 const styles = theme => ({
     dialogTitle: {
         '&>h2': {
-            fontSize: '16px',
+            fontSize: 16,
         },
     },
 });

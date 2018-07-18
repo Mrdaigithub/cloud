@@ -32,14 +32,14 @@ const styles = theme => ({
     },
     links: {
         display: 'inline-block',
-        marginRight: '10px',
-        fontSize: '14px',
+        marginRight: 10,
+        fontSize: 14,
         color: '#555',
         fontWeight: 100,
         textDecoration: 'none',
     },
     copyright: {
-        fontSize: '14px',
+        fontSize: 14,
         color: '#555',
         fontWeight: 100,
     },

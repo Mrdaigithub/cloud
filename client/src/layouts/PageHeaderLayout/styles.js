@@ -29,12 +29,19 @@ const styles = theme => ({
     normal: {
         height: '100vh',
     },
+    flex: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginLeft: -12,
+        marginRight: 20,
+    },
     searchLink: {
         display: 'inherit',
         color: 'inherit',
     },
     drawer: {
-        width: '250px',
+        width: 250,
     },
     avatarContainer: {
         backgroundColor: theme.palette.secondary.light,
@@ -45,11 +52,11 @@ const styles = theme => ({
         color: theme.palette.secondary.light,
     },
     avatarUsername: {
-        fontSize: '16px',
+        fontSize: 16,
         margin: '15px 0 0 0',
     },
     avatarEmail: {
-        fontSize: '16px',
+        fontSize: 16,
         margin: '0',
         color: 'rgba(255,255,255,.8)',
     },
@@ -64,7 +71,7 @@ const styles = theme => ({
         color: '#fff',
     },
     content: {
-        paddingTop: '66px',
+        paddingTop: 66,
         boxSizing: 'border-box',
         height: '100vh',
         overflow: 'hidden',

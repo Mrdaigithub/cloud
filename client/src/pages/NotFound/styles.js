@@ -26,7 +26,7 @@ import notFoundImg from '../../res/static/404.svg';
 
 const styles = theme => ({
     normal: {
-        paddingTop: '0px',
+        paddingTop: 0,
         height: '100vh',
         boxSizing: 'border-box',
     },
@@ -35,19 +35,19 @@ const styles = theme => ({
         background: `url(${notFoundImg}) no-repeat center`,
         backgroundSize: 'contain',
         fontSize: 0,
-        textIndent: '-99999px',
+        textIndent: -99999,
     },
     right: {
-        paddingBottom: '100px',
+        paddingBottom: 100,
         textAlign: 'center',
         '& h3': {
             color: '#434e59',
-            fontSize: '30px',
+            fontSize: 30,
             fontWeight: 'bold',
         },
         '& p': {
             color: '#434e59',
-            fontSize: '20px',
+            fontSize: 20,
         },
     },
 });

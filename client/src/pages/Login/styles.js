@@ -28,19 +28,19 @@ const styles = theme => ({
     },
     logoImg: {
         width: '100%',
-        marginBottom: '20px',
+        marginBottom: 20,
     },
 
     logoTitle: {
-        fontSize: '38px',
+        fontSize: 38,
         color: 'rgba(0, 0, 0, 0.85)',
     },
 
     logoText: {
         textAlign: 'center',
-        fontSize: '14px',
+        fontSize: 14,
         color: 'rgba(0, 0, 0, 0.45)',
-        marginBottom: '20px',
+        marginBottom: 20,
     },
 
     loginForm: {

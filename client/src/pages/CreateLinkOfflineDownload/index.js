@@ -32,14 +32,25 @@ import Grid from '@material-ui/core/Grid';
 import Formsy from 'formsy-react';
 import Button from '@material-ui/core/Button';
 import styles from './styles';
-import { _linkInvalid, _offlineDownloadInputPlaceholder, _ok, _pleaseInputDownloadFileLink } from '../../res/values/string';
+import {
+    _createOfflineDownloadTask,
+    _linkInvalid,
+    _offlineDownloadInputPlaceholder,
+    _ok,
+    _pleaseInputDownloadFileLink,
+} from '../../res/values/string';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import requester from '../../utils/requester';
+import { setPageTitle } from '../../store/actions/assistActions';
 
 class CreateLinkOfflineDownload extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+    }
+
+    componentWillMount() {
+        this.props.setPageTitle(_createOfflineDownloadTask);
     }
 
     handleCreateLinkOfflineDownloadTask = (model) => {
@@ -84,6 +95,7 @@ class CreateLinkOfflineDownload extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     changePage: url => dispatch(push(url)),
 });
 

@@ -36,13 +36,13 @@ const styles = theme => ({
         display: 'inline',
     },
     resourceList: {
-        paddingTop: '60px',
+        paddingTop: 60,
     },
     resourceIcon: {
         marginRight: 0,
     },
     moveDirTopBar: {
-        marginBottom: '20px',
+        marginBottom: 20,
     },
     moveDirTopBarTitle: {
         flex: 1,

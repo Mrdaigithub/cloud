@@ -24,8 +24,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { bindActionCreators } from 'redux';
 import SwipeableViews from 'react-swipeable-views';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -43,10 +41,11 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Divider from '@material-ui/core/Divider';
 import styles from '../OfflineDownloadManager/styles';
 import { DownloadCompleteIcon, DownloadingIcon } from '../../components/Icons';
-import { _downloadCompleted, _downloading } from '../../res/values/string';
+import { _downloadCompleted, _downloading, _offlineDownloadManager } from '../../res/values/string';
 import { saveDownloadList } from '../../store/actions/downloadActions';
 import requester from '../../utils/requester';
 import { conversionCapacityUtil } from '../../utils/assist';
+import { setPageTitle } from '../../store/actions/assistActions';
 
 
 class OfflineDownloadManager extends Component {
@@ -60,6 +59,10 @@ class OfflineDownloadManager extends Component {
         this.handleFetchAria2Task();
     }
 
+    componentWillMount() {
+        this.props.setPageTitle(_offlineDownloadManager);
+    }
+
     componentWillUnmount() {
         clearInterval(this.timer);
     }
@@ -71,7 +74,7 @@ class OfflineDownloadManager extends Component {
         this.timer = setInterval(async () => {
             downloadList = await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
             this.props.saveDownloadList(downloadList);
-        }, 1000);
+        }, 5000);
     }
 
     handleRemoveTask = gid => async () => {
@@ -130,7 +133,9 @@ class OfflineDownloadManager extends Component {
                                         <ListItem>
                                             <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
                                                 <Grid item xs={12}>
-                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                    <Grid
+                                                        container direction={'row'} justify={'space-between'}
+                                                        alignItems={'center'}>
                                                         <Grid item xs={10} sm={8}>
                                                             <ListItemText
                                                                 primary={downloadItem.result.files[0].path.split('/')
@@ -138,14 +143,18 @@ class OfflineDownloadManager extends Component {
                                                                 className={classes.downloadItemTitle}/>
                                                         </Grid>
                                                         <Grid item xs={2} sm={4} className={classes.textRight}>
-                                                            <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={this.handleRemoveTask(downloadItem.result.gid)}>
                                                                 <DeleteIcon/>
                                                             </IconButton>
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
                                                 <Grid item xs={12}>
-                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                    <Grid
+                                                        container direction={'row'} justify={'space-between'}
+                                                        alignItems={'center'}>
                                                         <Grid item xs={4} className={classes.downloadItemState}>
                                                             {downloadItem.result.status === 'complete' ? _downloadCompleted : _downloading}
                                                         </Grid>
@@ -178,7 +187,9 @@ class OfflineDownloadManager extends Component {
                                         <ListItem>
                                             <Grid container direction={'row'} justify={'center'} alignItems={'center'}>
                                                 <Grid item xs={12}>
-                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                    <Grid
+                                                        container direction={'row'} justify={'space-between'}
+                                                        alignItems={'center'}>
                                                         <Grid item xs={10} sm={8}>
                                                             <ListItemText
                                                                 primary={downloadItem.result.files[0].path.split('/')
@@ -186,14 +197,18 @@ class OfflineDownloadManager extends Component {
                                                                 className={classes.downloadItemTitle}/>
                                                         </Grid>
                                                         <Grid item xs={2} sm={4} className={classes.textRight}>
-                                                            <IconButton size="small" onClick={this.handleRemoveTask(downloadItem.result.gid)}>
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={this.handleRemoveTask(downloadItem.result.gid)}>
                                                                 <DeleteIcon/>
                                                             </IconButton>
                                                         </Grid>
                                                     </Grid>
                                                 </Grid>
                                                 <Grid item xs={12}>
-                                                    <Grid container direction={'row'} justify={'space-between'} alignItems={'center'}>
+                                                    <Grid
+                                                        container direction={'row'} justify={'space-between'}
+                                                        alignItems={'center'}>
                                                         <Grid item xs={4} className={classes.downloadItemState}>
                                                             {
                                                                 downloadItem.result.status === 'active' ?
@@ -205,8 +220,11 @@ class OfflineDownloadManager extends Component {
                                                             <span className={classes.downloadItemSpeed}>
                                                                 {`${conversionCapacityUtil(downloadItem.result.completedLength)} / ${conversionCapacityUtil(downloadItem.result.totalLength)}`}
                                                             </span>
-                                                            <IconButton size="small" onClick={this.handleToggleTaskStatus(downloadItem.result.gid, downloadItem.result.status === 'active')}>
-                                                                {downloadItem.result.status === 'paused' ? <PlayArrowIcon/> : <PauseIcon/>}
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={this.handleToggleTaskStatus(downloadItem.result.gid, downloadItem.result.status === 'active')}>
+                                                                {downloadItem.result.status === 'paused' ?
+                                                                    <PlayArrowIcon/> : <PauseIcon/>}
                                                             </IconButton>
                                                         </Grid>
                                                     </Grid>
@@ -233,10 +251,10 @@ const mapStateToProps = state => ({
     downloadList: state.download.downloadList,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
+const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     saveDownloadList: downloadList => saveDownloadList(downloadList)(dispatch),
-}, dispatch);
+});
 
 export default connect(
     mapStateToProps,

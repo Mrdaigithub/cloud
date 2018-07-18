@@ -28,7 +28,7 @@ const styles = theme => ({
         height: '100vh',
     },
     logo: {
-        maxWidth: '400px',
+        maxWidth: 400,
         width: '80%',
     },
 });

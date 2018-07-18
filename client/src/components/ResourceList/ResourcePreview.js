@@ -151,7 +151,7 @@ class ResourcePreview extends Component {
                                 </IconButton>
                                 <Typography type="title" color="inherit" className={classes.modalHeaderFlex}>
                                     <ResourceTypeIcon
-                                        style={{ width: ':30px', height: '30px', verticalAlign: 'middle', marginRight: '10px' }}
+                                        style={{ width: ':30px', height: 30, verticalAlign: 'middle', marginRight: 10 }}
                                         className={classes.modalHeaderFileIcon}
                                         ext={selectedResource.resourceMime}/>
                                     {selectedResource.resourceName || _unnamed}

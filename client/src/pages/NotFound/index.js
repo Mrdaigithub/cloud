@@ -24,18 +24,22 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import styles from './styles';
 import { _back, _pageNotFound } from '../../res/values/string';
+import { setPageTitle } from '../../store/actions/assistActions';
 
 class NotFound extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+    }
+
+    componentWillMount() {
+        this.props.setPageTitle(_pageNotFound);
     }
 
     render() {
@@ -46,7 +50,9 @@ class NotFound extends Component {
                 <Grid item sm={5} xs={12} className={classes.right}>
                     <h3>404</h3>
                     <p>{_pageNotFound}</p>
-                    <Button variant="outlined" color="primary" onClick={changePage.bind(this, '/cloud-drive/0')}>{_back}</Button>
+                    <Button
+                        variant="outlined" color="primary"
+                        onClick={changePage.bind(this, '/cloud-drive/0')}>{_back}</Button>
                 </Grid>
             </Grid>
         );
@@ -55,9 +61,10 @@ class NotFound extends Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: url => (push(url)),
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
+    changePage: url => dispatch(push(url)),
+});
 
 export default connect(
     mapStateToProps,

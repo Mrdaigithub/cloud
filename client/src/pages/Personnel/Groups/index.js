@@ -61,6 +61,7 @@ import Transition from '../../../components/Transition';
 import SpeedDial, { SpeedDialItem } from '../../../components/SpeedDial';
 import EnhancedTableHead from '../../../components/EnhancedTableHead';
 import { FormsyText } from '../../../components/FormsyMaterialUi';
+import { setPageTitle } from '../../../store/actions/assistActions';
 import {
     _capacity, _capacityOnlyBePositiveInteger, _close, _confirmPassword, _create,
     _createdAt, _differentInputs, _edit,
@@ -105,6 +106,7 @@ class Oneself extends Component {
     }
 
     async componentWillMount() {
+        this.props.setPageTitle(_personnelManagement);
         if (!this.props.users || !this.props.users.length) {
             this.props.fetchUsers(() => {
                 this.getUsers();
@@ -254,7 +256,7 @@ class Oneself extends Component {
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - (page * rowsPerPage));
 
         return (
-            <div className={classes.normal} style={{ position: 'fixed', top: '60px', right: 0, left: 0, bottom: 0 }}>
+            <div className={classes.normal} style={{ position: 'fixed', top: 60, right: 0, left: 0, bottom: 0 }}>
                 <Grid
                     container
                     direction={'row'}
@@ -447,6 +449,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     fetchUsers: cb => fetchUsers(cb)(dispatch),
     addUser: (userData, cb) => addUser(userData, cb)(dispatch),
     removeUsers: (idList, cb) => removeUsers(idList, cb)(dispatch),
