@@ -23,6 +23,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
@@ -42,5 +43,9 @@ const FileUploader = props => (
     </Dialog>
 );
 
+FileUploader.propTypes = {
+    uploadState: PropTypes.bool.isRequired,
+    uploadTitle: PropTypes.string.isRequired,
+};
 
 export default withStyles(styles)(FileUploader);

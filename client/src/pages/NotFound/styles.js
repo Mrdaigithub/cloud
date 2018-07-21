@@ -38,17 +38,8 @@ const styles = theme => ({
         textIndent: -99999,
     },
     right: {
-        paddingBottom: 100,
+        paddingBottom: 70,
         textAlign: 'center',
-        '& h3': {
-            color: '#434e59',
-            fontSize: 30,
-            fontWeight: 'bold',
-        },
-        '& p': {
-            color: '#434e59',
-            fontSize: 20,
-        },
     },
 });
 

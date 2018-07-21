@@ -33,15 +33,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 
 class EnhancedTableHead extends Component {
-    static propTypes = {
-        numSelected: PropTypes.number.isRequired,
-        onRequestSort: PropTypes.func.isRequired,
-        onSelectAllClick: PropTypes.func.isRequired,
-        order: PropTypes.string.isRequired,
-        orderBy: PropTypes.string.isRequired,
-        rowCount: PropTypes.number.isRequired,
-    };
-
     createSortHandler = property => (event) => {
         this.props.onRequestSort(event, property);
     };
@@ -84,5 +75,13 @@ class EnhancedTableHead extends Component {
     }
 }
 
+EnhancedTableHead.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.string.isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired,
+};
 
 export default EnhancedTableHead;

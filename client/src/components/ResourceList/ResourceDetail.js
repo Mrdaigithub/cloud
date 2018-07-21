@@ -23,6 +23,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -100,6 +101,11 @@ const ResourceDetail = props => (
     </Drawer>
 );
 
+ResourceDetail.propTypes = {
+    open: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    selectedResource: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = state => ({
     selectedResource: state.resource.selectedResource,

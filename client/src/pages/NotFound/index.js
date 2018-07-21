@@ -28,6 +28,7 @@ import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import styles from './styles';
 import { _back, _pageNotFound } from '../../res/values/string';
 import { setPageTitle } from '../../store/actions/assistActions';
@@ -48,8 +49,8 @@ class NotFound extends Component {
             <Grid className={classes.normal} container direction={'row'} justify={'center'} alignItems={'center'}>
                 <Grid item sm={7} xs={12} className={classes.left}/>
                 <Grid item sm={5} xs={12} className={classes.right}>
-                    <h3>404</h3>
-                    <p>{_pageNotFound}</p>
+                    <Typography variant="display1" gutterBottom>404</Typography>
+                    <Typography variant="title" gutterBottom>{_pageNotFound}</Typography>
                     <Button
                         variant="outlined" color="primary"
                         onClick={changePage.bind(this, '/cloud-drive/0')}>{_back}</Button>
