@@ -27,7 +27,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import mime from 'mime-types';
-import arrSort from 'arr-sort';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -81,44 +80,20 @@ class ResourceList extends Component {
     render() {
         const { classes, resourceList, checked, toggleCheck, ItemIcon, onClickAction } = this.props;
 
-        const array = [
-            { foo: 'bbb', num: 4, flag: 2, file: false },
-            { foo: 'aaa', num: 3, flag: 1, file: true },
-            { foo: 'ccc', num: -6, flag: 2, file: false },
-            { foo: 'ccc', num: 8, flag: 2, file: true },
-            { foo: 'bbb', num: 2, flag: 4, file: false },
-            { foo: 'aaa', num: -3, flag: 4, file: true },
-        ];
+        const sortedResourceList = resourceList
+            .sort((v1, v2) => {
+                return new Date(v2.updated_at).getTime() - new Date(v1.updated_at).getTime();
+            })
+            .sort((v1, v2) => {
+                return v1.file === v2.file ? 0 : v1.file ? 1 : -1;
+            });
 
-        const res = arrSort(array, [{
-            attr: 'flag',
-            asc: true,
-        }, {
-            attr: 'file',
-            asc: (a, b) => {
-                return a ? -1 : 1;
-            },
-        }]);
-
-        // const res = arrSort(array, [{
-        //     attr: 'updated_at',
-        //     asc: (a, b) => {
-        //         return new Date(a) - new Date(b) ? 1 : -1;
-        //     },
-        // }, {
-        //     attr: 'file',
-        //     asc: (a, b) => {
-        //         console.log(a);
-        //         return new Date(a) - new Date(b) ? 1 : -1;
-        //     },
-        // }]);
-        console.log(res);
         return (
             <div className={classes.root}>
                 {
                     resourceList.length ?
                         <List className={classes.resourceList}>
-                            {resourceList.map(resource => (
+                            {sortedResourceList.map(resource => (
                                 <div key={resource.id}>
                                     <ListItem
                                         button

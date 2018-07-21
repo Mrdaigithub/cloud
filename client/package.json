@@ -5,7 +5,6 @@
   "dependencies": {
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^1.1.0",
-    "arr-sort": "^1.0.0",
     "axios": "^0.18.0",
     "connected-react-router": "^4.3.0",
     "dplayer": "^1.22.2",
