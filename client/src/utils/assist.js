@@ -116,3 +116,23 @@ export const conversionCapacityUtil = (fileByte) => {
     }
     return '∞';
 };
+
+/**
+ * 函数防抖
+ *
+ * @param fn
+ * @param delay
+ * @returns {Function}
+ */
+export const debounce = (fn, delay = 500) => {
+    let timer;
+
+    return (...args) => {
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            console.log(1);
+            fn.apply(this, args);
+        }, delay);
+    };
+};

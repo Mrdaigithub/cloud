@@ -57,7 +57,7 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { url2path, getPreview } from '../../utils/assist';
+import { url2path, getPreview, debounce } from '../../utils/assist';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import {
     fetchResources,
@@ -670,7 +670,7 @@ const mapDispatchToProps = dispatch => ({
     changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
-    alert: (msgText, time) => alert(msgText, time)(dispatch),
+    alert: debounce((msgText, time) => alert(msgText, time)(dispatch)),
     changePage: url => dispatch(push(url)),
 });
 

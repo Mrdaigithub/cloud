@@ -47,6 +47,7 @@ import {
     _login,
     _loginSuccess,
 } from '../../res/values/string';
+import { debounce } from '../../utils/assist';
 
 
 class Login extends Component {
@@ -124,7 +125,7 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
     login,
     clearToken,
-    alert: (msgText, time) => alert(msgText, time)(dispatch),
+    alert: debounce((msgText, time) => alert(msgText, time)(dispatch)),
     changePage: url => dispatch(replace(url)),
 });
 

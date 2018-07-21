@@ -27,6 +27,7 @@ import store from '../store';
 import ERROR_CODES from '../constants/errorCodes';
 import { BASE_URL, NETWORK_TIMEOUT, HEADERS } from '../constants/requesterConfig';
 import { toggleLoading, alert } from '../store/actions/assistActions';
+import { debounce } from './assist';
 
 
 const requester = axios.create({
@@ -35,6 +36,10 @@ const requester = axios.create({
     headers: HEADERS,
 });
 requester.animate = true;
+
+const debounceAlert = (msgText, time) => {
+    debounce(() => alert(msgText, time)(store.dispatch))();
+};
 
 requester.setAnimate = (bool = true) => {
     requester.animate = bool;
@@ -54,7 +59,7 @@ requester.interceptors.request.use(
     },
     (err) => {
         toggleLoading(false)(store.dispatch);
-        alert('本地请求超时')(store.dispatch);
+        // debounceAlert('本地请求超时');
         return Promise.reject(err);
     });
 
@@ -67,15 +72,19 @@ requester.interceptors.response.use(
         toggleLoading()(store.dispatch);
         if (!error.response) {
             toggleLoading(false)(store.dispatch);
-            alert('本地请求超时')(store.dispatch);
+            // debounceAlert('本地请求超时');
             return Promise.reject(error);
         }
         const data = error.response.data;
         if (data.errors) {
             const errorCode = data.errors[Object.keys(data.errors)[0]][0];
-            alert(ERROR_CODES[errorCode])(store.dispatch);
+            // alert(ERROR_CODES[errorCode])(store.dispatch);
+            // debounceAlert(ERROR_CODES[errorCode]);
+            for (let i = 0; i < 50; i++) {
+                debounceAlert(ERROR_CODES[errorCode]);
+            }
         } else {
-            alert('远端服务器超时')(store.dispatch);
+            // debounceAlert('远端服务器超时');
         }
         return Promise.reject(data);
     });
