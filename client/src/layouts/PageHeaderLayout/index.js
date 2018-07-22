@@ -47,6 +47,7 @@ import Settings from '@material-ui/icons/Settings';
 import SearchIcon from '@material-ui/icons/Search';
 import { GithubIcon, LightIcon, OfflineDownloadIcon } from '../../components/Icons';
 import Setting from '../../pages/Setting';
+import Searcher from '../../components/Searcher';
 import styles from './styles';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import {
@@ -67,6 +68,7 @@ class PageHeaderLayout extends Component {
         this.state = {
             drawerOpen: false,
             settingOpen: false,
+            searcherOpen: false,
         };
     }
 
@@ -82,6 +84,10 @@ class PageHeaderLayout extends Component {
         this.setState({ settingOpen: !this.state.settingOpen });
     };
 
+    handleToggleSearcher = () => {
+        this.setState({ searcherOpen: !this.state.searcherOpen });
+    };
+
     render() {
         const {
             pageTitle,
@@ -94,6 +100,31 @@ class PageHeaderLayout extends Component {
         } = this.props;
         return (
             <div className={classes.normal}>
+                <AppBar position={'fixed'}>
+                    <Toolbar>
+                        <IconButton
+                            className={classes.menuButton}
+                            onClick={this.handleToggleDrawer(true)}
+                            color="inherit"
+                            aria-label="Menu">
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="title" noWrap color="inherit" className={classes.flex}>
+                            {pageTitle || ''}
+                        </Typography>
+                        <IconButton onClick={this.handleToggleSearcher} className={classes.topbarBtn}>
+                            <SearchIcon style={{ width: 30, height: 30 }}/>
+                        </IconButton>
+                        <IconButton className={classes.topbarBtn}>
+                            <LightIcon style={{ width: 30, height: 30 }}/>
+                        </IconButton>
+                        <IconButton
+                            className={classes.topbarBtn}
+                            href={'https://github.com/Mrdaigithub/cloud'}>
+                            <GithubIcon style={{ width: 30, height: 30 }}/>
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
                 <Drawer open={this.state.drawerOpen} onClose={this.handleToggleDrawer(false)}>
                     <div
                         className={classes.drawer}
@@ -171,37 +202,11 @@ class PageHeaderLayout extends Component {
                         </List>
                     </div>
                 </Drawer>
-                <AppBar position={'fixed'}>
-                    <Toolbar>
-                        <IconButton
-                            className={classes.menuButton}
-                            onClick={this.handleToggleDrawer(true)}
-                            color="inherit"
-                            aria-label="Menu">
-                            <MenuIcon/>
-                        </IconButton>
-                        <Typography variant="title" noWrap color="inherit" className={classes.flex}>
-                            {pageTitle || ''}
-                        </Typography>
-                        <IconButton className={classes.topbarBtn}>
-                            <Link className={classes.searchLink} to="/search">
-                                <SearchIcon style={{ width: 30, height: 30 }}/>
-                            </Link>
-                        </IconButton>
-                        <IconButton className={classes.topbarBtn}>
-                            <LightIcon style={{ width: 30, height: 30 }}/>
-                        </IconButton>
-                        <IconButton
-                            className={classes.topbarBtn}
-                            href={'https://github.com/Mrdaigithub/cloud'}>
-                            <GithubIcon style={{ width: 30, height: 30 }}/>
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
                 <div className={classes.content}>
                     {children}
                 </div>
                 <Setting open={this.state.settingOpen} onClose={this.handleToggleSetting}/>
+                <Searcher open={this.state.searcherOpen} onClose={this.handleToggleSearcher}/>
             </div>
         );
     }

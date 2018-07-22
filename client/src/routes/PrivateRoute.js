@@ -27,7 +27,6 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageHeaderLayout from '../layouts/PageHeaderLayout';
 import Trash from '../pages/Trash';
-import Search from '../pages/Search';
 import CloudDrive from '../pages/CloudDrive';
 import Groups from '../pages/Personnel/Groups';
 import CreateLinkOfflineDownload from '../pages/CreateLinkOfflineDownload';
@@ -47,7 +46,6 @@ const PrivateRoute = () => (
                                     timeout={300}
                                     key={location.key}>
                                     <Switch location={location}>
-                                        <Route exact path="/search" component={Search}/>
                                         <Route
                                             location={location}
                                             key={location.key}

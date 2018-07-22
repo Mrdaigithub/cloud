@@ -86,12 +86,12 @@ class Search extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, open } = this.props;
         const { query, result } = this.state;
         return (
             <div>
                 <Dialog
-                    open
+                    open={open}
                     fullScreen
                     className={classes.searchList}>
                     <FormControl>
