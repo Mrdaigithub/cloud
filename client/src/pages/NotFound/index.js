@@ -31,8 +31,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import styles from './styles';
 import { _back, _pageNotFound } from '../../res/values/string';
-import { setPageTitle, alert } from '../../store/actions/assistActions';
-import { debounce } from '../../utils/assist';
+import { setPageTitle } from '../../store/actions/assistActions';
 
 class NotFound extends Component {
     constructor(props) {
@@ -65,7 +64,6 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
-    alert: debounce((msgText, time) => alert(msgText, time)(dispatch)),
     changePage: url => dispatch(push(url)),
 });
 

@@ -105,3 +105,5 @@ export const _unknownFilePath = '未知的文件路径';
 export const _fileTypeUnablePreview = '此文件类型暂无法预览';
 export const _fileType = '文件类型';
 export const _filePath = '文件路径';
+export const _remoteServerTimeout = '远端服务器超时';
+export const _localRequestTimeout = '本地请求超时';

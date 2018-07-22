@@ -47,7 +47,7 @@ import {
     _login,
     _loginSuccess,
 } from '../../res/values/string';
-import { debounce } from '../../utils/assist';
+import debounce from '../../utils/debounce';
 
 
 class Login extends Component {

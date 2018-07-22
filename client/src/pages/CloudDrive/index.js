@@ -57,7 +57,8 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { url2path, getPreview, debounce } from '../../utils/assist';
+import { url2path, getPreview } from '../../utils/assist';
+import debounce from '../../utils/debounce';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import {
     fetchResources,

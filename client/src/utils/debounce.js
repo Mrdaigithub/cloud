@@ -22,5 +22,23 @@
  * SOFTWARE.
  */
 
-export const VERSION_CODE = 'V1.5';
-export const DELAY_TIME = 1000;
+/**
+ * 函数防抖
+ *
+ * @param fn
+ * @param delay
+ * @returns {Function}
+ */
+const debounce = (fn, delay = 500) => {
+    let timer;
+
+    return (...args) => {
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            fn.apply(this, args);
+        }, delay);
+    };
+};
+
+export default debounce;
