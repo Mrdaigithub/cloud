@@ -34,11 +34,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
-import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -89,19 +86,17 @@ const suggestions = [
 ];
 
 function renderInput(inputProps) {
-    console.log(inputProps);
-    const { classes, ref, ...other } = inputProps;
+    const { placeholder, startadornment, endadornment } = inputProps;
 
     return (
-        <TextField
+        <Input
             fullWidth
-            InputProps={{
-                inputRef: ref,
-                classes: {
-                    input: classes.input,
-                },
-                ...other,
-            }}/>
+            disableUnderline
+            autoFocus
+            placeholder={placeholder}
+            inputProps={inputProps}
+            startAdornment={startadornment}
+            endAdornment={endadornment}/>
     );
 }
 
@@ -150,7 +145,7 @@ function getSuggestions(value) {
 
     return inputLength === 0
         ? []
-        : suggestions.filter((suggestion) => {
+        : this.props.resources.filter((resource) => {
             const keep =
                 count < 5 && suggestion.label.toLowerCase()
                     .slice(0, inputLength) === inputValue;
@@ -168,24 +163,11 @@ class Searcher extends Component {
         super(props);
         this.state = {
             ResourceDetailOpen: false,
-            query: '',
             result: [],
             suggestions: [],
             value: '',
         };
     }
-
-    handleInput = name => (event) => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
-
-    handleClearInput = () => {
-        this.setState({
-            query: '',
-        });
-    };
 
     handleSuggestionsFetchRequested = ({ value }) => {
         this.setState({
@@ -205,9 +187,15 @@ class Searcher extends Component {
         });
     };
 
+    handleClearInput = () => {
+        this.setState({
+            value: '',
+        });
+    };
+
     render() {
         const { classes, open, onClose } = this.props;
-        const { query, result } = this.state;
+        const { result } = this.state;
 
         return (
             <Dialog
@@ -232,9 +220,19 @@ class Searcher extends Component {
                             renderSuggestion={renderSuggestion}
                             inputProps={{
                                 classes,
-                                placeholder: 'Search a country (start with a)',
+                                placeholder: _searchPlaceholder,
                                 value: this.state.value,
                                 onChange: this.handleChange,
+                                startadornment: (
+                                    <IconButton onClick={onClose}>
+                                        <ArrowBack/>
+                                    </IconButton>
+                                ),
+                                endadornment: (
+                                    <IconButton onClick={this.handleClearInput}>
+                                        <CloseIcon/>
+                                    </IconButton>
+                                ),
                             }}/>
                     </Toolbar>
                 </AppBar>
@@ -256,7 +254,9 @@ Searcher.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    resources: state.resource.resources,
+});
 
 const mapDispatchToProps = dispatch => ({
     clearOneself: () => dispatch(logout()),

@@ -26,18 +26,12 @@ const styles = theme => ({
     appBarColorPrimary: {
         backgroundColor: '#fff',
     },
-    flex: {
-        flexGrow: 1,
-    },
     resultListContainer: {
         flexGrow: 1,
         paddingTop: 68,
     },
-
     container: {
         flexGrow: 1,
-        position: 'relative',
-        height: 250,
     },
     suggestionsContainerOpen: {
         position: 'absolute',
