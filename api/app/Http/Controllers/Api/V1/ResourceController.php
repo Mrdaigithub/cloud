@@ -134,9 +134,9 @@
 			return DB::select( "SELECT id, resource_name, file, path, created_at, updated_at
               FROM resources
               LEFT JOIN resource_user ON resources.id = resource_user.resource_id
-              WHERE user_id=? AND trashed=? AND resource_name LIKE ?
+              WHERE user_id=? AND file=? AND trashed=? AND resource_name LIKE ?
               ORDER BY file DESC , resource_name",
-				[ $request->user()->id, false, "%$query%" ] );
+				[ $request->user()->id, true, false, "%$query%" ] );
 		}
 		
 		/**

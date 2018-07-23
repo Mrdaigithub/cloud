@@ -24,6 +24,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import mime from 'mime-types';
 import { connect } from 'react-redux';
 import { replace } from 'connected-react-router';
 import Autosuggest from 'react-autosuggest';
@@ -34,7 +35,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
@@ -47,43 +47,11 @@ import ResourceList from '../../components/ResourceList';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 import styles from './styles';
 import { _searchPlaceholder } from '../../res/values/string';
+import requester from '../../utils/requester';
+import { clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
+import { path2url } from '../../utils/assist';
 
-const suggestions = [
-    { label: 'Afghanistan' },
-    { label: 'Aland Islands' },
-    { label: 'Albania' },
-    { label: 'Algeria' },
-    { label: 'American Samoa' },
-    { label: 'Andorra' },
-    { label: 'Angola' },
-    { label: 'Anguilla' },
-    { label: 'Antarctica' },
-    { label: 'Antigua and Barbuda' },
-    { label: 'Argentina' },
-    { label: 'Armenia' },
-    { label: 'Aruba' },
-    { label: 'Australia' },
-    { label: 'Austria' },
-    { label: 'Azerbaijan' },
-    { label: 'Bahamas' },
-    { label: 'Bahrain' },
-    { label: 'Bangladesh' },
-    { label: 'Barbados' },
-    { label: 'Belarus' },
-    { label: 'Belgium' },
-    { label: 'Belize' },
-    { label: 'Benin' },
-    { label: 'Bermuda' },
-    { label: 'Bhutan' },
-    { label: 'Bolivia, Plurinational State of' },
-    { label: 'Bonaire, Sint Eustatius and Saba' },
-    { label: 'Bosnia and Herzegovina' },
-    { label: 'Botswana' },
-    { label: 'Bouvet Island' },
-    { label: 'Brazil' },
-    { label: 'British Indian Ocean Territory' },
-    { label: 'Brunei Darussalam' },
-];
+let suggestions = [];
 
 function renderInput(inputProps) {
     const { placeholder, startadornment, endadornment } = inputProps;
@@ -145,7 +113,7 @@ function getSuggestions(value) {
 
     return inputLength === 0
         ? []
-        : this.props.resources.filter((resource) => {
+        : suggestions.filter((suggestion) => {
             const keep =
                 count < 5 && suggestion.label.toLowerCase()
                     .slice(0, inputLength) === inputValue;
@@ -193,9 +161,47 @@ class Searcher extends Component {
         });
     };
 
+    handleClickResource = ({ path }) => {
+        this.handleClose();
+        this.props.changePage(`/cloud-drive/${path2url(path)}`);
+    };
+
+    handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
+        this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
+        this.setState({
+            ResourceDetailOpen: true,
+        });
+    };
+
+    handleCloseResourceDetail = () => {
+        this.setState({ ResourceDetailOpen: false });
+        this.props.clearSelectedResource();
+    };
+
+    handleClose = () => {
+        this.setState({
+            suggestions: [],
+            value: '',
+            result: [],
+        });
+        this.props.onClose();
+    };
+
+    async handleSearch() {
+        let { value } = this.state;
+        value = value.trim();
+        if (!value) return;
+        const result = await requester.get(`resources/search?q=${value}`);
+        this.setState({ result });
+    }
+
     render() {
-        const { classes, open, onClose } = this.props;
+        const { classes, open, resources } = this.props;
         const { result } = this.state;
+
+        suggestions = resources ?
+            resources.filter(resource => resource.file && !resource.trashed)
+                .map(resource => ({ label: resource.resource_name })) : [];
 
         return (
             <Dialog
@@ -223,26 +229,31 @@ class Searcher extends Component {
                                 placeholder: _searchPlaceholder,
                                 value: this.state.value,
                                 onChange: this.handleChange,
+                                onKeyPress: (event) => {
+                                    return event.key === 'Enter' ? this.handleSearch() : null;
+                                },
                                 startadornment: (
-                                    <IconButton onClick={onClose}>
+                                    <IconButton onClick={this.handleClose}>
                                         <ArrowBack/>
                                     </IconButton>
                                 ),
-                                endadornment: (
+                                endadornment: (this.state.value && this.state.value.length) ? (
                                     <IconButton onClick={this.handleClearInput}>
                                         <CloseIcon/>
                                     </IconButton>
-                                ),
+                                ) : null,
                             }}/>
                     </Toolbar>
                 </AppBar>
                 <div className={classes.resultListContainer}>
                     <ResourceList
-                        className={classes.searchList}
                         resourceList={result}
                         ItemIcon={Info}
                         onClickResource={this.handleClickResource}
                         onClickAction={this.handleOpenResourceDetail}/>
+                    <ResourceDetail
+                        open={this.state.ResourceDetailOpen}
+                        onClose={this.handleCloseResourceDetail}/>
                 </div>
             </Dialog>
         );
@@ -261,6 +272,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearOneself: () => dispatch(logout()),
     changePage: url => dispatch(replace(url)),
+    getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
+    clearSelectedResource: () => dispatch(clearSelectedResource()),
 });
 
 export default connect(
