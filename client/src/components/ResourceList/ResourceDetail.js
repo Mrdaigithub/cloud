@@ -38,6 +38,8 @@ import { FolderIcon } from '../Icons';
 import styles from './styles';
 import { _directory, _filePath, _fileType, _unknownFilePath, _unknownFileType } from '../../res/values/string';
 import { friendlyPath } from '../../utils/pathUtil';
+import moment from 'moment/moment';
+import { DATE_FORMAT } from '../../constants';
 
 
 const ResourceDetail = props => (
@@ -84,7 +86,8 @@ const ResourceDetail = props => (
                     className={props.classes.ResourceDetailCardContentText}>
                     创建时间:
                     <span className={props.classes.ResourceDetailCardContentRightText}>
-                        {props.selectedResource.resourceCreatedAt}
+                        {moment(new Date(props.selectedResource.resourceCreatedAt))
+                            .format(DATE_FORMAT)}
                     </span>
                 </Typography>
                 <Typography
@@ -93,7 +96,8 @@ const ResourceDetail = props => (
                     className={props.classes.ResourceDetailCardContentText}>
                     修改时间:
                     <span className={props.classes.ResourceDetailCardContentRightText}>
-                        {props.selectedResource.resourceUpdatedAt}
+                        {moment(new Date(props.selectedResource.resourceUpdatedAt))
+                            .format(DATE_FORMAT)}
                     </span>
                 </Typography>
             </CardContent>

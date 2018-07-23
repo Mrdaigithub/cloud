@@ -24,3 +24,4 @@
 
 export const VERSION_CODE = 'V1.5';
 export const DELAY_TIME = 1000;
+export const DATE_FORMAT = 'YYYY/MM/DD';

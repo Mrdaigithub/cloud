@@ -28,7 +28,6 @@
 	use function GuzzleHttp\Psr7\parse_query;
 	use Illuminate\Http\Request;
 	use Illuminate\Validation\ValidationException;
-	use Illuminate\Support\Facades\Crypt;
 	use Illuminate\Support\Facades\Storage;
 	use Illuminate\Support\Facades\DB;
 	use App\Http\Controllers\Api\ApiController;
@@ -36,6 +35,9 @@
 	use App\Http\Resources\ResourceResource;
 	use App\Http\Requests\UpdateResourceRequest;
 	use App\Http\Requests\StoreResourceRequest;
+	use App\Http\Requests\MoveResourceRequest;
+	use App\Http\Requests\ShowPathResourceRequest;
+	use App\Http\Requests\SearchResourceRequest;
 	use App\Models\Resource;
 	
 	
@@ -98,7 +100,7 @@
 		 *
 		 * @return PathResourceCollection
 		 */
-		public function show_with_path( \App\Http\Requests\ShowPathResourceRequest $request, $path ) {
+		public function show_with_path( ShowPathResourceRequest $request, $path ) {
 			return new PathResourceCollection( $request->user()->resources()->where( "path", $path )->get() );
 		}
 		
@@ -128,7 +130,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function search( \App\Http\Requests\SearchResourceRequest $request ) {
+		public function search( SearchResourceRequest $request ) {
 			$query = $request->input( "q" );
 			
 			return DB::select( "SELECT id, resource_name, file, path, created_at, updated_at
@@ -278,7 +280,7 @@
 		 *
 		 * @return mixed
 		 */
-		public function move( \App\Http\Requests\MoveResourceRequest $request, $id ) {
+		public function move( MoveResourceRequest $request, $id ) {
 			$user      = $request->user();
 			$resource  = Resource::find( $id );
 			$base_path = $resource->path;
@@ -321,9 +323,17 @@
 		 * @return mixed
 		 */
 		public function update( UpdateResourceRequest $request, $id ) {
-			$user     = $request->user();
 			$resource = Resource::find( $id );
+			
 			if ( $request->has( "resource_name" ) ) {
+				if ( Resource::where( 'resource_name', $request->resource_name )
+				             ->where( 'path', $resource->path )
+				             ->where( 'trashed', false )
+				             ->count() ) {
+					throw ValidationException::withMessages( [
+						"resource" => [ "400006" ],
+					] )->status( 400 );
+				}
 				$resource->resource_name = $request->get( "resource_name" );
 			}
 			$this->save_model( $resource );
