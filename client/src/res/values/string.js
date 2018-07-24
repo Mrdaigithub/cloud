@@ -42,6 +42,7 @@ export const _fileHashCalculationFailed = '文件Hash计算失败';
 export const _fileUploading = '文件上传中...';
 export const _notSupportSuffixNameAndEmptyFile = '暂不支持无后缀名与空文件';
 export const _fileUploadFailed = '文件上传失败';
+export const _createDirectory = '创建文件夹';
 export const _directory = '文件夹';
 export const _directoryName = '文件夹名称';
 export const _illegalCharacters = '存在非法字符';

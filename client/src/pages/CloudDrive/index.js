@@ -27,13 +27,10 @@ import { connect } from 'react-redux';
 import qs from 'qs';
 import { push } from 'connected-react-router';
 import mime from 'mime-types';
-import Formsy from 'formsy-react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -46,7 +43,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import SparkMD5 from 'spark-md5';
 import { alert, setPageTitle } from '../../store/actions/assistActions';
-import { FormsyText } from '../../components/FormsyMaterialUi';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import ShareStepper from '../../components/ShareStepper';
@@ -72,9 +68,10 @@ import { DELAY_TIME } from '../../constants';
 import {
     _capacityDeficiency, _sameNameFileInTheCurrentDirectory, _calculatingFileHash,
     _fileHashCalculationFailed, _fileUploading, _notSupportSuffixNameAndEmptyFile,
-    _fileUploadFailed, _directoryName, _illegalCharacters, _folderAlreadyExists,
-    _close, _create, _ok, _moveTo,
+    _fileUploadFailed, _illegalCharacters, _folderAlreadyExists,
+    _ok, _moveTo, _rename, _createDirectory,
 } from '../../res/values/string';
+import FormsyDialog from '../../components/FormsyDialog';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -85,6 +82,7 @@ class CloudDrive extends Component {
             movePath: '0',
             selected: [],
             createDirDialogOpen: false,
+            renameResourceDialogOpen: false,
             moveResourceDialogOpen: false,
             ResourcePreviewOpen: false,
             uploadState: false,
@@ -191,13 +189,34 @@ class CloudDrive extends Component {
         const { routing } = this.props;
         this.handleToggleCreateDirDialog()();
         const { path } = await requester.post('resources', qs.stringify({
-            resource_name: model.newDir,
+            resource_name: model.text,
             path: url2path(routing.location.pathname),
         }));
         await requester.get(`resources/${path}`);
         this.props.fetchResources(() => {
             this.getResourceList(url2path(routing.location.pathname));
         });
+    };
+
+
+    /**  重命名资源 **/
+
+    handleToggleRenameResourceDialog = (open = false) => () => {
+        this.setState({ renameResourceDialogOpen: Boolean(open) });
+    };
+
+    handleRenameSubmit = () => async (model) => {
+        if (!this.props.selectedResource) return;
+        const { routing } = this.props;
+        const resourceId = this.props.selectedResource.resourceID;
+        this.handleToggleRenameResourceDialog()();
+        await requester.patch(`resources/${resourceId}`, qs.stringify({
+            resource_name: model.text,
+        }));
+        this.props.fetchResources(() => {
+            this.getResourceList(url2path(routing.location.pathname));
+        });
+        this.props.clearSelectedResource();
     };
 
 
@@ -488,6 +507,8 @@ class CloudDrive extends Component {
     render() {
         const { classes, selectedResource } = this.props;
         const {
+            createDirDialogOpen,
+            renameResourceDialogOpen,
             resourceList,
             moveResourceList,
             selected,
@@ -580,7 +601,8 @@ class CloudDrive extends Component {
                         ItemIcon={Checkbox}
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
-                        toggleCheck={this.handleCheckResource}/>
+                        toggleCheck={this.handleCheckResource}
+                        onRename={this.handleToggleRenameResourceDialog(true)}/>
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
                         onDownload={this.handleDownload(selectedResource.resourceID)}
@@ -593,34 +615,35 @@ class CloudDrive extends Component {
                     uploadTitle={uploadTitle}
                     uploadState={uploadState}
                     uploadValue={uploadValue}/>
-                <Dialog open={this.state.createDirDialogOpen}>
-                    <Formsy onValidSubmit={this.handleCreateDir()}>
-                        <DialogContent>
-                            <FormsyText
-                                title={_directoryName}
-                                name="newDir"
-                                validations={{
-                                    isAlphanumeric: true,
-                                    dirExists: (values, value) => {
-                                        return !this.state.resourceList
-                                            .filter(item => !item.file && item.resource_name === value)
-                                            .length;
-                                    },
-                                }}
-                                validationErrors={{
-                                    isAlphanumeric: _illegalCharacters,
-                                    dirExists: _folderAlreadyExists,
-                                }}
-                                required
-                                fullWidth
-                                autoFocus/>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button color="primary" onClick={this.handleToggleCreateDirDialog()}>{_close}</Button>
-                            <Button type="submit" color="primary">{_create}</Button>
-                        </DialogActions>
-                    </Formsy>
-                </Dialog>
+                <FormsyDialog
+                    open={createDirDialogOpen}
+                    title={_createDirectory}
+                    onClose={this.handleToggleCreateDirDialog()}
+                    onSubmit={this.handleCreateDir()}
+                    validations={{
+                        isAlphanumeric: true,
+                        dirExists: (values, value) => {
+                            return !this.state.resourceList
+                                .filter(item => !item.file && item.resource_name === value)
+                                .length;
+                        },
+                    }}
+                    validationErrors={{
+                        isAlphanumeric: _illegalCharacters,
+                        dirExists: _folderAlreadyExists,
+                    }}/>
+                <FormsyDialog
+                    open={renameResourceDialogOpen}
+                    title={_rename}
+                    value={this.props.selectedResource.resourceName.toString() || ''}
+                    onClose={this.handleToggleRenameResourceDialog()}
+                    onSubmit={this.handleRenameSubmit()}
+                    validations={{
+                        isAlphanumeric: true,
+                    }}
+                    validationErrors={{
+                        isAlphanumeric: _illegalCharacters,
+                    }}/>
                 <Dialog
                     fullScreen
                     open={this.state.moveResourceDialogOpen}

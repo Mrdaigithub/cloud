@@ -25,7 +25,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import mime from 'mime-types';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
@@ -44,14 +43,14 @@ import Divider from '@material-ui/core/Divider';
 import { FolderIcon } from '../Icons';
 import ResourceTypeIcon from '../ResourceTypeIconSwitcher';
 import styles from './styles';
-import { changeResourceListWithPath, clearSelectedResource, fetchResources, getSelectedResource } from '../../store/actions/resourceActions';
+import {
+    clearSelectedResource,
+    getSelectedResource,
+} from '../../store/actions/resourceActions';
 import { _detail, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
 import { conversionCapacityUtil } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
-import { push } from 'connected-react-router';
-import { fetchOneself } from '../../store/actions/oneselfActions';
-import debounce from '../../utils/debounce';
-import { alert, setPageTitle } from '../../store/actions/assistActions';
+import { alert } from '../../store/actions/assistActions';
 
 class ResourceList extends Component {
     constructor(props) {
@@ -92,9 +91,16 @@ class ResourceList extends Component {
         }
     };
 
-    handleClickMoreVert = event => (resource) => {
-        this.props.getSelectedResource(resource);
+    handleClickMoreVert = ({ id, resource_name, path, created_at, updated_at }) => (event) => {
         this.setState({ anchorEl: event.currentTarget });
+        this.props.getSelectedResource({
+            resourceID: id,
+            resourceName: resource_name,
+            resourceMime: mime.lookup(resource_name),
+            resourcePath: path,
+            resourceCreatedAt: created_at,
+            resourceUpdatedAt: updated_at,
+        });
     };
 
     handleCloseMoreVert = () => {
@@ -111,8 +117,8 @@ class ResourceList extends Component {
 
     handleRename = () => {
         this.handleCloseMoreVert();
-        if (!this.props.onRename) return;
-        this.props.onRename();
+        if (!this.props.onRename || !this.props.resourceID) return;
+        this.props.onRename(this.props.resourceID);
     };
 
     render() {
@@ -148,7 +154,8 @@ class ResourceList extends Component {
                                         button
                                         className={classes.resourceItem}
                                         onClick={this.handleClickResource(resource)}
-                                        onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease} onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>
+                                        onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease}
+                                        onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>
                                         <ListItemIcon className={classes.resourceListIcon}>
                                             {
                                                 resource.file ?
