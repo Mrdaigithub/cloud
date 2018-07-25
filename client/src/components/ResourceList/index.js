@@ -47,10 +47,14 @@ import {
     clearSelectedResource,
     getSelectedResource,
 } from '../../store/actions/resourceActions';
-import { _detail, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
+import { _detail, _download, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
 import { conversionCapacityUtil } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
 import { alert } from '../../store/actions/assistActions';
+
+
+let eventLock = false;
+let buttonPressTimer = null;
 
 class ResourceList extends Component {
     constructor(props) {
@@ -59,10 +63,6 @@ class ResourceList extends Component {
             ResourceDescribeOpen: false,
             anchorEl: null,
         };
-        this.buttonPressTimer = 'sad';
-
-        this.handleButtonPress = this.handleButtonPress.bind(this);
-        this.handleButtonRelease = this.handleButtonRelease.bind(this);
     }
 
     onClickAction = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
@@ -79,16 +79,16 @@ class ResourceList extends Component {
     };
 
     handleClickResource = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
-        if (this.props.onClickResource) {
-            this.props.onClickResource({
-                id,
-                name: resource_name,
-                path,
-                file,
-                createdAt: created_at,
-                updatedAt: updated_at,
-            });
-        }
+        if (eventLock) return;
+
+        this.props.onClickResource({
+            id,
+            name: resource_name,
+            path,
+            file,
+            createdAt: created_at,
+            updatedAt: updated_at,
+        });
     };
 
     handleClickMoreVert = ({ id, resource_name, path, created_at, updated_at }) => (event) => {
@@ -107,18 +107,55 @@ class ResourceList extends Component {
         this.setState({ anchorEl: null });
     };
 
-    handleButtonPress() {
-        this.buttonPressTimer = setTimeout(() => alert('long press activated'), 1000);
-    }
+    handleButtonPress = () => {
+        buttonPressTimer = setTimeout(() => {
+            eventLock = true;
 
-    handleButtonRelease() {
-        clearTimeout(this.buttonPressTimer);
-    }
+            // this.props.onLongClickResource();
+        }, 800);
+    };
+
+    handleButtonRelease = () => {
+        clearTimeout(buttonPressTimer);
+        setTimeout(() => {
+            eventLock = false;
+        }, 1);
+    };
 
     handleRename = () => {
         this.handleCloseMoreVert();
         if (!this.props.onRename || !this.props.resourceID) return;
         this.props.onRename(this.props.resourceID);
+    };
+
+    handleRemove = () => {
+        this.handleCloseMoreVert();
+        if (!this.props.onRemove || !this.props.resourceID) return;
+        this.props.onRemove(this.props.resourceID);
+    };
+
+    handleShare = () => {
+        this.handleCloseMoreVert();
+        if (!this.props.onRemove || !this.props.resourceID) return;
+        this.props.onShare(this.props.resourceID);
+    };
+
+    handleDownload = () => {
+        this.handleCloseMoreVert();
+        if (!this.props.onRemove || !this.props.resourceID) return;
+        this.props.onDownload(this.props.resourceID);
+    };
+
+    handleMove = () => {
+        this.handleCloseMoreVert();
+        if (!this.props.onRemove || !this.props.resourceID) return;
+        this.props.onMove(this.props.resourceID);
+    };
+
+    handleDetail = () => {
+        this.handleCloseMoreVert();
+        if (!this.props.onRemove || !this.props.resourceID) return;
+        this.props.onDetail(this.props.resourceID);
     };
 
     render() {
@@ -129,7 +166,6 @@ class ResourceList extends Component {
             toggleCheck,
             ItemIcon,
             onClickAction,
-            onRemove,
             onMove,
         } = this.props;
 
@@ -153,9 +189,7 @@ class ResourceList extends Component {
                                     <ListItem
                                         button
                                         className={classes.resourceItem}
-                                        onClick={this.handleClickResource(resource)}
-                                        onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease}
-                                        onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>
+                                        onClick={this.handleClickResource(resource)}>
                                         <ListItemIcon className={classes.resourceListIcon}>
                                             {
                                                 resource.file ?
@@ -164,6 +198,9 @@ class ResourceList extends Component {
                                             }
                                         </ListItemIcon>
                                         <ListItemText
+                                            primaryTypographyProps={{
+                                                noWrap: true,
+                                            }}
                                             primary={resource.resource_name}
                                             secondary={
                                                 `${resource.file ? (`${conversionCapacityUtil(resource.size)}, `) : ''}
@@ -175,21 +212,21 @@ class ResourceList extends Component {
                                             <IconButton onClick={this.handleClickMoreVert(resource)}>
                                                 <MoreVertIcon/>
                                             </IconButton>
-                                            {/* {*/}
-                                            {/* (checked && ItemIcon && toggleCheck) ?*/}
-                                            {/* (<ItemIcon*/}
-                                            {/* onChange={toggleCheck(resource.id)}*/}
-                                            {/* checked={checked.indexOf(resource.id) !== -1}/>) : null*/}
-                                            {/* }*/}
-                                            {/* {*/}
-                                            {/* (ItemIcon && onClickAction) ?*/}
-                                            {/* (*/}
-                                            {/* <IconButton>*/}
-                                            {/* <ItemIcon*/}
-                                            {/* onClick={this.onClickAction(resource)}/>*/}
-                                            {/* </IconButton>*/}
-                                            {/* ) : null*/}
-                                            {/* }*/}
+                                            {/*{*/}
+                                            {/*(checked && ItemIcon && toggleCheck) ?*/}
+                                            {/*(<ItemIcon*/}
+                                            {/*onChange={toggleCheck(resource.id)}*/}
+                                            {/*checked={checked.indexOf(resource.id) !== -1}/>) : null*/}
+                                            {/*}*/}
+                                            {/*{*/}
+                                            {/*(ItemIcon && onClickAction) ?*/}
+                                            {/*(*/}
+                                            {/*<IconButton>*/}
+                                            {/*<ItemIcon*/}
+                                            {/*onClick={this.onClickAction(resource)}/>*/}
+                                            {/*</IconButton>*/}
+                                            {/*) : null*/}
+                                            {/*}*/}
                                         </ListItemSecondaryAction>
                                     </ListItem>
                                     <Divider/>
@@ -211,23 +248,26 @@ class ResourceList extends Component {
                     onClose={this.handleCloseMoreVert}
                     PaperProps={{
                         style: {
-                            maxHeight: 48 * 4.5,
+                            maxHeight: 80 * 4.5,
                             width: 150,
                         },
                     }}>
                     <MenuItem onClick={this.handleRename}>
                         {_rename}
                     </MenuItem>
-                    <MenuItem onClick={this.handleCloseMoreVert}>
+                    <MenuItem onClick={this.handleMove}>
                         {_moveTo}
                     </MenuItem>
-                    <MenuItem onClick={this.handleCloseMoreVert}>
+                    <MenuItem onClick={this.handleShare}>
                         {_share}
                     </MenuItem>
-                    <MenuItem onClick={this.handleCloseMoreVert}>
+                    <MenuItem onClick={this.handleDetail}>
                         {_detail}
                     </MenuItem>
-                    <MenuItem onClick={this.handleCloseMoreVert}>
+                    <MenuItem onClick={this.handleDownload}>
+                        {_download}
+                    </MenuItem>
+                    <MenuItem onClick={this.handleRemove}>
                         {_remove}
                     </MenuItem>
                 </Menu>
@@ -240,9 +280,16 @@ ResourceList.propTypes = {
     resourceList: PropTypes.array.isRequired,
     checked: PropTypes.array,
     toggleCheck: PropTypes.func,
-    ItemIcon: PropTypes.func,
+    ItemIcon: PropTypes.func.isRequired,
+    onClickResource: PropTypes.func.isRequired,
+    onLongClickResource: PropTypes.func.isRequired,
     onClickAction: PropTypes.func,
     onRename: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
+    onShare: PropTypes.func.isRequired,
+    onDownload: PropTypes.func.isRequired,
+    onMove: PropTypes.func.isRequired,
+    onDetail: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

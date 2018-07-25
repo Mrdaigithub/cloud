@@ -35,6 +35,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloseIcon from '@material-ui/icons/Close';
 import CreateNewFolder from '@material-ui/icons/CreateNewFolder';
 import CompareArrows from '@material-ui/icons/CompareArrows';
@@ -72,6 +73,7 @@ import {
     _ok, _moveTo, _rename, _createDirectory,
 } from '../../res/values/string';
 import FormsyDialog from '../../components/FormsyDialog';
+import ResourceDetail from '../../components/ResourceList/ResourceDetail';
 
 class CloudDrive extends Component {
     constructor(props) {
@@ -80,11 +82,13 @@ class CloudDrive extends Component {
             resourceList: [],
             moveResourceList: [],
             movePath: '0',
+            selectMode: true,
             selected: [],
             createDirDialogOpen: false,
             renameResourceDialogOpen: false,
             moveResourceDialogOpen: false,
             ResourcePreviewOpen: false,
+            ResourceDetailOpen: false,
             uploadState: false,
             uploadValue: 0,
             uploadTitle: '',
@@ -406,6 +410,7 @@ class CloudDrive extends Component {
 
 
     /**  删除资源 **/
+
     handleRemoveResource = () => {
         return async () => {
             const { resources, routing } = this.props;
@@ -423,6 +428,42 @@ class CloudDrive extends Component {
         };
     };
 
+    handleRemoveSingleResource = async (resourceId) => {
+        const { resources, routing } = this.props;
+        await requester.patch(`resources/${resourceId}/trash`);
+        const resourceListWithPath = resources.map(r => ((r.id === resourceId) ? {
+            ...r,
+            trashed: true,
+        } : { ...r }));
+        this.props.changeResourceListWithPath(resourceListWithPath);
+        this.getResourceList(url2path(routing.location.pathname));
+    };
+
+
+    /** 查看资源详细情况 **/
+
+    handleOpenResourceDetail = () => {
+        if (!this.props.selectedResource) return;
+
+        const { resourceID, resourceName, resourcePath, resourceCreatedAt, resourceUpdatedAt } = this.props.selectedResource;
+
+        this.props.getSelectedResource({
+            resourceID,
+            resourceName,
+            resourceMime: mime.lookup(resourceName),
+            resourcePath,
+            resourceCreatedAt,
+            resourceUpdatedAt,
+        });
+        this.setState({
+            ResourceDetailOpen: true,
+        });
+    };
+
+    handleCloseResourceDetail = () => {
+        this.setState({ ResourceDetailOpen: false });
+        this.props.clearSelectedResource();
+    };
 
     /**  移动资源 **/
 
@@ -463,8 +504,10 @@ class CloudDrive extends Component {
 
     /**  下载资源 **/
 
-    handleDownload = resourceID => async () => {
-        const downloadUrl = await requester.get(`resources/link/${resourceID}`);
+    handleDownload = async () => {
+        if (!this.props.selectedResource) return;
+
+        const downloadUrl = await requester.get(`resources/link/${this.props.selectedResource.resourceID}`);
         const downloadDom = document.createElement('a');
         downloadDom.id = 'downloadUrl';
         downloadDom.download = true;
@@ -479,9 +522,8 @@ class CloudDrive extends Component {
 
     /** 分享资源 **/
 
-    handleShare = () => async () => {
-        const { selected } = this.state;
-        if (!selected.length) return;
+    handleShare = () => {
+        if (!this.props.selectedResource) return;
         this.setState({ ShareStepperOpen: true });
     };
 
@@ -504,6 +546,12 @@ class CloudDrive extends Component {
         });
     };
 
+
+    handleMultipleSelectionMode = () => {
+        console.log('handleMultipleSelectionMode');
+    };
+
+
     render() {
         const { classes, selectedResource } = this.props;
         const {
@@ -512,6 +560,7 @@ class CloudDrive extends Component {
             resourceList,
             moveResourceList,
             selected,
+            selectMode,
             uploadState,
             uploadTitle,
             uploadValue,
@@ -585,7 +634,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-share">
                             <IconButton
-                                onClick={this.handleShare()}
+                                onClick={this.handleShare}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -598,18 +647,27 @@ class CloudDrive extends Component {
                 <div id="resourceContent" className={classes.root}>
                     <ResourceList
                         resourceList={resourceList}
-                        ItemIcon={Checkbox}
+                        ItemIcon={selectMode ? MoreVertIcon : Checkbox}
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
+                        onLongClickResource={this.handleMultipleSelectionMode}
                         toggleCheck={this.handleCheckResource}
-                        onRename={this.handleToggleRenameResourceDialog(true)}/>
+                        onRename={this.handleToggleRenameResourceDialog(true)}
+                        onRemove={this.handleRemoveSingleResource}
+                        onShare={this.handleShare}
+                        onDownload={this.handleDownload}
+                        onMove={this.handleToggleMoveResourceDialog(true)}
+                        onDetail={this.handleOpenResourceDetail}/>
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
-                        onDownload={this.handleDownload(selectedResource.resourceID)}
+                        onDownload={this.handleDownload}
                         onRefresh={this.handleRefresh()}
                         onClose={this.handleToggleResourcePreview()}>
                         {getPreview(selectedResource)}
                     </ResourcePreview>
+                    <ResourceDetail
+                        open={this.state.ResourceDetailOpen}
+                        onClose={this.handleCloseResourceDetail}/>
                 </div>
                 <FileUploader
                     uploadTitle={uploadTitle}
@@ -621,7 +679,7 @@ class CloudDrive extends Component {
                     onClose={this.handleToggleCreateDirDialog()}
                     onSubmit={this.handleCreateDir()}
                     validations={{
-                        isAlphanumeric: true,
+                        matchRegexp: /^[^\\/:*?"<>|]+$/,
                         dirExists: (values, value) => {
                             return !this.state.resourceList
                                 .filter(item => !item.file && item.resource_name === value)
@@ -629,7 +687,7 @@ class CloudDrive extends Component {
                         },
                     }}
                     validationErrors={{
-                        isAlphanumeric: _illegalCharacters,
+                        matchRegexp: _illegalCharacters,
                         dirExists: _folderAlreadyExists,
                     }}/>
                 <FormsyDialog
@@ -639,10 +697,10 @@ class CloudDrive extends Component {
                     onClose={this.handleToggleRenameResourceDialog()}
                     onSubmit={this.handleRenameSubmit()}
                     validations={{
-                        isAlphanumeric: true,
+                        matchRegexp: /^[^\\/:*?"<>|]+$/,
                     }}
                     validationErrors={{
-                        isAlphanumeric: _illegalCharacters,
+                        matchRegexp: _illegalCharacters,
                     }}/>
                 <Dialog
                     fullScreen
@@ -669,7 +727,7 @@ class CloudDrive extends Component {
                 </Dialog>
                 <ShareStepper
                     open={this.state.ShareStepperOpen}
-                    resourceID={this.state.selected[0] || null}
+                    resourceID={selectedResource.resourceID || null}
                     onComplete={this.closeShareStepper}/>
                 <OfflineDownloader
                     open={this.state.OfflineDownloaderOpen}

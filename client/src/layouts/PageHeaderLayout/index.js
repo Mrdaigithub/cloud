@@ -115,9 +115,9 @@ class PageHeaderLayout extends Component {
                         <IconButton onClick={this.handleToggleSearcher} className={classes.topbarBtn}>
                             <SearchIcon style={{ width: 30, height: 30 }}/>
                         </IconButton>
-                        <IconButton className={classes.topbarBtn}>
-                            <LightIcon style={{ width: 30, height: 30 }}/>
-                        </IconButton>
+                        {/*<IconButton className={classes.topbarBtn}>*/}
+                            {/*<LightIcon style={{ width: 30, height: 30 }}/>*/}
+                        {/*</IconButton>*/}
                         <IconButton
                             className={classes.topbarBtn}
                             href={'https://github.com/Mrdaigithub/cloud'}>

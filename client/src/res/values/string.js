@@ -89,6 +89,7 @@ export const _chooseSharingMode = '选择分享模式';
 export const _publicLinks = '公开链接';
 export const _privateLinks = '私有链接';
 export const _completed = '完成';
+export const _download = '下载';
 export const _downloadCompleted = '下载完成';
 export const _downloading = '下载中';
 export const _andExtractCode = '及提取码';
