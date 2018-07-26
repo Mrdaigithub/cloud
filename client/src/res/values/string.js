@@ -77,6 +77,7 @@ export const _unlimited = '无限制';
 export const _used = '已用';
 export const _sum = '总计';
 export const _unnamed = '未命名';
+export const _selectAll = '全选';
 export const _rename = '重命名';
 export const _detail = '详细信息';
 export const _share = '分享';

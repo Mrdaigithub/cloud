@@ -38,6 +38,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import MenuIcon from '@material-ui/icons/Menu';
 import Storage from '@material-ui/icons/Storage';
@@ -45,7 +47,8 @@ import Delete from '@material-ui/icons/Delete';
 import SupervisorAccount from '@material-ui/icons/SupervisorAccount';
 import Settings from '@material-ui/icons/Settings';
 import SearchIcon from '@material-ui/icons/Search';
-import { GithubIcon, LightIcon, OfflineDownloadIcon } from '../../components/Icons';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { GithubIcon, OfflineDownloadIcon } from '../../components/Icons';
 import Setting from '../../pages/Setting';
 import Searcher from '../../components/Searcher';
 import styles from './styles';
@@ -69,6 +72,7 @@ class PageHeaderLayout extends Component {
             drawerOpen: false,
             settingOpen: false,
             searcherOpen: false,
+            anchorEl: null,
         };
     }
 
@@ -88,9 +92,19 @@ class PageHeaderLayout extends Component {
         this.setState({ searcherOpen: !this.state.searcherOpen });
     };
 
+    handleClickAppBarMenu = (event) => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleCloseAppBarMenu = (event) => () => {
+        this.setState({ anchorEl: null });
+        if (event) event();
+    };
+
     render() {
         const {
             pageTitle,
+            appBarMenu,
             children,
             classes,
             username,
@@ -98,6 +112,8 @@ class PageHeaderLayout extends Component {
             capacity,
             used,
         } = this.props;
+        const { anchorEl } = this.state;
+
         return (
             <div className={classes.normal}>
                 <AppBar position={'fixed'}>
@@ -115,14 +131,19 @@ class PageHeaderLayout extends Component {
                         <IconButton onClick={this.handleToggleSearcher} className={classes.topbarBtn}>
                             <SearchIcon style={{ width: 30, height: 30 }}/>
                         </IconButton>
-                        {/*<IconButton className={classes.topbarBtn}>*/}
-                            {/*<LightIcon style={{ width: 30, height: 30 }}/>*/}
-                        {/*</IconButton>*/}
                         <IconButton
                             className={classes.topbarBtn}
                             href={'https://github.com/Mrdaigithub/cloud'}>
                             <GithubIcon style={{ width: 30, height: 30 }}/>
                         </IconButton>
+                        {
+                            appBarMenu || appBarMenu.length ?
+                                <IconButton
+                                    className={classes.topbarBtn}
+                                    onClick={this.handleClickAppBarMenu}>
+                                    <MoreVertIcon/>
+                                </IconButton> : null
+                        }
                     </Toolbar>
                 </AppBar>
                 <Drawer open={this.state.drawerOpen} onClose={this.handleToggleDrawer(false)}>
@@ -207,6 +228,27 @@ class PageHeaderLayout extends Component {
                 </div>
                 <Setting open={this.state.settingOpen} onClose={this.handleToggleSetting}/>
                 <Searcher open={this.state.searcherOpen} onClose={this.handleToggleSearcher}/>
+                {
+                    appBarMenu ?
+                        <Menu
+                            id="appBarMenu"
+                            PaperProps={{
+                                style: {
+                                    maxHeight: 80 * 4.5,
+                                    width: 150,
+                                },
+                            }}
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={this.handleCloseAppBarMenu}>
+                            {appBarMenu.map(i =>
+                                <MenuItem
+                                    key={i.name}
+                                    onClick={this.handleCloseAppBarMenu(i.event)}>
+                                    {i.name}
+                                </MenuItem>)}
+                        </Menu> : null
+                }
             </div>
         );
     }
@@ -214,6 +256,7 @@ class PageHeaderLayout extends Component {
 
 const mapStateToProps = state => ({
     pageTitle: state.assist.pageTitle,
+    appBarMenu: state.assist.appBarMenu,
     id: state.oneself.id,
     username: state.oneself.username,
     email: state.oneself.email,

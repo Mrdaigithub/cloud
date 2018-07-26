@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-import { CHANGE_MSG, TOGGLE_LOADING, TOGGLE_MSG, SET_TITLE } from '../actions/assistActions';
+import { CHANGE_MSG, TOGGLE_LOADING, TOGGLE_MSG, SET_TITLE, SET_APP_BAR_MENU } from '../actions/assistActions';
 
 const initialState = {
     loading: false,
     msgShow: false,
     msgText: '',
     pageTitle: '',
+    appBarMenu: [],
 };
 
 export default (state = initialState, action) => {
@@ -52,6 +53,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 pageTitle: action.payload.pageTitle,
+            };
+        case SET_APP_BAR_MENU:
+            return {
+                ...state,
+                appBarMenu: action.payload.appBarMenu,
             };
 
         default:

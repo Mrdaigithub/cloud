@@ -25,6 +25,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import qs from 'qs';
+import SparkMD5 from 'spark-md5';
 import { push } from 'connected-react-router';
 import mime from 'mime-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -42,8 +43,7 @@ import CompareArrows from '@material-ui/icons/CompareArrows';
 import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
-import SparkMD5 from 'spark-md5';
-import { alert, setPageTitle } from '../../store/actions/assistActions';
+import { alert, setPageTitle, setAppBarMenu } from '../../store/actions/assistActions';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import ShareStepper from '../../components/ShareStepper';
@@ -70,7 +70,7 @@ import {
     _capacityDeficiency, _sameNameFileInTheCurrentDirectory, _calculatingFileHash,
     _fileHashCalculationFailed, _fileUploading, _notSupportSuffixNameAndEmptyFile,
     _fileUploadFailed, _illegalCharacters, _folderAlreadyExists,
-    _ok, _moveTo, _rename, _createDirectory,
+    _ok, _moveTo, _rename, _createDirectory, _selectAll,
 } from '../../res/values/string';
 import FormsyDialog from '../../components/FormsyDialog';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
@@ -99,14 +99,25 @@ class CloudDrive extends Component {
             locale: 'zh',
             ShareStepperOpen: false,
             OfflineDownloaderOpen: false,
+            anchorEl: null,
         };
     }
 
     async componentDidMount() {
         const { routing } = this.props;
+        const menus = [
+            {
+                name: _selectAll,
+                'event': () => {
+                    console.log(1);
+                },
+            },
+        ];
+
         this.props.fetchResources(() => {
             this.getResourceList(url2path(routing.location.pathname));
             this.props.setPageTitle(friendlyPath(url2path(this.props.routing.location.pathname)));
+            this.props.setAppBarMenu(menus);
             this.props.fetchOneself();
         });
     }
@@ -747,6 +758,7 @@ const mapStateToProps = (state, routing) => ({
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
+    setAppBarMenu: appBarMenu => setAppBarMenu(appBarMenu)(dispatch),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
     changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),

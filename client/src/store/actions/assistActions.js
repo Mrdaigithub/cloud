@@ -28,6 +28,7 @@ export const TOGGLE_LOADING = 'assist/TOGGLE_LOADING';
 export const TOGGLE_MSG = 'assist/TOGGLE_MSG';
 export const CHANGE_MSG = 'assist/CHANGE_MSG';
 export const SET_TITLE = 'assist/SET_TITLE';
+export const SET_APP_BAR_MENU = 'assist/SET_APP_BAR_MENU';
 
 export const toggleLoading = (loading) => {
     return (dispatch) => {
@@ -72,6 +73,17 @@ export const setPageTitle = (pageTitle) => {
             type: SET_TITLE,
             payload: {
                 pageTitle,
+            },
+        });
+    };
+};
+
+export const setAppBarMenu = (appBarMenu) => {
+    return (dispatch) => {
+        return dispatch({
+            type: SET_APP_BAR_MENU,
+            payload: {
+                appBarMenu,
             },
         });
     };
