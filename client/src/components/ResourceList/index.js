@@ -35,26 +35,27 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
+import Checkbox from '@material-ui/core/Checkbox';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CloseIcon from '@material-ui/icons/Close';
+import PlayListAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { FolderIcon } from '../Icons';
 import ResourceTypeIcon from '../ResourceTypeIconSwitcher';
 import styles from './styles';
 import {
-    clearSelectedResource,
-    getSelectedResource,
+    clearSelectedResource, getSelectedResource,
+    setCheckedResourceIdList, clearCheckedResourceIdList,
 } from '../../store/actions/resourceActions';
-import { _detail, _download, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
+import { _alreadyChecked, _detail, _download, _item, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
 import { conversionCapacityUtil } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
-import { alert } from '../../store/actions/assistActions';
-
-
-let eventLock = false;
-let buttonPressTimer = null;
 
 class ResourceList extends Component {
     constructor(props) {
@@ -62,6 +63,7 @@ class ResourceList extends Component {
         this.state = {
             ResourceDescribeOpen: false,
             anchorEl: null,
+            checkedMenuAnchorEl: null,
         };
     }
 
@@ -79,8 +81,6 @@ class ResourceList extends Component {
     };
 
     handleClickResource = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
-        if (eventLock) return;
-
         this.props.onClickResource({
             id,
             name: resource_name,
@@ -107,19 +107,33 @@ class ResourceList extends Component {
         this.setState({ anchorEl: null });
     };
 
-    handleButtonPress = () => {
-        buttonPressTimer = setTimeout(() => {
-            eventLock = true;
-
-            // this.props.onLongClickResource();
-        }, 800);
+    handleClickCheckedMenuMoreVert = (event) => {
+        this.setState({ checkedMenuAnchorEl: event.currentTarget });
     };
 
-    handleButtonRelease = () => {
-        clearTimeout(buttonPressTimer);
-        setTimeout(() => {
-            eventLock = false;
-        }, 1);
+    handleCloseCheckedMenuMoreVert = () => {
+        this.setState({ checkedMenuAnchorEl: null });
+    };
+
+    handleCloseCheckedMode = () => {
+        this.props.clearCheckedResourceIdList();
+    };
+
+    handleToggleCheck = resourceId => () => {
+        const checkedResourceIdList = this.props.checkedResourceIdList;
+        const index = checkedResourceIdList.indexOf(resourceId);
+
+        if (index === -1) {
+            checkedResourceIdList.push(resourceId);
+        } else {
+            checkedResourceIdList.splice(index, 1);
+        }
+
+        this.props.setResourceIdList(checkedResourceIdList);
+    };
+
+    handleCheckedAllResourceWithPath = () => {
+        
     };
 
     handleRename = () => {
@@ -162,14 +176,11 @@ class ResourceList extends Component {
         const {
             classes,
             resourceList,
-            checked,
-            toggleCheck,
-            ItemIcon,
-            onClickAction,
+            checkedResourceIdList,
             onMove,
         } = this.props;
 
-        const { anchorEl } = this.state;
+        const { anchorEl, checkedMenuAnchorEl } = this.state;
 
         const sortedResourceList = resourceList
             .sort((v1, v2) => {
@@ -182,6 +193,43 @@ class ResourceList extends Component {
         return (
             <div className={classes.root}>
                 {
+                    checkedResourceIdList && checkedResourceIdList.length ?
+                        <AppBar
+                            position="fixed"
+                            color="default"
+                            classes={{ colorDefault: classes.dark }}>
+                            <Toolbar>
+                                <IconButton className={classes.white} onClick={this.handleCloseCheckedMode}>
+                                    <CloseIcon/>
+                                </IconButton>
+                                <Typography
+                                    variant="title"
+                                    className={classes.checkedTopBarTitle}>
+                                    {
+                                        checkedResourceIdList ?
+                                            `${_alreadyChecked}${checkedResourceIdList.length}${_item}` :
+                                            null
+                                    }
+                                </Typography>
+                                <IconButton
+                                    className={classes.white}
+                                    onClick={this.handleCheckedAllResourceWithPath}>
+                                    <PlayListAddCheckIcon/>
+                                </IconButton>
+                                <IconButton
+                                    className={classes.white}
+                                    onClick={this.handleClickAppBarMenu}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                                <IconButton
+                                    className={classes.white}
+                                    onClick={this.handleClickCheckedMenuMoreVert}>
+                                    <MoreVertIcon/>
+                                </IconButton>
+                            </Toolbar>
+                        </AppBar> : null
+                }
+                {
                     resourceList.length ?
                         <List className={classes.resourceList}>
                             {sortedResourceList.map(resource => (
@@ -189,7 +237,11 @@ class ResourceList extends Component {
                                     <ListItem
                                         button
                                         className={classes.resourceItem}
-                                        onClick={this.handleClickResource(resource)}>
+                                        onClick={
+                                            checkedResourceIdList ?
+                                                this.handleToggleCheck(resource.id) :
+                                                this.handleClickResource(resource)
+                                        }>
                                         <ListItemIcon className={classes.resourceListIcon}>
                                             {
                                                 resource.file ?
@@ -209,24 +261,16 @@ class ResourceList extends Component {
                                                     .format(DATE_FORMAT)}`
                                             }/>
                                         <ListItemSecondaryAction>
-                                            <IconButton onClick={this.handleClickMoreVert(resource)}>
-                                                <MoreVertIcon/>
-                                            </IconButton>
-                                            {/*{*/}
-                                            {/*(checked && ItemIcon && toggleCheck) ?*/}
-                                            {/*(<ItemIcon*/}
-                                            {/*onChange={toggleCheck(resource.id)}*/}
-                                            {/*checked={checked.indexOf(resource.id) !== -1}/>) : null*/}
-                                            {/*}*/}
-                                            {/*{*/}
-                                            {/*(ItemIcon && onClickAction) ?*/}
-                                            {/*(*/}
-                                            {/*<IconButton>*/}
-                                            {/*<ItemIcon*/}
-                                            {/*onClick={this.onClickAction(resource)}/>*/}
-                                            {/*</IconButton>*/}
-                                            {/*) : null*/}
-                                            {/*}*/}
+                                            {
+                                                checkedResourceIdList && checkedResourceIdList.length ?
+                                                    <Checkbox
+                                                        checked={checkedResourceIdList.indexOf(resource.id) !== -1}
+                                                        value={resource.id.toString()}
+                                                        onChange={this.handleToggleCheck(resource.id)}/> :
+                                                    <IconButton onClick={this.handleClickMoreVert(resource)}>
+                                                        <MoreVertIcon/>
+                                                    </IconButton>
+                                            }
                                         </ListItemSecondaryAction>
                                     </ListItem>
                                     <Divider/>
@@ -271,6 +315,23 @@ class ResourceList extends Component {
                         {_remove}
                     </MenuItem>
                 </Menu>
+                <Menu
+                    anchorEl={checkedMenuAnchorEl}
+                    open={Boolean(checkedMenuAnchorEl)}
+                    onClose={this.handleCloseCheckedMenuMoreVert}
+                    PaperProps={{
+                        style: {
+                            maxHeight: 80 * 4.5,
+                            width: 150,
+                        },
+                    }}>
+                    <MenuItem onClick={this.handleMove}>
+                        {_moveTo}
+                    </MenuItem>
+                    <MenuItem onClick={this.handleRename}>
+                        {_download}
+                    </MenuItem>
+                </Menu>
             </div>
         );
     }
@@ -278,11 +339,7 @@ class ResourceList extends Component {
 
 ResourceList.propTypes = {
     resourceList: PropTypes.array.isRequired,
-    checked: PropTypes.array,
-    toggleCheck: PropTypes.func,
-    ItemIcon: PropTypes.func.isRequired,
     onClickResource: PropTypes.func.isRequired,
-    onLongClickResource: PropTypes.func.isRequired,
     onClickAction: PropTypes.func,
     onRename: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
@@ -294,11 +351,14 @@ ResourceList.propTypes = {
 
 const mapStateToProps = state => ({
     resourceID: state.resource.selectedResource.resourceID,
+    checkedResourceIdList: state.resource.checkedResourceIdList,
 });
 
 const mapDispatchToProps = dispatch => ({
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
+    setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
+    clearCheckedResourceIdList: () => dispatch(clearCheckedResourceIdList()),
 });
 
 export default connect(

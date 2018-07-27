@@ -43,7 +43,6 @@ import CompareArrows from '@material-ui/icons/CompareArrows';
 import FileUpload from '@material-ui/icons/FileUpload';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
-import { alert, setPageTitle, setAppBarMenu } from '../../store/actions/assistActions';
 import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import ShareStepper from '../../components/ShareStepper';
@@ -56,12 +55,14 @@ import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview } from '../../utils/assist';
 import debounce from '../../utils/debounce';
+import { alert, setPageTitle, setAppBarMenu } from '../../store/actions/assistActions';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import {
     fetchResources,
     changeResourceListWithPath,
     clearSelectedResource,
     getSelectedResource,
+    setCheckedResourceIdList,
 } from '../../store/actions/resourceActions';
 import { friendlyPath, movePath } from '../../utils/pathUtil';
 import { CALCULATE_HASH_CHUNK_SIZE } from '../../constants/uploaderConfig';
@@ -70,7 +71,7 @@ import {
     _capacityDeficiency, _sameNameFileInTheCurrentDirectory, _calculatingFileHash,
     _fileHashCalculationFailed, _fileUploading, _notSupportSuffixNameAndEmptyFile,
     _fileUploadFailed, _illegalCharacters, _folderAlreadyExists,
-    _ok, _moveTo, _rename, _createDirectory, _selectAll,
+    _ok, _moveTo, _rename, _createDirectory, _selectAll, _offlineDownload, _uploadFile, _alreadyChecked, _item,
 } from '../../res/values/string';
 import FormsyDialog from '../../components/FormsyDialog';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
@@ -105,21 +106,53 @@ class CloudDrive extends Component {
 
     async componentDidMount() {
         const { routing } = this.props;
-        const menus = [
-            {
-                name: _selectAll,
-                'event': () => {
-                    console.log(1);
-                },
-            },
-        ];
 
         this.props.fetchResources(() => {
             this.getResourceList(url2path(routing.location.pathname));
             this.props.setPageTitle(friendlyPath(url2path(this.props.routing.location.pathname)));
-            this.props.setAppBarMenu(menus);
             this.props.fetchOneself();
+            this.props.setAppBarMenu([
+                {
+                    name: _selectAll,
+                    'event': () => {
+                        this.props.setResourceIdList(this.state.resourceList.map(resource => resource.id));
+                    },
+                    disabled: !this.state.resourceList.length,
+                }, {
+                    name: <div>
+                        <input
+                            accept="*"
+                            style={{ display: 'none' }}
+                            id="icon-button-file"
+                            name="icon-button-file"
+                            onChange={this.handleUpload()}
+                            type="file"/>
+                        <label htmlFor="icon-button-file">
+                            {_uploadFile}
+                        </label>
+                    </div>,
+                    'event': () => {
+                    },
+                    disabled: false,
+                }, {
+                    name: _createDirectory,
+                    'event': () => {
+                        this.handleToggleCreateDirDialog(true)();
+                    },
+                    disabled: false,
+                }, {
+                    name: _offlineDownload,
+                    'event': () => {
+                        this.handleOpenOfflineDownload();
+                    },
+                    disabled: false,
+                },
+            ]);
         });
+    }
+
+    componentWillUnmount() {
+        this.props.setAppBarMenu([]);
     }
 
     /**
@@ -558,11 +591,6 @@ class CloudDrive extends Component {
     };
 
 
-    handleMultipleSelectionMode = () => {
-        console.log('handleMultipleSelectionMode');
-    };
-
-
     render() {
         const { classes, selectedResource } = this.props;
         const {
@@ -661,7 +689,6 @@ class CloudDrive extends Component {
                         ItemIcon={selectMode ? MoreVertIcon : Checkbox}
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
-                        onLongClickResource={this.handleMultipleSelectionMode}
                         toggleCheck={this.handleCheckResource}
                         onRename={this.handleToggleRenameResourceDialog(true)}
                         onRemove={this.handleRemoveSingleResource}
@@ -759,13 +786,14 @@ const mapStateToProps = (state, routing) => ({
 const mapDispatchToProps = dispatch => ({
     setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
     setAppBarMenu: appBarMenu => setAppBarMenu(appBarMenu)(dispatch),
+    alert: debounce((msgText, time) => alert(msgText, time)(dispatch)),
+    changePage: url => dispatch(push(url)),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
     changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
-    alert: debounce((msgText, time) => alert(msgText, time)(dispatch)),
-    changePage: url => dispatch(push(url)),
+    setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
 });
 
 export default connect(

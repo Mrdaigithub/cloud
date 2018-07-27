@@ -96,7 +96,7 @@ class PageHeaderLayout extends Component {
         this.setState({ anchorEl: event.currentTarget });
     };
 
-    handleCloseAppBarMenu = (event) => () => {
+    handleCloseAppBarMenu = event => () => {
         this.setState({ anchorEl: null });
         if (event) event();
     };
@@ -116,7 +116,7 @@ class PageHeaderLayout extends Component {
 
         return (
             <div className={classes.normal}>
-                <AppBar position={'fixed'}>
+                <AppBar position="fixed">
                     <Toolbar>
                         <IconButton
                             className={classes.menuButton}
@@ -137,7 +137,7 @@ class PageHeaderLayout extends Component {
                             <GithubIcon style={{ width: 30, height: 30 }}/>
                         </IconButton>
                         {
-                            appBarMenu || appBarMenu.length ?
+                            appBarMenu && appBarMenu.length ?
                                 <IconButton
                                     className={classes.topbarBtn}
                                     onClick={this.handleClickAppBarMenu}>
@@ -240,10 +240,11 @@ class PageHeaderLayout extends Component {
                             }}
                             anchorEl={anchorEl}
                             open={Boolean(anchorEl)}
-                            onClose={this.handleCloseAppBarMenu}>
+                            onClose={this.handleCloseAppBarMenu()}>
                             {appBarMenu.map(i =>
                                 <MenuItem
                                     key={i.name}
+                                    disabled={Boolean(i.disabled)}
                                     onClick={this.handleCloseAppBarMenu(i.event)}>
                                     {i.name}
                                 </MenuItem>)}

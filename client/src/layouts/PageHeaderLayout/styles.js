@@ -45,10 +45,10 @@ const styles = theme => ({
     },
     avatarContainer: {
         backgroundColor: theme.palette.secondary.light,
-        color: '#fff',
+        color: '#f5f5f5',
     },
     avatarImg: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f5f5f5',
         color: theme.palette.secondary.light,
     },
     avatarUsername: {
@@ -68,7 +68,7 @@ const styles = theme => ({
         width: '100%',
     },
     topbarBtn: {
-        color: '#fff',
+        color: '#f5f5f5',
     },
     content: {
         paddingTop: 66,

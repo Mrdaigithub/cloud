@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
-import { GET_RESOURCES, GET_SELECTED_RESOURCE, CLEAR_SELECTED_RESOURCE } from '../actions/resourceActions';
+import {
+    GET_RESOURCES, GET_SELECTED_RESOURCE, CLEAR_SELECTED_RESOURCE,
+    SET_CHECKED_RESOURCE_ID_LIST, CLEAR_CHECKED_RESOURCE_ID_LIST,
+} from '../actions/resourceActions';
 
 const initialState = {
     resources: null,
@@ -34,6 +37,7 @@ const initialState = {
         resourceCreatedAt: '',
         resourceUpdatedAt: '',
     },
+    checkedResourceIdList: null,
 };
 
 export default (state = initialState, action) => {
@@ -59,6 +63,16 @@ export default (state = initialState, action) => {
                     resourceCreatedAt: '',
                     resourceUpdatedAt: '',
                 },
+            };
+        case SET_CHECKED_RESOURCE_ID_LIST:
+            return {
+                ...state,
+                checkedResourceIdList: action.payload.checkedResourceIdList,
+            };
+        case CLEAR_CHECKED_RESOURCE_ID_LIST:
+            return {
+                ...state,
+                checkedResourceIdList: null,
             };
 
         default:

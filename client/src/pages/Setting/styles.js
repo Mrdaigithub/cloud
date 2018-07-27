@@ -34,7 +34,7 @@ const styles = theme => ({
         position: 'relative',
     },
     listSection: {
-        background: '#fff',
+        background: '#f5f5f5',
     },
     listItemTextChild: {
         '& h4': {

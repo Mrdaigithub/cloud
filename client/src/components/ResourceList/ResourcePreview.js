@@ -209,7 +209,7 @@ class ResourcePreview extends Component {
                                 {
                                     children ?
                                         children :
-                                        <Typography variant="subheading" gutterBottom className={classes.unablePreviewText}>
+                                        <Typography variant="subheading" gutterBottom className={classes.white}>
                                             {_fileTypeUnablePreview}
                                         </Typography>
                                 }

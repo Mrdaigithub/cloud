@@ -24,7 +24,7 @@
 
 const styles = theme => ({
     appBarColorPrimary: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f5f5f5',
     },
     resultListContainer: {
         flexGrow: 1,

@@ -26,6 +26,15 @@ const styles = theme => ({
     root: {
         height: '100%',
     },
+    flex: {
+        flexGrow: 1,
+    },
+    dark: {
+        backgroundColor: '#212121',
+    },
+    white: {
+        color: '#f5f5f5',
+    },
     fullScreen: {
         width: '100vw',
         height: '100vh',
@@ -36,6 +45,10 @@ const styles = theme => ({
     },
     textCenter: {
         textAlign: 'center',
+    },
+    checkedTopBarTitle: {
+        extend: 'white',
+        flexGrow: 1,
     },
     resourceList: {
         overflowY: 'scroll',
@@ -52,7 +65,7 @@ const styles = theme => ({
         height: '90vh',
     },
     resourceItem: {
-        backgroundColor: '#fff',
+        backgroundColor: '#f5f5f5',
         '&:hover': {
             backgroundColor: '#eee',
         },
@@ -99,7 +112,7 @@ const styles = theme => ({
         top: 70,
         left: '5vw',
         border: '1px solid #e5e5e5',
-        backgroundColor: '#fff',
+        backgroundColor: '#f5f5f5',
         boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',
         padding: 8 * 4,
     },
@@ -114,9 +127,6 @@ const styles = theme => ({
         backgroundColor: '#fafafa',
     },
     videoPreview: {},
-    unablePreviewText: {
-        color: '#fff',
-    },
 });
 
 export default styles;

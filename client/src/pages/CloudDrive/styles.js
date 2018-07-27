@@ -27,7 +27,10 @@ const styles = theme => ({
         height: '100%',
     },
     bottomBarBtnIcon: {
-        color: '#fff',
+        color: '#f5f5f5',
+    },
+    topbarBtn: {
+        color: '#f5f5f5',
     },
     SpeedDialItemInput: {
         display: 'none',

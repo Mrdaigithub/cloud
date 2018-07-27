@@ -47,7 +47,7 @@ const styles = theme => ({
             transition: '0.2s ease-in-out',
         },
         '& button': {
-            backgroundColor: '#fff',
+            backgroundColor: '#f5f5f5',
             '& a': {
                 display: 'inline-flex',
                 color: '#5f6161',
