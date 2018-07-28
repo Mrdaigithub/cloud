@@ -25,6 +25,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import moment from 'moment/moment';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -37,8 +38,7 @@ import ResourceTypeIcon from '../ResourceTypeIconSwitcher/index';
 import { FolderIcon } from '../Icons';
 import styles from './styles';
 import { _directory, _filePath, _fileType, _unknownFilePath, _unknownFileType } from '../../res/values/string';
-import { friendlyPath } from '../../utils/pathUtil';
-import moment from 'moment/moment';
+import { friendlyPath } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
 
 

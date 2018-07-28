@@ -24,7 +24,7 @@
 
 import requester from '../../utils/requester';
 
-export const GET_RESOURCES = 'resource/GET_RESOURCES';
+export const SET_RESOURCE_LIST = 'resource/SET_RESOURCE_LIST';
 export const GET_SELECTED_RESOURCE = 'resource/GET_SELECTED_RESOURCE';
 export const CLEAR_SELECTED_RESOURCE = 'resource/CLEAR_SELECTED_RESOURCE';
 export const SET_CHECKED_RESOURCE_ID_LIST = 'resource/SET_CHECKED_RESOURCE_ID_LIST';
@@ -34,7 +34,7 @@ export const fetchResources = (cb) => {
     return async (dispatch) => {
         const resources = await requester.get('resources');
         dispatch({
-            type: GET_RESOURCES,
+            type: SET_RESOURCE_LIST,
             payload: {
                 resources,
             },
@@ -65,9 +65,9 @@ export const clearSelectedResource = () => {
     };
 };
 
-export const changeResourceListWithPath = (resources) => {
+export const setResourceList = (resources) => {
     return {
-        type: GET_RESOURCES,
+        type: SET_RESOURCE_LIST,
         payload: {
             resources,
         },

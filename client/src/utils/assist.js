@@ -27,6 +27,9 @@ import ImgPreview from '../components/ResourceList/ImgPreview';
 import TextPreview from '../components/ResourceList/TextPreview';
 import VideoPreview from '../components/ResourceList/VideoPreview';
 
+
+/* Resource Util*/
+
 /**
  * 获取文件对应的预览组件
  *
@@ -71,6 +74,75 @@ export const getPreview = ({ resourceMime }) => {
 };
 
 /**
+ * 获取指定路径的资源列表
+ *
+ * @param resourceLList
+ * @param path
+ * @returns {*[]}
+ */
+export const getResourceListWithPath = (resourceLList = [], path = '0') => {
+    return resourceLList
+        .filter(r => r.path === path)
+        .filter(r => !r.trashed);
+};
+
+
+/**
+ * 将文件容量单位转换之合适的单位
+ *
+ * @param fileByte
+ * @returns {string}
+ */
+export const conversionCapacityUtil = (fileByte) => {
+    const capacityUtilName = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    let fileSizeMsg = '';
+    for (let i = 0; i < capacityUtilName.length; i += 1) {
+        if (fileByte >= (1024 ** i) && fileByte < (1024 ** (i + 1))) {
+            fileSizeMsg = i === 0 ?
+                `${fileByte}${capacityUtilName[i]}` :
+                `${(fileByte / (1024 ** i)).toFixed(2)}${capacityUtilName[i]}`;
+            return fileSizeMsg;
+        }
+    }
+    return '∞';
+};
+
+
+/* Path Util*/
+
+/**
+ * 回退url /cloud-drive/0/1/2/3 => /cloud-drive/0/1/2
+ *
+ * @param url
+ * @returns {string}
+ */
+export const movePath = {
+    go: (url, path) => {
+        const newMoveUrl = url.toString()
+            .split('/')
+            .filter(item => !!item);
+        if (newMoveUrl[0] !== '0') {
+            newMoveUrl.unshift('0');
+        }
+        newMoveUrl.push(path.toString()
+            .trim());
+        return newMoveUrl.join('/');
+    },
+    back: (url) => {
+        const newMoveUrl = url.toString()
+            .split('/')
+            .filter(item => !!item);
+        if (newMoveUrl[0] !== '0') {
+            newMoveUrl.unshift('0');
+        }
+        if (newMoveUrl.length > 1) {
+            newMoveUrl.pop();
+        }
+        return newMoveUrl.join('/');
+    },
+};
+
+/**
  * 将url转化成上传的路径字符串/cloud-drive/0/1/2/3 => '0.1.2.3'
  *
  * @param url
@@ -98,21 +170,21 @@ export const path2url = (path) => {
 };
 
 /**
- * 将文件容量单位转换之合适的单位
+ * 返回友好的资源路径  0.1.2 => /path1/path2
  *
- * @param fileByte
- * @returns {string}
+ * @param path
+ * @returns {*}
  */
-export const conversionCapacityUtil = (fileByte) => {
-    const capacityUtilName = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-    let fileSizeMsg = '';
-    for (let i = 0; i < capacityUtilName.length; i += 1) {
-        if (fileByte >= (1024 ** i) && fileByte < (1024 ** (i + 1))) {
-            fileSizeMsg = i === 0 ?
-                `${fileByte}${capacityUtilName[i]}` :
-                `${(fileByte / (1024 ** i)).toFixed(2)}${capacityUtilName[i]}`;
-            return fileSizeMsg;
-        }
-    }
-    return '∞';
+export const friendlyPath = (path) => {
+    if (!window.store) return false;
+    const resources = window.store.getState().resource.resources;
+
+    return path.toString() === '0' ?
+        '/' :
+        path.split('.')
+            .map((i) => {
+                if (i === '0') return '';
+                return resources.filter(item => item.id.toString() === i)[0].resource_name;
+            })
+            .join('/');
 };

@@ -23,7 +23,7 @@
  */
 
 import {
-    GET_RESOURCES, GET_SELECTED_RESOURCE, CLEAR_SELECTED_RESOURCE,
+    SET_RESOURCE_LIST, GET_SELECTED_RESOURCE, CLEAR_SELECTED_RESOURCE,
     SET_CHECKED_RESOURCE_ID_LIST, CLEAR_CHECKED_RESOURCE_ID_LIST,
 } from '../actions/resourceActions';
 
@@ -42,7 +42,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case GET_RESOURCES:
+        case SET_RESOURCE_LIST:
             return {
                 ...state,
                 resources: action.payload.resources,

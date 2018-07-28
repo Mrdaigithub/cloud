@@ -51,11 +51,12 @@ import ResourceTypeIcon from '../ResourceTypeIconSwitcher';
 import styles from './styles';
 import {
     clearSelectedResource, getSelectedResource,
-    setCheckedResourceIdList, clearCheckedResourceIdList,
+    setCheckedResourceIdList, clearCheckedResourceIdList, setResourceList,
 } from '../../store/actions/resourceActions';
 import { _alreadyChecked, _detail, _download, _item, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
-import { conversionCapacityUtil } from '../../utils/assist';
+import { conversionCapacityUtil, getResourceListWithPath } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
+import requester from '../../utils/requester';
 
 class ResourceList extends Component {
     constructor(props) {
@@ -129,11 +130,11 @@ class ResourceList extends Component {
             checkedResourceIdList.splice(index, 1);
         }
 
-        this.props.setResourceIdList(checkedResourceIdList);
+        this.props.setCheckedResourceIdList(checkedResourceIdList);
     };
 
     handleCheckedAllResourceWithPath = () => {
-        
+        this.props.setCheckedResourceIdList(this.props.resourceList.map(resource => resource.id));
     };
 
     handleRename = () => {
@@ -142,10 +143,28 @@ class ResourceList extends Component {
         this.props.onRename(this.props.resourceID);
     };
 
-    handleRemove = () => {
+    handleRemove = resourceIdList => async () => {
+        const _resourceIdList =
+            Object.prototype.toString.call(resourceIdList) !== '[object Array]' ?
+                [resourceIdList] : resourceIdList;
         this.handleCloseMoreVert();
-        if (!this.props.onRemove || !this.props.resourceID) return;
-        this.props.onRemove(this.props.resourceID);
+
+        if (_resourceIdList.length) {
+            console.log(this.props.resourceList
+                .map(r => ((_resourceIdList.indexOf(r.id) === -1) ?
+                    { ...r } :
+                    { ...r, trashed: true })));
+            // const deleteList = _resourceIdList.map(id => requester.patch(`resources/${id}/trash`));
+            // await Promise.all(deleteList);
+            // this.props.setResourceList(this.props.resourceList
+            //     .map(r => ((_resourceIdList.indexOf(r.id) === -1) ?
+            //         { ...r } :
+            //         { ...r, trashed: true })));
+
+            // const checkedResourceIdList =
+            // this.setCheckedResourceIdList();
+            this.props.onRefresh();
+        }
     };
 
     handleShare = () => {
@@ -176,6 +195,7 @@ class ResourceList extends Component {
         const {
             classes,
             resourceList,
+            selectedResource,
             checkedResourceIdList,
             onMove,
         } = this.props;
@@ -218,7 +238,7 @@ class ResourceList extends Component {
                                 </IconButton>
                                 <IconButton
                                     className={classes.white}
-                                    onClick={this.handleClickAppBarMenu}>
+                                    onClick={this.handleRemove(checkedResourceIdList)}>
                                     <DeleteIcon/>
                                 </IconButton>
                                 <IconButton
@@ -311,7 +331,7 @@ class ResourceList extends Component {
                     <MenuItem onClick={this.handleDownload}>
                         {_download}
                     </MenuItem>
-                    <MenuItem onClick={this.handleRemove}>
+                    <MenuItem onClick={this.handleRemove(selectedResource.resourceID)}>
                         {_remove}
                     </MenuItem>
                 </Menu>
@@ -341,6 +361,7 @@ ResourceList.propTypes = {
     resourceList: PropTypes.array.isRequired,
     onClickResource: PropTypes.func.isRequired,
     onClickAction: PropTypes.func,
+    onRefresh: PropTypes.func.isRequired,
     onRename: PropTypes.func.isRequired,
     onRemove: PropTypes.func.isRequired,
     onShare: PropTypes.func.isRequired,
@@ -350,14 +371,17 @@ ResourceList.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    resources: state.resource.resources,
     resourceID: state.resource.selectedResource.resourceID,
+    selectedResource: state.resource.selectedResource,
     checkedResourceIdList: state.resource.checkedResourceIdList,
 });
 
 const mapDispatchToProps = dispatch => ({
+    setResourceList: resourceListWithPath => dispatch(setResourceList(resourceListWithPath)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
-    setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
+    setCheckedResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
     clearCheckedResourceIdList: () => dispatch(clearCheckedResourceIdList()),
 });
 

@@ -53,25 +53,24 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { url2path, getPreview } from '../../utils/assist';
+import { url2path, getPreview, movePath, friendlyPath } from '../../utils/assist';
 import debounce from '../../utils/debounce';
 import { alert, setPageTitle, setAppBarMenu } from '../../store/actions/assistActions';
 import { fetchOneself } from '../../store/actions/oneselfActions';
 import {
     fetchResources,
-    changeResourceListWithPath,
+    setResourceList,
     clearSelectedResource,
     getSelectedResource,
     setCheckedResourceIdList,
 } from '../../store/actions/resourceActions';
-import { friendlyPath, movePath } from '../../utils/pathUtil';
 import { CALCULATE_HASH_CHUNK_SIZE } from '../../constants/uploaderConfig';
 import { DELAY_TIME } from '../../constants';
 import {
     _capacityDeficiency, _sameNameFileInTheCurrentDirectory, _calculatingFileHash,
     _fileHashCalculationFailed, _fileUploading, _notSupportSuffixNameAndEmptyFile,
     _fileUploadFailed, _illegalCharacters, _folderAlreadyExists,
-    _ok, _moveTo, _rename, _createDirectory, _selectAll, _offlineDownload, _uploadFile, _alreadyChecked, _item,
+    _ok, _moveTo, _rename, _createDirectory, _selectAll, _offlineDownload, _uploadFile,
 } from '../../res/values/string';
 import FormsyDialog from '../../components/FormsyDialog';
 import ResourceDetail from '../../components/ResourceList/ResourceDetail';
@@ -466,7 +465,7 @@ class CloudDrive extends Component {
                     ...r,
                     trashed: true,
                 }));
-                this.props.changeResourceListWithPath(resourceListWithPath);
+                this.props.setResourceList(resourceListWithPath);
                 this.getResourceList(url2path(routing.location.pathname));
             }
         };
@@ -479,7 +478,7 @@ class CloudDrive extends Component {
             ...r,
             trashed: true,
         } : { ...r }));
-        this.props.changeResourceListWithPath(resourceListWithPath);
+        this.props.setResourceList(resourceListWithPath);
         this.getResourceList(url2path(routing.location.pathname));
     };
 
@@ -690,6 +689,7 @@ class CloudDrive extends Component {
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
                         toggleCheck={this.handleCheckResource}
+                        onRefresh={this.handleRefresh()}
                         onRename={this.handleToggleRenameResourceDialog(true)}
                         onRemove={this.handleRemoveSingleResource}
                         onShare={this.handleShare}
@@ -790,7 +790,7 @@ const mapDispatchToProps = dispatch => ({
     changePage: url => dispatch(push(url)),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
-    changeResourceListWithPath: resourceListWithPath => dispatch(changeResourceListWithPath(resourceListWithPath)),
+    setResourceList: resourceListWithPath => dispatch(setResourceList(resourceListWithPath)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
     setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
