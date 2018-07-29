@@ -69,17 +69,17 @@ class OfflineDownloadManager extends Component {
 
     async handleFetchAria2Task() {
         let downloadList = null;
-        downloadList = await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
+        downloadList = await requester.get('https://api.mrdaisite.club/api/v1/aria2/state');
         this.props.saveDownloadList(downloadList);
         this.timer = setInterval(async () => {
-            downloadList = await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
+            downloadList = await requester.get('https://api.mrdaisite.club/api/v1/aria2/state');
             this.props.saveDownloadList(downloadList);
         }, 5000);
     }
 
     handleRemoveTask = gid => async () => {
-        await requester.delete(`https://api.mrdaisite.com/api/v1/aria2/${gid}`);
-        const downloadList = await requester.get('https://api.mrdaisite.com/api/v1/aria2/state');
+        await requester.delete(`https://api.mrdaisite.club/api/v1/aria2/${gid}`);
+        const downloadList = await requester.get('https://api.mrdaisite.club/api/v1/aria2/state');
         this.props.saveDownloadList(downloadList);
     };
 
@@ -92,8 +92,8 @@ class OfflineDownloadManager extends Component {
     handleToggleTaskStatus = (gid, status = true) => async () => {
         console.log(status);
         return status ?
-            await requester.get(`https://api.mrdaisite.com/api/v1/aria2/pause/${gid}`) :
-            await requester.get(`https://api.mrdaisite.com/api/v1/aria2/unpause/${gid}`);
+            await requester.get(`https://api.mrdaisite.club/api/v1/aria2/pause/${gid}`) :
+            await requester.get(`https://api.mrdaisite.club/api/v1/aria2/unpause/${gid}`);
     };
 
     handleChange = (event, value) => {

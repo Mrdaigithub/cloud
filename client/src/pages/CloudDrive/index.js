@@ -346,7 +346,7 @@ class CloudDrive extends Component {
             subDir,
             uploadBaseName,
             uploadExt,
-        } = await requester.post('https://api.mrdaisite.com/aetherupload/preprocess', qs.stringify({
+        } = await requester.post('https://api.mrdaisite.club/aetherupload/preprocess', qs.stringify({
             file_name: name,
             file_size: size,
             file_hash: fileHash,
@@ -412,7 +412,7 @@ class CloudDrive extends Component {
             form.append('locale', this.state.locale);
             form.append('path', url2path(this.props.routing.location.pathname));
             try {
-                await requester.post('https://api.mrdaisite.com/aetherupload/uploading', form);
+                await requester.post('https://api.mrdaisite.club/aetherupload/uploading', form);
             } catch (e) {
                 this.setState({
                     uploadTitle: _fileUploadFailed,

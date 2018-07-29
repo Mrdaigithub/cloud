@@ -56,7 +56,7 @@ class CreateLinkOfflineDownload extends Component {
     handleCreateLinkOfflineDownloadTask = (model) => {
         const { props } = this;
         (async function () {
-            await requester.post('https://api.mrdaisite.com/api/v1/aria2/adduri', qs.stringify({
+            await requester.post('https://api.mrdaisite.club/api/v1/aria2/adduri', qs.stringify({
                 uri: model.link,
             }));
             props.changePage('/download/offline/manager');
