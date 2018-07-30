@@ -166,8 +166,8 @@ class Searcher extends Component {
         this.props.changePage(`/cloud-drive/${path2url(path)}`);
     };
 
-    handleOpenResourceDetail = ({ id, name, path, createdAt, updatedAt }) => {
-        this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
+    handleOpenResourceDetail = ({ id, name, path, file, createdAt, updatedAt }) => {
+        this.props.getSelectedResource({ resourceID: id, resourceName: name, resourceMime: mime.lookup(name), resourcePath: path, file, resourceCreatedAt: createdAt, resourceUpdatedAt: updatedAt });
         this.setState({
             ResourceDetailOpen: true,
         });

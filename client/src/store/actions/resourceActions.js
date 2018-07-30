@@ -43,7 +43,7 @@ export const fetchResources = (cb) => {
     };
 };
 
-export const getSelectedResource = ({ resourceID, resourceName, resourceMime, resourcePath, resourceCreatedAt, resourceUpdatedAt }) => {
+export const getSelectedResource = ({ resourceID, resourceName, resourceMime, resourcePath, file, resourceCreatedAt, resourceUpdatedAt }) => {
     return {
         type: GET_SELECTED_RESOURCE,
         payload: {
@@ -52,6 +52,7 @@ export const getSelectedResource = ({ resourceID, resourceName, resourceMime, re
                 resourceName,
                 resourceMime,
                 resourcePath,
+                file,
                 resourceCreatedAt,
                 resourceUpdatedAt,
             },

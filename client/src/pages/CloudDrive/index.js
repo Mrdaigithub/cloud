@@ -53,7 +53,7 @@ import ResourcePreview from '../../components/ResourceList/ResourcePreview';
 import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
-import { url2path, getPreview, movePath, friendlyPath } from '../../utils/assist';
+import { url2path, getPreview, changePath, friendlyPath, getResourceListWithPath, path2url } from '../../utils/assist';
 import debounce from '../../utils/debounce';
 import { alert, setPageTitle, setAppBarMenu } from '../../store/actions/assistActions';
 import { fetchOneself } from '../../store/actions/oneselfActions';
@@ -84,11 +84,14 @@ class CloudDrive extends Component {
             movePath: '0',
             selectMode: true,
             selected: [],
+            toMoveResourceIdList: [],
             createDirDialogOpen: false,
             renameResourceDialogOpen: false,
             moveResourceDialogOpen: false,
             ResourcePreviewOpen: false,
             ResourceDetailOpen: false,
+            ShareStepperOpen: false,
+            OfflineDownloaderOpen: false,
             uploadState: false,
             uploadValue: 0,
             uploadTitle: '',
@@ -97,8 +100,6 @@ class CloudDrive extends Component {
             fileHash: '',
             group: 'file',
             locale: 'zh',
-            ShareStepperOpen: false,
-            OfflineDownloaderOpen: false,
             anchorEl: null,
         };
     }
@@ -190,6 +191,7 @@ class CloudDrive extends Component {
                 resourceName: name,
                 resourceMime: mime.lookup(name),
                 resourcePath: path,
+                file,
                 resourceCreatedAt: createdAt,
                 resourceUpdatedAt: updatedAt,
             });
@@ -221,12 +223,16 @@ class CloudDrive extends Component {
         }
     };
 
-    handleRefresh = () => () => {
-        this.getResourceList(url2path(this.props.routing.location.pathname));
+    handleRefresh = () => {
+        setTimeout(() => {
+            this.getResourceList(url2path(this.props.routing.location.pathname));
+        }, 1);
     };
 
 
-    /**  创建文件夹 **/
+    /**
+     * 创建文件夹
+     */
 
     handleToggleCreateDirDialog = (open = false) => () => {
         this.setState({ createDirDialogOpen: Boolean(open) });
@@ -246,7 +252,9 @@ class CloudDrive extends Component {
     };
 
 
-    /**  重命名资源 **/
+    /**
+     * 重命名资源
+     */
 
     handleToggleRenameResourceDialog = (open = false) => () => {
         this.setState({ renameResourceDialogOpen: Boolean(open) });
@@ -267,7 +275,9 @@ class CloudDrive extends Component {
     };
 
 
-    /**  上传文件 **/
+    /**
+     * 上传文件
+     */
 
     handleUpload = () => () => {
         const { capacity, used } = this.props;
@@ -452,49 +462,38 @@ class CloudDrive extends Component {
     }
 
 
-    /**  删除资源 **/
+    /**
+     * 删除资源
+     */
 
-    handleRemoveResource = () => {
-        return async () => {
-            const { resources, routing } = this.props;
-            const { selected } = this.state;
-            if (selected.length) {
-                const deleteList = selected.map(id => requester.patch(`resources/${id}/trash`));
-                await Promise.all(deleteList);
-                const resourceListWithPath = resources.map(r => ((selected.indexOf(r.id) === -1) ? { ...r } : {
-                    ...r,
-                    trashed: true,
-                }));
-                this.props.setResourceList(resourceListWithPath);
-                this.getResourceList(url2path(routing.location.pathname));
-            }
-        };
-    };
+    handleRemove = async (resourceIdList) => {
+        const deleteList = resourceIdList.map(id => requester.patch(`resources/${id}/trash`));
+        await Promise.all(deleteList);
 
-    handleRemoveSingleResource = async (resourceId) => {
-        const { resources, routing } = this.props;
-        await requester.patch(`resources/${resourceId}/trash`);
-        const resourceListWithPath = resources.map(r => ((r.id === resourceId) ? {
-            ...r,
-            trashed: true,
-        } : { ...r }));
-        this.props.setResourceList(resourceListWithPath);
-        this.getResourceList(url2path(routing.location.pathname));
+        this.props.setResourceList(
+            this.props.resources.map(r => ((resourceIdList.indexOf(r.id) === -1) ?
+                { ...r } :
+                { ...r, trashed: true })));
+
+        this.handleRefresh();
     };
 
 
-    /** 查看资源详细情况 **/
+    /**
+     * 查看资源详细情况
+     */
 
     handleOpenResourceDetail = () => {
         if (!this.props.selectedResource) return;
 
-        const { resourceID, resourceName, resourcePath, resourceCreatedAt, resourceUpdatedAt } = this.props.selectedResource;
+        const { resourceID, resourceName, resourcePath, file, resourceCreatedAt, resourceUpdatedAt } = this.props.selectedResource;
 
         this.props.getSelectedResource({
             resourceID,
             resourceName,
             resourceMime: mime.lookup(resourceName),
             resourcePath,
+            file,
             resourceCreatedAt,
             resourceUpdatedAt,
         });
@@ -508,44 +507,70 @@ class CloudDrive extends Component {
         this.props.clearSelectedResource();
     };
 
-    /**  移动资源 **/
+
+    /**
+     * 移动资源
+     */
+
+    handleMove = (resourceIdList) => {
+        this.setState({ toMoveResourceIdList: resourceIdList });
+        this.handleToggleMoveResourceDialog(true)();
+    };
 
     handleToggleMoveResourceDialog = (open = false) => () => {
         if (open) {
-            if (!this.state.selected.length) return;
-            this.getResourceList(undefined, true);
-            this.setState({ moveResourceDialogOpen: true });
+            this.setState({
+                moveResourceDialogOpen: true,
+                moveResourceList: getResourceListWithPath(this.props.resources, this.state.movePath)
+                    .filter(r => !r.file),
+            });
         } else {
             this.setState({
                 moveResourceDialogOpen: false,
                 moveResourceList: [],
                 movePath: '0',
+                toMoveResourceIdList: [],
             });
         }
     };
 
-    handleClickMoveDir = () => ({ id, file }) => {
+    handleGoMovePath = ({ id, file }) => {
         if (file) return;
-        const newMovePath = movePath.go(this.state.movePath, id);
-        this.setState({ movePath: newMovePath });
-        this.getResourceList(url2path(newMovePath), true);
+        const newMovePath = url2path(changePath.go(path2url(this.state.movePath), id));
+        this.setState({
+            movePath: newMovePath,
+            moveResourceList: getResourceListWithPath(this.props.resources, newMovePath)
+                .filter(r => !r.file),
+        });
+    };
+
+    handleBackMovePath = () => {
+        if (this.state.movePath.length === 1 && this.state.movePath.split('/')[0] === '0') return;
+        const newMovePath = url2path(changePath.back(path2url(this.state.movePath)));
+        this.setState({
+            movePath: newMovePath,
+            moveResourceList: getResourceListWithPath(this.props.resources, newMovePath)
+                .filter(r => !r.file),
+        });
     };
 
     handleMoveResource = () => async () => {
-        const { selected } = this.state;
-        if (!selected.length) return;
-        const moveList = selected.map(id => requester.patch(`resources/${id}/move`, qs.stringify({
+        const { toMoveResourceIdList } = this.state;
+        if (!toMoveResourceIdList.length) return;
+        const moveList = toMoveResourceIdList.map(id => requester.patch(`resources/${id}/move`, qs.stringify({
             path: url2path(this.state.movePath),
         })));
-        this.handleToggleMoveResourceDialog()();
         await Promise.all(moveList);
+        this.handleToggleMoveResourceDialog()();
         this.props.fetchResources(() => {
-            this.getResourceList(url2path(this.props.routing.location.pathname));
+            this.handleRefresh();
         });
     };
 
 
-    /**  下载资源 **/
+    /**
+     * 下载资源
+     */
 
     handleDownload = async () => {
         if (!this.props.selectedResource) return;
@@ -563,7 +588,9 @@ class CloudDrive extends Component {
     };
 
 
-    /** 分享资源 **/
+    /**
+     * 分享资源
+     */
 
     handleShare = () => {
         if (!this.props.selectedResource) return;
@@ -575,7 +602,9 @@ class CloudDrive extends Component {
     };
 
 
-    /** 离线下载 **/
+    /**
+     * 离线下载
+     */
 
     handleOpenOfflineDownload = () => {
         this.setState({
@@ -648,7 +677,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-move">
                             <IconButton
-                                onClick={this.handleToggleMoveResourceDialog(true)}
+                                onClick={this.handleToggleMoveResourceDialog()}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -660,7 +689,7 @@ class CloudDrive extends Component {
                     <SpeedDialItem>
                         <label htmlFor="icon-button-remove">
                             <IconButton
-                                onClick={this.handleRemoveResource()}
+                                onClick={this.handleRemove}
                                 disabled={!selected.length}
                                 color="primary"
                                 className={classes.SpeedDialItemButton}
@@ -689,17 +718,17 @@ class CloudDrive extends Component {
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
                         toggleCheck={this.handleCheckResource}
-                        onRefresh={this.handleRefresh()}
+                        onRefresh={this.handleRefresh}
                         onRename={this.handleToggleRenameResourceDialog(true)}
-                        onRemove={this.handleRemoveSingleResource}
+                        onRemove={this.handleRemove}
                         onShare={this.handleShare}
                         onDownload={this.handleDownload}
-                        onMove={this.handleToggleMoveResourceDialog(true)}
+                        onMove={this.handleMove}
                         onDetail={this.handleOpenResourceDetail}/>
                     <ResourcePreview
                         open={this.state.ResourcePreviewOpen}
                         onDownload={this.handleDownload}
-                        onRefresh={this.handleRefresh()}
+                        onRefresh={this.handleRefresh}
                         onClose={this.handleToggleResourcePreview()}>
                         {getPreview(selectedResource)}
                     </ResourcePreview>
@@ -747,12 +776,13 @@ class CloudDrive extends Component {
                     <AppBar className={classes.moveDirTopBar}>
                         <Toolbar>
                             <IconButton
-                                color="inherit" onClick={this.handleToggleMoveResourceDialog()}
-                                aria-label="Close">
+                                color="inherit"
+                                onClick={this.handleToggleMoveResourceDialog()}>
                                 <CloseIcon/>
                             </IconButton>
                             <Typography
-                                className={classes.moveDirTopBarTitle} type="title"
+                                className={classes.moveDirTopBarTitle}
+                                type="title"
                                 color="inherit">{_moveTo}</Typography>
                             <Button color="inherit" onClick={this.handleMoveResource()}>{_ok}</Button>
                         </Toolbar>
@@ -760,7 +790,9 @@ class CloudDrive extends Component {
                     <div className={classes.resourceList}>
                         <ResourceList
                             resourceList={moveResourceList}
-                            onClickResource={this.handleClickMoveDir()}/>
+                            itemMenu={false}
+                            onBack={this.handleBackMovePath}
+                            onClickResource={this.handleGoMovePath}/>
                     </div>
                 </Dialog>
                 <ShareStepper
@@ -790,7 +822,7 @@ const mapDispatchToProps = dispatch => ({
     changePage: url => dispatch(push(url)),
     fetchOneself: () => fetchOneself()(dispatch),
     fetchResources: cb => fetchResources(cb)(dispatch),
-    setResourceList: resourceListWithPath => dispatch(setResourceList(resourceListWithPath)),
+    setResourceList: resourceList => dispatch(setResourceList(resourceList)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
     setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),

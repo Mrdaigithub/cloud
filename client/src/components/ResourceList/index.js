@@ -46,6 +46,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloseIcon from '@material-ui/icons/Close';
 import PlayListAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import DeleteIcon from '@material-ui/icons/Delete';
+import UndoIcon from '@material-ui/icons/Undo';
 import { FolderIcon } from '../Icons';
 import ResourceTypeIcon from '../ResourceTypeIconSwitcher';
 import styles from './styles';
@@ -53,10 +54,9 @@ import {
     clearSelectedResource, getSelectedResource,
     setCheckedResourceIdList, clearCheckedResourceIdList, setResourceList,
 } from '../../store/actions/resourceActions';
-import { _alreadyChecked, _detail, _download, _item, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
-import { conversionCapacityUtil, getResourceListWithPath } from '../../utils/assist';
+import { _alreadyChecked, _back, _detail, _download, _item, _lastUpdatedAt, _moveTo, _noData, _remove, _rename, _share } from '../../res/values/string';
+import { conversionCapacityUtil } from '../../utils/assist';
 import { DATE_FORMAT } from '../../constants';
-import requester from '../../utils/requester';
 
 class ResourceList extends Component {
     constructor(props) {
@@ -67,19 +67,6 @@ class ResourceList extends Component {
             checkedMenuAnchorEl: null,
         };
     }
-
-    onClickAction = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
-        if (this.props.onClickAction) {
-            this.props.onClickAction({
-                id,
-                name: resource_name,
-                path,
-                file,
-                createdAt: created_at,
-                updatedAt: updated_at,
-            });
-        }
-    };
 
     handleClickResource = ({ id, resource_name, path, file, created_at, updated_at }) => () => {
         this.props.onClickResource({
@@ -92,13 +79,14 @@ class ResourceList extends Component {
         });
     };
 
-    handleClickMoreVert = ({ id, resource_name, path, created_at, updated_at }) => (event) => {
+    handleClickMoreVert = ({ id, resource_name, path, file, created_at, updated_at }) => (event) => {
         this.setState({ anchorEl: event.currentTarget });
         this.props.getSelectedResource({
             resourceID: id,
             resourceName: resource_name,
             resourceMime: mime.lookup(resource_name),
             resourcePath: path,
+            file,
             resourceCreatedAt: created_at,
             resourceUpdatedAt: updated_at,
         });
@@ -143,28 +131,26 @@ class ResourceList extends Component {
         this.props.onRename(this.props.resourceID);
     };
 
-    handleRemove = resourceIdList => async () => {
+    handleRemove = resourceIdList => () => {
         const _resourceIdList =
             Object.prototype.toString.call(resourceIdList) !== '[object Array]' ?
                 [resourceIdList] : resourceIdList;
         this.handleCloseMoreVert();
 
-        if (_resourceIdList.length) {
-            console.log(this.props.resourceList
-                .map(r => ((_resourceIdList.indexOf(r.id) === -1) ?
-                    { ...r } :
-                    { ...r, trashed: true })));
-            // const deleteList = _resourceIdList.map(id => requester.patch(`resources/${id}/trash`));
-            // await Promise.all(deleteList);
-            // this.props.setResourceList(this.props.resourceList
-            //     .map(r => ((_resourceIdList.indexOf(r.id) === -1) ?
-            //         { ...r } :
-            //         { ...r, trashed: true })));
+        if (_resourceIdList.length) this.props.onRemove(_resourceIdList);
 
-            // const checkedResourceIdList =
-            // this.setCheckedResourceIdList();
-            this.props.onRefresh();
-        }
+        this.props.clearCheckedResourceIdList();
+    };
+
+    handleMove = resourceIdList => () => {
+        const _resourceIdList =
+            Object.prototype.toString.call(resourceIdList) !== '[object Array]' ?
+                [resourceIdList] : resourceIdList;
+        this.handleCloseMoreVert();
+
+        if (_resourceIdList.length) this.props.onMove(_resourceIdList);
+
+        this.props.clearCheckedResourceIdList();
     };
 
     handleShare = () => {
@@ -179,12 +165,6 @@ class ResourceList extends Component {
         this.props.onDownload(this.props.resourceID);
     };
 
-    handleMove = () => {
-        this.handleCloseMoreVert();
-        if (!this.props.onRemove || !this.props.resourceID) return;
-        this.props.onMove(this.props.resourceID);
-    };
-
     handleDetail = () => {
         this.handleCloseMoreVert();
         if (!this.props.onRemove || !this.props.resourceID) return;
@@ -195,9 +175,10 @@ class ResourceList extends Component {
         const {
             classes,
             resourceList,
+            itemMenu,
             selectedResource,
             checkedResourceIdList,
-            onMove,
+            onBack,
         } = this.props;
 
         const { anchorEl, checkedMenuAnchorEl } = this.state;
@@ -250,8 +231,23 @@ class ResourceList extends Component {
                         </AppBar> : null
                 }
                 {
-                    resourceList.length ?
+                    resourceList.length || onBack ?
                         <List className={classes.resourceList}>
+                            {
+                                onBack ?
+                                    (
+                                        <div>
+                                            <ListItem
+                                                button
+                                                className={classes.resourceItem}
+                                                onClick={onBack}>
+                                                <ListItemIcon className={classes.resourceListIcon}><UndoIcon/></ListItemIcon>
+                                                <ListItemText primary={_back}/>
+                                            </ListItem>
+                                            <Divider/>
+                                        </div>
+                                    ) : null
+                            }
                             {sortedResourceList.map(resource => (
                                 <div key={resource.id}>
                                     <ListItem
@@ -287,9 +283,10 @@ class ResourceList extends Component {
                                                         checked={checkedResourceIdList.indexOf(resource.id) !== -1}
                                                         value={resource.id.toString()}
                                                         onChange={this.handleToggleCheck(resource.id)}/> :
-                                                    <IconButton onClick={this.handleClickMoreVert(resource)}>
-                                                        <MoreVertIcon/>
-                                                    </IconButton>
+                                                    itemMenu ?
+                                                        <IconButton onClick={this.handleClickMoreVert(resource)}>
+                                                            <MoreVertIcon/>
+                                                        </IconButton> : null
                                             }
                                         </ListItemSecondaryAction>
                                     </ListItem>
@@ -319,7 +316,7 @@ class ResourceList extends Component {
                     <MenuItem onClick={this.handleRename}>
                         {_rename}
                     </MenuItem>
-                    <MenuItem onClick={this.handleMove}>
+                    <MenuItem onClick={this.handleMove(selectedResource.resourceID)}>
                         {_moveTo}
                     </MenuItem>
                     <MenuItem onClick={this.handleShare}>
@@ -328,9 +325,12 @@ class ResourceList extends Component {
                     <MenuItem onClick={this.handleDetail}>
                         {_detail}
                     </MenuItem>
-                    <MenuItem onClick={this.handleDownload}>
-                        {_download}
-                    </MenuItem>
+                    {
+                        selectedResource.file ?
+                            <MenuItem onClick={this.handleDownload}>
+                                {_download}
+                            </MenuItem> : null
+                    }
                     <MenuItem onClick={this.handleRemove(selectedResource.resourceID)}>
                         {_remove}
                     </MenuItem>
@@ -345,7 +345,7 @@ class ResourceList extends Component {
                             width: 150,
                         },
                     }}>
-                    <MenuItem onClick={this.handleMove}>
+                    <MenuItem onClick={this.handleMove(checkedResourceIdList)}>
                         {_moveTo}
                     </MenuItem>
                     <MenuItem onClick={this.handleRename}>
@@ -359,15 +359,20 @@ class ResourceList extends Component {
 
 ResourceList.propTypes = {
     resourceList: PropTypes.array.isRequired,
+    itemMenu: PropTypes.bool.isRequired,
     onClickResource: PropTypes.func.isRequired,
-    onClickAction: PropTypes.func,
-    onRefresh: PropTypes.func.isRequired,
-    onRename: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    onShare: PropTypes.func.isRequired,
-    onDownload: PropTypes.func.isRequired,
-    onMove: PropTypes.func.isRequired,
-    onDetail: PropTypes.func.isRequired,
+    onBack: PropTypes.func,
+    onRename: PropTypes.func,
+    onRemove: PropTypes.func,
+    onShare: PropTypes.func,
+    onDownload: PropTypes.func,
+    onMove: PropTypes.func,
+    onDetail: PropTypes.func,
+};
+
+ResourceList.defaultProps = {
+    resourceList: [],
+    itemMenu: true,
 };
 
 const mapStateToProps = state => ({
@@ -378,7 +383,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setResourceList: resourceListWithPath => dispatch(setResourceList(resourceListWithPath)),
+    setResourceList: resourceList => dispatch(setResourceList(resourceList)),
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
     setCheckedResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),

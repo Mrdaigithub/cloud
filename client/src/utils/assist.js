@@ -76,12 +76,12 @@ export const getPreview = ({ resourceMime }) => {
 /**
  * 获取指定路径的资源列表
  *
- * @param resourceLList
+ * @param resourceList
  * @param path
  * @returns {*[]}
  */
-export const getResourceListWithPath = (resourceLList = [], path = '0') => {
-    return resourceLList
+export const getResourceListWithPath = (resourceList = [], path = '0') => {
+    return resourceList
         .filter(r => r.path === path)
         .filter(r => !r.trashed);
 };
@@ -111,12 +111,13 @@ export const conversionCapacityUtil = (fileByte) => {
 /* Path Util*/
 
 /**
+ * 前进url /cloud-drive/0/1/2/ => /cloud-drive/0/1/2/3
  * 回退url /cloud-drive/0/1/2/3 => /cloud-drive/0/1/2
  *
  * @param url
  * @returns {string}
  */
-export const movePath = {
+export const changePath = {
     go: (url, path) => {
         const newMoveUrl = url.toString()
             .split('/')
