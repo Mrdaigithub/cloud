@@ -114,7 +114,6 @@ class ResourcePreview extends Component {
             id,
             resource_name,
             path,
-            file,
             created_at,
             updated_at,
         } = await requester.patch(`resources/${selectedResource.resourceID}`, qs.stringify({

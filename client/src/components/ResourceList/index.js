@@ -181,7 +181,14 @@ class ResourceList extends Component {
             itemMenu,
             selectedResource,
             checkedResourceIdList,
+            onClickResource,
             onBack,
+            onRename,
+            onRemove,
+            onShare,
+            onDownload,
+            onMove,
+            onDetail,
         } = this.props;
 
         const { anchorEl, checkedMenuAnchorEl } = this.state;
@@ -315,14 +322,20 @@ class ResourceList extends Component {
                             width: 150,
                         },
                     }}>
-                    <MenuItem onClick={this.handleRename}>
-                        {_rename}
-                    </MenuItem>
-                    <MenuItem onClick={this.handleMove(selectedResource.resourceID)}>
-                        {_moveTo}
-                    </MenuItem>
                     {
-                        selectedResource.file ?
+                        onRemove ?
+                            <MenuItem onClick={this.handleRename}>
+                                {_rename}
+                            </MenuItem> : null
+                    }
+                    {
+                        onMove ?
+                            <MenuItem onClick={this.handleMove(selectedResource.resourceID)}>
+                                {_moveTo}
+                            </MenuItem> : null
+                    }
+                    {
+                        selectedResource.file && onShare ?
                             <MenuItem onClick={this.handleShare}>
                                 {_share}
                             </MenuItem> : null
@@ -331,7 +344,7 @@ class ResourceList extends Component {
                         {_detail}
                     </MenuItem>
                     {
-                        selectedResource.file ?
+                        selectedResource.file && onRename ?
                             <MenuItem onClick={this.handleDownload}>
                                 {_download}
                             </MenuItem> : null

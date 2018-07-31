@@ -97,8 +97,7 @@ class CloudDrive extends Component {
     async componentDidMount() {
         const { routing } = this.props;
 
-        this.props.fetchResources(() => {
-            this.getResourceList(url2path(routing.location.pathname));
+        this.handleRefresh(true, url2path(routing.location.pathname), () => {
             this.props.setPageTitle(friendlyPath(url2path(this.props.routing.location.pathname)));
             this.props.fetchOneself();
             this.props.setAppBarMenu([
@@ -127,24 +126,6 @@ class CloudDrive extends Component {
                     disabled: false,
                 },
             ]);
-        });
-    }
-
-    /**
-     * 获取当前路径的资源列表
-     *
-     * @param path
-     * @param moveMode
-     * @returns {Promise<void>}
-     */
-    getResourceList(path = '0') {
-        this.setState({
-            resourceList: this.props.resources ?
-                this.props.resources
-                    .filter(r => r.path === path)
-                    .filter(r => !r.trashed)
-                : [],
-            selected: [],
         });
     }
 
@@ -201,7 +182,8 @@ class CloudDrive extends Component {
                 setTimeout(() => {
                     this.setState({
                         resourceList: this.props.resources ?
-                            getResourceListWithPath(this.props.resources, path) : [],
+                            getResourceListWithPath(this.props.resources, path)
+                                .filter(r => !r.trashed) : [],
                         selected: [],
                     });
                     if (cb) cb();
@@ -211,7 +193,8 @@ class CloudDrive extends Component {
             setTimeout(() => {
                 this.setState({
                     resourceList: this.props.resources ?
-                        getResourceListWithPath(this.props.resources, path) : [],
+                        getResourceListWithPath(this.props.resources, path)
+                            .filter(r => !r.trashed) : [],
                     selected: [],
                 });
                 if (cb) cb();
@@ -236,9 +219,7 @@ class CloudDrive extends Component {
             path: url2path(routing.location.pathname),
         }));
         await requester.get(`resources/${path}`);
-        this.props.fetchResources(() => {
-            this.getResourceList(url2path(routing.location.pathname));
-        });
+        this.handleRefresh(true);
     };
 
 
@@ -252,15 +233,13 @@ class CloudDrive extends Component {
 
     handleRenameSubmit = () => async (model) => {
         if (!this.props.selectedResource) return;
-        const { routing } = this.props;
+
         const resourceId = this.props.selectedResource.resourceID;
         this.handleToggleRenameResourceDialog()();
         await requester.patch(`resources/${resourceId}`, qs.stringify({
             resource_name: model.text,
         }));
-        this.props.fetchResources(() => {
-            this.getResourceList(url2path(routing.location.pathname));
-        });
+        this.handleRefresh(true);
         this.props.clearSelectedResource();
     };
 
@@ -338,7 +317,6 @@ class CloudDrive extends Component {
         this.setState({ uploadTitle: _fileUploading });
         const { file, fileHash, group, locale } = this.state;
         const { name, size } = file;
-        const { routing } = this.props;
         const {
             error,
             chunkSize,
@@ -375,9 +353,7 @@ class CloudDrive extends Component {
             });
             setTimeout(() => {
                 this.resetUploadProcess();
-                this.props.fetchResources(() => {
-                    this.getResourceList(url2path(routing.location.pathname));
-                });
+                this.handleRefresh(true);
             }, DELAY_TIME);
         }
     }
@@ -395,7 +371,7 @@ class CloudDrive extends Component {
     async uploadChunk(chunkCountArr, chunkSize, chunkCount, uploadExt, uploadBaseName, subDir) {
         const file = this.state.file;
         const { name, size } = file;
-        const { routing } = this.props;
+
         for (const i of chunkCountArr) {
             const form = new FormData();
             const start = i * chunkSize;
@@ -419,9 +395,7 @@ class CloudDrive extends Component {
                 });
                 setTimeout(() => {
                     this.resetUploadProcess();
-                    this.props.fetchResources(() => {
-                        this.getResourceList(url2path(routing.location.pathname));
-                    });
+                    this.handleRefresh(true);
                 }, DELAY_TIME);
                 return;
             }
@@ -432,9 +406,7 @@ class CloudDrive extends Component {
         });
         setTimeout(() => {
             this.resetUploadProcess();
-            this.props.fetchResources(() => {
-                this.getResourceList(url2path(routing.location.pathname));
-            });
+            this.handleRefresh(true);
         }, DELAY_TIME);
     }
 
@@ -512,6 +484,7 @@ class CloudDrive extends Component {
             this.setState({
                 moveResourceDialogOpen: true,
                 moveResourceList: getResourceListWithPath(this.props.resources, this.state.movePath)
+                    .filter(r => !r.trashed)
                     .filter(r => !r.file),
             });
         } else {
@@ -530,6 +503,7 @@ class CloudDrive extends Component {
         this.setState({
             movePath: newMovePath,
             moveResourceList: getResourceListWithPath(this.props.resources, newMovePath)
+                .filter(r => !r.trashed)
                 .filter(r => !r.file),
         });
     };
@@ -540,6 +514,7 @@ class CloudDrive extends Component {
         this.setState({
             movePath: newMovePath,
             moveResourceList: getResourceListWithPath(this.props.resources, newMovePath)
+                .filter(r => !r.trashed)
                 .filter(r => !r.file),
         });
     };
@@ -626,7 +601,6 @@ class CloudDrive extends Component {
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
                         toggleCheck={this.handleCheckResource}
-                        onRefresh={this.handleRefresh}
                         onRename={this.handleToggleRenameResourceDialog(true)}
                         onRemove={this.handleRemove}
                         onShare={this.handleShare}

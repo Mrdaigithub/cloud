@@ -26,7 +26,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mime from 'mime-types';
 import { withStyles } from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Undo from '@material-ui/icons/Undo';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -39,6 +38,7 @@ import { fetchOneself } from '../../store/actions/oneselfActions';
 import { setPageTitle } from '../../store/actions/assistActions';
 import { fetchResources, clearSelectedResource, getSelectedResource } from '../../store/actions/resourceActions';
 import { _trashCan } from '../../res/values/string';
+import { getResourceListWithPath, url2path } from '../../utils/assist';
 
 
 class Trash extends Component {
@@ -53,6 +53,7 @@ class Trash extends Component {
 
     async componentWillMount() {
         this.props.setPageTitle(_trashCan);
+        this.handleRefresh(true);
         if (!this.props.resources) {
             this.props.fetchResources(() => {
                 this.getTrashList();
@@ -72,6 +73,37 @@ class Trash extends Component {
             selected: [],
         });
     }
+
+    /**
+     * 刷新当前资源列表
+     *
+     * @param network
+     * @param trashPath
+     * @param cb
+     */
+    handleRefresh = (network = false, trashPath = '0', cb) => {
+        if (network) {
+            this.props.fetchResources(() => {
+                setTimeout(() => {
+                    this.setState({
+                        resourceList: this.props.resources ?
+                            this.getTrashList() : [],
+                        selected: [],
+                    });
+                    if (cb) cb();
+                }, 1);
+            });
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    resourceList: this.props.resources ?
+                        this.getTrashList() : [],
+                    selected: [],
+                });
+                if (cb) cb();
+            }, 1);
+        }
+    };
 
     handleClickResource = ({ id, name, path, createdAt, updatedAt }) => {
         this.props.getSelectedResource({
@@ -141,7 +173,6 @@ class Trash extends Component {
             <div style={{ position: 'fixed', top: 60, right: 0, left: 0, bottom: 0 }}>
                 <ResourceList
                     resourceList={trashList}
-                    ItemIcon={Checkbox}
                     checked={this.state.selected}
                     onClickResource={this.handleClickResource}
                     toggleCheck={this.handleCheckResource}/>

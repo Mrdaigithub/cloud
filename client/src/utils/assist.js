@@ -83,8 +83,7 @@ export const getPreview = ({ resourceMime }) => {
  */
 export const getResourceListWithPath = (resourceList = [], path = '0') => {
     return resourceList
-        .filter(r => r.path === path)
-        .filter(r => !r.trashed);
+        .filter(r => r.path === path);
 };
 
 
