@@ -93,7 +93,10 @@ class ResourceList extends Component {
     };
 
     handleCloseMoreVert = () => {
-        this.setState({ anchorEl: null });
+        this.setState({
+            anchorEl: null,
+            checkedMenuAnchorEl: null,
+        });
     };
 
     handleClickCheckedMenuMoreVert = (event) => {
@@ -256,8 +259,7 @@ class ResourceList extends Component {
                                         onClick={
                                             checkedResourceIdList ?
                                                 this.handleToggleCheck(resource.id) :
-                                                this.handleClickResource(resource)
-                                        }>
+                                                this.handleClickResource(resource)}>
                                         <ListItemIcon className={classes.resourceListIcon}>
                                             {
                                                 resource.file ?
@@ -319,9 +321,12 @@ class ResourceList extends Component {
                     <MenuItem onClick={this.handleMove(selectedResource.resourceID)}>
                         {_moveTo}
                     </MenuItem>
-                    <MenuItem onClick={this.handleShare}>
-                        {_share}
-                    </MenuItem>
+                    {
+                        selectedResource.file ?
+                            <MenuItem onClick={this.handleShare}>
+                                {_share}
+                            </MenuItem> : null
+                    }
                     <MenuItem onClick={this.handleDetail}>
                         {_detail}
                     </MenuItem>
@@ -347,9 +352,6 @@ class ResourceList extends Component {
                     }}>
                     <MenuItem onClick={this.handleMove(checkedResourceIdList)}>
                         {_moveTo}
-                    </MenuItem>
-                    <MenuItem onClick={this.handleRename}>
-                        {_download}
                     </MenuItem>
                 </Menu>
             </div>

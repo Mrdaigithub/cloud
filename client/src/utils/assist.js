@@ -26,6 +26,7 @@ import React from 'react';
 import ImgPreview from '../components/ResourceList/ImgPreview';
 import TextPreview from '../components/ResourceList/TextPreview';
 import VideoPreview from '../components/ResourceList/VideoPreview';
+import { _unknowPath } from '../res/values/string';
 
 
 /* Resource Util*/
@@ -185,7 +186,9 @@ export const friendlyPath = (path) => {
         path.split('.')
             .map((i) => {
                 if (i === '0') return '';
-                return resources.filter(item => item.id.toString() === i)[0].resource_name;
+                return resources.filter(item => item.id.toString() === i).length ?
+                    resources.filter(item => item.id.toString() === i)[0].resource_name :
+                    _unknowPath;
             })
             .join('/');
 };

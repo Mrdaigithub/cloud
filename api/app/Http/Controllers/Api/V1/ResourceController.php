@@ -247,9 +247,10 @@
 		 * @return mixed|\Symfony\Component\HttpFoundation\BinaryFileResponse
 		 */
 		public function download( $secret ) {
-			$onece_decrypt = decrypt( $secret );
-			$source        = decrypt( $onece_decrypt );
-			$t             = parse_query( $source )["t"];
+			$once_decrypt = decrypt( $secret );
+			$source       = decrypt( $once_decrypt );
+			$t            = parse_query( $source )["t"];
+			
 			if ( ( time() - $t ) > env( "DOWNLOAD_LINK_TIMEOUT" ) ) {
 				throw ValidationException::withMessages( [
 					"resource" => [ "504000" ],

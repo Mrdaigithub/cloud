@@ -107,6 +107,7 @@ export const _linkInvalid = '链接无效';
 export const _noData = '暂无数据';
 export const _unknownFileType = '未知的文件类型';
 export const _unknownFilePath = '未知的文件路径';
+export const _unknowPath = '未知的路径';
 export const _fileTypeUnablePreview = '此文件类型暂无法预览';
 export const _fileType = '文件类型';
 export const _filePath = '文件路径';

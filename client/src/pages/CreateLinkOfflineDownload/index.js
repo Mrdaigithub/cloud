@@ -41,7 +41,7 @@ import {
 } from '../../res/values/string';
 import { FormsyText } from '../../components/FormsyMaterialUi';
 import requester from '../../utils/requester';
-import { setPageTitle } from '../../store/actions/assistActions';
+import { setAppBarMenu, setPageTitle } from '../../store/actions/assistActions';
 
 class CreateLinkOfflineDownload extends Component {
     constructor(props) {
@@ -51,6 +51,7 @@ class CreateLinkOfflineDownload extends Component {
 
     componentWillMount() {
         this.props.setPageTitle(_createOfflineDownloadTask);
+        this.props.setAppBarMenu([]);
     }
 
     handleCreateLinkOfflineDownloadTask = (model) => {
@@ -96,6 +97,7 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: pageTitle => setPageTitle(pageTitle)(dispatch),
+    setAppBarMenu: appBarMenu => setAppBarMenu(appBarMenu)(dispatch),
     changePage: url => dispatch(push(url)),
 });
 

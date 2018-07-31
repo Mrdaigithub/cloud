@@ -35,22 +35,13 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Checkbox from '@material-ui/core/Checkbox';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloseIcon from '@material-ui/icons/Close';
-import CreateNewFolder from '@material-ui/icons/CreateNewFolder';
-import CompareArrows from '@material-ui/icons/CompareArrows';
-import FileUpload from '@material-ui/icons/FileUpload';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ShareIcon from '@material-ui/icons/Share';
-import SpeedDial, { SpeedDialItem } from '../../components/SpeedDial';
 import FileUploader from '../../components/FileUploader';
 import ShareStepper from '../../components/ShareStepper';
 import OfflineDownloader from '../../components/OfflineDownloader';
 import Transition from '../../components/Transition';
 import ResourceList from '../../components/ResourceList';
 import ResourcePreview from '../../components/ResourceList/ResourcePreview';
-import { OfflineDownloadIcon } from '../../components/Icons';
 import styles from './styles';
 import requester from '../../utils/requester';
 import { url2path, getPreview, changePath, friendlyPath, getResourceListWithPath, path2url } from '../../utils/assist';
@@ -62,7 +53,7 @@ import {
     setResourceList,
     clearSelectedResource,
     getSelectedResource,
-    setCheckedResourceIdList,
+    setCheckedResourceIdList, clearCheckedResourceIdList,
 } from '../../store/actions/resourceActions';
 import { CALCULATE_HASH_CHUNK_SIZE } from '../../constants/uploaderConfig';
 import { DELAY_TIME } from '../../constants';
@@ -82,7 +73,6 @@ class CloudDrive extends Component {
             resourceList: [],
             moveResourceList: [],
             movePath: '0',
-            selectMode: true,
             selected: [],
             toMoveResourceIdList: [],
             createDirDialogOpen: false,
@@ -119,18 +109,7 @@ class CloudDrive extends Component {
                     },
                     disabled: !this.state.resourceList.length,
                 }, {
-                    name: <div>
-                        <input
-                            accept="*"
-                            style={{ display: 'none' }}
-                            id="icon-button-file"
-                            name="icon-button-file"
-                            onChange={this.handleUpload()}
-                            type="file"/>
-                        <label htmlFor="icon-button-file">
-                            {_uploadFile}
-                        </label>
-                    </div>,
+                    name: <label htmlFor="icon-button-file">{_uploadFile}</label>,
                     'event': () => {
                     },
                     disabled: false,
@@ -151,10 +130,6 @@ class CloudDrive extends Component {
         });
     }
 
-    componentWillUnmount() {
-        this.props.setAppBarMenu([]);
-    }
-
     /**
      * 获取当前路径的资源列表
      *
@@ -162,25 +137,15 @@ class CloudDrive extends Component {
      * @param moveMode
      * @returns {Promise<void>}
      */
-    getResourceList(path = '0', moveMode = false) {
-        if (moveMode) {
-            this.setState({
-                moveResourceList: this.props.resources ?
-                    this.props.resources
-                        .filter(r => r.path === path)
-                        .filter(r => !r.file && !r.trashed) :
-                    [],
-            });
-        } else {
-            this.setState({
-                resourceList: this.props.resources ?
-                    this.props.resources
-                        .filter(r => r.path === path)
-                        .filter(r => !r.trashed)
-                    : [],
-                selected: [],
-            });
-        }
+    getResourceList(path = '0') {
+        this.setState({
+            resourceList: this.props.resources ?
+                this.props.resources
+                    .filter(r => r.path === path)
+                    .filter(r => !r.trashed)
+                : [],
+            selected: [],
+        });
     }
 
     handleClickResource = ({ id, name, path, file, createdAt, updatedAt }) => {
@@ -223,10 +188,35 @@ class CloudDrive extends Component {
         }
     };
 
-    handleRefresh = () => {
-        setTimeout(() => {
-            this.getResourceList(url2path(this.props.routing.location.pathname));
-        }, 1);
+    /**
+     * 刷新当前资源列表
+     *
+     * @param network
+     * @param path
+     * @param cb
+     */
+    handleRefresh = (network = false, path = url2path(this.props.routing.location.pathname), cb) => {
+        if (network) {
+            this.props.fetchResources(() => {
+                setTimeout(() => {
+                    this.setState({
+                        resourceList: this.props.resources ?
+                            getResourceListWithPath(this.props.resources, path) : [],
+                        selected: [],
+                    });
+                    if (cb) cb();
+                }, 1);
+            });
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    resourceList: this.props.resources ?
+                        getResourceListWithPath(this.props.resources, path) : [],
+                    selected: [],
+                });
+                if (cb) cb();
+            }, 1);
+        }
     };
 
 
@@ -562,9 +552,7 @@ class CloudDrive extends Component {
         })));
         await Promise.all(moveList);
         this.handleToggleMoveResourceDialog()();
-        this.props.fetchResources(() => {
-            this.handleRefresh();
-        });
+        this.handleRefresh(true);
     };
 
 
@@ -626,95 +614,15 @@ class CloudDrive extends Component {
             renameResourceDialogOpen,
             resourceList,
             moveResourceList,
-            selected,
-            selectMode,
             uploadState,
             uploadTitle,
             uploadValue,
         } = this.state;
         return (
             <div className={classes.root}>
-                <SpeedDial>
-                    <SpeedDialItem>
-                        <input
-                            accept="*"
-                            className={classes.SpeedDialItemInput}
-                            id="icon-button-file"
-                            name="icon-button-file"
-                            onChange={this.handleUpload()}
-                            type="file"/>
-                        <label htmlFor="icon-button-file">
-                            <IconButton
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span">
-                                <FileUpload/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                    <SpeedDialItem>
-                        <label htmlFor="icon-button-create">
-                            <IconButton
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span"
-                                onClick={this.handleToggleCreateDirDialog(true)}>
-                                <CreateNewFolder/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                    <SpeedDialItem>
-                        <label htmlFor="icon-button-offline-download">
-                            <IconButton
-                                onClick={this.handleOpenOfflineDownload}
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span">
-                                <OfflineDownloadIcon/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                    <SpeedDialItem>
-                        <label htmlFor="icon-button-move">
-                            <IconButton
-                                onClick={this.handleToggleMoveResourceDialog()}
-                                disabled={!selected.length}
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span">
-                                <CompareArrows/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                    <SpeedDialItem>
-                        <label htmlFor="icon-button-remove">
-                            <IconButton
-                                onClick={this.handleRemove}
-                                disabled={!selected.length}
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span">
-                                <DeleteIcon/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                    <SpeedDialItem>
-                        <label htmlFor="icon-button-share">
-                            <IconButton
-                                onClick={this.handleShare}
-                                disabled={!selected.length}
-                                color="primary"
-                                className={classes.SpeedDialItemButton}
-                                component="span">
-                                <ShareIcon/>
-                            </IconButton>
-                        </label>
-                    </SpeedDialItem>
-                </SpeedDial>
                 <div id="resourceContent" className={classes.root}>
                     <ResourceList
                         resourceList={resourceList}
-                        ItemIcon={selectMode ? MoreVertIcon : Checkbox}
                         checked={this.state.selected}
                         onClickResource={this.handleClickResource}
                         toggleCheck={this.handleCheckResource}
@@ -802,6 +710,13 @@ class CloudDrive extends Component {
                 <OfflineDownloader
                     open={this.state.OfflineDownloaderOpen}
                     onClose={this.handleCloseOfflineDownload}/>
+                <input
+                    accept="*"
+                    style={{ display: 'none' }}
+                    id="icon-button-file"
+                    name="icon-button-file"
+                    onChange={this.handleUpload()}
+                    type="file"/>
             </div>
         );
     }
@@ -813,6 +728,7 @@ const mapStateToProps = (state, routing) => ({
     used: state.oneself.used,
     resources: state.resource.resources,
     selectedResource: state.resource.selectedResource,
+    checkedResourceIdList: state.resource.checkedResourceIdList,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -826,6 +742,8 @@ const mapDispatchToProps = dispatch => ({
     getSelectedResource: selectedResource => dispatch(getSelectedResource(selectedResource)),
     clearSelectedResource: () => dispatch(clearSelectedResource()),
     setResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
+    setCheckedResourceIdList: resourceIdList => setCheckedResourceIdList(resourceIdList)(dispatch),
+    clearCheckedResourceIdList: () => dispatch(clearCheckedResourceIdList()),
 });
 
 export default connect(
